@@ -3,21 +3,14 @@ name: Continuous Integration
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-env:
-  BUILD_TYPE: Release
-
 jobs:
-  linux_build:
+  git-sync:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-
-      - name: mirroring
-        run: git remote update
-
-      - name: updating
-        run: git push --mirror
+      - name: git-sync
+        uses: wei/git-sync@v3
+        with:
+          source_repo: "git@github.com:Morvince/AREA.git"
+          source_branch: "main"
+          destination_repo: "destination_org/repository"
+          destination_branch: "main"
