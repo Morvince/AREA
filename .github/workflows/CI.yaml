@@ -12,5 +12,5 @@ jobs:
         with:
           source_repo: "git@github.com:Morvince/AREA.git"
           source_branch: "main"
-          destination_repo: "destination_org/repository"
+          destination_repo: "git@github.com:EpitechPromo2025/B-DEV-500-NAN-5-2-area-enzo.laurent.git"
           destination_branch: "main"
