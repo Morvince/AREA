@@ -3,14 +3,21 @@ name: Continuous Integration
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  BUILD_TYPE: Release
+
 jobs:
-  git-sync:
+  linux_build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: git-sync
-        uses: wei/git-sync@v3
-        with:
-          source_repo: "git@github.com:Morvince/AREA.git"
-          source_branch: "main"
-          destination_repo: "git@github.com:EpitechPromo2025/B-DEV-500-NAN-5-2-area-enzo.laurent.git"
-          destination_branch: "main"
+      - uses: actions/checkout@v3
+
+      - name: mirroring & updating
+        run: |
+          cd AREA.git
+          git remote update
+          git push --mirror
