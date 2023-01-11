@@ -14,9 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@a81bbbf8298c0fa03ea29cdc473d45769f953675
+      - uses: actions/checkout@v3
 
       - name: mirroring
-        run: |
-          git remote update
-          git push --mirror
+        run: git remote update
+
+      - name: updating
+        run: git push --mirror
