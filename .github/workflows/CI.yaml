@@ -17,7 +17,6 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: mirroring
-        shell: bash
         run: |
           git remote update
           git push --mirror
