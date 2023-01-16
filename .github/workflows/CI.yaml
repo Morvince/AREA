@@ -18,6 +18,7 @@ jobs:
 
       - name: mirroring & updating
         run: |
-          cd AREA.git
+          git clone https://Morvince:${{secrets.TOKEN}}@github.com/EpitechPromo2025/B-DEV-500-NAN-5-2-area-enzo.laurent.git
+          cd B-DEV-500-NAN-5-2-area-enzo.laurent.git
           git remote update
           git push --mirror
