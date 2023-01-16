@@ -18,6 +18,7 @@ jobs:
 
       - name: mirroring & updating
         run: |
+          ls /usr/bin/git
           cd .git
           git remote update
           git push --mirror
