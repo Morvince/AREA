@@ -18,6 +18,6 @@ jobs:
 
       - name: mirroring & updating
         run: |
-          cd AREA.git
+          cd .git
           git remote update
           git push --mirror
