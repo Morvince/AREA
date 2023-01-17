@@ -3,7 +3,15 @@
     require_once("classes/Spotify/artist.class.php");
 
     function getArtist($decoded_data) {
-        $artist = new Artist($decoded_data->external_urls, $decoded_data->followers->total, $decoded_data->genres, $decoded_data->href, $decoded_data->id, $decoded_data->images, $decoded_data->name, $decoded_data->popularity);
+        $artist = new Artist($decoded_data->external_urls,
+                            $decoded_data->followers->total,
+                            $decoded_data->genres,
+                            $decoded_data->href,
+                            $decoded_data->id,
+                            $decoded_data->images,
+                            $decoded_data->name,
+                            $decoded_data->popularity
+                        );
         return $artist;
     }
 
