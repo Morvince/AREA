@@ -9,6 +9,10 @@
         foreach ($decoded_data->artists as $artist) {
             array_push($artists, getArtistById($access_token, $artist->id));
         }
+        $tracks = array();
+        foreach ($decoded_data->tracks->items as $track) {
+            array_push($tracks, getTrackById($access_token, $track->id));
+        }
         $album = new Album( $artists,
                             $decoded_data->available_markets,
                             $decoded_data->external_urls,
@@ -18,7 +22,8 @@
                             $decoded_data->name,
                             $decoded_data->release_date,
                             $decoded_data->total_tracks,
-                            $decoded_data->album_type
+                            $decoded_data->album_type,
+                            $tracks
                         );
         return $album;
     }

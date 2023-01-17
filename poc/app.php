@@ -43,7 +43,10 @@
         $album = getAlbumBySearch($access_token, $_GET["album"]);
 
         echo "<img src=".$album->getImages()[0]->url."><br>";
-        echo "Album: ".$album->getName()." release by ".$album->getArtists()[0]->getName()." the ".$album->getReleaseDate();
+        echo "Album: ".$album->getName()." release by ".$album->getArtists()[0]->getName()." the ".$album->getReleaseDate()."<br><br>";
+        foreach ($album->getTracks() as $track) {
+            echo " - ".$track->getName()."<br>";
+        }
     } else {
     //afficher les catégories en france
         $decoded_data = requestAPI($access_token, "https://api.spotify.com/v1/browse/categories?country=FR&locale=fr_FR");

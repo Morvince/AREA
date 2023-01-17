@@ -10,9 +10,9 @@
         private $release_date;
         private $total_tracks;
         private $type;
-        // private $tracks;
+        private $tracks;
 
-        public function __construct($artists, $available_markets, $external_urls, $href, $id, $images, $name, $release_date, $total_tracks, $type) {
+        public function __construct($artists, $available_markets, $external_urls, $href, $id, $images, $name, $release_date, $total_tracks, $type, $tracks) {
             $this->artists = $artists;
             $this->available_markets = $available_markets;
             $this->external_urls = $external_urls;
@@ -23,6 +23,7 @@
             $this->release_date = $release_date;
             $this->total_tracks = $total_tracks;
             $this->type = $type;
+            $this->tracks = $tracks;
         }
 
         // Getter
@@ -52,6 +53,9 @@
         }
         public function getType() {
             return $this->type;
+        }
+        public function getTracks() {
+            return $this->tracks;
         }
     }
 ?>
