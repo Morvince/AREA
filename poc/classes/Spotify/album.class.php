@@ -10,6 +10,7 @@
         private $release_date;
         private $total_tracks;
         private $type;
+        // private $tracks;
 
         public function __construct($artists, $available_markets, $external_urls, $href, $id, $images, $name, $release_date, $total_tracks, $type) {
             $this->artists = $artists;
