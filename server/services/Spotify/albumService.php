@@ -23,7 +23,8 @@
                             $decoded_data->release_date,
                             $decoded_data->total_tracks,
                             $decoded_data->album_type,
-                            $tracks
+                            $tracks,
+                            $decoded_data->uri
                         );
         return $album;
     }

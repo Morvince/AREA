@@ -14,8 +14,9 @@
         private $preview_url;
         private $track_number;
         private $type;
+        private $uri;
 
-        public function __construct($album_id, $artists, $available_markets, $duration_ms, $explicit, $external_urls, $href, $id, $is_playable, $name, $popularity, $preview_url, $track_number, $type) {
+        public function __construct($album_id, $artists, $available_markets, $duration_ms, $explicit, $external_urls, $href, $id, $is_playable, $name, $popularity, $preview_url, $track_number, $type, $uri) {
             $this->album_id = $album_id;
             $this->artists = $artists;
             $this->available_markets = $available_markets;
@@ -30,6 +31,7 @@
             $this->preview_url = $preview_url;
             $this->track_number = $track_number;
             $this->type = $type;
+            $this->uri = $uri;
         }
 
         // Getter
@@ -74,6 +76,9 @@
         }
         public function getType() {
             return $this->type;
+        }
+        public function getUri() {
+            return $this->uri;
         }
     }
 ?>

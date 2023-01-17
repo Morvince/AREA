@@ -10,7 +10,8 @@
                             $decoded_data->id,
                             $decoded_data->images,
                             $decoded_data->name,
-                            $decoded_data->popularity
+                            $decoded_data->popularity,
+                            $decoded_data->uri
                         );
         return $artist;
     }

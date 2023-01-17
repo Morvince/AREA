@@ -11,8 +11,9 @@
         private $total_tracks;
         private $type;
         private $tracks;
+        private $uri;
 
-        public function __construct($artists, $available_markets, $external_urls, $href, $id, $images, $name, $release_date, $total_tracks, $type, $tracks) {
+        public function __construct($artists, $available_markets, $external_urls, $href, $id, $images, $name, $release_date, $total_tracks, $type, $tracks, $uri) {
             $this->artists = $artists;
             $this->available_markets = $available_markets;
             $this->external_urls = $external_urls;
@@ -24,6 +25,7 @@
             $this->total_tracks = $total_tracks;
             $this->type = $type;
             $this->tracks = $tracks;
+            $this->uri = $uri;
         }
 
         // Getter
@@ -56,6 +58,9 @@
         }
         public function getTracks() {
             return $this->tracks;
+        }
+        public function getUri() {
+            return $this->uri;
         }
     }
 ?>

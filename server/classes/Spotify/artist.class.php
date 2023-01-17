@@ -8,8 +8,9 @@
         private $images;
         private $name;
         private $popularity;
+        private $uri;
 
-        public function __construct($external_urls, $followers, $genres, $href, $id, $images, $name, $popularity) {
+        public function __construct($external_urls, $followers, $genres, $href, $id, $images, $name, $popularity, $uri) {
             $this->external_urls = $external_urls;
             $this->followers = $followers;
             $this->genres = $genres;
@@ -18,6 +19,7 @@
             $this->images = $images;
             $this->name = $name;
             $this->popularity = $popularity;
+            $this->uri = $uri;
         }
 
         // Getter
@@ -47,6 +49,9 @@
         }
         public function getType() {
             return "artist";
+        }
+        public function getUri() {
+            return $this->uri;
         }
     }
 ?>

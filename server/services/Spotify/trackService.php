@@ -21,7 +21,8 @@
                             $decoded_data->popularity,
                             $decoded_data->preview_url,
                             $decoded_data->track_number,
-                            $decoded_data->type
+                            $decoded_data->type,
+                            $decoded_data->uri
                         );
         return $track;
     }
