@@ -1,14 +1,44 @@
-import styled from 'styled-components';
+import React, { useState, useRef } from 'react';
 
-export const Rectangle= styled.div`
-  display: inline-block;
-  width: 250px;
-  height: 150px;
-  position: absolute;
-  top: ${props => props.top};
-  left:  ${props => props.left};
-  right: ${props => props.right};
-  bottom: ${props => props.bottom};
-  background: #784ecc;
-  border-radius: 25px; 
-  `;
+export const Rectangle = (props) => {
+  const [position, setPosition] = useState({ x: props.x, y: props.y });
+  const ref = useRef(null);
+
+  const handleMouseDown = (e) => {
+    const initialX = e.clientX - position.x;
+    const initialY = e.clientY - position.y;
+
+    const handleMouseMove = (e) => {
+      setPosition({
+        x: e.clientX - initialX,
+        y: e.clientY - initialY
+      });
+    }
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    const handleMouseUp = () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    }
+
+    window.addEventListener('mouseup', handleMouseUp);
+  }
+
+  return (
+    <div
+      ref={ref}
+      onMouseDown={handleMouseDown}
+      style={{
+        width: '250px',
+        height: '150px',
+        position: 'absolute',
+        left: position.x,
+        top: position.y,
+        background: props.color,
+        borderRadius: '20%',
+        border: '3px solid black',
+      }}
+    />
+  );
+}
