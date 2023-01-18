@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { Rectangle, Barre} from './puzzleBlockElements';
+import { Rectangle, Barre } from './puzzleBlockElements';
 
 const Mouvement = (props) => {
   const [position, setPosition] = useState({ x: props.x, y: props.y });
-  const ref = useRef(null);
+  const initialPosition = useRef({ x: props.x, y: props.y });
 
   const handleMouseDown = (e) => {
     const initialX = e.clientX - position.x;
@@ -21,24 +21,33 @@ const Mouvement = (props) => {
     const handleMouseUp = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
+      props.onMouseUp(initialPosition.current);
     }
 
     window.addEventListener('mouseup', handleMouseUp);
   }
 
   return (
-    <div ref={ref}>
-      <Rectangle x={position.x + "px"} y={position.y + "px"} color={props.color} onMouseDown={handleMouseDown}/>
-    </div>
+    <Rectangle x={position.x + "px"} y={position.y + "px"} color={props.color} onMouseDown={handleMouseDown} />
   );
 }
 
 const PuzzeBlock = () => {
+  const [rectangles, setRectangles] = useState([{x: 300, y: 150, color: '#686f84'}, 
+                                                {x: 300, y: 350, color: '#686f84'}, 
+                                                {x: 300, y: 550, color: '#686f84'}, 
+                                                {x: 300, y: 750, color: '#686f84'}]);
+
+  const handleMouseUp = (initialPosition) => {
+    setRectangles(rectangles.concat({ x: initialPosition.x, y: initialPosition.y, color: '#686f84' }));
+  }
+
   return (
     <div>
       <Barre />
-      <Mouvement x="300" y="150" color='#686f84'/>
+      {rectangles.map((rect, index) => (<Mouvement key={index} x={rect.x} y={rect.y} color={rect.color} onMouseUp={handleMouseUp} /> ))}
     </div>
   )
-}
-  export default PuzzeBlock
+  }
+
+  export default PuzzeBlock;

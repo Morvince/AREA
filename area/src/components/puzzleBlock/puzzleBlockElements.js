@@ -14,7 +14,7 @@ export const Rectangle = styled.div`
 `;
 
 export const Barre = styled.div`
-    height: 10000px;
+    height: 975px;
     width: 5px;
     position: absolute;
     top: 0px;
