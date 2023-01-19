@@ -14,7 +14,7 @@ const Home = () => {
   return (
     <div>
       <Sidebar isOpen={isOpen} toggle={toggle} />
-      <Navebar toggle={toggle} changeY={720} defaultState={false}/>
+      <Navebar toggle={toggle} changeY={720} defaultState={false} />
       <Servicesbar />
     </div>
   )

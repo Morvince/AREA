@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Icon } from '@iconify/react';
-import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName } from './servicesbarElements'
+import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, SwitchSlider } from './servicesbarElements'
 
 const Servicesbar = () => {
+  const [isOpen, setIsOpen] = useState(true);
+
   return (
     <>
-      <ServicesBarContainer>
+      <ServicesBarContainer className={isOpen ? 'open' : 'closed'}>
         <ServicesName>Services</ServicesName>
         <ServicesBarWrapper>
           <IconBox>
@@ -28,6 +30,7 @@ const Servicesbar = () => {
           </IconBox>
         </ServicesBarWrapper>
       </ServicesBarContainer>
+      <SwitchSlider className={isOpen ? 'open' : 'closed'} onClick={() => setIsOpen(!isOpen)} />
     </>
   )
 }
