@@ -89,3 +89,24 @@ export const SwitchSlider = styled.div`
   }
 `;
 
+export const RightBox = styled.div`
+  position: absolute;
+  right:0;
+  width: 150px;
+  height: 87%;
+  background: #686f84;
+  z-index: 999;
+  border-radius: 50px 0 0 50px;
+  margin-top: 20px;
+  transition: transform .2s ease-in-out;
+  display: none;
+
+  &.open {
+    display: block;
+    transform: translateX(0);
+  }
+
+  &.closed {
+    transform: translateX(150px);
+  }
+`;
