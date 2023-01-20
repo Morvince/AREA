@@ -5,7 +5,7 @@ export const ServicesBarContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #686f84;
+  background-color: ${props => props.color};
   width: 150px;
   height: 87%;
   position: fixed;
@@ -94,12 +94,12 @@ export const RightBox = styled.div`
   right:0;
   width: 150px;
   height: 87%;
-  background: #686f84;
   z-index: 999;
   border-radius: 50px 0 0 50px;
   margin-top: 20px;
-  transition: transform .2s ease-in-out;
   display: none;
+  transition: all 0.2s ease-in-out;
+  background-color: ${props => props.color};
 
   &.open {
     display: block;

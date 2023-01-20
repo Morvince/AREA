@@ -25,19 +25,19 @@ const Servicesbar = () => {
       case "instagram":
         return "#e1306c";
       case "google":
-        return "#4285f4";
+        return "#EA4335";
       case "twitter":
         return "#1da1f2";
       case "openai":
-        return "#f8b429";
-      default:
         return "#686f84";
+      default:
+        return "#f8b429";
     }
   }
 
   return (
     <>
-      <ServicesBarContainer className={isOpen ? 'open' : 'closed'}>
+      <ServicesBarContainer className={isOpen ? 'open' : 'closed'} color={getColor()}>
         <ServicesName>Services</ServicesName>
         <ServicesBarWrapper>
           <IconBox onClick={() => handleClick("discord")}>
@@ -60,7 +60,7 @@ const Servicesbar = () => {
           </IconBox>
         </ServicesBarWrapper>
       </ServicesBarContainer>
-      <RightBox className={isRightBoxOpen ? 'open' : 'closed'} style={{ backgroundColor: getColor() }} />
+      <RightBox className={isRightBoxOpen ? 'open' : 'closed'} color={getColor()} />
       <SwitchSlider className={isOpen ? 'open' : 'closed'} onClick={() => setIsOpen(!isOpen)} />
     </>
   );
