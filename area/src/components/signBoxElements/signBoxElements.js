@@ -1,13 +1,6 @@
 import styled, { keyframes } from 'styled-components'
 import {darkGray, lightGray, lightPurple, darkPurple, white} from '../../color'
 
-export const SignPage = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-`
-
 const animate = keyframes`
   0% { transform: rotate(0deg) }
   100% { transform: rotate(360deg) }
@@ -54,11 +47,11 @@ export const SignForm = styled.form`
   margin-top: 0;
   margin-bottom: 0;
   padding: 0px 50px;
-  z-index: ${props => props.zIndex};
+  z-index: 10;
   display: flex;
   flex-direction: column;
-  transition-property: margin-top;
-  transition-duration: 0.7s;
+  transition-property: transform;
+  transition-duration: 0.6s;
 `;
 
 export const InputSignContainer = styled.div`
@@ -148,6 +141,24 @@ export const LinkSignInOrUp = styled.p`
   }
 `;
 
+export const LabelCheckboxField = styled.label`
+  font-size: 0.90em;
+  margin-left: 6px;
+  font-weight: bold;
+  color: ${darkPurple};
+`;
+
+export const CheckboxField = styled.input`
+  width: 17px;
+  height: 17px;
+  &:hover {
+    cursor: pointer;
+  }
+  &:hover ~ label {
+    color: ${lightPurple};
+  }
+`;
+
 export const SubmitButton = styled.input`
   width: 34%;
   border: none;
@@ -177,18 +188,18 @@ export const SubmitButton = styled.input`
 `;
 
 export const AccountButton = styled.button`
-  height: 50px;
+  height: 55px;
   width: 25%;
   background: ${lightPurple};
   border: none;
-  border-radius: 0 0 50px 50px;
+  border-radius: 0 0 55px 55px;
   align-self: center;
   cursor: pointer;
-  box-shadow: inset 0 0 0 0 ${props => props.colorBS};
-  transition-property: border-color, box-shadow;
-  transition-duration: 0.2s;
+  transition-property: background-color;
+  transition-timing-function: ease-out;
+  transition-duration: 0.3s;
   &:hover {
-    box-shadow: inset 0 50px 0 0 ${props => props.colorBS};
+    background-color: ${props => props.colorBG};
     border: 2px solid ${lightPurple};
   }
   &:active {
