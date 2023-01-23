@@ -18,10 +18,10 @@ const Mouvement = (props) => {
 
     window.addEventListener('mousemove', handleMouseMove);
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (e) => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
-      props.onMouseUp(initialPosition.current);
+      props.onMouseUp(initialPosition.current, e.clientX, props.id);
     }
 
     window.addEventListener('mouseup', handleMouseUp);
@@ -33,21 +33,25 @@ const Mouvement = (props) => {
 }
 
 const PuzzeBlock = () => {
-  const [rectangles, setRectangles] = useState([{x: 300, y: 150, color: '#686f84'}, 
-                                                {x: 300, y: 350, color: '#686f84'}, 
-                                                {x: 300, y: 550, color: '#686f84'}, 
-                                                {x: 300, y: 750, color: '#686f84'}]);
+  const [rectangles, setRectangles] = useState([{id:1, x: 300, y: 150, color: '#686f84'}, 
+                                                {id:2, x: 300, y: 350, color: '#686f84'}, 
+                                                {id:3, x: 300, y: 550, color: '#686f84'}, 
+                                                {id:4, x: 300, y: 750, color: '#686f84'}]);
 
-  const handleMouseUp = (initialPosition) => {
-    setRectangles(rectangles.concat({ x: initialPosition.x, y: initialPosition.y, color: '#686f84' }));
+  const handleMouseUp = (initialPosition, x, id) => {
+    if(x < 600){
+      setRectangles(rectangles.filter(rectangle => rectangle.id !== id));
+    } else {
+      setRectangles([...rectangles, {id: rectangles.length + 1, x: initialPosition.x, y: initialPosition.y, color: '#686f84'}]);
+    }
   }
 
   return (
     <div>
       <Barre />
-      {rectangles.map((rect, index) => (<Mouvement key={index} x={rect.x} y={rect.y} color={rect.color} onMouseUp={handleMouseUp} /> ))}
+      {rectangles.map((rect, index) => (<Mouvement key={rect.id} id={rect.id} x={rect.x} y={rect.y} color={rect.color} onMouseUp={handleMouseUp} /> ))}
     </div>
   )
-  }
+}
 
-  export default PuzzeBlock;
+export default PuzzeBlock
