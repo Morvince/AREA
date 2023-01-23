@@ -30,7 +30,6 @@
                     break;
             }
             $response = curl_exec($ch);
-            print_r(json_decode($response));
             if (curl_error($ch)) {
                 curl_close($ch);
                 throw Exception(json_decode($response)->error->message, json_decode($response)->error->status);
