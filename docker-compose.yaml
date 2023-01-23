@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  db:
+    image: mariadb
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/mysql/
+    environment:
+      - MARIADB_ROOT_PASSWORD=password
+      - MARIADB_DATABASE=area_db
+    networks:
+      - db_network
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    environment:
+      - ADMINER_DEFAULT_DB_DRIVER=mysql
+      - ADMINER_DEFAULT_DB_HOST=mariadb
+      - ADMINER_DEFAULT_DB_NAME=adminer
+    ports:
+      - 8080:8080
+    networks:
+      - db_network
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './mariadb'
+networks:
+  frontend_network:
+  backend_network:
+  db_network:
