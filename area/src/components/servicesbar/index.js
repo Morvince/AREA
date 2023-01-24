@@ -65,7 +65,6 @@ const Servicesbar = () => {
       <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
         <PuzzleBlock x={10} y={10} color={getColor()}/>
       </RectangleContener>
-      {/* <SwitchSlider className={isOpen ? 'open' : 'closed'} onClick={() => setIsOpen(!isOpen)} /> */}
     </>
   );
 }
