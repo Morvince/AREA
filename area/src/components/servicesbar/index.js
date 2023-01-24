@@ -4,15 +4,16 @@ import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, Switch
 
 const Servicesbar = () => {
   const [isOpen, setIsOpen] = useState(true);
-  const [isRightBoxOpen, setIsRightBoxOpen] = useState(false);
+  const [isLeftBoxOpen, setisLeftBoxOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
 
   function handleClick(service) {
-    if(!isRightBoxOpen || selectedService !== service) {
-      setIsRightBoxOpen(true);
+    if(!isLeftBoxOpen || selectedService !== service) {
+      setisLeftBoxOpen(true);
       setSelectedService(service);
     } else {
-      setIsRightBoxOpen(false);
+      setisLeftBoxOpen(false);
+      setSelectedService();
     }
   }
 
@@ -60,7 +61,7 @@ const Servicesbar = () => {
           </IconBox>
         </ServicesBarWrapper>
       </ServicesBarContainer>
-      <RectangleContener className={isRightBoxOpen ? 'open' : 'closed'} color={getColor()} />
+      <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()} />
       {/* <SwitchSlider className={isOpen ? 'open' : 'closed'} onClick={() => setIsOpen(!isOpen)} /> */}
     </>
   );
