@@ -1,34 +1,47 @@
 version: '3.8'
 services:
-  db:
+  client_web:
+    build:
+      context: ./area
+      dockerfile: Dockerfile-reactjs
+    image: area_reactjs:latest
+    container_name: ${CONTAINER_NAME_PREFIX}client_web
+    restart: unless-stopped
+    ports:
+      - 8081:3000
+    networks:
+      - frontend_network
+      - backend_network
+  areadb:
     image: mariadb
+    container_name: ${CONTAINER_NAME_PREFIX}db
     restart: unless-stopped
     volumes:
       - db_data:/var/lib/mysql/
     environment:
-      - MARIADB_ROOT_PASSWORD=password
-      - MARIADB_DATABASE=area_db
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
     networks:
-      - db_network
-  adminer:
-    image: adminer
+      - areadb_network
+      - backend_network
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: ${CONTAINER_NAME_PREFIX}db_admin
     restart: unless-stopped
-    environment:
-      - ADMINER_DEFAULT_DB_DRIVER=mysql
-      - ADMINER_DEFAULT_DB_HOST=mariadb
-      - ADMINER_DEFAULT_DB_NAME=adminer
     ports:
-      - 8080:8080
+      - 8082:80
+    environment:
+      - PMA_ARBITRARY=1
     networks:
-      - db_network
+      - areadb_network
 volumes:
   db_data:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: './mariadb'
+      device: '${VOLUME_DATABASE}'
 networks:
   frontend_network:
   backend_network:
-  db_network:
+  areadb_network:
