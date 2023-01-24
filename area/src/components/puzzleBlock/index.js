@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Rectangle, Barre, Barre2 } from './puzzleBlockElements';
+import { Rectangle, Barre} from './puzzleBlockElements';
 
 const Mouvement = (props) => {
   const [position, setPosition] = useState({ x: props.x, y: props.y });
@@ -48,8 +48,8 @@ const PuzzeBlock = () => {
 
   return (
     <div>
-      <Barre2 />
-      <Barre />
+      <Barre left="600px" />
+      <Barre left="260px" />
       {rectangles.map((rect, index) => (<Mouvement key={rect.id} id={rect.id} x={rect.x} y={rect.y} color={rect.color} onMouseUp={handleMouseUp} /> ))}
     </div>
   )

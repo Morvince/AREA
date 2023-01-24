@@ -18,15 +18,6 @@ export const Barre = styled.div`
     width: 5px;
     position: absolute;
     top: 0px;
-    left: 600px;
-    background: black
-`;
-
-export const Barre2 = styled.div`
-    height: 975px;
-    width: 5px;
-    position: absolute;
-    top: 0px;
-    left: 260px;
-    background: black
+    left: ${props => props.left};
+    background: black;
 `;
