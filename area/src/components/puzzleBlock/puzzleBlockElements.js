@@ -8,9 +8,7 @@ export const Rectangle = styled.div`
     left: ${position => position.x};
     background: ${props => props.color};
     border-radius: 25px;
-    /* border: 3px solid black; */
-    box-shadow: 5px 5px 1px 0 #373b48
-;
+    box-shadow: 5px 5px 1px 0 #373b48;
 `;
 
 export const Barre = styled.div`

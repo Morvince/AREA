@@ -28,7 +28,15 @@ const Mouvement = (props) => {
   }
 
   return (
-    <Rectangle x={position.x + "px"} y={position.y + "px"} color={props.color} onMouseDown={handleMouseDown} />
+    <Rectangle
+      x={position.x + "px"}
+      y={position.y + "px"}
+      color={props.color}
+      onMouseDown={handleMouseDown}
+      onMouseEnter={props.onMouseEnter}
+      onMouseLeave={props.onMouseLeave}
+      style={{backgroundColor: props.highlightedId === props.id ? 'green' : props.color}}
+    />
   );
 }
 
@@ -37,6 +45,7 @@ const PuzzeBlock = () => {
                                                 {id:2, x: 300, y: 350, color: '#686f84'}, 
                                                 {id:3, x: 300, y: 550, color: '#686f84'}, 
                                                 {id:4, x: 300, y: 750, color: '#686f84'}]);
+  const [highlightedId, setHighlightedId] = useState(null);
 
   const handleMouseUp = (initialPosition, x, id) => {
     if(x < 600){
@@ -46,13 +55,30 @@ const PuzzeBlock = () => {
     }
   }
 
+  const handleMouseEnter = (id) => {
+    setHighlightedId(id);
+  }
+
+  const handleMouseLeave = () => {
+    setHighlightedId(null);
+  }
+
   return (
     <div>
       <Barre left="600px" />
       <Barre left="260px" />
-      {rectangles.map((rect, index) => (<Mouvement key={rect.id} id={rect.id} x={rect.x} y={rect.y} color={rect.color} onMouseUp={handleMouseUp} /> ))}
+      {rectangles.map((rect, index) => (<Mouvement 
+      key={rect.id} 
+      id={rect.id} 
+      x={rect.x}
+      y={rect.y}
+      color={rect.color}
+      onMouseUp={handleMouseUp}
+      onMouseEnter={() => handleMouseEnter(rect.id)}
+      onMouseLeave={handleMouseLeave}
+      highlightedId={highlightedId}
+      /> ))}
     </div>
   )
 }
-
 export default PuzzeBlock
