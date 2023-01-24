@@ -10,12 +10,3 @@ export const Rectangle = styled.div`
     border-radius: 25px;
     box-shadow: 5px 5px 1px 0 #373b48;
 `;
-
-export const Barre = styled.div`
-    height: 975px;
-    width: 5px;
-    position: absolute;
-    top: 0px;
-    left: ${props => props.left};
-    background: black;
-`;

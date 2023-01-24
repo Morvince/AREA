@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Rectangle, Barre} from './puzzleBlockElements';
+import { Rectangle } from './puzzleBlockElements';
 
 const Mouvement = (props) => {
   const [position, setPosition] = useState({ x: props.x, y: props.y });
@@ -40,19 +40,12 @@ const Mouvement = (props) => {
   );
 }
 
-const PuzzeBlock = () => {
-  const [rectangles, setRectangles] = useState([{id:1, x: 300, y: 150, color: '#686f84'}, 
-                                                {id:2, x: 300, y: 350, color: '#686f84'}, 
-                                                {id:3, x: 300, y: 550, color: '#686f84'}, 
-                                                {id:4, x: 300, y: 750, color: '#686f84'}]);
+const PuzzeBlock = (props) => {
+  const [rectangles, setRectangles] = useState([{id:1, x: props.x, y: props.y, color: props.color}]);
   const [highlightedId, setHighlightedId] = useState(null);
 
-  const handleMouseUp = (initialPosition, x, id) => {
-    if(x < 600){
-      setRectangles(rectangles.filter(rectangle => rectangle.id !== id));
-    } else {
-      setRectangles([...rectangles, {id: rectangles.length + 1, x: initialPosition.x, y: initialPosition.y, color: '#686f84'}]);
-    }
+  const handleMouseUp = (initialPosition, newId) => {
+    setRectangles([...rectangles, {id: newId, x: initialPosition.x, y: initialPosition.y}]);
   }
 
   const handleMouseEnter = (id) => {
@@ -65,19 +58,18 @@ const PuzzeBlock = () => {
 
   return (
     <div>
-      <Barre left="600px" />
-      <Barre left="260px" />
-      {rectangles.map((rect, index) => (<Mouvement 
-      key={rect.id} 
-      id={rect.id} 
-      x={rect.x}
-      y={rect.y}
-      color={rect.color}
-      onMouseUp={handleMouseUp}
-      onMouseEnter={() => handleMouseEnter(rect.id)}
-      onMouseLeave={handleMouseLeave}
-      highlightedId={highlightedId}
-      /> ))}
+      {rectangles.map(() => (
+        <Mouvement
+          id={props.id}
+          x={props.x}
+          y={props.y}
+          color={props.color}
+          onMouseUp={handleMouseUp}
+          onMouseEnter={() => handleMouseEnter(props.id)}
+          onMouseLeave={handleMouseLeave}
+          highlightedId={highlightedId}
+        />
+      ))}
     </div>
   )
 }
