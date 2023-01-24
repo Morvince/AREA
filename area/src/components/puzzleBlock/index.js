@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Rectangle, Barre} from './puzzleBlockElements';
+import 'animate.css/animate.min.css';
 
 const Mouvement = (props) => {
   const [position, setPosition] = useState({ x: props.x, y: props.y });
