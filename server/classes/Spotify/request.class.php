@@ -1,9 +1,9 @@
 <?php
     class Request {
-        public function __construct() {
-        }
+        public function __construct() {}
 
-        public function send($access_token, $url, $method, $parameters) {
+        public function send($access_token, $url, $method, $parameters)
+        {
             $headers = array(
                 "Accept: application/json",
                 "Content-Type: application/json",

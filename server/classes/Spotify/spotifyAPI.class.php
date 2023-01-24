@@ -9,7 +9,8 @@
         private $access_token;
         private $request;
 
-        public function __construct($client_id, $client_secret) {
+        public function __construct($client_id, $client_secret)
+        {
             $this->client_id = $client_id;
             $this->client_secret = $client_secret;
             $this->access_token = "";
@@ -17,19 +18,23 @@
         }
 
         // Getter
-        public function getClientID() {
+        public function getClientID()
+        {
             return $this->client_id;
         }
-        public function getClientSecret() {
+        public function getClientSecret()
+        {
             return $this->client_secret;
         }
 
         // Setter
-        public function setAccessToken($access_token) {
+        public function setAccessToken($access_token)
+        {
             $this->access_token = $access_token;
         }
 
-        private function sendRequest($endpoint, $method = "GET", $parameters = array()) {
+        private function sendRequest($endpoint, $method = "GET", $parameters = array())
+        {
             try {
                 $response = $this->request->send($this->access_token, self::API_URL.$endpoint, $method, $parameters);
             } catch (Exception $e) {
@@ -65,13 +70,15 @@
             return $response;
         }
 
-        public function search($type, $search) {// type = par exemple artist/track/album/playlist/etc... et search est la recherche
+        public function search($type, $search)
+        {// type = par exemple artist/track/album/playlist/etc... et search est la recherche
             $search = str_replace(" ", "%20", $search);
             $response = $this->sendRequest("search?type=$type&q=$search");
             return $response;
         }
 
-        public function getRandomMusicFromArtist($artist_name) {
+        public function getRandomMusicFromArtist($artist_name)
+        {
             srand(time());
             $alphabet = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
             $response = $this->search("track", $artist_name." ".$alphabet[rand(0, count($alphabet) - 1)]);
@@ -81,12 +88,14 @@
         }
 
         // Action
-        // public function isMusicAddedToPlaylist($action_id) {// en bdd = playlistId
+        // public function isMusicAddedToPlaylist($action_id)
+        // {// en bdd = playlistId
         //     ;
         // }
 
         // Reaction
-        public function addMusicFromArtistToQueue($reaction_id) {// en bdd = artistName
+        public function addMusicFromArtistToQueue($reaction_id)
+        {// en bdd = artistName
             $artist_name = "";// recuperer artistName en bdd avec symphony
             $music_uri = $this->getRandomMusicFromArtist()->uri;
             $parameters = array(
@@ -94,7 +103,8 @@
             );
             $this->sendRequest("me/player/queue", "POST", $parameters);
         }
-        public function addMusicFromArtistListToPlaylist($reaction_id) {// en bdd = artistName;artistName:playlistId
+        public function addMusicFromArtistListToPlaylist($reaction_id)
+        {// en bdd = artistName;artistName:playlistId
             srand(time());
             $description = "";// recuperer la liste dartiste en bdd et la playlist id avec symphony
             // parser la liste
