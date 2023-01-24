@@ -73,20 +73,20 @@
 
         public function getRandomMusicFromArtist($artist_name) {
             srand(time());
-            $t = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
-            $response = $this->search("track", $artist_name." ".$t[rand(0, count($t) - 1)]);
+            $alphabet = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
+            $response = $this->search("track", $artist_name." ".$alphabet[rand(0, count($alphabet) - 1)]);
             // faire un rand sur les recherches et obtenir la track uri
             $tracks = $response->tracks->items;
             return $tracks[rand(0, count($tracks) - 1)]->uri;
         }
 
         // Action
-        public function isMusicFromArtistStarted() {// en bdd = artistId
-            ;
-        }
+        // public function isMusicAddedToPlaylist($action_id) {// en bdd = playlistId
+        //     ;
+        // }
 
         // Reaction
-        public function addMusicFromArtistToQueue() {// en bdd = artistName
+        public function addMusicFromArtistToQueue($reaction_id) {// en bdd = artistName
             $artist_name = "";// recuperer artistName en bdd avec symphony
             $music_uri = $this->getRandomMusicFromArtist()->uri;
             $parameters = array(
@@ -94,7 +94,7 @@
             );
             $this->sendRequest("me/player/queue", "POST", $parameters);
         }
-        public function addMusicFromArtistListToPlaylist() {// en bdd = artistName;artistName:playlistId
+        public function addMusicFromArtistListToPlaylist($reaction_id) {// en bdd = artistName;artistName:playlistId
             srand(time());
             $description = "";// recuperer la liste dartiste en bdd et la playlist id avec symphony
             // parser la liste
