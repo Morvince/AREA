@@ -7,12 +7,10 @@ export const ServicesBarContainer = styled.div`
   align-items: center;
   background-color: ${props => props.color};
   width: 150px;
-  height: 87%;
+  height: 100%;
   position: fixed;
   left: 0;
   z-index: 999;
-  border-radius: 0 50px 50px 0;
-  margin-top: 20px;
   transition: transform .2s ease-in-out;
 
   &.open {
@@ -89,24 +87,19 @@ export const SwitchSlider = styled.div`
   }
 `;
 
-export const RightBox = styled.div`
+export const RectangleContener = styled.div`
   position: absolute;
-  right:0;
-  width: 150px;
-  height: 87%;
-  z-index: 999;
-  border-radius: 50px 0 0 50px;
-  margin-top: 20px;
-  display: none;
+  width: 350px;
+  height: 100%;
+  z-index: 998;
   transition: all 0.2s ease-in-out;
   background-color: ${props => props.color};
 
   &.open {
-    display: block;
-    transform: translateX(0);
+    transform: translateX(160px);
   }
 
   &.closed {
-    transform: translateX(150px);
+    transform: translateX(-200px);
   }
 `;

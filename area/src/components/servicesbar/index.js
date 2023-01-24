@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
-import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, SwitchSlider, RightBox } from './servicesbarElements';
+import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, SwitchSlider, RectangleContener } from './servicesbarElements';
 
 const Servicesbar = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -60,8 +60,8 @@ const Servicesbar = () => {
           </IconBox>
         </ServicesBarWrapper>
       </ServicesBarContainer>
-      <RightBox className={isRightBoxOpen ? 'open' : 'closed'} color={getColor()} />
-      <SwitchSlider className={isOpen ? 'open' : 'closed'} onClick={() => setIsOpen(!isOpen)} />
+      <RectangleContener className={isRightBoxOpen ? 'open' : 'closed'} color={getColor()} />
+      {/* <SwitchSlider className={isOpen ? 'open' : 'closed'} onClick={() => setIsOpen(!isOpen)} /> */}
     </>
   );
 }
