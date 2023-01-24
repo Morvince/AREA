@@ -31,7 +31,7 @@ const Servicesbar = () => {
       case "openai":
         return "#686f84";
       default:
-        return "#f8b429";
+        return "#373B48";
     }
   }
 

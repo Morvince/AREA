@@ -43,7 +43,7 @@ export const ServicesBarWrapper = styled.div`
 `;
 
 export const IconBox = styled.div`
-  margin: 4px;
+  margin: 12px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 
