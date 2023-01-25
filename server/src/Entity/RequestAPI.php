@@ -43,7 +43,7 @@
                 throw new \Exception(json_decode($response)->error->message, json_decode($response)->error->status);
             }
             curl_close($ch);
-            return json_decode($response);
+            return $response;
         }
     }
 ?>
