@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Rectangle } from './puzzleBlockElements';
+import { Rectangle, Bin, Bin2 } from './puzzleBlockElements';
 
 const Mouvement = (props) => {
   const [position, setPosition] = useState({ x: props.x, y: props.y });
@@ -28,7 +28,9 @@ const Mouvement = (props) => {
   }
 
   return (
-    <Rectangle
+    <>
+      <Bin color={props.color}/>
+      <Rectangle
       x={position.x + "px"}
       y={position.y + "px"}
       color={props.color}
@@ -36,7 +38,9 @@ const Mouvement = (props) => {
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}
       style={{backgroundColor: props.highlightedId === props.id ? 'green' : props.color}}
-    />
+      />
+      < Bin2 />
+    </>
   );
 }
 

@@ -63,7 +63,7 @@ const Servicesbar = () => {
         </ServicesBarWrapper>
       </ServicesBarContainer>
       <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
-        <PuzzleBlock x={10} y={10} color={getColor()}/>
+        <PuzzleBlock x={40} y={20} color={getColor()}/>
       </RectangleContener>
     </>
   );
