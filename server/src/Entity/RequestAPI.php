@@ -1,5 +1,12 @@
 <?php
-    class Request
+    namespace App\Entity;
+
+    use Doctrine\ORM\Mapping as ORM;
+
+    /**
+     * @ORM\MappedSuperclass
+     */
+    class RequestAPI
     {
         public function __construct() {}
 
@@ -33,7 +40,7 @@
             $response = curl_exec($ch);
             if (curl_error($ch)) {
                 curl_close($ch);
-                throw Exception(json_decode($response)->error->message, json_decode($response)->error->status);
+                throw new \Exception(json_decode($response)->error->message, json_decode($response)->error->status);
             }
             curl_close($ch);
             return json_decode($response);

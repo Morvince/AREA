@@ -10,3 +10,11 @@ user_login:
 user_logout:
     path: /logout
     controller: App\Controller\UserController::logout
+
+# SPOTIFY
+spotify_api_get_access_token:
+    path: /spotify/get_access_token
+    controller: App\Controller\SpotifyAPIController::getAccessToken
+spotify_api_search:
+    path: /spotify/search
+    controller: App\Controller\SpotifyAPIController::search
