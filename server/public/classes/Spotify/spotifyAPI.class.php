@@ -1,7 +1,8 @@
 <?php
-    require_once("request.class.php");
+    require_once("classes/request.class.php");
 
-    class SpotifyAPI {
+    class SpotifyAPI
+    {
         private const API_URL = "https://api.spotify.com/v1/";
 
         private $client_id;

@@ -1,0 +1,12 @@
+# USER
+user_register:
+    path: /register
+    controller: App\Controller\UserController::register
+    # methods: [POST]
+user_login:
+    path: /login
+    controller: App\Controller\UserController::login
+    # methods: [POST]
+user_logout:
+    path: /logout
+    controller: App\Controller\UserController::logout

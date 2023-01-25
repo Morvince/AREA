@@ -1,5 +1,6 @@
 <?php
-    class Request {
+    class Request
+    {
         public function __construct() {}
 
         public function send($access_token, $url, $method, $parameters)
