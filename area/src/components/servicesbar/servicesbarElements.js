@@ -91,7 +91,7 @@ export const RectangleContener = styled.div`
   position: fixed;
   width: 350px;
   height: 100%;
-  z-index: 998;
+  z-index: 25;
   transition: all 0.2s ease-in-out;
   background-color: ${props => props.color};
 
