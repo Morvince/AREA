@@ -88,7 +88,7 @@ export const SwitchSlider = styled.div`
 `;
 
 export const RectangleContener = styled.div`
-  position: absolute;
+  position: fixed;
   width: 350px;
   height: 100%;
   z-index: 998;
@@ -96,10 +96,10 @@ export const RectangleContener = styled.div`
   background-color: ${props => props.color};
 
   &.open {
-    transform: translateX(160px);
+    left: 160px;
   }
 
   &.closed {
-    transform: translateX(-200px);
+    left: -200px;
   }
 `;

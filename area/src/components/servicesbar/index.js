@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, SwitchSlider, RectangleContener } from './servicesbarElements';
 import PuzzleBlock from '../puzzleBlock';
+import { Bin } from '../bin/binElements'
 
 const Servicesbar = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -39,6 +40,7 @@ const Servicesbar = () => {
 
   return (
     <>
+      < Bin color={getColor()} />
       <ServicesBarContainer className={isOpen ? 'open' : 'closed'} color={getColor()}>
         <ServicesName>Services</ServicesName>
         <ServicesBarWrapper>
