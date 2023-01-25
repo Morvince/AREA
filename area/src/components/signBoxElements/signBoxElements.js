@@ -85,6 +85,11 @@ export const InputSignField = styled.input`
   &:focus ~ i {
     height: 44px;
   }
+  &:valid ~ div.iconPasswdTr,
+  &:not(:placeholder-shown) ~ div.iconPasswdTr,
+  &:focus ~ div.iconPasswdTr {
+    color: ${white};
+  }
 `;
 
 export const InputSignLabel = styled.span`
@@ -205,4 +210,30 @@ export const AccountButton = styled.button`
   &:active {
     opacity: 0.9;
   }
+  &:hover ~ div.slideArrowColorTr {
+    color: ${white};
+  }
+`;
+
+export const IconArrowBox = styled.div`
+  position: absolute;
+  left: 44.5%;
+  top: 1%;
+  color: ${props => props.color};
+  pointer-events: none;
+  transition-property: color;
+  transition-timing-function: ease-out;
+  transition-duration: 0.3s;
+`;
+
+export const IconPasswdBox = styled.div`
+  position: absolute;
+  right: 2%;
+  bottom: 7%;
+  color: ${props => props.color};
+  transition-property: color;
+  transition-timing-function: ease-out;
+  transition-duration: 0.3s;
+  z-index: 20;
+  cursor: pointer;
 `;
