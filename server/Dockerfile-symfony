@@ -1,0 +1,8 @@
+FROM php:8.1-apache
+WORKDIR /app
+COPY . ./server
+RUN apt-get update && apt-get install curl
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash
+RUN apt-get install -y symfony-cli
+WORKDIR /app/server
+CMD [ "symfony", "server:start" ]

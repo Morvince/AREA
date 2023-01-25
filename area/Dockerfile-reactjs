@@ -1,5 +1,6 @@
 FROM node
 WORKDIR /app
-COPY . .
+COPY . ./client_web
+WORKDIR /app/client_web
 RUN npm install
 CMD [ "npm", "start" ]

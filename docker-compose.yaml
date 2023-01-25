@@ -1,5 +1,24 @@
 version: '3.8'
+
 services:
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile-symfony
+    image: area_symfony:latest
+    container_name: ${CONTAINER_NAME_PREFIX}server
+    restart: unless-stopped
+    ports:
+      - 8080:8000
+    environment:
+      - DATABASE_URL=mysql://root:${MARIADB_ROOT_PASSWORD}@areadb:3306/${MARIADB_DATABASE}
+    networks:
+      - areadb_network
+      - backend_network
+    depends_on:
+      - areadb
+
   client_web:
     build:
       context: ./area
@@ -12,6 +31,9 @@ services:
     networks:
       - frontend_network
       - backend_network
+    depends_on:
+      - server
+
   areadb:
     image: mariadb
     container_name: ${CONTAINER_NAME_PREFIX}db
@@ -24,6 +46,7 @@ services:
     networks:
       - areadb_network
       - backend_network
+
   phpmyadmin:
     image: phpmyadmin
     container_name: ${CONTAINER_NAME_PREFIX}db_admin
@@ -34,6 +57,9 @@ services:
       - PMA_ARBITRARY=1
     networks:
       - areadb_network
+    depends_on:
+      - areadb
+
 volumes:
   db_data:
     driver: local
@@ -41,6 +67,7 @@ volumes:
       type: 'none'
       o: 'bind'
       device: '${VOLUME_DATABASE}'
+
 networks:
   frontend_network:
   backend_network:
