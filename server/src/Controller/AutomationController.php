@@ -2,7 +2,7 @@
     namespace App\Controller;
 
     use App\Entity\Automation;
-    use App\Entity\Action;
+    use App\Entity\AutomationAction;
     use App\Repository\AutomationRepository;
     use App\Repository\AutomationActionRepository;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,8 +35,40 @@
                 return new JsonResponse(array("status" => "error"));// id inexistante
             }
             $automation = $automation_action_repository->findByAutomationId($automation_id);
+            // formatter une array avec automation in $response
             if (empty($automation)) {
                 return new JsonResponse(array("status" => "ok"));
+            }
+            return new JsonResponse(array("status" => "ok"));
+        }
+        /**
+         * @Route("/automation/edit", name="automation_edit")
+         */
+        public function editAutomation(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository)
+        {
+            $data = json_decode($request->getContent(), true);
+            if (empty($data->automation_id)) {
+                return new JsonResponse(array("status" => "error"));// manque le champs automation_id
+            }
+            $automation_id = $data->automation_id;
+            if (empty($automation_repository->findById($automation_id))) {
+                return new JsonResponse(array("status" => "error"));// id inexistante
+            }
+            $automation = $automation_action_repository->findByAutomationId($automation_id);
+            foreach ($automation as $item) {
+                $automation_action_repository->remove($item);
+            }
+            if (empty($data->actions)) {
+                return new JsonResponse(array("status" => "ok"));
+            }
+            $actions = $data->actions;
+            foreach ($actions as $action) {
+                $automation_action = new AutomationAction();
+                $automation_action->setActionId($action->id);
+                $automation_action->setAutomationId($automation_id);
+                $automation_action->setNumber($action->number);
+                $automation_action->setInformations($action->informations);
+                $automation_action_repository->add($automation_action, true);
             }
             return new JsonResponse(array("status" => "ok"));
         }

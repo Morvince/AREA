@@ -29,3 +29,6 @@ automation_add:
 automation_get:
     path: /automation/get
     controller: App\Controller\AutomationController::getAutomation
+automation_edit:
+    path: /automation/edit
+    controller: App\Controller\AutomationController::editAutomation
