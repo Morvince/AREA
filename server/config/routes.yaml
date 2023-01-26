@@ -25,4 +25,7 @@ spotify_api_search:
 # AUTOMATION
 automation_add:
     path: /automation/add
-    controller: App\Controller\AutomationController::add
+    controller: App\Controller\AutomationController::addAutomation
+automation_get:
+    path: /automation/get
+    controller: App\Controller\AutomationController::getAutomation

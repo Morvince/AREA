@@ -38,6 +38,16 @@
             }
         }
 
+        public function findByAutomationId($automation_id)
+        {
+            return $this->createQueryBuilder("automation_action")
+                ->where("automation_action.automation_id = :automation_id")
+                ->setParameter("automation_id", $automation_id)
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+
     //    /**
     //     * @return AutomationAction[] Returns an array of AutomationAction objects
     //     */
