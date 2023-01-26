@@ -38,6 +38,16 @@
             }
         }
 
+        public function findById($action_id)
+        {
+            return $this->createQueryBuilder("action")
+                ->where("action.id = :id")
+                ->setParameter("id", $action_id)
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+
     //    /**
     //     * @return Action[] Returns an array of Action objects
     //     */
