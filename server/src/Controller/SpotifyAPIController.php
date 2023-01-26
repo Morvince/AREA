@@ -17,12 +17,17 @@
         /**
          * @Route("/spotify/connect", name="spotify_api_connect")
          */
-        public function connect(Request $request, ServiceRepository $sevice_repository)
+        public function connect(ServiceRepository $sevice_repository)
         {
-            $service = new Service();// refaire une fonction dans le repo service qui permet de get avec le nom du service
-            /*$client_id = $service->getIdentifiers();// avant le ;
-            $client_secret = $service->getIdentifiers();// apres le ;*/
-            $client_id = "CLIENT_ID";
+            $service = $sevice_repository->findByName("spotify")[0];
+            if (empty($service)) {
+                return new JsonResponse(array("status" => "error"));//pas de service spotify en db
+            }
+            $identifiers = explode(";", $service->getIdentifiers());
+            if (empty($identifiers)) {
+                return new JsonResponse(array("status" => "error"));//probleme client id ou secret en db
+            }
+            $client_id = $identifiers[0];
             $redirect_uri = "http://localhost:8000/spotify/get_access_token";
             return $this->redirectToAutorisationLink($client_id, $redirect_uri);
         }
@@ -46,15 +51,19 @@
          */
         public function getAccessToken(Request $request, ServiceRepository $sevice_repository)
         {
-            $service = new Service();// refaire une fonction dans le repo service qui permet de get avec le nom du service
-            /*$client_id = $service->getIdentifiers();// avant le ;
-            $client_secret = $service->getIdentifiers();// apres le ;*/
-            $client_id = "CLIENT_ID";
-            $client_secret = "CLIENT_SECRET";
+            $service = $sevice_repository->findByName("spotify")[0];
+            if (empty($service)) {
+                return new JsonResponse(array("status" => "error"));//pas de service spotify en db
+            }
+            $identifiers = explode(";", $service->getIdentifiers());
+            if (count($identifiers) != 2) {
+                return new JsonResponse(array("status" => "error"));//probleme client id ou secret en db
+            }
+            $client_id = $identifiers[0];
+            $client_secret = $identifiers[1];
             $code = $request->query->get("code");
             $state = $request->query->get("state");
             $redirect_uri = "http://localhost:8000/spotify/get_access_token";
-            // Vérifiez la validité de la requête en comparant la valeur de l'état avec la valeur générée précédemment
             if ($state != "17") {
                 return new JsonResponse(array("status" => "error"));//Bad request
             }

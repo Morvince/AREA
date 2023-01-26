@@ -38,6 +38,16 @@
             }
         }
 
+        public function findByName($name)
+        {
+            return $this->createQueryBuilder("service")
+                ->where("service.name = :name")
+                ->setParameter("name", $name)
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+
     //    /**
     //     * @return Service[] Returns an array of Service objects
     //     */
