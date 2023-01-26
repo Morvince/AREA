@@ -93,17 +93,17 @@ const SignBoxComponent = ({slideForm, handleSlideForm}) => {
         <p style={{ color: lightPurple, fontSize: "19px", fontStyle: "italic", fontWeight: "bold", marginTop: "30px", alignSelf: "center" }}>Sign up with Google</p>
         <GoogleButton signOption="signup_with" margin="12px 0px 0px 0px" align="center" slideForm={slideForm}/>
         <OrLine/>
-        <InputSignContainer paddingTop="10px">
+        <InputSignContainer paddingTop="9px">
           <InputSignField type="text" required="required" placeholder=" " caret={black}/>
           <InputSignLabel>Username</InputSignLabel>
           <InputSignLine/>
         </InputSignContainer>
-        <InputSignContainer paddingTop="25px">
+        <InputSignContainer paddingTop="20px">
           <InputSignField type="email" required="required" placeholder=" " caret={black}/>
           <InputSignLabel>Email address</InputSignLabel>
           <InputSignLine/>
         </InputSignContainer>
-        <InputSignContainer paddingTop="25px">
+        <InputSignContainer paddingTop="20px">
           <InputSignField ref={inputPasswdSignUp} type="password" required="required" placeholder=" " caret={black}/>
           <InputSignLabel>Password</InputSignLabel>
           <InputSignLine/>
@@ -111,7 +111,7 @@ const SignBoxComponent = ({slideForm, handleSlideForm}) => {
             <Icon icon={iconPasswd["iPSu"]} width="30" height="30" onClick={() => seePassword("iPSu")}/>
           </IconPasswdBox>
         </InputSignContainer>
-        <InputSignContainer paddingTop="25px">
+        <InputSignContainer paddingTop="20px">
           <InputSignField ref={inputConfirmPasswdSignUp} type="password" required="required" placeholder=" " caret={black}/>
           <InputSignLabel>Confirm your password</InputSignLabel>
           <InputSignLine/>
