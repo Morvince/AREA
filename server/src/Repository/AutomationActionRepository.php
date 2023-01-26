@@ -23,7 +23,6 @@
         public function add(AutomationAction $entity, bool $flush = false): void
         {
             $this->getEntityManager()->persist($entity);
-
             if ($flush) {
                 $this->getEntityManager()->flush();
             }
@@ -32,10 +31,19 @@
         public function remove(AutomationAction $entity, bool $flush = false): void
         {
             $this->getEntityManager()->remove($entity);
-
             if ($flush) {
                 $this->getEntityManager()->flush();
             }
+        }
+
+        public function findByAutomationId($automation_id)
+        {
+            return $this->createQueryBuilder("automation_action")
+                ->where("automation_action.automation_id = :automation_id")
+                ->setParameter("automation_id", $automation_id)
+                ->getQuery()
+                ->getResult()
+            ;
         }
 
     //    /**
