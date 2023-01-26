@@ -146,12 +146,12 @@
             }
             return $response;
         }            
-            
+/*           
         // Action
-        // public function isMusicAddedToPlaylist($action_id)
-        // {// en bdd = playlistId
-        //     ;
-        // }
+        public function isMusicAddedToPlaylist($action_id)
+        {// en bdd = playlistId
+            ;
+        }
 
         // Reaction
         public function addMusicFromArtistToQueue($reaction_id)
@@ -195,6 +195,6 @@
             $search = str_replace(" ", "%20", $search);
             $response = $this->sendRequest("search?type=$type&q=$search");
             return $response;
-        }
+        }*/
     }
 ?>
