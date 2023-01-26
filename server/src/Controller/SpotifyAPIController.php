@@ -1,7 +1,6 @@
 <?php
     namespace App\Controller;
 
-    use App\Entity\Service;
     use App\Entity\RequestAPI;
     use App\Repository\ServiceRepository;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -146,34 +145,14 @@
                 }
             }
             return $response;
-        }
-
-        // faire une fct private pour la fct getRandomMusic en dessous
-        // public function search($type, $search)
-        // {// type = par exemple artist/track/album/playlist/etc... et search est la recherche
+        }            
             
-        //     $search = str_replace(" ", "%20", $search);
-        //     $response = $this->sendRequest("search?type=$type&q=$search");
-        //     return new JsonResponse($response);
-        // }
-
-        // private function getRandomMusicFromArtist($artist_name)
-        // {
-        //     srand(time());
-        //     $alphabet = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
-        //     $response = json_decode($this->search("track", $artist_name." ".$alphabet[rand(0, count($alphabet) - 1)]));
-        //     $tracks = $response->tracks->items;
-        //     return $tracks[rand(0, count($tracks) - 1)]->uri;
-        // }
-
-
         // Action
         // public function isMusicAddedToPlaylist($action_id)
         // {// en bdd = playlistId
         //     ;
         // }
 
-/*
         // Reaction
         public function addMusicFromArtistToQueue($reaction_id)
         {// en bdd = artistName
@@ -200,6 +179,22 @@
                 "uri" => $music_uri
             );
             $this->sendRequest("playlists/$playlist_id/tracks", "POST", $parameters);
-        }*/
+        }
+
+        private function getRandomMusicFromArtist($artist_name)
+        {
+            srand(time());
+            $alphabet = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
+            $response = json_decode($this->privateSearch("track", $artist_name." ".$alphabet[rand(0, count($alphabet) - 1)]));
+            $tracks = $response->tracks->items;
+            return $tracks[rand(0, count($tracks) - 1)]->uri;
+        }
+        private function privateSearch($type, $search)
+        {// type = par exemple artist/track/album/playlist/etc... et search est la recherche
+            
+            $search = str_replace(" ", "%20", $search);
+            $response = $this->sendRequest("search?type=$type&q=$search");
+            return $response;
+        }
     }
 ?>

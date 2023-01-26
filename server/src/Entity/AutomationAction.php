@@ -31,6 +31,11 @@
          */
         private $number;
 
+        /**
+         * @ORM\Column(type="string", length=255)
+         */
+        private $informations;
+
         // Getter
         public function getId()
         {
@@ -48,6 +53,10 @@
         {
             return $this->number;
         }
+        public function getInformations()
+        {
+            return $this->informations;
+        }
 
         // Setter
         public function setAutomationId(int $automation_id)
@@ -63,6 +72,11 @@
         public function setNumber(int $number)
         {
             $this->number = $number;
+            return $this;
+        }
+        public function setInformations(string $informations)
+        {
+            $this->informations = $informations;
             return $this;
         }
     }
