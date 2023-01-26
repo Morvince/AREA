@@ -31,9 +31,28 @@ const Servicesbar = () => {
       case "twitter":
         return "#1da1f2";
       case "openai":
-        return "#686f84";
+        return "#434857";
       default:
         return "#373B48";
+    }
+  }
+
+  function getColorPuzzleBlock() {
+    switch(selectedService) {
+      case "discord":
+        return "#5470d6";
+      case "spotify":
+        return "#10a143";
+      case "instagram":
+        return "#c2134f";
+      case "google":
+        return "#d92516";
+      case "twitter":
+        return "#1486cc";
+      case "openai":
+        return "#686f84";
+      default:
+        return "#454b5e";
     }
   }
 
@@ -63,7 +82,7 @@ const Servicesbar = () => {
         </ServicesBarWrapper>
       </ServicesBarContainer>
       <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
-        <PuzzleBlock x={10} y={10} color={getColor()}/>
+        <PuzzleBlock x={10} y={10} color={getColorPuzzleBlock()}/>
       </RectangleContener>
     </>
   );
