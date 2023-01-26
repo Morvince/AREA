@@ -1,5 +1,11 @@
 import styled from 'styled-components';
 
+export const LeftColumn = styled.div`
+  /* position: absolute; */
+  display: flex;
+  width: 150px;
+`;
+
 export const ServicesBarContainer = styled.div`
   position: absolute;
   display: flex;
@@ -55,34 +61,6 @@ export const IconBox = styled.div`
   &:active {
     transition: all 0.1s ease-in-out;
     transform: scale(1.5);
-  }
-`;
-
-export const SwitchSlider = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 150px;
-  width: 20px;
-  height: 60px;
-  background-color: #9966ff;
-  border-radius: 0 50px 50px 0;
-  cursor: pointer;
-  transition: transform .2s ease-in-out;
-
-  &.open {
-    transform: translateX(0);
-  }
-
-  &.closed {
-    transform: translateX(-150px);
-  }
-
-  &:hover {
-    background-color: green;
-  }
-
-  &:active {
-    background-color: red;
   }
 `;
 

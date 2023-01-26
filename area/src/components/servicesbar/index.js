@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
-import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, SwitchSlider, RectangleContener } from './servicesbarElements';
+import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
 import PuzzleBlock from '../puzzleBlock';
 
 const Servicesbar = () => {
@@ -57,7 +57,7 @@ const Servicesbar = () => {
   }
 
   return (
-    <>
+    <LeftColumn>
       <ServicesBarContainer className={isOpen ? 'open' : 'closed'} color={getColor()}>
         <ServicesName>Services</ServicesName>
         <ServicesBarWrapper>
@@ -84,7 +84,7 @@ const Servicesbar = () => {
       <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
         <PuzzleBlock x={10} y={10} color={getColorPuzzleBlock()}/>
       </RectangleContener>
-    </>
+    </LeftColumn>
   );
 }
 
