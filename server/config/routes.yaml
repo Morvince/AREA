@@ -32,3 +32,8 @@ automation_get:
 automation_edit:
     path: /automation/edit
     controller: App\Controller\AutomationController::editAutomation
+
+# ACTION
+action_get:
+    path: /action/get
+    controller: App\Controller\ActionController::getAction

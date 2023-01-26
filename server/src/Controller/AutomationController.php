@@ -32,11 +32,11 @@
             }
             $automation_id = $request->query->get("automation_id");
             if (empty($automation_repository->findById($automation_id))) {
-                return new JsonResponse(array("status" => "error"));// id inexistante
+                return new JsonResponse(array("status" => "error"));// automation inexistante
             }
-            $automation = $automation_action_repository->findByAutomationId($automation_id);
+            $automation_actions = $automation_action_repository->findByAutomationId($automation_id);
             // formatter une array avec automation in $response
-            if (empty($automation)) {
+            if (empty($automation_actions)) {
                 return new JsonResponse(array("status" => "ok"));
             }
             return new JsonResponse(array("status" => "ok"));
@@ -54,8 +54,8 @@
             if (empty($automation_repository->findById($automation_id))) {
                 return new JsonResponse(array("status" => "error"));// id inexistante
             }
-            $automation = $automation_action_repository->findByAutomationId($automation_id);
-            foreach ($automation as $item) {
+            $automation_actions = $automation_action_repository->findByAutomationId($automation_id);
+            foreach ($automation_actions as $item) {
                 $automation_action_repository->remove($item);
             }
             if (empty($data->actions)) {
