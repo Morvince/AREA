@@ -8,7 +8,6 @@ export const ServicesBarContainer = styled.div`
   background-color: ${props => props.color};
   width: 150px;
   height: 100%;
-  position: fixed;
   left: 0;
   z-index: 999;
   transition: transform .2s ease-in-out;
