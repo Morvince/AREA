@@ -2,6 +2,7 @@
     namespace App\Controller;
 
     use App\Entity\RequestAPI;
+    use App\Repository\AutomationActionRepository;
     use App\Repository\ServiceRepository;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\HttpFoundation\Request;
@@ -145,42 +146,75 @@
                 }
             }
             return $response;
-        }            
-/*           
+        }
+
         // Action
-        public function isMusicAddedToPlaylist($action_id)
-        {// en bdd = playlistId
+        public function isMusicAddedToPlaylist()//jsp trop comment implementer car je dois avoir ancienne version de la playlist en plus de la nouvelle
+        {// en db = playlist_id
             ;
         }
 
         // Reaction
-        public function addMusicFromArtistToQueue($reaction_id)
-        {// en bdd = artistName
-            $artist_name = "";// recuperer artistName en bdd avec symphony
-            $music_uri = $this->getRandomMusicFromArtist($artist_name)->uri;
+        public function addMusicFromArtistToQueue($automation_action_id, AutomationActionRepository $automation_action_repository)
+        {// en db = artist_id
+            $automation_action = $automation_action_repository->findById($automation_action_id);
+            if (empty($automation_action)) {
+                return array("status" => "error");// id inexistante
+            }
+            $artist_id = $automation_action[0]->getInformations();
+            $response = json_decode($this->getArtistById($artist_id));
+            if (empty($response->name)) {
+                return $response;// error renvoyé par la requete
+            }
+            $music_uri = $this->getRandomMusicFromArtist($response->name)->uri;
             $parameters = array(
                 "uri" => $music_uri
             );
             $this->sendRequest("me/player/queue", "POST", $parameters);
+            return array("status" => "ok");
         }
-        public function addMusicFromArtistListToPlaylist($reaction_id)
-        {// en bdd = artistName;artistName:playlistId
+        public function addMusicFromArtistListToPlaylist($automation_action_id, AutomationActionRepository $automation_action_repository)
+        {// en db = artist_id;artist_id:playlist_id
             srand(time());
-            $description = "";// recuperer la liste dartiste en bdd et la playlist id avec symphony
-            // parser la liste
-            $args = explode(":", $description);
-            if (count($args) != 2) {
-                return;// peut etre throw une erreur
+            $automation_action = $automation_action_repository->findById($automation_action_id);
+            if (empty($automation_action)) {
+                return array("status" => "error");// id inexistante
             }
-            $artist_list = explode(";", $args[0]);
+            $informations = $automation_action[0]->getInformations();
+            // parser la liste
+            $args = explode(":", $informations);
+            if (count($args) != 2) {
+                return array("status" => "error");// probleme en db
+            }
+            $artists_id = explode(";", $args[0]);
+            $artists_name = array();
+            foreach ($artists_id as $artist_id) {
+                if (!empty($artist_id)) {
+                    $response = json_decode($this->getArtistById($artist_id));
+                    if (!empty($response->name)) {
+                        array_push($artists_name, $response->name);
+                    }
+                }
+            }
+            if (empty($artists_name)) {
+                return array("status" => "error");// id inexistante
+            }
             $playlist_id = $args[1];
-            $music_uri = $this->getRandomMusicFromArtist($artist_list[rand(0, count($artist_list) - 1)])->uri;
+            $music_uri = $this->getRandomMusicFromArtist($artists_name[rand(0, count($artists_name) - 1)])->uri;
             $parameters = array(
                 "uri" => $music_uri
             );
-            $this->sendRequest("playlists/$playlist_id/tracks", "POST", $parameters);
+            $response = $this->sendRequest("playlists/$playlist_id/tracks", "POST", $parameters);
+            return array("status" => "ok");//verifier erreur de response
         }
-
+        private function getArtistById($artist_id)
+        {
+            return $this->sendRequest("/artists/".$artist_id);
+        }
+        private function getPlaylistById($playlist_id)
+        {
+            return $this->sendRequest("/playlists/".$playlist_id);
+        }
         private function getRandomMusicFromArtist($artist_name)
         {
             srand(time());
@@ -195,6 +229,6 @@
             $search = str_replace(" ", "%20", $search);
             $response = $this->sendRequest("search?type=$type&q=$search");
             return $response;
-        }*/
+        }
     }
 ?>
