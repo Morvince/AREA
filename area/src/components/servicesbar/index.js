@@ -4,12 +4,21 @@ import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, LeftCo
 import PuzzleBlock from '../puzzleBlock';
 
 const Servicesbar = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen] = useState(true);
   const [isLeftBoxOpen, setisLeftBoxOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
 
+  const services = [
+    { nom: 'discord', nombre: 5 },
+    { nom: 'spotify', nombre: 1 },
+    { nom: 'instagram', nombre: 2 },
+    { nom: 'google', nombre: 4 },
+    { nom: 'twitter', nombre: 3 },
+    { nom: 'openai', nombre: 6 },
+  ];
+
   function handleClick(service) {
-    if(!isLeftBoxOpen || selectedService !== service) {
+    if (!isLeftBoxOpen || selectedService !== service) {
       setisLeftBoxOpen(true);
       setSelectedService(service);
     } else {
@@ -19,7 +28,7 @@ const Servicesbar = () => {
   }
 
   function getColor() {
-    switch(selectedService) {
+    switch (selectedService) {
       case "discord":
         return "#7289da";
       case "spotify":
@@ -38,7 +47,7 @@ const Servicesbar = () => {
   }
 
   function getColorPuzzleBlock() {
-    switch(selectedService) {
+    switch (selectedService) {
       case "discord":
         return "#5470d6";
       case "spotify":
@@ -56,34 +65,42 @@ const Servicesbar = () => {
     }
   }
 
+  const puzzleBlocks = services
+    .filter(service => selectedService === null || service.nom === selectedService)
+    .map((service) => {
+      return [...Array(service.nombre)].map((_, i) => (
+        <PuzzleBlock key={i} color={getColorPuzzleBlock()} />
+      ));
+    });
+
   return (
     <LeftColumn>
       <ServicesBarContainer className={isOpen ? 'open' : 'closed'} color={getColor()}>
         <ServicesName>Services</ServicesName>
         <ServicesBarWrapper>
           <IconBox onClick={() => handleClick("discord")}>
-            <Icon icon="skill-icons:discord" width="75" height="75"/>
+            <Icon icon="skill-icons:discord" width="75" height="75" />
           </IconBox>
           <IconBox onClick={() => handleClick("spotify")}>
-            <Icon icon="logos:spotify-icon" width="75" height="75"/>
+            <Icon icon="logos:spotify-icon" width="75" height="75" />
           </IconBox>
           <IconBox onClick={() => handleClick("instagram")}>
-            <Icon icon="skill-icons:instagram" width="75" height="75"/>
+            <Icon icon="skill-icons:instagram" width="75" height="75" />
           </IconBox>
           <IconBox onClick={() => handleClick("google")}>
-            <Icon icon="logos:google-icon" width="75" height="75"/>
+            <Icon icon="logos:google-icon" width="75" height="75" />
           </IconBox>
           <IconBox onClick={() => handleClick("twitter")}>
-            <Icon icon="skill-icons:twitter" width="75" height="75"/>
+            <Icon icon="skill-icons:twitter" width="75" height="75" />
           </IconBox>
           <IconBox onClick={() => handleClick("openai")}>
-            <Icon icon="logos:openai-icon" width="75" height="75"/>
+            <Icon icon="logos:openai-icon" width="75" height="75" />
           </IconBox>
         </ServicesBarWrapper>
+        <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
+          {puzzleBlocks}
+        </RectangleContener>
       </ServicesBarContainer>
-      <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
-        <PuzzleBlock x={10} y={10} color={getColorPuzzleBlock()}/>
-      </RectangleContener>
     </LeftColumn>
   );
 }

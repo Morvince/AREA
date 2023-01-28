@@ -73,10 +73,10 @@ export const RectangleContener = styled.div`
   background-color: ${props => props.color};
 
   &.open {
-    transform: translateX(160px);
+    transform: translateX(270px);
   }
 
   &.closed {
-    transform: translateX(-200px);
+    transform: translateX(-350px);
   }
 `;

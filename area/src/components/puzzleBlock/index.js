@@ -6,8 +6,9 @@ const PuzzeBlock = (props) => {
 
   return (
     <Draggable>
-      <Rectangle color={props.color} />
+      <Rectangle color={props.color}/>
     </Draggable>
   )
 }
+
 export default PuzzeBlock
