@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
 import PuzzleBlock from '../puzzleBlock';
@@ -7,6 +7,7 @@ const Servicesbar = () => {
   const [isOpen] = useState(true);
   const [isLeftBoxOpen, setisLeftBoxOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
+  const [blockPositions, setBlockPositions] = useState([]);
 
   const services = [
     { nom: 'discord', nombre: 5, before : 0 },
@@ -16,6 +17,21 @@ const Servicesbar = () => {
     { nom: 'twitter', nombre: 3, before : 12 },
     { nom: 'openai', nombre: 6, before : 15 },
   ];
+
+  useEffect(() => {
+    let positions = [];
+    services.forEach((service) => {
+      [...Array(service.nombre)].forEach((_, i) => {
+        positions.push({
+          top: (i * 140) + 10,
+          left: 50,
+          color: getColorPuzzleBlock(service.nom),
+          service: service.nom
+        });
+      });
+    });
+    setBlockPositions(positions);
+  }, []);
 
   function handleClick(service) {
     if (!isLeftBoxOpen || selectedService !== service) {
@@ -46,8 +62,8 @@ const Servicesbar = () => {
     }
   }
 
-  function getColorPuzzleBlock() {
-    switch (selectedService) {
+  function getColorPuzzleBlock(string) {
+    switch (string) {
       case "discord":
         return "#5470d6";
       case "spotify":
@@ -64,14 +80,6 @@ const Servicesbar = () => {
         return "#454b5e";
     }
   }
-
-  const puzzleBlocks = services
-    .filter(service => selectedService === null || service.nom === selectedService)
-    .map((service) => {
-      return [...Array(service.nombre)].map((_, i, b) => (
-        <PuzzleBlock key={i+b} color={getColorPuzzleBlock()} top={(i*140)+10} left={50}/>
-      ));
-    });
 
   return (
     <LeftColumn>
@@ -98,7 +106,11 @@ const Servicesbar = () => {
           </IconBox>
         </ServicesBarWrapper>
         <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
-          {puzzleBlocks}
+          {blockPositions
+            .filter((position) => selectedService === null || position.service === selectedService)
+            .map((position, index) => (
+              <PuzzleBlock key={position.nom + index} color={position.color} top={position.top} left={position.left} />
+            ))}
         </RectangleContener>
       </ServicesBarContainer>
     </LeftColumn>
