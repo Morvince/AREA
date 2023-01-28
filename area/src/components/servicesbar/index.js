@@ -69,7 +69,7 @@ const Servicesbar = () => {
     .filter(service => selectedService === null || service.nom === selectedService)
     .map((service) => {
       return [...Array(service.nombre)].map((_, i) => (
-        <PuzzleBlock key={i} color={getColorPuzzleBlock()} />
+        <PuzzleBlock key={i} color={getColorPuzzleBlock()} top={(i*140)+10} left={50}/>
       ));
     });
 

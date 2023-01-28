@@ -6,7 +6,7 @@ const PuzzeBlock = (props) => {
 
   return (
     <Draggable>
-      <Rectangle color={props.color}/>
+      <Rectangle color={props.color} top={props.top} left={props.left}/>
     </Draggable>
   )
 }
