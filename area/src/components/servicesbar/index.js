@@ -9,12 +9,12 @@ const Servicesbar = () => {
   const [selectedService, setSelectedService] = useState(null);
 
   const services = [
-    { nom: 'discord', nombre: 5 },
-    { nom: 'spotify', nombre: 1 },
-    { nom: 'instagram', nombre: 2 },
-    { nom: 'google', nombre: 4 },
-    { nom: 'twitter', nombre: 3 },
-    { nom: 'openai', nombre: 6 },
+    { nom: 'discord', nombre: 5, before : 0 },
+    { nom: 'spotify', nombre: 1, before : 5 },
+    { nom: 'instagram', nombre: 2, before : 6 },
+    { nom: 'google', nombre: 4, before : 8 },
+    { nom: 'twitter', nombre: 3, before : 12 },
+    { nom: 'openai', nombre: 6, before : 15 },
   ];
 
   function handleClick(service) {
@@ -68,8 +68,8 @@ const Servicesbar = () => {
   const puzzleBlocks = services
     .filter(service => selectedService === null || service.nom === selectedService)
     .map((service) => {
-      return [...Array(service.nombre)].map((_, i) => (
-        <PuzzleBlock key={i} color={getColorPuzzleBlock()} top={(i*140)+10} left={50}/>
+      return [...Array(service.nombre)].map((_, i, b) => (
+        <PuzzleBlock key={i+b} color={getColorPuzzleBlock()} top={(i*140)+10} left={50}/>
       ));
     });
 
