@@ -31,6 +31,11 @@
          */
         private $type;
 
+        /**
+         * @ORM\Column(type="string", length=20)
+         */
+        private $identifier;
+
         // Getter
         public function getId()
         {
@@ -48,6 +53,10 @@
         {
             return $this->type;
         }
+        public function getIdentifier()
+        {
+            return $this->identifier;
+        }
 
         // Setter
         public function setServiceId(int $service_id)
@@ -63,6 +72,11 @@
         public function setType(string $type)
         {
             $this->type = $type;
+            return $this;
+        }
+        public function setIdentifier(string $identifier)
+        {
+            $this->identifier = $identifier;
             return $this;
         }
     }
