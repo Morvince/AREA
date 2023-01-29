@@ -7,6 +7,7 @@ const Servicesbar = () => {
   const [isOpen] = useState(true);
   const [isLeftBoxOpen, setisLeftBoxOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
+  let puzzleBlocktemps = []
 
   const services = [
     { nom: 'discord', nombre: 5, info: [], block: [] },
@@ -36,7 +37,7 @@ const Servicesbar = () => {
     ));
   }
 
-  //fonction pour débugg
+  //fonction pour débugg------------
   const logBlocks = () => {
     for (let i = 0; i < services.length; i++) {
       console.log(`Service ${services[i].nom}:`)
@@ -46,13 +47,24 @@ const Servicesbar = () => {
     }
   }
 
+  function displayPuzzleBlockTemps() {
+    puzzleBlocktemps.forEach(element => {
+      console.log(element);
+    });
+  }
+  //--------------------------------
+
   function handleClick(service) {
     if (!isLeftBoxOpen || selectedService !== service) {
       setisLeftBoxOpen(true);
       setSelectedService(service);
+      const selectedServiceData = services.find(s => s.nom === service);
+      puzzleBlocktemps = selectedServiceData.block.slice();
+      displayPuzzleBlockTemps();
     } else {
       setisLeftBoxOpen(false);
       setSelectedService(null);
+      puzzleBlocktemps = [];
     }
   }
 
@@ -119,7 +131,9 @@ const Servicesbar = () => {
           </IconBox>
         </ServicesBarWrapper>
         <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
-          <PuzzleBlock />
+          {puzzleBlocktemps.map((block, index) => {
+            return block;
+          })}
         </RectangleContener>
       </ServicesBarContainer>
     </LeftColumn>
