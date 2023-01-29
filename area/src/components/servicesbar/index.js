@@ -7,31 +7,44 @@ const Servicesbar = () => {
   const [isOpen] = useState(true);
   const [isLeftBoxOpen, setisLeftBoxOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
-  const [blockPositions, setBlockPositions] = useState([]);
 
   const services = [
-    { nom: 'discord', nombre: 5, before : 0 },
-    { nom: 'spotify', nombre: 1, before : 5 },
-    { nom: 'instagram', nombre: 2, before : 6 },
-    { nom: 'google', nombre: 4, before : 8 },
-    { nom: 'twitter', nombre: 3, before : 12 },
-    { nom: 'openai', nombre: 6, before : 15 },
+    { nom: 'discord', nombre: 5, info: [], block: [] },
+    { nom: 'spotify', nombre: 1, info: [], block: [] },
+    { nom: 'instagram', nombre: 2, info: [], block: [] },
+    { nom: 'google', nombre: 4, info: [], block: [] },
+    { nom: 'twitter', nombre: 3, info: [], block: [] },
+    { nom: 'openai', nombre: 6, info: [], block: [] },
   ];
 
-  useEffect(() => {
-    let positions = [];
-    services.forEach((service) => {
-      [...Array(service.nombre)].forEach((_, i) => {
-        positions.push({
-          top: (i * 140) + 10,
-          left: 50,
-          color: getColorPuzzleBlock(service.nom),
-          service: service.nom
-        });
+  for (let i = 0; i < services.length; i++) {
+    for (let x = 0; x < services[i].nombre; x++) {
+      services[i].info.push({
+        top: (x * 140) + 10,
+        left: 50,
+        color: getColorPuzzleBlock(services[i].nom),
+        service: services[i].nom
       });
-    });
-    setBlockPositions(positions);
-  }, []);
+    }
+    services[i].block = services[i].info.map(info => (
+      <PuzzleBlock
+        top={info.top}
+        left={info.left}
+        color={info.color}
+        service={info.service}
+      />
+    ));
+  }
+
+  //fonction pour débugg
+  const logBlocks = () => {
+    for (let i = 0; i < services.length; i++) {
+      console.log(`Service ${services[i].nom}:`)
+      for (let x = 0; x < services[i].block.length; x++) {
+        console.log(services[i].block[x])
+      }
+    }
+  }
 
   function handleClick(service) {
     if (!isLeftBoxOpen || selectedService !== service) {
@@ -39,7 +52,7 @@ const Servicesbar = () => {
       setSelectedService(service);
     } else {
       setisLeftBoxOpen(false);
-      setSelectedService();
+      setSelectedService(null);
     }
   }
 
@@ -106,11 +119,7 @@ const Servicesbar = () => {
           </IconBox>
         </ServicesBarWrapper>
         <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
-          {blockPositions
-            .filter((position) => selectedService === null || position.service === selectedService)
-            .map((position, index) => (
-              <PuzzleBlock key={position.nom + index} color={position.color} top={position.top} left={position.left} />
-            ))}
+          <PuzzleBlock />
         </RectangleContener>
       </ServicesBarContainer>
     </LeftColumn>
