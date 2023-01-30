@@ -41,9 +41,10 @@ const Sign = () => {
     <SignPage bgColor={bgColor}>
       <SignMessage slideForm={slideForm}/>
       <SignBoxComponent slideForm={slideForm} handleSlideForm={handleSlideForm} handleLogin={handleLogin} handleRegister={handleRegister}/>
+      <p>{handleLogin.isSuccess && handleLogin.data.data}</p>
       <div style={{position: "absolute", width: "100%", alignSelf: "flex-end", textAlign: "center", marginBottom: "110px"}}>
         {(slideForm === 0 || slideForm === 2) && handleLogin.isError ? <ErrorMessage color={black}>{handleLogin.error.message}</ErrorMessage> :
-          slideForm === 1 && handleRegister.isError ? <ErrorMessage color={white}>test2</ErrorMessage> : null}
+          slideForm === 1 && handleRegister.isError ? <ErrorMessage color={white}>{handleRegister.error.message}</ErrorMessage> : null}
       </div>
     </SignPage>
   )

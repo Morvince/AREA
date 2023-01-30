@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useMutation } from "react-query"
+import { redirect } from "react-router-dom"
 
 const login = async (formData) => {
   return await axios.post("/login", formData)
@@ -7,8 +8,10 @@ const login = async (formData) => {
 
 export const useLogin = () => {
   return useMutation(login, {
-    onSuccess: () => {
-      console.log("test")
+    onSuccess: (data) => {
+      console.log(data)
+      redirect("/")
+      // sessionStorage.setItem("user_id", data.data)
     }
   })
 }
@@ -19,8 +22,10 @@ const register = async (formData) => {
 
 export const useRegister = () => {
   return useMutation(register, {
-    onSuccess: () => {
-      console.log("test2")
+    onSuccess: (data) => {
+      console.log(data)
+      redirect("/")
+      // sessionStorage.setItem("user_id", data.data)
     }
   })
 }
