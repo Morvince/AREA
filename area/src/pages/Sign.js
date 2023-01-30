@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import SignBoxComponent from '../components/signBoxElements/index';
 import SignMessage from '../components/signMessage/index';
 import { black, white } from '../color';
+import { useLogin, useRegister } from '../api/apiSignPage';
 
 const SignPage = styled.div`
   display: flex;
@@ -13,9 +14,18 @@ const SignPage = styled.div`
   transition: background-color 0.3s;
 `;
 
+const ErrorMessage = styled.p`
+  margin-left: 200px;
+  font-size: 20px;
+  font-style: italic;
+  color: ${props => props.color};
+`;
+
 const Sign = () => {
   const [slideForm, setSlideForm] = useState(0)
   const bgColor = slideForm === 0 || slideForm === 2 ? white : black
+  const handleLogin = useLogin()
+  const handleRegister = useRegister()
 
   const handleSlideForm = useCallback(function(event) {
     event.preventDefault()
@@ -30,7 +40,11 @@ const Sign = () => {
   return (
     <SignPage bgColor={bgColor}>
       <SignMessage slideForm={slideForm}/>
-      <SignBoxComponent slideForm={slideForm} handleSlideForm={handleSlideForm}/>
+      <SignBoxComponent slideForm={slideForm} handleSlideForm={handleSlideForm} handleLogin={handleLogin} handleRegister={handleRegister}/>
+      <div style={{position: "absolute", width: "100%", alignSelf: "flex-end", textAlign: "center", marginBottom: "110px"}}>
+        {(slideForm === 0 || slideForm === 2) && handleLogin.isError ? <ErrorMessage color={black}>{handleLogin.error.message}</ErrorMessage> :
+          slideForm === 1 && handleRegister.isError ? <ErrorMessage color={white}>test2</ErrorMessage> : null}
+      </div>
     </SignPage>
   )
 }

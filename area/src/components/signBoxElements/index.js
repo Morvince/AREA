@@ -23,7 +23,7 @@ const CheckboxSignField = ({label, children, onClick=null}) => {
   )
 }
 
-const SignBoxComponent = ({slideForm, handleSlideForm}) => {
+const SignBoxComponent = ({slideForm, handleSlideForm, handleLogin, handleRegister}) => {
 
   const formSignIn = useRef(null)
   const formSignUp = useRef(null)
@@ -81,9 +81,23 @@ const SignBoxComponent = ({slideForm, handleSlideForm}) => {
     }))
   }
 
+  const handleSignIn = (e) => {
+    e.preventDefault()
+    handleLogin.mutate(JSON.stringify(Object.fromEntries(new FormData(e.currentTarget).entries())))
+  }
+
+  const handleSignUp = (e) => {
+    e.preventDefault()
+    if (inputPasswdSignUp.current.value !== inputConfirmPasswdSignUp.current.value) {
+      alert("The 2 passwords differed")
+      return
+    }
+    handleRegister.mutate(JSON.stringify(Object.fromEntries(new FormData(e.currentTarget).entries())))
+  }
+
   return (
     <SignContainer>
-      <SignForm id="signUpForm" ref={formSignUp} bg={black}>
+      <SignForm id="signUpForm" ref={formSignUp} onSubmit={handleSignUp} bg={black}>
         <AccountButton onClick={handleSlideForm} colorBG={black}/>
         <IconArrowBox className="slideArrowColorTr" color={black}>
           <Icon icon="material-symbols:keyboard-arrow-down-rounded" width="60" height="60"/>
@@ -94,17 +108,17 @@ const SignBoxComponent = ({slideForm, handleSlideForm}) => {
         <GoogleButton signOption="signup_with" margin="12px 0px 0px 0px" align="center" slideForm={slideForm}/>
         <OrLine/>
         <InputSignContainer paddingTop="9px">
-          <InputSignField type="text" required="required" placeholder=" " caret={black}/>
+          <InputSignField name="username" type="text" required="required" placeholder=" " caret={black}/>
           <InputSignLabel>Username</InputSignLabel>
           <InputSignLine/>
         </InputSignContainer>
         <InputSignContainer paddingTop="20px">
-          <InputSignField type="email" required="required" placeholder=" " caret={black}/>
+          <InputSignField name="email" type="email" required="required" placeholder=" " caret={black}/>
           <InputSignLabel>Email address</InputSignLabel>
           <InputSignLine/>
         </InputSignContainer>
         <InputSignContainer paddingTop="20px">
-          <InputSignField ref={inputPasswdSignUp} type="password" required="required" placeholder=" " caret={black}/>
+          <InputSignField name="password" ref={inputPasswdSignUp} type="password" required="required" placeholder=" " caret={black}/>
           <InputSignLabel>Password</InputSignLabel>
           <InputSignLine/>
           <IconPasswdBox className="iconPasswdTr" color={darkGray}>
@@ -126,7 +140,7 @@ const SignBoxComponent = ({slideForm, handleSlideForm}) => {
       </SignForm>
 
 
-      <SignForm id="signInForm" ref={formSignIn}>
+      <SignForm id="signInForm" ref={formSignIn} onSubmit={handleSignIn}>
         <AccountButton onClick={handleSlideForm} colorBG={darkPurple}/>
         <IconArrowBox color={white}>
           <Icon icon="material-symbols:keyboard-arrow-down-rounded" width="60" height="60"/>
@@ -137,12 +151,12 @@ const SignBoxComponent = ({slideForm, handleSlideForm}) => {
         <GoogleButton signOption="continue_with" margin="12px 0px 0px 0px" align="center" slideForm={slideForm}/>
         <OrLine/>
         <InputSignContainer paddingTop="10px">
-          <InputSignField type="text" required="required" placeholder=" "/>
+          <InputSignField name="login" type="text" required="required" placeholder=" "/>
           <InputSignLabel>Email address or Username</InputSignLabel>
           <InputSignLine/>
         </InputSignContainer>
         <InputSignContainer paddingTop="25px">
-          <InputSignField ref={inputPasswdSignIn} type="password" required="required" placeholder=" "/>
+          <InputSignField name="password" ref={inputPasswdSignIn} type="password" required="required" placeholder=" "/>
           <InputSignLabel>Password</InputSignLabel>
           <InputSignLine/>
           <IconPasswdBox className="iconPasswdTr" color={darkGray}>
