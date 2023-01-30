@@ -87,6 +87,7 @@
             return new JsonResponse(array("status" => "ok"));
         }
 
+
         /**
          * @Route("/spotify/search", name="spotify_api_search")
          */
@@ -98,7 +99,15 @@
             $response = $this->sendRequest("search?type=$type&q=$search");
             return new JsonResponse($response);
         }
-        private function sendRequest($endpoint, $method = "GET", $parameters = array())
+        /**
+         * @Route("/spotify/get_user_playlists", name="spotify_get_user_playlists")
+         */
+        public function getUserPlaylists(AutomationActionRepository $automation_action_repository)
+        {
+            $response = $this->sendRequest("me/playlists");
+            return new JsonResponse($response);
+        }
+        private function sendRequest($endpoint, $method = "GET")
         {
             if (empty($_SESSION["spotify"])) {
                 return json_encode(array("a"));
@@ -106,40 +115,41 @@
             if (empty($this->request_api)) {
                 $this->request_api = new RequestAPI();
             }
-            $response = $this->request_api->send($_SESSION["spotify"], self::API_URL.$endpoint, $method, $parameters);
+            $response = $this->request_api->send($_SESSION["spotify"], self::API_URL.$endpoint, $method);
+            print_r($response);
             if (isset(json_decode($response)->error)) {
                 switch (json_decode($response)->error->status) {
                     case 400:
                         // mauvaise requete (regarder en details la diff avec la 404)
-                        $response = array("status" => "error");
+                        $response = json_encode(array("status" => "error"));
                         break;
                     case 401:
                         // mauvais token ou token expire -> re authentifier le user
-                        $response = array("status" => "error");
+                        $response = json_encode(array("status" => "error"));
                         break;
                     case 403:
                         // le lien pour la requete de loauth est pas bonne (cle ou valeur) -> refaire le lien de la requete
-                        $response = array("status" => "error");
+                        $response = json_encode(array("status" => "error"));
                         break;
                     case 404:
                         // objet rechercher pas trouvé -> id pas existante...
-                        $response = array("status" => "error");
+                        $response = json_encode(array("status" => "error"));
                         break;
                     case 429:
                         // trop de requete, jsp comment le corriger
-                        $response = array("status" => "error");
+                        $response = json_encode(array("status" => "error"));
                         break;
                     case 500:
                         // une erreur du cote spotify (askip ca ne devrait jamais arriver)
-                        $response = array("status" => "error");
+                        $response = json_encode(array("status" => "error"));
                         break;
                     case 502:
                         // bad gateway, jsp trop ce que c'est
-                        $response = array("status" => "error");
+                        $response = json_encode(array("status" => "error"));
                         break;
                     case 503:
                         // le serveur spotify est indispo
-                        $response = array("status" => "error");
+                        $response = json_encode(array("status" => "error"));
                         break;
                     default:
                         break;
@@ -155,22 +165,20 @@
         }
 
         // Reaction
-        public function addMusicFromArtistToQueue($automation_action_id, AutomationActionRepository $automation_action_repository)
+        public function addMusicFromArtistToQueue($automation_action_id, AutomationActionRepository $automation_action_repository)// fonctionne mais necessite spotify premium
         {// en db = artist_id
             $automation_action = $automation_action_repository->findById($automation_action_id);
             if (empty($automation_action)) {
                 return array("status" => "error");// id inexistante
             }
             $artist_id = $automation_action[0]->getInformations();
+            echo $artist_id;
             $response = json_decode($this->getArtistById($artist_id));
             if (empty($response->name)) {
                 return $response;// error renvoyé par la requete
             }
-            $music_uri = $this->getRandomMusicFromArtist($response->name)->uri;
-            $parameters = array(
-                "uri" => $music_uri
-            );
-            $this->sendRequest("me/player/queue", "POST", $parameters);
+            $music_uri = $this->getRandomMusicFromArtist($response->name);
+            $this->sendRequest("me/player/queue?uris=$music_uri", "POST");
             return array("status" => "ok");
         }
         public function addMusicFromArtistListToPlaylist($automation_action_id, AutomationActionRepository $automation_action_repository)
@@ -200,20 +208,17 @@
                 return array("status" => "error");// id inexistante
             }
             $playlist_id = $args[1];
-            $music_uri = $this->getRandomMusicFromArtist($artists_name[rand(0, count($artists_name) - 1)])->uri;
-            $parameters = array(
-                "uri" => $music_uri
-            );
-            $response = $this->sendRequest("playlists/$playlist_id/tracks", "POST", $parameters);
+            $music_uri = $this->getRandomMusicFromArtist($artists_name[rand(0, count($artists_name) - 1)]);
+            $response = $this->sendRequest("playlists/$playlist_id/tracks?uris=$music_uri", "POST");
             return array("status" => "ok");//verifier erreur de response
         }
         private function getArtistById($artist_id)
         {
-            return $this->sendRequest("/artists/".$artist_id);
+            return $this->sendRequest("artists/".$artist_id);
         }
         private function getPlaylistById($playlist_id)
         {
-            return $this->sendRequest("/playlists/".$playlist_id);
+            return $this->sendRequest("playlists/".$playlist_id);
         }
         private function getRandomMusicFromArtist($artist_name)
         {
