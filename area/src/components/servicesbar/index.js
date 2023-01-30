@@ -7,7 +7,7 @@ const Servicesbar = () => {
   const [isOpen] = useState(true);
   const [isLeftBoxOpen, setisLeftBoxOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
-  let puzzleBlocktemps = []
+  const [puzzleBlocktemps, setpuzzleBlocktemps] = useState([])
 
   const services = [
     { nom: 'discord', nombre: 5, info: [], block: [] },
@@ -17,15 +17,17 @@ const Servicesbar = () => {
     { nom: 'twitter', nombre: 3, info: [], block: [] },
     { nom: 'openai', nombre: 6, info: [], block: [] },
   ];
-
+  let t = 0;
   for (let i = 0; i < services.length; i++) {
     for (let x = 0; x < services[i].nombre; x++) {
       services[i].info.push({
         top: (x * 140) + 10,
         left: 50,
         color: getColorPuzzleBlock(services[i].nom),
-        service: services[i].nom
+        service: services[i].nom,
+        index: t
       });
+      t++;
     }
     services[i].block = services[i].info.map(info => (
       <PuzzleBlock
@@ -33,6 +35,7 @@ const Servicesbar = () => {
         left={info.left}
         color={info.color}
         service={info.service}
+        // key={i*services[i].length}
       />
     ));
   }
@@ -48,6 +51,7 @@ const Servicesbar = () => {
   }
 
   function displayPuzzleBlockTemps() {
+    console.log("--------------------")
     puzzleBlocktemps.forEach(element => {
       console.log(element);
     });
@@ -59,12 +63,11 @@ const Servicesbar = () => {
       setisLeftBoxOpen(true);
       setSelectedService(service);
       const selectedServiceData = services.find(s => s.nom === service);
-      puzzleBlocktemps = selectedServiceData.block.slice();
-      displayPuzzleBlockTemps();
+      setpuzzleBlocktemps(selectedServiceData.info.slice());
     } else {
       setisLeftBoxOpen(false);
       setSelectedService(null);
-      puzzleBlocktemps = [];
+      setpuzzleBlocktemps([]);
     }
   }
 
@@ -105,6 +108,7 @@ const Servicesbar = () => {
         return "#454b5e";
     }
   }
+  displayPuzzleBlockTemps();
 
   return (
     <LeftColumn>
@@ -131,8 +135,10 @@ const Servicesbar = () => {
           </IconBox>
         </ServicesBarWrapper>
         <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
-          {puzzleBlocktemps.map((block, index) => {
-            return block;
+          {puzzleBlocktemps.map((info, index) => {
+            return (
+              <PuzzleBlock key={info.index} top={info.top} left={info.left} color={info.color} service={info.service} />
+            )
           })}
         </RectangleContener>
       </ServicesBarContainer>
