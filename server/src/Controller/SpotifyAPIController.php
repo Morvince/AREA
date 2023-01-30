@@ -102,12 +102,12 @@
         /**
          * @Route("/spotify/get_user_playlists", name="spotify_get_user_playlists")
          */
-        public function getUserPlaylists(AutomationActionRepository $automation_action_repository)
+        public function getUserPlaylists()
         {
             $response = $this->sendRequest("me/playlists");
             return new JsonResponse($response);
         }
-        private function sendRequest($endpoint, $method = "GET")
+        private function sendRequest($endpoint, $method = "GET", $parameters = array())
         {
             if (empty($_SESSION["spotify"])) {
                 return json_encode(array("a"));
@@ -115,8 +115,7 @@
             if (empty($this->request_api)) {
                 $this->request_api = new RequestAPI();
             }
-            $response = $this->request_api->send($_SESSION["spotify"], self::API_URL.$endpoint, $method);
-            print_r($response);
+            $response = $this->request_api->send($_SESSION["spotify"], self::API_URL.$endpoint, $method, $parameters);
             if (isset(json_decode($response)->error)) {
                 switch (json_decode($response)->error->status) {
                     case 400:
@@ -165,21 +164,45 @@
         }
 
         // Reaction
-        public function addMusicFromArtistToQueue($automation_action_id, AutomationActionRepository $automation_action_repository)// fonctionne mais necessite spotify premium
-        {// en db = artist_id
+        public function changePlaylistDetails($automation_action_id, AutomationActionRepository $automation_action_repository)
+        {// en db = name:public(true/false):description;playlist_id
             $automation_action = $automation_action_repository->findById($automation_action_id);
             if (empty($automation_action)) {
                 return array("status" => "error");// id inexistante
             }
-            $artist_id = $automation_action[0]->getInformations();
-            echo $artist_id;
-            $response = json_decode($this->getArtistById($artist_id));
-            if (empty($response->name)) {
-                return $response;// error renvoyé par la requete
+            $informations = $automation_action[0]->getInformations();
+            $args = explode(":", $informations);
+            if (count($args) != 2) {
+                return array("status" => "error");// probleme en db
             }
-            $music_uri = $this->getRandomMusicFromArtist($response->name);
-            $this->sendRequest("me/player/queue?uris=$music_uri", "POST");
-            return array("status" => "ok");
+            $data = explode(";", $args[0]);
+            $playlist = json_decode($this->getPlaylistById($args[1]));
+            $name = $playlist->name;
+            if (!empty($data[0])) {
+                $name = $data[0];
+            }
+            $public = $playlist->public;
+            switch ($data[1]) {
+                case "false":
+                    $public = false;
+                    break;
+                case "true":
+                    $public = true;
+                    break;
+                default:
+                    break;
+            }
+            $description = $playlist->description;
+            if (!empty($data[2])) {
+                $description = $data[2];
+            }
+            $parameters = array(
+                "name" => $name,
+                "public" => $public,
+                "description" => $description
+            );
+            $response = $this->sendRequest("playlists/$playlist->id?name=&public=&description=", "PUT", $parameters);
+            return array("status" => "ok");//verifier erreur de response
         }
         public function addMusicFromArtistListToPlaylist($automation_action_id, AutomationActionRepository $automation_action_repository)
         {// en db = artist_id;artist_id:playlist_id

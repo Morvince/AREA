@@ -10,7 +10,7 @@
     {
         public function __construct() {}
 
-        public function send($access_token, $url, $method)
+        public function send($access_token, $url, $method, $parameters)
         {
             $headers = array(
                 "Accept: application/json",
@@ -28,6 +28,7 @@
                     break;
                 case "PUT":
                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($parameters));
                     break;
                 case "DELETE":
                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
