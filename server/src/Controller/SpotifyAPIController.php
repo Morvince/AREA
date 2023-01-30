@@ -72,9 +72,9 @@
             // Demande de jeton d'accès
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, "https://accounts.spotify.com/api/token");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=authorization_code&code=$code&redirect_uri=$redirect_uri");
-            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_USERPWD, "$client_id:$client_secret");
             $headers = array();
             $headers[] = "Content-Type: application/x-www-form-urlencoded";
@@ -86,7 +86,43 @@
             }
             return new JsonResponse(array("spotify_token" => json_decode($result)->access_token), 200);
         }
-
+        /**
+         * @Route("/spotify/refresh_access_token", name="spotify_api_refresh_access_token")
+         */
+        public function refreshAccessToken(Request $request, ServiceRepository $sevice_repository)
+        {
+            $service = $sevice_repository->findByName("spotify");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
+            }
+            $service = $service[0];
+            $identifiers = explode(";", $service->getIdentifiers());
+            if (count($identifiers) != 2) {
+                return new JsonResponse(array("message" => "Spotify: Identifiers error"), 422);
+            }
+            if (empty($request->query->get("refresh_token"))) {
+                return $this->redirect("http://localhost:8000/spotify/connect");
+            }
+            $client_id = $identifiers[0];
+            $client_secret = $identifiers[1];
+            $refresh_token = $request->query->get("refresh_token");
+            // Demande de jeton d'accès
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://accounts.spotify.com/api/token");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=refresh_token&refresh_token=$refresh_token&client_id=$client_id&client_secret=$client_secret");
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_USERPWD, "$client_id:$client_secret");
+            $headers = array();
+            $headers[] = "Content-Type: application/x-www-form-urlencoded";
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            $result = curl_exec($ch);
+            curl_close ($ch);
+            if (!isset(json_decode($result)->access_token)) {
+                return new JsonResponse(array("message" => "Spotify: Bad refresh token to get access token"), 400);
+            }
+            return new JsonResponse(array("spotify_token" => json_decode($result)->access_token), 200);
+        }
 
         /**
          * @Route("/spotify/search", name="spotify_api_search")
