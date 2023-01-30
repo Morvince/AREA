@@ -5,7 +5,7 @@
     use App\Repository\UserRepository;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\HttpFoundation\Request;
-    use Symfony\Component\HttpFoundation\Response;
+    use Symfony\Component\HttpFoundation\JsonResponse;
     use Symfony\Component\Routing\Annotation\Route;
 
     class UserController extends AbstractController
@@ -15,9 +15,6 @@
          */
         public function login(Request $request, UserRepository $user_repository)
         {
-            if (!empty($_SESSION["user_id"])) {
-                return new Response("User already logged");
-            }
             if (!empty($request->query->get("password")) && !empty($request->query->get("login"))) {
                 $login = $request->query->get("login");
                 $password = $request->query->get("password");
@@ -27,13 +24,12 @@
                 foreach ($users as $user) {
                     if (strcmp($user->getPassword(), $password) === 0 &&
                         (strcmp($user->getUsername(), $login) === 0 || strcmp($user->getEmail(), $login) === 0)) {
-                        $_SESSION["user_id"] = $user->getId();
-                        return new Response("User connected");
+                        return new JsonResponse(array("user_id" => $user->getId()), 200);
                     }
                 }
-                return new Response("Mismatched field");
+                return new JsonResponse(array("message" => "Wrong password"), 401);
             }
-            return new Response("Missing field");
+            return new JsonResponse(array("message" => "Missing field"), 400);
         }
 
         /**
@@ -48,12 +44,10 @@
                 $users = $user_repository->findAll();
                 foreach ($users as $user) {
                     if (strcmp($user->getUsername(), $username) === 0) {
-                        // username error array
-                        return new Response("Username already used");
+                        return new JsonResponse(array("message" => "Username already used"), 401);
                     }
                     if (strcmp($user->getEmail(), $email) === 0) {
-                        // email error array
-                        return new Response("Email already used");
+                        return new JsonResponse(array("message" => "Email already used"), 401);
                     }
                 }
                 $password = hash("haval256,5", $password);
@@ -63,18 +57,9 @@
                 $user->setEmail($email);
                 $user->setPassword($password);
                 $user_repository->add($user, true);
-                return new Response("User added");
+                return new JsonResponse(array("user_id" => $user->getId()), 200);
             }
-            return new Response("Missing field");
-        }
-
-        /**
-         * @Route("/logout", name="user_logout")
-         */
-        public function logout()
-        {
-            session_destroy();
-            return new Response("User successfully logout");
+            return new JsonResponse(array("message" => "Missing field"), 400);
         }
     }
 ?>

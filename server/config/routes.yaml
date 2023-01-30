@@ -7,9 +7,6 @@ user_login:
     path: /login
     controller: App\Controller\UserController::login
     # methods: [POST]
-user_logout:
-    path: /logout
-    controller: App\Controller\UserController::logout
 
 # SPOTIFY
 spotify_api_connect:
