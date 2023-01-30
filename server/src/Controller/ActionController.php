@@ -2,6 +2,7 @@
     namespace App\Controller;
 
     use App\Repository\ActionRepository;
+    use App\Repository\ServiceRepository;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\HttpFoundation\JsonResponse;
@@ -10,21 +11,25 @@
     class ActionController extends AbstractController
     {
         /**
-         * @Route("/action/get", name="action_get")
+         * @Route("/action/get_all", name="action_get_all")
          */
-        public function getAction(Request $request, ActionRepository $action_repository)
+        public function getAllActions(ActionRepository $action_repository, ServiceRepository $service_repository)
         {
-            if (empty($request->query->get("action_id"))) {
-                return new JsonResponse(array("status" => "error"));//action_id vide dans la requete
+            $actions = $action_repository->findAll();
+            if (empty($actions)) {
+                return new JsonResponse(array("status" => "error"));//aucune action
             }
-            $action_id = $request->query->get("action_id");
-            $action = $action_repository->findById($action_id);
-            if (empty($action)) {
-                return new JsonResponse(array("status" => "error"));//action inexistante
+            $formatted = array();
+            foreach ($actions as $action) {
+                $service = $service_repository->findById($action->getServiceId());
+                if (empty($service)) {
+                    continue;
+                } else {
+                    $service = $service[0];
+                }
+                array_push($formatted, array("id" => $action->getId(), "name" => $action->getName(), "service" => $service->getName(), "type" => $action->getType()));
             }
-            $action = $action[0];
-            //formatter les infos
-            return new JsonResponse(array("status" => "ok"));
+            return new JsonResponse($formatted);
         }
     }
 ?>

@@ -104,7 +104,7 @@
          */
         public function getUserPlaylists()
         {
-            $response = $this->sendRequest("me/playlists");
+            $response = $this->sendRequest("me/playlists");// changer pour voir seulement celle modifiable
             return new JsonResponse($response);
         }
         private function sendRequest($endpoint, $method = "GET", $parameters = array())
