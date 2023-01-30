@@ -17,6 +17,7 @@ const Servicesbar = () => {
     { nom: 'twitter', nombre: 3, info: [], block: [] },
     { nom: 'openai', nombre: 6, info: [], block: [] },
   ];
+
   let t = 0;
   for (let i = 0; i < services.length; i++) {
     for (let x = 0; x < services[i].nombre; x++) {
@@ -137,7 +138,7 @@ const Servicesbar = () => {
         <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
           {puzzleBlocktemps.map((info, index) => {
             return (
-              <PuzzleBlock key={info.index} top={info.top} left={info.left} color={info.color} service={info.service} />
+              <PuzzleBlock key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} />
             )
           })}
         </RectangleContener>
