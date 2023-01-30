@@ -1,0 +1,39 @@
+# USER
+user_register:
+    path: /register
+    controller: App\Controller\UserController::register
+    # methods: [POST]
+user_login:
+    path: /login
+    controller: App\Controller\UserController::login
+    # methods: [POST]
+
+# SPOTIFY
+spotify_api_connect:
+    path: /spotify/connect
+    controller: App\Controller\SpotifyAPIController::connect
+spotify_api_get_access_token:
+    path: /spotify/get_access_token
+    controller: App\Controller\SpotifyAPIController::getAccessToken
+spotify_api_search:
+    path: /spotify/search
+    controller: App\Controller\SpotifyAPIController::search
+spotify_get_user_playlists:
+    path: /spotify/get_user_playlists
+    controller: App\Controller\SpotifyAPIController::getUserPlaylists
+
+# AUTOMATION
+automation_add:
+    path: /automation/add
+    controller: App\Controller\AutomationController::addAutomation
+automation_get:
+    path: /automation/get
+    controller: App\Controller\AutomationController::getAutomation
+automation_edit:
+    path: /automation/edit
+    controller: App\Controller\AutomationController::editAutomation
+
+# ACTION
+action_get_all:
+    path: /action/get_all
+    controller: App\Controller\ActionController::getAllActions
