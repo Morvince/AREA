@@ -15,11 +15,16 @@
         /**
          * @Route("/automation/add", name="automation_add")
          */
-        public function addAutomation(AutomationRepository $automation_repository)
+        public function addAutomation(Request $request, AutomationRepository $automation_repository)
         {
+            // Get needed values
+            if (empty($request->query->get("user_id"))) {
+                return new JsonResponse(array("message" => "Automation: Missing field"), 400);
+            }
+            $user_id = $request->query->get("user_id");
             // Put a new automation in database
             $automation = new Automation();
-            $automation->setUserId($_SESSION["user_id"]);
+            $automation->setUserId($user_id);
             $automation_repository->add($automation, true);
             return new JsonResponse(array("automation_id" => $automation->getId()), 200);
         }
