@@ -1,18 +1,19 @@
 import React, {useState} from 'react'
-import Navebar from '../components/navbar'
+import Sidebar from '../components/sidebar'
+import Landing from '../components/Landing'
 
-const Landing = () => {
+const LandingPage = () => {
     const [isOpen, setIsOpen] = useState(false)
 
     const toggle = () => {
         setIsOpen(!isOpen)
     }
-
     return (
         <div>
-            <Navebar toggle={toggle} changeY={720} defaultState={false}/>
+            <Sidebar isOpen={isOpen} toggle={toggle} />
+            < Landing />
         </div>
     )
 }
 
-export default Landing 
+export default LandingPage
