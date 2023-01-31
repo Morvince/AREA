@@ -26,7 +26,7 @@
             if (empty($request->query->get("user_id"))) {
                 return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
-            $_SESSION["user_id"] = $request->query->get("user_id");
+            $user_id = $request->query->get("user_id");
             $service = $sevice_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
@@ -38,9 +38,9 @@
             }
             $client_id = $identifiers[0];
             $redirect_uri = "http://localhost:8000/spotify/get_access_token";
-            return $this->redirectToAutorisationLink($client_id, $redirect_uri);
+            return $this->redirectToAutorisationLink($user_id, $client_id, $redirect_uri);
         }
-        private function redirectToAutorisationLink($client_id, $redirect_uri)
+        private function redirectToAutorisationLink($user_id, $client_id, $redirect_uri)
         {
             // Compose the authorization scope
             $scope = array( "user-read-playback-state", "user-modify-playback-state", "user-read-currently-playing",
@@ -53,7 +53,7 @@
                         );
             $scope = implode(" ", $scope);
             // Set the state when the request is good
-            $state = "17";
+            $state = $user_id."0017";
             // Compose the authorization url
             $authorization_url = "https://accounts.spotify.com/authorize?client_id=$client_id&response_type=code&redirect_uri=$redirect_uri&scope=$scope&state=$state";
             return $this->redirect($authorization_url);
@@ -78,7 +78,8 @@
             $code = $request->query->get("code");
             $state = $request->query->get("state");
             $redirect_uri = "http://localhost:8000/spotify/get_access_token";
-            if ($state != "17") {
+            $user_id = ($state - 17)/10000;
+            if ($state != $user_id."0017") {
                 return new JsonResponse(array("message" => "Spotify: Bad request to get access token"), 400);
             }
             // Request for the access token
@@ -97,7 +98,6 @@
                 return new JsonResponse(array("message" => "Spotify: Bad code to get access token"), 400);
             }
             // Put or edit datas in database
-            $user_id = $_SESSION["user_id"];
             if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
                 $user_service = new UserService();
                 $user_service->setUserId($user_id);
@@ -111,7 +111,6 @@
                 $user_service->setRefreshToken(json_decode($result)->refresh_token);
                 $user_sevice_repository->edit($user_service, true);
             }
-            session_destroy();
             return new JsonResponse(array("token" => json_decode($result)->access_token), 200);
         }
         /**
