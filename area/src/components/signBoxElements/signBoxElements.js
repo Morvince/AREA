@@ -68,7 +68,7 @@ export const InputSignField = styled.input`
   background: transparent;
   border: none;
   outline: none;
-  font-size: 1.3em;
+  font-size: 1em;
   color: ${white};
   letter-spacing: 0.05em;
   caret-color: ${props => props.caret ? props.caret : white};
@@ -77,13 +77,18 @@ export const InputSignField = styled.input`
   &:not(:placeholder-shown) ~ span,
   &:focus ~ span {
     color: ${lightPurple};
-    transform: translateY(-30px);
+    transform: translateY(-32px);
     font-size: 0.80em;
   }
   &:valid ~ i,
   &:not(:placeholder-shown) ~ i,
   &:focus ~ i {
-    height: 44px;
+    height: 40px;
+  }
+  &:valid ~ div.iconPasswdTr,
+  &:not(:placeholder-shown) ~ div.iconPasswdTr,
+  &:focus ~ div.iconPasswdTr {
+    color: ${white};
   }
 `;
 
@@ -205,4 +210,29 @@ export const AccountButton = styled.button`
   &:active {
     opacity: 0.9;
   }
+  &:hover ~ div.slideArrowColorTr {
+    color: ${white};
+  }
+`;
+
+export const IconArrowBox = styled.div`
+  position: absolute;
+  left: 44.4%;
+  color: ${props => props.color};
+  pointer-events: none;
+  transition-property: color;
+  transition-timing-function: ease-out;
+  transition-duration: 0.3s;
+`;
+
+export const IconPasswdBox = styled.div`
+  position: absolute;
+  right: 2%;
+  bottom: 1%;
+  color: ${props => props.color};
+  transition-property: color;
+  transition-timing-function: ease-out;
+  transition-duration: 0.3s;
+  z-index: 20;
+  cursor: pointer;
 `;
