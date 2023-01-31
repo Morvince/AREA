@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Draggable from 'react-draggable'
 import { RectangleBlock } from './blockElements'
 
-
 const Block = (props) => {
 
   const [backgroundColor, setbackgroundColor] = useState(props.color)

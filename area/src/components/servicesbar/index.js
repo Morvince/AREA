@@ -41,13 +41,6 @@ const Servicesbar = () => {
     ));
   }
 
-  function displayPuzzleBlockTemps() {
-    console.log("--------------------")
-    puzzleBlocktemps.forEach(element => {
-      console.log(element);
-    });
-  }
-
   function handleClick(service) {
     if (!isLeftBoxOpen || selectedService !== service) {
       setisLeftBoxOpen(true);
@@ -98,7 +91,6 @@ const Servicesbar = () => {
         return "#454b5e";
     }
   }
-  displayPuzzleBlockTemps();
 
   return (
     <LeftColumn>
