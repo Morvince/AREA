@@ -21,11 +21,9 @@
             }
             $formatted = array();
             foreach ($actions as $action) {
-                $service = $service_repository->findById($action->getServiceId());
+                $service = $service_repository->find($action->getServiceId());
                 if (empty($service)) {
                     continue;
-                } else {
-                    $service = $service[0];
                 }
                 array_push($formatted, array("id" => $action->getId(), "name" => $action->getName(), "service" => $service->getName(), "type" => $action->getType()));
             }

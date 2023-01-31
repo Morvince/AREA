@@ -205,11 +205,11 @@
         // Reaction
         public function changePlaylistDetails($access_token, $automation_action_id, AutomationActionRepository $automation_action_repository)
         {// en db = name:public(true/false):description;playlist_id
-            $automation_action = $automation_action_repository->findById($automation_action_id);
+            $automation_action = $automation_action_repository->find($automation_action_id);
             if (empty($automation_action)) {
                 return json_encode(array("message" => "Spotify: automation_action_id not found", "code" => 404));
             }
-            $informations = $automation_action[0]->getInformations();
+            $informations = $automation_action->getInformations();
             $args = explode(":", $informations);
             if (count($args) != 2) {
                 return json_encode(array("message" => "Spotify: Informations error", "code" => 422));
@@ -245,11 +245,11 @@
         public function addMusicFromArtistListToPlaylist($access_token, $automation_action_id, AutomationActionRepository $automation_action_repository)
         {// en db = artist_id;artist_id:playlist_id
             srand(time());
-            $automation_action = $automation_action_repository->findById($automation_action_id);
+            $automation_action = $automation_action_repository->find($automation_action_id);
             if (empty($automation_action)) {
                 return json_encode(array("message" => "Spotify: automation_action_id not found", "code" => 404));
             }
-            $informations = $automation_action[0]->getInformations();
+            $informations = $automation_action->getInformations();
             $args = explode(":", $informations);
             if (count($args) != 2) {
                 return json_encode(array("message" => "Spotify: Informations error", "code" => 422));
