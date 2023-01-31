@@ -169,15 +169,16 @@
             if (empty($request->query->get("user_id")) || empty($request->query->get("type")) || empty($request->query->get("search"))) {
                 return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
+            $user_id = $request->query->get("user_id");
             $service = $sevice_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
             }
             $service = $service[0];
-            if (empty($user_sevice_repository->findByUserIdAndServiceId($request->query->get("user_id"), $service->getId()))) {
+            if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
                 return new JsonResponse(array("message" => "Spotify: Access token not found"), 404);
             }
-            $access_token = $user_sevice_repository->findByUserIdAndServiceId($request->query->get("user_id"), $service->getId())[0]->getAccessToken();
+            $access_token = $user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
             $type = $request->query->get("type");
             $search = $request->query->get("search");
             $search = str_replace(" ", "%20", $search);
@@ -197,15 +198,16 @@
             if (empty($request->query->get("user_id"))) {
                 return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
+            $user_id = $request->query->get("user_id");
             $service = $sevice_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
             }
             $service = $service[0];
-            if (empty($user_sevice_repository->findByUserIdAndServiceId($request->query->get("user_id"), $service->getId()))) {
+            if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
                 return new JsonResponse(array("message" => "Spotify: Access token not found"), 404);
             }
-            $access_token = $user_sevice_repository->findByUserIdAndServiceId($request->query->get("user_id"), $service->getId())[0]->getAccessToken();
+            $access_token = $user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
             // Request for the user playlists
             $response = $this->sendRequest($access_token, "me/playlists");// changer pour voir seulement celles modifiables
             if (isset(json_decode($response)->code)) {
@@ -261,6 +263,7 @@
         // Reaction
         public function changePlaylistDetails($access_token, $automation_action_id, AutomationActionRepository $automation_action_repository)
         {// en db = name:public(true/false):description;playlist_id
+            // Get needed values
             $automation_action = $automation_action_repository->find($automation_action_id);
             if (empty($automation_action)) {
                 return json_encode(array("message" => "Spotify: automation_action_id not found", "code" => 404));
@@ -296,10 +299,12 @@
                 "public" => $public,
                 "description" => $description
             );
+            // Request to change playlist details
             return $this->sendRequest("playlists/$playlist->id?name=&public=&description=", "PUT", $parameters);
         }
         public function addMusicFromArtistListToPlaylist($access_token, $automation_action_id, AutomationActionRepository $automation_action_repository)
         {// en db = artist_id;artist_id:playlist_id
+            // Get needed values
             srand(time());
             $automation_action = $automation_action_repository->find($automation_action_id);
             if (empty($automation_action)) {
@@ -325,6 +330,7 @@
             }
             $playlist_id = $args[1];
             $music_uri = $this->getRandomMusicFromArtist($access_token, $artists_name[rand(0, count($artists_name) - 1)]);
+            // Request to add a song to a playlist
             return $this->sendRequest("playlists/$playlist_id/tracks?uris=$music_uri", "POST");
         }
         private function getArtistById($access_token, $artist_id)
