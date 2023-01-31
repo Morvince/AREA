@@ -44,6 +44,18 @@
             }
         }
 
+       public function findByUserIdAndServiceId($user_id, $service_id)
+       {
+            return $this->createQueryBuilder("user_service")
+                ->where("user_service.user_id = :user_id")
+                ->andWhere("user_service.service_id = :service_id")
+                ->setParameter("user_id", $user_id)
+                ->setParameter("service_id", $service_id)
+                ->getQuery()
+                ->getResult()
+            ;
+       }
+
     //    /**
     //     * @return UserService[] Returns an array of UserService objects
     //     */

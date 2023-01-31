@@ -2,8 +2,10 @@
     namespace App\Controller;
 
     use App\Entity\RequestAPI;
+    use App\Entity\UserService;
     use App\Repository\AutomationActionRepository;
     use App\Repository\ServiceRepository;
+    use App\Repository\UserServiceRepository;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,8 +19,12 @@
         /**
          * @Route("/spotify/connect", name="spotify_api_connect")
          */
-        public function connect(ServiceRepository $sevice_repository)
+        public function connect(Request $request, ServiceRepository $sevice_repository)
         {
+            if (empty($request->query->get("user_id"))) {
+                return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
+            }
+            $_SESSION["user_id"] = $request->query->get("user_id");
             $service = $sevice_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
@@ -50,7 +56,7 @@
         /**
          * @Route("/spotify/get_access_token", name="spotify_api_get_access_token")
          */
-        public function getAccessToken(Request $request, ServiceRepository $sevice_repository)
+        public function getAccessToken(Request $request, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
         {
             $service = $sevice_repository->findByName("spotify");
             if (empty($service)) {
@@ -80,16 +86,31 @@
             $headers[] = "Content-Type: application/x-www-form-urlencoded";
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             $result = curl_exec($ch);
-            curl_close ($ch);
+            curl_close($ch);
             if (!isset(json_decode($result)->access_token)) {
                 return new JsonResponse(array("message" => "Spotify: Bad code to get access token"), 400);
             }
-            return new JsonResponse(array("spotify_token" => json_decode($result)->access_token), 200);
+            $user_id = $_SESSION["user_id"];
+            if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+                $user_service = new UserService();
+                $user_service->setUserId($user_id);
+                $user_service->setServiceId($service->getId());
+                $user_service->setAccessToken(json_decode($result)->access_token);
+                $user_service->setRefreshToken(json_decode($result)->refresh_token);
+                $user_sevice_repository->add($user_service, true);
+            } else {
+                $user_service = $user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
+                $user_service->setAccessToken(json_decode($result)->access_token);
+                $user_service->setRefreshToken(json_decode($result)->refresh_token);
+                $user_sevice_repository->edit($user_service, true);
+            }
+            session_destroy();
+            return new JsonResponse(array("token" => json_decode($result)->access_token), 200);
         }
         /**
          * @Route("/spotify/refresh_access_token", name="spotify_api_refresh_access_token")
          */
-        public function refreshAccessToken(Request $request, ServiceRepository $sevice_repository)
+        public function refreshAccessToken(Request $request, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
         {
             $service = $sevice_repository->findByName("spotify");
             if (empty($service)) {
