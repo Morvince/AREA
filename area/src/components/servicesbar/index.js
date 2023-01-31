@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { Icon } from '@iconify/react';
 import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
 import ButtonBox from '../buttonBlock';
-import { Button } from 'react-scroll';
 
 const Servicesbar = () => {
   const [isOpen] = useState(true);
@@ -42,23 +41,12 @@ const Servicesbar = () => {
     ));
   }
 
-  //fonction pour débugg------------
-  const logBlocks = () => {
-    for (let i = 0; i < services.length; i++) {
-      console.log(`Service ${services[i].nom}:`)
-      for (let x = 0; x < services[i].block.length; x++) {
-        console.log(services[i].block[x])
-      }
-    }
-  }
-
   function displayPuzzleBlockTemps() {
     console.log("--------------------")
     puzzleBlocktemps.forEach(element => {
       console.log(element);
     });
   }
-  //--------------------------------
 
   function handleClick(service) {
     if (!isLeftBoxOpen || selectedService !== service) {
