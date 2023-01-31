@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Draggable from 'react-draggable';
-import { Rectangle } from './puzzleBlockElements';
+import { Rectangle } from './buttonBlockElements';
 
-const PuzzeBlock = (props) => {
+const ButtonBox = (props) => {
   const [backgroundColor, setbackgroundColor] = useState(props.color)
   const [pos, setPos] = useState({ x: props.top, y: props.left })
 
@@ -13,6 +13,7 @@ const PuzzeBlock = (props) => {
   const handleDragStop = (e, data) => {
     if (data.x < 300) {
       setPos({ x: props.top, y: props.left });
+      setbackgroundColor(props.color)
       setbackgroundColor(props.color)
     } else {
       setbackgroundColor("red")
@@ -30,4 +31,4 @@ const PuzzeBlock = (props) => {
   )
 }
 
-export default PuzzeBlock
+export default ButtonBox

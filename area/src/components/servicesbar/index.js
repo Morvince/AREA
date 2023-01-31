@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
-import PuzzleBlock from '../puzzleBlock';
+import ButtonBox from '../buttonBlock';
+import { Button } from 'react-scroll';
 
 const Servicesbar = () => {
   const [isOpen] = useState(true);
@@ -31,7 +32,7 @@ const Servicesbar = () => {
       t++;
     }
     services[i].block = services[i].info.map(info => (
-      <PuzzleBlock
+      <ButtonBox
         top={info.top}
         left={info.left}
         color={info.color}
@@ -138,7 +139,7 @@ const Servicesbar = () => {
         <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
           {puzzleBlocktemps.map((info, index) => {
             return (
-              <PuzzleBlock key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} />
+              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} />
             )
           })}
         </RectangleContener>
