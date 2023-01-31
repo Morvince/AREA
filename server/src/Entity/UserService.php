@@ -27,7 +27,7 @@
         private $service_id;
 
         /**
-         * @ORM\Column(type="string", length=255)
+         * @ORM\Column(type="string", length=512)
          */
         private $access_token;
 

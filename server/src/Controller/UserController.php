@@ -29,9 +29,9 @@
                         return new JsonResponse(array("user_id" => $user->getId()), 200);
                     }
                 }
-                return new JsonResponse(array("message" => "Wrong password"), 401);
+                return new JsonResponse(array("message" => "User: Wrong password"), 401);
             }
-            return new JsonResponse(array("message" => "Missing field"), 400);
+            return new JsonResponse(array("message" => "User: Missing field"), 400);
         }
 
         /**
@@ -48,10 +48,10 @@
                 // Check values in database
                 foreach ($users as $user) {
                     if (strcmp($user->getUsername(), $username) === 0) {
-                        return new JsonResponse(array("message" => "Username already used"), 401);
+                        return new JsonResponse(array("message" => "User: Username already used"), 401);
                     }
                     if (strcmp($user->getEmail(), $email) === 0) {
-                        return new JsonResponse(array("message" => "Email already used"), 401);
+                        return new JsonResponse(array("message" => "User: Email already used"), 401);
                     }
                 }
                 $password = hash("haval256,5", $password);
@@ -64,7 +64,7 @@
                 $user_repository->add($user, true);
                 return new JsonResponse(array("user_id" => $user->getId()), 200);
             }
-            return new JsonResponse(array("message" => "Missing field"), 400);
+            return new JsonResponse(array("message" => "User: Missing field"), 400);
         }
     }
 ?>
