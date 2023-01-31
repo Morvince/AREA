@@ -16,11 +16,13 @@
         public function login(Request $request, UserRepository $user_repository)
         {
             if (!empty($request->query->get("password")) && !empty($request->query->get("login"))) {
+                // Get needed values
                 $login = $request->query->get("login");
                 $password = $request->query->get("password");
                 $password = hash("haval256,5", $password);
                 $password = hash("md5", $password);
                 $users = $user_repository->findAll();
+                // Check datas in database
                 foreach ($users as $user) {
                     if (strcmp($user->getPassword(), $password) === 0 &&
                         (strcmp($user->getUsername(), $login) === 0 || strcmp($user->getEmail(), $login) === 0)) {
@@ -38,10 +40,12 @@
         public function register(Request $request, UserRepository $user_repository)
         {
             if (!empty($request->query->get("username")) && !empty($request->query->get("email")) && !empty($request->query->get("password"))) {
+                // Get needed values
                 $username = $request->query->get("username");
                 $email = $request->query->get("email");
                 $password = $request->query->get("password");
                 $users = $user_repository->findAll();
+                // Check values in database
                 foreach ($users as $user) {
                     if (strcmp($user->getUsername(), $username) === 0) {
                         return new JsonResponse(array("message" => "Username already used"), 401);
@@ -52,6 +56,7 @@
                 }
                 $password = hash("haval256,5", $password);
                 $password = hash("md5", $password);
+                // Put datas in database
                 $user = new User();
                 $user->setUsername($username);
                 $user->setEmail($email);

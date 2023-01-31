@@ -15,10 +15,12 @@
          */
         public function getAllActions(ActionRepository $action_repository, ServiceRepository $service_repository)
         {
+            // Get needed values
             $actions = $action_repository->findAll();
             if (empty($actions)) {
-                return new JsonResponse(array("status" => "error"));//aucune action
+                return new JsonResponse(array("message" => "Action: No action found"), 404);
             }
+            // Formatting the return array
             $formatted = array();
             foreach ($actions as $action) {
                 $service = $service_repository->find($action->getServiceId());
