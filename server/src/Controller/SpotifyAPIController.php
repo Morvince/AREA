@@ -3,6 +3,7 @@
 
     use App\Entity\RequestAPI;
     use App\Entity\UserService;
+    use App\Repository\AutomationRepository;
     use App\Repository\AutomationActionRepository;
     use App\Repository\ServiceRepository;
     use App\Repository\UserServiceRepository;
@@ -190,7 +191,7 @@
             return new JsonResponse($response, 200);
         }
         /**
-         * @Route("/spotify/get_user_playlists", name="spotify_get_user_playlists")
+         * @Route("/spotify/get_user_playlists", name="spotify_api_get_user_playlists")
          */
         public function getUserPlaylists(Request $request, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
         {
@@ -255,23 +256,43 @@
         }
 
         // Action
+        /**
+         * @Route("/spotify/action/check_music_playlist", name="spotify_api_check_music_playlist")
+         */
         public function isMusicAddedToPlaylist()//jsp trop comment implementer car je dois avoir ancienne version de la playlist en plus de la nouvelle
         {// en db = playlist_id
             ;
         }
 
         // Reaction
-        public function changePlaylistDetails($access_token, $automation_action_id, AutomationActionRepository $automation_action_repository)
+        /**
+         * @Route("/spotify/reaction/change_playlist_details", name="spotify_api_reaction_change_playlist_details")
+         */
+        public function changePlaylistDetails(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
         {// en db = name:public(true/false):description;playlist_id
             // Get needed values
+            if (empty($request->query->get("automation_action_id"))) {
+                return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
+            }
+            $automation_action_id = $request->query->get("automation_action_id");
             $automation_action = $automation_action_repository->find($automation_action_id);
             if (empty($automation_action)) {
-                return json_encode(array("message" => "Spotify: automation_action_id not found", "code" => 404));
+                return new JsonResponse(array("message" => "Spotify: automation_action_id not found"), 404);
             }
+            $service = $sevice_repository->findByName("spotify");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
+            }
+            $service = $service[0];
+            $automation = $automation_repository->find($automation_action->getAutomationId());
+            if (empty($user_sevice_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+                return new JsonResponse(array("message" => "Spotify: Access token not found"), 404);
+            }
+            $access_token = $user_sevice_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
             $informations = $automation_action->getInformations();
             $args = explode(":", $informations);
             if (count($args) != 2) {
-                return json_encode(array("message" => "Spotify: Informations error", "code" => 422));
+                return new JsonResponse(array("message" => "Spotify: Informations error"), 422);
             }
             $data = explode(";", $args[0]);
             $playlist = json_decode($this->getPlaylistById($access_token, $args[1]));
@@ -300,20 +321,37 @@
                 "description" => $description
             );
             // Request to change playlist details
-            return $this->sendRequest("playlists/$playlist->id?name=&public=&description=", "PUT", $parameters);
+            return new JsonResponse($this->sendRequest("playlists/$playlist->id?name=&public=&description=", "PUT", $parameters), 200);
         }
-        public function addMusicFromArtistListToPlaylist($access_token, $automation_action_id, AutomationActionRepository $automation_action_repository)
+        /**
+         * @Route("/spotify/reaction/add_artist_music_to_playlist", name="spotify_api_reaction_add_artist_music_to_playlist")
+         */
+        public function addMusicFromArtistListToPlaylist(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
         {// en db = artist_id;artist_id:playlist_id
             // Get needed values
             srand(time());
+            if (empty($request->query->get("automation_action_id"))) {
+                return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
+            }
+            $automation_action_id = $request->query->get("automation_action_id");
             $automation_action = $automation_action_repository->find($automation_action_id);
             if (empty($automation_action)) {
-                return json_encode(array("message" => "Spotify: automation_action_id not found", "code" => 404));
+                return new JsonResponse(array("message" => "Spotify: automation_action_id not found"), 404);
             }
+            $service = $sevice_repository->findByName("spotify");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
+            }
+            $service = $service[0];
+            $automation = $automation_repository->find($automation_action->getAutomationId());
+            if (empty($user_sevice_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+                return new JsonResponse(array("message" => "Spotify: Access token not found"), 404);
+            }
+            $access_token = $user_sevice_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
             $informations = $automation_action->getInformations();
             $args = explode(":", $informations);
             if (count($args) != 2) {
-                return json_encode(array("message" => "Spotify: Informations error", "code" => 422));
+                return new JsonResponse(array("message" => "Spotify: Informations error"), 422);
             }
             $artists_id = explode(";", $args[0]);
             $artists_name = array();
@@ -326,12 +364,12 @@
                 }
             }
             if (empty($artists_name)) {
-                return json_encode(array("message" => "Spotify: artist_id not found", "code" => 404));
+                return new JsonResponse(array("message" => "Spotify: artist_id not found"), 404);
             }
             $playlist_id = $args[1];
             $music_uri = $this->getRandomMusicFromArtist($access_token, $artists_name[rand(0, count($artists_name) - 1)]);
             // Request to add a song to a playlist
-            return $this->sendRequest("playlists/$playlist_id/tracks?uris=$music_uri", "POST");
+            return new JsonResponse($this->sendRequest("playlists/$playlist_id/tracks?uris=$music_uri", "POST"), 200);
         }
         private function getArtistById($access_token, $artist_id)
         {
