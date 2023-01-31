@@ -51,6 +51,6 @@ action_get_all:
     controller: App\Controller\ActionController::getAllActions
 
 # AUTOMATION ACTION
-automation_action_do:
-    path: /automation/action/do
-    controller: App\Controller\AutomationActionController::doAction
+automation_reaction_do:
+    path: /automation/reaction/do
+    controller: App\Controller\AutomationActionController::doReaction

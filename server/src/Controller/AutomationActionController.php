@@ -12,9 +12,9 @@
     class AutomationActionController extends AbstractController
     {
         /**
-         * @Route("/automation/action/do", name="automation_action_do")
+         * @Route("/automation/reaction/do", name="automation_reaction_do")
          */
-        public function doAction(Request $request, ActionRepository $action_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
+        public function doReaction(Request $request, ActionRepository $action_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
         {
             // Get needed values
             if (empty($request->query->get("automation_action_id"))) {

@@ -328,7 +328,7 @@
             if (isset(json_decode($response)->code)) {
                 return new JsonResponse(array(json_decode($response)->message), json_decode($response)->code);
             }
-            return new JsonResponse($response, 200);
+            return new JsonResponse(array("message" => "OK"), 200);
         }
         /**
          * @Route("/spotify/reaction/add_artist_music_to_playlist", name="spotify_api_reaction_add_artist_music_to_playlist")
@@ -381,7 +381,7 @@
             if (isset(json_decode($response)->code)) {
                 return new JsonResponse(array(json_decode($response)->message), json_decode($response)->code);
             }
-            return new JsonResponse($response, 200);
+            return new JsonResponse(array("message" => "OK"), 200);
         }
         private function getArtistById($access_token, $artist_id)
         {
