@@ -258,9 +258,33 @@
         /**
          * @Route("/spotify/action/check_music_playlist", name="spotify_api_check_music_playlist")
          */
-        public function isMusicAddedToPlaylist()//jsp trop comment implementer car je dois avoir ancienne version de la playlist en plus de la nouvelle
+        public function isMusicAddedToPlaylist(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
         {// en db = playlist_id
-            ;
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->automation_action_id)) {
+                return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
+            }
+            $automation_action_id = $request_content->automation_action_id;
+            $automation_action = $automation_action_repository->find($automation_action_id);
+            if (empty($automation_action)) {
+                return new JsonResponse(array("message" => "Spotify: automation_action_id not found"), 404);
+            }
+            $service = $sevice_repository->findByName("spotify");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
+            }
+            $service = $service[0];
+            $automation = $automation_repository->find($automation_action->getAutomationId());
+            if (empty($user_sevice_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+                return new JsonResponse(array("message" => "Spotify: Access token not found"), 404);
+            }
+            $access_token = $user_sevice_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
+            $informations = $automation_action->getInformations();
+            $playlist = json_decode($this->getPlaylistById($access_token, $informations));
+            if (isset($playlist->code)) {
+                return new JsonResponse(array($playlist->message), $playlist->code);
+            }
+            return new JsonResponse(array("message" => true), 200);
         }
 
         // Reaction

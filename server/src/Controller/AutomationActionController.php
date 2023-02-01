@@ -37,11 +37,18 @@
             $service = $service_repository->find($service_id);
             $url = "http://localhost:8000/".$service->getName()."/".$action->getType()."/".$action->getIdentifier();
             // Post request to the action url
+            $parameters = array("automation_action_id" => $automation_action_id);
+            $response = $this->requestPOST($url, $parameters);
+            if (isset(json_decode($response)->code)) {
+                return new JsonResponse(array(json_decode($response)->message), json_decode($response)->code);
+            }
+            return new JsonResponse($response, 200);
+        }
+        private function requestPOST($url, $parameters) {
             $headers = array(
                 "Accept: application/json",
                 "Content-Type: application/json",
             );
-            $parameters = array("automation_action_id" => $automation_action_id);
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -51,10 +58,7 @@
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($parameters));
             $response = curl_exec($ch);
             curl_close($ch);
-            if (isset(json_decode($response)->code)) {
-                return new JsonResponse(array(json_decode($response)->message), json_decode($response)->code);
-            }
-            return new JsonResponse($response, 200);
+            return ($response);
         }
     }
 ?>
