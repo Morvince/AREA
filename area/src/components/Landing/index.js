@@ -14,7 +14,7 @@ const Landing = () => {
             color="white" fontweight="bold" > Hapilink </Text>
             <Button1 to="/sign" top="29px" left="1600px" >Login</Button1>
             <Button1 to="/home" top="29px" left="1750px" >Get Started</Button1>
-            <Button2 to="/home" top="600px" left="770px" >Start Now</Button2>
+            <Button2 to="/home" top="600px" left="760px" width="400px" >Start Now</Button2>
             <Rect top="820px" height="1000px" color="#D4D3DC" Rect/>
             <Icon icon="logos:microsoft-windows" width="300" style={{ position: 'absolute', left: '400px', height: "2500px" }} />
             <Icon icon="flat-color-icons:android-os" width="500" style={{ position: 'absolute', left: '1100px', height: "2500px" }} />
@@ -40,7 +40,7 @@ const Landing = () => {
             color="white" fontweight="bold" > There are unlimited ways to connect ! </Text>
             <Text lineheight="1.2" fontsize="40px" top="3700px" left="750px"
             color="white" fontweight="bold" > PUT SCREENSHOT  </Text>
-            <Button2 to="/home" top="4000px" left="820px" >Try it</Button2>
+            <Button2 to="/home" top="4000px" left="795px" width="250px" >Try it</Button2>
 
         </>
     )

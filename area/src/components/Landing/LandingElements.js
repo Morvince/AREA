@@ -54,7 +54,9 @@ export const Button2 = styled(LinkR)`
     color: black;
     background: white;
     text-align: center;
-    font-size: 70px;
+    font-size: 40px;
+    width: ${props => props.width};
+    height: 90px;
     top: ${props => props.top};
     left: ${props => props.left};
     font-family: Roboto;
