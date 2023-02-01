@@ -15,6 +15,7 @@
          */
         public function login(Request $request, UserRepository $user_repository)
         {
+            header('Access-Control-Allow-Origin: *');
             if (!empty($request->query->get("password")) && !empty($request->query->get("login"))) {
                 // Get needed values
                 $login = $request->query->get("login");
@@ -39,6 +40,7 @@
          */
         public function register(Request $request, UserRepository $user_repository)
         {
+            header('Access-Control-Allow-Origin: *');
             if (!empty($request->query->get("username")) && !empty($request->query->get("email")) && !empty($request->query->get("password"))) {
                 // Get needed values
                 $username = $request->query->get("username");
