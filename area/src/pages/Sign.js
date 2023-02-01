@@ -4,6 +4,7 @@ import SignBoxComponent from '../components/signBoxElements/index';
 import SignMessage from '../components/signMessage/index';
 import { black, white } from '../color';
 import { useLogin, useRegister } from '../api/apiSignPage';
+import { Navigate } from 'react-router-dom';
 
 const SignPage = styled.div`
   display: flex;
@@ -42,9 +43,11 @@ const Sign = () => {
       <SignMessage slideForm={slideForm}/>
       <SignBoxComponent slideForm={slideForm} handleSlideForm={handleSlideForm} handleLogin={handleLogin} handleRegister={handleRegister}/>
       <div style={{position: "absolute", width: "100%", alignSelf: "flex-end", textAlign: "center", marginBottom: "110px"}}>
-        {(slideForm === 0 || slideForm === 2) && handleLogin.isError ? <ErrorMessage color={black}>{handleLogin.error.message}</ErrorMessage> :
-          slideForm === 1 && handleRegister.isError ? <ErrorMessage color={white}>test2</ErrorMessage> : null}
+        {(slideForm === 0 || slideForm === 2) && handleLogin.isError ? <ErrorMessage color={black}>{handleLogin.error.response.data.message}</ErrorMessage> :
+          slideForm === 1 && handleRegister.isError ? <ErrorMessage color={white}>{handleRegister.error.response.data.message}</ErrorMessage> : null}
       </div>
+      {handleLogin.isSuccess && <Navigate to="/"/>}
+      {handleRegister.isSuccess && <Navigate to="/"/>}
     </SignPage>
   )
 }

@@ -81,18 +81,18 @@ const SignBoxComponent = ({slideForm, handleSlideForm, handleLogin, handleRegist
     }))
   }
 
-  const handleSignIn = (e) => {
-    e.preventDefault()
-    handleLogin.mutate(JSON.stringify(Object.fromEntries(new FormData(e.currentTarget).entries())))
+  const handleSignIn = (event) => {
+    event.preventDefault()
+    handleLogin.mutate(JSON.stringify(Object.fromEntries(new FormData(event.currentTarget).entries())))
   }
 
-  const handleSignUp = (e) => {
-    e.preventDefault()
+  const handleSignUp = (event) => {
+    event.preventDefault()
     if (inputPasswdSignUp.current.value !== inputConfirmPasswdSignUp.current.value) {
       alert("The 2 passwords differed")
       return
     }
-    handleRegister.mutate(JSON.stringify(Object.fromEntries(new FormData(e.currentTarget).entries())))
+    handleRegister.mutate(JSON.stringify(Object.fromEntries(new FormData(event.currentTarget).entries())))
   }
 
   return (
