@@ -12,10 +12,10 @@ services:
     ports:
       - 8080:8000
     environment:
-      - DATABASE_URL=mysql://root:${MARIADB_ROOT_PASSWORD}@areadb:3306/${MARIADB_DATABASE}
+      DATABASE_URL: mysql://root:${MARIADB_ROOT_PASSWORD}@areadb:3306/${MARIADB_DATABASE}
     networks:
       - areadb_network
-      - backend_network
+      - web_network
     depends_on:
       - areadb
 
@@ -26,11 +26,14 @@ services:
     image: area_reactjs:latest
     container_name: ${CONTAINER_NAME_PREFIX}client_web
     restart: unless-stopped
+    volumes:
+      - ./area/src:/app/client_web/src/:ro
     ports:
-      - 8081:3000
+      - 8081:8081
+    environment:
+      - PORT=8081 #for the command npm start
     networks:
-      - frontend_network
-      - backend_network
+      - web_network
     depends_on:
       - server
 
@@ -45,7 +48,6 @@ services:
       - MARIADB_DATABASE=${MARIADB_DATABASE}
     networks:
       - areadb_network
-      - backend_network
 
   phpmyadmin:
     image: phpmyadmin
@@ -62,13 +64,7 @@ services:
 
 volumes:
   db_data:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '${VOLUME_DATABASE}'
 
 networks:
-  frontend_network:
-  backend_network:
+  web_network:
   areadb_network:

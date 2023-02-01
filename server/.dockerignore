@@ -1,3 +1,6 @@
+vendor
+var
+.env.local
 .gitignore
 .dockerignore
 Dockerfile-symfony
