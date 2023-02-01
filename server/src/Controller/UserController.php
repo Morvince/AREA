@@ -16,10 +16,11 @@
         public function login(Request $request, UserRepository $user_repository)
         {
             header('Access-Control-Allow-Origin: *');
-            if (!empty($request->query->get("password")) && !empty($request->query->get("login"))) {
+            $request_content = json_decode($request->getContent());
+            if (!empty($request_content->password) && !empty($request_content->login)) {
                 // Get needed values
-                $login = $request->query->get("login");
-                $password = $request->query->get("password");
+                $login = $request_content->login;
+                $password = $request_content->password;
                 $password = hash("haval256,5", $password);
                 $password = hash("md5", $password);
                 $users = $user_repository->findAll();
@@ -41,11 +42,12 @@
         public function register(Request $request, UserRepository $user_repository)
         {
             header('Access-Control-Allow-Origin: *');
-            if (!empty($request->query->get("username")) && !empty($request->query->get("email")) && !empty($request->query->get("password"))) {
+            $request_content = json_decode($request->getContent());
+            if (!empty($request_content->username) && !empty($request_content->email) && !empty($request_content->password)) {
                 // Get needed values
-                $username = $request->query->get("username");
-                $email = $request->query->get("email");
-                $password = $request->query->get("password");
+                $username = $request_content->username;
+                $email = $request_content->email;
+                $password = $request_content->password;
                 $users = $user_repository->findAll();
                 // Check values in database
                 foreach ($users as $user) {
