@@ -30,11 +30,9 @@ spotify_api_get_user_playlists:
 spotify_api_reaction_change_playlist_details:
     path: /spotify/reaction/change_playlist_details
     controller: App\Controller\SpotifyAPIController::changePlaylistDetails
-    methods: [GET]
 spotify_api_reaction_add_artist_music_to_playlist:
     path: /spotify/reaction/add_artist_music_to_playlist
     controller: App\Controller\SpotifyAPIController::addMusicFromArtistListToPlaylist
-    methods: [GET]
 
 # AUTOMATION
 automation_add:
@@ -51,3 +49,11 @@ automation_edit:
 action_get_all:
     path: /action/get_all
     controller: App\Controller\ActionController::getAllActions
+
+# AUTOMATION ACTION
+automation_reaction_trigger:
+    path: /automation/reaction/trigger
+    controller: App\Controller\AutomationActionController::triggerReaction
+automation_reaction_do:
+    path: /automation/reaction/do
+    controller: App\Controller\AutomationActionController::doReaction
