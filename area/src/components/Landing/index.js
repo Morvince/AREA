@@ -14,6 +14,8 @@ const Landing = () => {
             color="white" fontweight="bold" > Hapilink </Text>
             <Text lineheight="1.2" fontsize="20px" top="40px" left="1780px" 
             color="white" fontweight="bold" > Get Started </Text>
+            <Text lineheight="1.2" fontsize="20px" top="40px" left="1650px" 
+            color="white" fontweight="bold" > Login </Text>
             <Button top="590px" Button/>
             <Text lineheight="1.2" fontsize="50px" top="625px" left="850px" 
             color="black" fontweight="bold" > Start Now </Text>
