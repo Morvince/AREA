@@ -9,6 +9,7 @@ export const RectangleArea = styled.div`
 `;
 
 export const MovableBox = styled.div`
+  position: relative;
   display: flex;
   flex-grow: 2;
   background: green;
