@@ -133,7 +133,7 @@
                 return new JsonResponse(array("message" => "Spotify: Identifiers error"), 422);
             }
             if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
-                return json_encode(array("message" => "Spotify: Refresh token not found", "code" => 404));
+                return new JsonResponse(array("message" => "Spotify: Refresh token not found", "code"), 404);
             }
             $client_id = $identifiers[0];
             $client_secret = $identifiers[1];
