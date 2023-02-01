@@ -48,16 +48,6 @@
             ;
         }
 
-        public function findById($id)
-        {
-            return $this->createQueryBuilder("service")
-                ->where("service.id = :id")
-                ->setParameter("id", $id)
-                ->getQuery()
-                ->getResult()
-            ;
-        }
-
     //    /**
     //     * @return Service[] Returns an array of Service objects
     //     */

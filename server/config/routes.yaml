@@ -2,11 +2,11 @@
 user_register:
     path: /register
     controller: App\Controller\UserController::register
-    # methods: [POST]
+    methods: [POST]
 user_login:
     path: /login
     controller: App\Controller\UserController::login
-    # methods: [POST]
+    methods: [POST]
 
 # SPOTIFY
 spotify_api_connect:
@@ -15,12 +15,24 @@ spotify_api_connect:
 spotify_api_get_access_token:
     path: /spotify/get_access_token
     controller: App\Controller\SpotifyAPIController::getAccessToken
+spotify_api_refresh_access_token:
+    path: /spotify/refresh_access_token
+    controller: App\Controller\SpotifyAPIController::refreshAccessToken
 spotify_api_search:
     path: /spotify/search
     controller: App\Controller\SpotifyAPIController::search
-spotify_get_user_playlists:
+spotify_api_get_user_playlists:
     path: /spotify/get_user_playlists
     controller: App\Controller\SpotifyAPIController::getUserPlaylists
+# spotify_api_check_music_playlist:
+#     path: /spotify/action/check_music_playlist
+#     controller: App\Controller\SpotifyAPIController::isMusicAddedToPlaylist
+spotify_api_reaction_change_playlist_details:
+    path: /spotify/reaction/change_playlist_details
+    controller: App\Controller\SpotifyAPIController::changePlaylistDetails
+spotify_api_reaction_add_artist_music_to_playlist:
+    path: /spotify/reaction/add_artist_music_to_playlist
+    controller: App\Controller\SpotifyAPIController::addMusicFromArtistListToPlaylist
 
 # AUTOMATION
 automation_add:
@@ -37,3 +49,8 @@ automation_edit:
 action_get_all:
     path: /action/get_all
     controller: App\Controller\ActionController::getAllActions
+
+# AUTOMATION ACTION
+automation_reaction_do:
+    path: /automation/reaction/do
+    controller: App\Controller\AutomationActionController::doReaction
