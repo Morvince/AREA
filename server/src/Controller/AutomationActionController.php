@@ -1,6 +1,7 @@
 <?php
     namespace App\Controller;
 
+    use App\Entity\RequestAPI;
     use App\Repository\ActionRepository;
     use App\Repository\AutomationActionRepository;
     use App\Repository\ServiceRepository;
@@ -11,16 +12,52 @@
 
     class AutomationActionController extends AbstractController
     {
+        private RequestAPI $request_api;
+        /**
+         * @Route("/automation/reaction/trigger", name="automation_reaction_trigger")
+         */
+        public function triggerReaction(Request $request, ActionRepository $action_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
+        {
+            // Get needed values
+            // $request_content = json_decode($request->getContent());
+            // if (empty($request_content->automation_action_id)) {
+            //     return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
+            // }
+            // $automation_action_id = $request_content->automation_action_id;
+            if (empty($request->query->get("automation_action_id"))) {
+                return new JsonResponse(array("message" => "AutomationAction: Missing field"), 400);
+            }
+            $automation_action_id = $request->query->get("automation_action_id");
+            if (empty($automation_action_repository->find($automation_action_id))) {
+                return new JsonResponse(array("message" => "AutomationAction: automation_action not found"), 404);
+            }
+            $automation_action = $automation_action_repository->find($automation_action_id);
+            $automation_id = $automation_action->getAutomationId();
+            if (empty($automation_action_repository->findAutomationReactions($automation_id))) {
+                return new JsonResponse(array("message" => "AutomationAction: No reaction found"), 404);
+            }
+            $automation_reactions = $automation_action_repository->findAutomationReactions($automation_id);
+            foreach ($automation_reactions as $automation_reaction) {
+                $url = "http://localhost:8000/automation/reaction/do";
+                $parameters = array("automation_action_id" => $automation_reaction->getId());
+                $response = $this->sendRequest($url, $parameters);
+                if (isset(json_decode($response)->code)) {
+                    return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
+                }
+            }
+            return new JsonResponse(array("message" => "OK"), 200);
+        }
         /**
          * @Route("/automation/reaction/do", name="automation_reaction_do")
          */
         public function doReaction(Request $request, ActionRepository $action_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
         {
             // Get needed values
-            if (empty($request->query->get("automation_action_id"))) {
-                return new JsonResponse(array("message" => "AutomationAction: Missing field"), 400);
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->automation_action_id)) {
+                return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
-            $automation_action_id = $request->query->get("automation_action_id");
+            $automation_action_id = $request_content->automation_action_id;
             if (empty($automation_action_repository->find($automation_action_id))) {
                 return new JsonResponse(array("message" => "AutomationAction: automation_action not found"), 404);
             }
@@ -38,27 +75,19 @@
             $url = "http://localhost:8000/".$service->getName()."/".$action->getType()."/".$action->getIdentifier();
             // Post request to the action url
             $parameters = array("automation_action_id" => $automation_action_id);
-            $response = $this->requestPOST($url, $parameters);
+            $response = $this->sendRequest($url, $parameters);
             if (isset(json_decode($response)->code)) {
-                return new JsonResponse(array(json_decode($response)->message), json_decode($response)->code);
+                return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
             }
             return new JsonResponse($response, 200);
         }
-        private function requestPOST($url, $parameters) {
-            $headers = array(
-                "Accept: application/json",
-                "Content-Type: application/json",
-            );
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($parameters));
-            $response = curl_exec($ch);
-            curl_close($ch);
-            return ($response);
+        private function sendRequest($url, $parameters)
+        {
+            if (empty($this->request_api)) {
+                $this->request_api = new RequestAPI();
+            }
+            $response = $this->request_api->sendRoute($url, $parameters);
+            return $response;
         }
     }
 ?>

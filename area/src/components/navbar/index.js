@@ -39,7 +39,7 @@ const Navbar = ({ toggle, changeY, defaultState }) => {
             </NavItem>
           </NavMenu>
           <NavBtn>
-            <NavBtnLink to="/signin">Sign In</NavBtnLink>
+            <NavBtnLink to="/sign">Sign In</NavBtnLink>
           </NavBtn>
         </NavbarContainer>
       </Nav>
