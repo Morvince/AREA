@@ -1,5 +1,5 @@
 import React from 'react'
-import { Rect, Text, Button } from './LandingElements';
+import { Rect, Text, Button1, Button2 } from './LandingElements';
 import { Icon } from '@iconify/react';
 
 const Landing = () => {
@@ -12,13 +12,9 @@ const Landing = () => {
             color="white" fontweight="" > Link all your application in order to make your life easier ! </Text>
             <Text lineheight="1.2" fontsize="45px" top="20px" left="25px" 
             color="white" fontweight="bold" > Hapilink </Text>
-            <Text lineheight="1.2" fontsize="20px" top="40px" left="1780px" 
-            color="white" fontweight="bold" > Get Started </Text>
-            <Text lineheight="1.2" fontsize="20px" top="40px" left="1650px" 
-            color="white" fontweight="bold" > Login </Text>
-            <Button top="590px" Button/>
-            <Text lineheight="1.2" fontsize="50px" top="625px" left="850px" 
-            color="black" fontweight="bold" > Start Now </Text>
+            <Button1 to="/sign" top="29px" left="1600px" >Login</Button1>
+            <Button1 to="/home" top="29px" left="1750px" >Get Started</Button1>
+            <Button2 to="/home" top="600px" left="770px" >Start Now</Button2>
 
             <Rect top="820px" height="1000px" color="#D4D3DC" Rect/>
             <Icon icon="logos:microsoft-windows" width="300" style={{ position: 'absolute', left: '400px', height: "2500px" }} />
@@ -45,9 +41,7 @@ const Landing = () => {
             color="white" fontweight="bold" > There are unlimited ways to connect ! </Text>
             <Text lineheight="1.2" fontsize="40px" top="3700px" left="750px"
             color="white" fontweight="bold" > PUT SCREENSHOT  </Text>
-            <Button top="4000px" Button/>
-            <Text lineheight="1.2" fontsize="60px" top="4030px" left="890px" 
-            color="black" fontweight="bold" > Try it </Text>
+            <Button2 to="/home" top="4000px" left="820px" >Try it</Button2>
 
         </>
     )

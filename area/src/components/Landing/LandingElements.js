@@ -28,13 +28,43 @@ export const Navebar = styled.div`
     background: black;
 `;
 
-export const Button = styled.div`
+export const Button1 = styled(LinkR)`
+    display: inline-block;
     position: absolute;
-    height: 130px;
-    width: 370px;
+    color: white;
+    text-align: center;
+    font-size: 20px;
     top: ${props => props.top};
-    left: 780px;
-    background: white;
+    left: ${props => props.left};
+    font-family: Roboto;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 12px 24px;
     border-radius: 50px;
-   
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        background: white;
+        color: black;
+    }
+`;
+
+export const Button2 = styled(LinkR)`
+    display: inline-block;
+    position: absolute;
+    color: black;
+    background: white;
+    text-align: center;
+    font-size: 70px;
+    top: ${props => props.top};
+    left: ${props => props.left};
+    font-family: Roboto;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        background: black;
+        color: white;
+    }
 `;
