@@ -282,7 +282,7 @@
             $informations = $automation_action->getInformations();
             $playlist = json_decode($this->getPlaylistById($access_token, $informations));
             if (isset($playlist->code)) {
-                return new JsonResponse(array($playlist->message), $playlist->code);
+                return new JsonResponse(array("message" => $playlist->message), $playlist->code);
             }
             return new JsonResponse(array("message" => true), 200);
         }
@@ -321,7 +321,7 @@
             $data = explode(";", $args[0]);
             $playlist = json_decode($this->getPlaylistById($access_token, $args[1]));
             if (isset($playlist->code)) {
-                return new JsonResponse(array($playlist->message), $playlist->code);
+                return new JsonResponse(array("message" => $playlist->message), $playlist->code);
             }
             $name = $playlist->name;
             if (!empty($data[0])) {
@@ -350,7 +350,7 @@
             // Request to change playlist details
             $response = $this->sendRequest($access_token, "playlists/$playlist->id?name=&public=&description=", "PUT", $parameters);
             if (isset(json_decode($response)->code)) {
-                return new JsonResponse(array(json_decode($response)->message), json_decode($response)->code);
+                return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
             }
             return new JsonResponse(array("message" => "OK"), 200);
         }
@@ -403,7 +403,7 @@
             // Request to add a song to a playlist
             $response = $this->sendRequest($access_token, "playlists/$playlist_id/tracks?uris=$music_uri", "POST");
             if (isset(json_decode($response)->code)) {
-                return new JsonResponse(array(json_decode($response)->message), json_decode($response)->code);
+                return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
             }
             return new JsonResponse(array("message" => "OK"), 200);
         }
