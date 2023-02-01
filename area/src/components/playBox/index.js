@@ -16,7 +16,7 @@ const PlayBox = () => {
       <MyContext.Provider value={{ sharedData, setSharedData }}>
         <Servicesbar />
         <MovableBox>
-          {sharedData.map((info, index) => {
+          {sharedData.map((info) => {
             return (
               <Block key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} />
             )

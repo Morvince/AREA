@@ -20,7 +20,7 @@ const ButtonBox = (props) => {
     if (data.x < 300) {
       setPos({ x: props.top, y: props.left });
     } else {
-      setSharedData(sharedData => [...sharedData, { service: props.service, index: props.id, color: props.color, top: props.top, left: props.left+200 }])
+      setSharedData(sharedData => [...sharedData, { service: props.service, index: props.id, color: props.color, top: props.top, left: props.left+500 }])
     }
     setbackgroundColor(props.color)
   }
