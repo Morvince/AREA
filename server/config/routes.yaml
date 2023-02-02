@@ -6,7 +6,7 @@ user_register:
 user_login:
     path: /login
     controller: App\Controller\UserController::login
-    methods: [POST]
+    # methods: [POST]
 
 # SPOTIFY
 spotify_api_connect:

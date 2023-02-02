@@ -54,11 +54,11 @@
         public function editAutomation(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository)
         {
             // Get needed values
-            $data = json_decode($request->getContent(), true);
-            if (empty($data->automation_id)) {
+            $request_content = json_decode($request->getContent(), true);
+            if (empty($request_content->automation_id)) {
                 return new JsonResponse(array("message" => "Automation: Missing field"), 400);
             }
-            $automation_id = $data->automation_id;
+            $automation_id = $request_content->automation_id;
             if (empty($automation_repository->findById($automation_id))) {
                 return new JsonResponse(array("message" => "Automation: Automation not found"), 404);
             }
@@ -67,11 +67,11 @@
             foreach ($automation_actions as $item) {
                 $automation_action_repository->remove($item);
             }
-            if (empty($data->actions)) {
+            if (empty($request_content->actions)) {
                 return new JsonResponse(array("message" => "OK"), 200);
             }
             // Put datas in database
-            $actions = $data->actions;
+            $actions = $request_content->actions;
             foreach ($actions as $action) {
                 $automation_action = new AutomationAction();
                 $automation_action->setActionId($action->id);

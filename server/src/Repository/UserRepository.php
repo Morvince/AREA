@@ -36,6 +36,16 @@
             }
         }
 
+        public function findByToken($token)
+        {
+             return $this->createQueryBuilder("user")
+                 ->where("user.token = :token")
+                 ->setParameter("token", $token)
+                 ->getQuery()
+                 ->getResult()
+             ;
+        }
+
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */
