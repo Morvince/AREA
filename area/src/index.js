@@ -6,7 +6,7 @@ import axios from "axios"
 import { ReactQueryDevtools } from 'react-query/devtools' /* enlever lors de la mise en prod */
 
 axios.defaults.baseURL = "http://localhost:8080"
-axios.defaults.validateStatus = function (status) { return status < 500 }
+axios.defaults.validateStatus = function (status) { return status < 300 }
 const queryClient = new QueryClient()
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

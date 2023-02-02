@@ -46,11 +46,13 @@
             ;
         }
 
-        public function findById($id)
+        public function findAutomationReactions($automation_id)
         {
             return $this->createQueryBuilder("automation_action")
-                ->where("automation_action.id = :id")
-                ->setParameter("id", $id)
+                ->where("automation_action.automation_id = :automation_id")
+                ->andWhere("automation_action.number > 1")
+                ->orderBy("automation_action.number")
+                ->setParameter("automation_id", $automation_id)
                 ->getQuery()
                 ->getResult()
             ;
