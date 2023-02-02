@@ -23,7 +23,7 @@
          */
         public function connect(Request $request, ServiceRepository $sevice_repository)
         {
-            // header('Access-Control-Allow-Origin: *');
+            header('Access-Control-Allow-Origin: *');
             // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->redirect_uri)) {
@@ -61,7 +61,7 @@
          */
         public function getAccessToken(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
         {
-            // header('Access-Control-Allow-Origin: *');
+            header('Access-Control-Allow-Origin: *');
             // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->state)) {
