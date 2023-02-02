@@ -44,7 +44,7 @@ const Sign = () => {
       <SignBoxComponent slideForm={slideForm} handleSlideForm={handleSlideForm} handleLogin={handleLogin} handleRegister={handleRegister}/>
       <div style={{position: "absolute", width: "100%", alignSelf: "flex-end", textAlign: "center", marginBottom: "110px"}}>
         {(slideForm === 0 || slideForm === 2) && handleLogin.isError ? <ErrorMessage color={black}>{handleLogin.error.response.data.message}</ErrorMessage> :
-          slideForm === 1 && handleRegister.isError ? <ErrorMessage color={white}>{handleRegister.error.response.data.message}</ErrorMessage> : sessionStorage.getItem("user_id")}
+          slideForm === 1 && handleRegister.isError ? <ErrorMessage color={white}>{handleRegister.error.response.data.message}</ErrorMessage> : null}
       </div>
       {handleLogin.isSuccess && <Navigate to="/home"/>}
       {handleRegister.isSuccess && <Navigate to="/home"/>}

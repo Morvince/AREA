@@ -18,7 +18,7 @@ function App() {
         <Route exact path='/' element={<LandingPage/>}/>
         <Route exact path='/sign' element={<Sign/>}/>
         <Route element={<PrivateRoutes/>}>
-          <Route exact path='/home' element={<Home/>}/>
+          <Route path='/home' element={<Home/>}/>
         </Route>
         <Route path='*' element={<PageNotFound/>}/>
       </Routes>
