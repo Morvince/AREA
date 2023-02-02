@@ -12,8 +12,7 @@ const Landing = () => {
             color="white" fontweight="" > Link all your application in order to make your life easier ! </Text>
             <Text lineheight="1.2" fontsize="45px" top="20px" left="25px" 
             color="white" fontweight="bold" > Hapilink </Text>
-            <Button1 to="/sign" top="29px" left="1600px" >Login</Button1>
-            <Button1 to="/home" top="29px" left="1750px" >Get Started</Button1>
+            <Button1 to="/sign" top="29px" left="1750px" >Login</Button1>
             <Button2 to="/home" top="600px" left="760px" width="400px" >Start Now</Button2>
         
             <Rect top="820px" height="1000px" color="#D4D3DC" Rect/>
