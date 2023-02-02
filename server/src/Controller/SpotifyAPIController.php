@@ -6,6 +6,7 @@
     use App\Repository\AutomationRepository;
     use App\Repository\AutomationActionRepository;
     use App\Repository\ServiceRepository;
+    use App\Repository\UserRepository;
     use App\Repository\UserServiceRepository;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\HttpFoundation\Request;
@@ -40,6 +41,41 @@
             $redirect_uri = "http://localhost:8000/spotify/get_access_token";
             return $this->redirectToAutorisationLink($user_id, $client_id, $redirect_uri);
         }
+        // La fonction si besoin de passer par le front
+        // public function connect(Request $request, ServiceRepository $sevice_repository)
+        // {
+        //     // Get needed values
+        //     $request_content = json_decode($request->getContent());
+        //     if (empty($request_content->redirect_uri)) {
+        //         return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
+        //     }
+        //     $redirect_uri = $request_content->redirect_uri;
+        //     $service = $sevice_repository->findByName("spotify");
+        //     if (empty($service)) {
+        //         return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
+        //     }
+        //     $service = $service[0];
+        //     $identifiers = explode(";", $service->getIdentifiers());
+        //     if (empty($identifiers)) {
+        //         return new JsonResponse(array("message" => "Spotify: Identifiers error"), 422);
+        //     }
+        //     $client_id = $identifiers[0];
+        //     // Compose the authorization scope
+        //     $scope = array( "user-read-playback-state", "user-modify-playback-state", "user-read-currently-playing",
+        //                     "app-remote-control", "streaming",
+        //                     "playlist-read-private", "playlist-read-collaborative", "playlist-modify-private", "playlist-modify-public",
+        //                     "user-follow-modify", "user-follow-read",
+        //                     "user-read-playback-position", "user-top-read", "user-read-recently-played",
+        //                     "user-library-modify", "user-library-read",
+        //                     "user-read-email", "user-read-private"
+        //                 );
+        //     $scope = implode(" ", $scope);
+        //     // Set the state when the request is good
+        //     $state = "17";
+        //     // Compose the authorization url
+        //     $authorization_url = "https://accounts.spotify.com/authorize?client_id=$client_id&response_type=code&redirect_uri=$redirect_uri&scope=$scope&state=$state";
+        //     return new JsonResponse(array("authorization_url" => $authorization_url), 200);
+        // }
         private function redirectToAutorisationLink($user_id, $client_id, $redirect_uri)
         {
             // Compose the authorization scope
@@ -113,6 +149,71 @@
             }
             return new JsonResponse(array("token" => json_decode($result)->access_token), 200);
         }
+        // La fonction si besoin de passer par le front
+        // public function getAccessToken(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
+        // {
+        //     // Get needed values
+        //     $request_content = json_decode($request->getContent());
+        //     if (empty($request_content->state)) {
+        //         return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
+        //     }
+        //     $state = $request_content->state;
+        //     if ($state != "17") {
+        //         return new JsonResponse(array("message" => "Spotify: Bad request to get access token"), 400);
+        //     }
+        //     if (empty($request_content->token) || empty($request_content->redirect_uri) || empty($request_content->code)) {
+        //         return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
+        //     }
+        //     $token = $request_content->token;
+        //     if (empty($user_repository->findByToken($token))) {
+        //         return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
+        //     }
+        //     $user = $user_repository->findByToken($token);
+        //     $user_id = $user->getId();
+        //     $code = $request_content->code;
+        //     $redirect_uri = $request_content->redirect_uri;
+        //     $service = $sevice_repository->findByName("spotify");
+        //     if (empty($service)) {
+        //         return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
+        //     }
+        //     $service = $service[0];
+        //     $identifiers = explode(";", $service->getIdentifiers());
+        //     if (count($identifiers) != 2) {
+        //         return new JsonResponse(array("message" => "Spotify: Identifiers error"), 422);
+        //     }
+        //     $client_id = $identifiers[0];
+        //     $client_secret = $identifiers[1];
+        //     // Request for the access token
+        //     $ch = curl_init();
+        //     curl_setopt($ch, CURLOPT_URL, "https://accounts.spotify.com/api/token");
+        //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        //     curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=authorization_code&code=$code&redirect_uri=$redirect_uri");
+        //     curl_setopt($ch, CURLOPT_POST, true);
+        //     curl_setopt($ch, CURLOPT_USERPWD, "$client_id:$client_secret");
+        //     $headers = array();
+        //     $headers[] = "Content-Type: application/x-www-form-urlencoded";
+        //     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        //     $result = curl_exec($ch);
+        //     curl_close($ch);
+        //     if (!isset(json_decode($result)->access_token)) {
+        //         return new JsonResponse(array("message" => "Spotify: Bad code to get access token"), 400);
+        //     }
+        //     // Put or edit datas in database
+        //     if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+        //         $user_service = new UserService();
+        //         $user_service->setUserId($user_id);
+        //         $user_service->setServiceId($service->getId());
+        //         $user_service->setAccessToken(json_decode($result)->access_token);
+        //         $user_service->setRefreshToken(json_decode($result)->refresh_token);
+        //         $user_sevice_repository->add($user_service, true);
+        //     } else {
+        //         $user_service = $user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
+        //         $user_service->setAccessToken(json_decode($result)->access_token);
+        //         $user_service->setRefreshToken(json_decode($result)->refresh_token);
+        //         $user_sevice_repository->edit($user_service, true);
+        //     }
+        //     return new JsonResponse(array("token" => json_decode($result)->access_token), 200);
+        // }
         /**
          * @Route("/spotify/refresh_access_token", name="spotify_api_refresh_access_token")
          */

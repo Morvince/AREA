@@ -31,38 +31,52 @@
          */
         private $password;
 
+        /**
+         * @ORM\Column(type="string", length=64)
+         */
+        private $token;
+
         // Getter
-        public function getId(): ?int
+        public function getId()
         {
             return $this->id;
         }
-        public function getUsername(): ?string
+        public function getUsername()
         {
             return $this->username;
         }
-        public function getEmail(): ?string
+        public function getEmail()
         {
             return $this->email;
         }
-        public function getPassword(): ?string
+        public function getPassword()
         {
             return $this->password;
         }
+        public function getToken()
+        {
+            return $this->token;
+        }
 
         // Setter
-        public function setUsername(string $username): self
+        public function setUsername(string $username)
         {
             $this->username = $username;
             return $this;
         }
-        public function setEmail(string $email): self
+        public function setEmail(string $email)
         {
             $this->email = $email;
             return $this;
         }
-        public function setPassword(string $password): self
+        public function setPassword(string $password)
         {
             $this->password = $password;
+            return $this;
+        }
+        public function setToken(string $token)
+        {
+            $this->token = $token;
             return $this;
         }
     }
