@@ -66,6 +66,6 @@ automation_reaction_trigger:
 automation_reaction_do:
     path: /automation/reaction/do
     controller: App\Controller\AutomationActionController::doReaction
-automation_action_check_all:
-    path: /automation/action/check_all
-    controller: App\Controller\AutomationActionController::checkAllActions
+automation_action_checks:
+    path: /automation/action/check
+    controller: App\Controller\AutomationActionController::check

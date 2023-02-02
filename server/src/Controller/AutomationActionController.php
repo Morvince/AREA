@@ -14,9 +14,9 @@
     {
         private RequestAPI $request_api;
         /**
-         * @Route("/automation/action/check_all", name="automation_action_check_all")
+         * @Route("/automation/action/check", name="automation_action_check")
          */
-        public function checkAllActions(ActionRepository $action_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
+        public function check(ActionRepository $action_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
         {// check si une des erreurs de requete est un bad token pour le refresh
             $old_parameters = array();
             while (true) {
@@ -55,8 +55,7 @@
                     $old_parameters[$automation_action_id] = $parameters;
                     // Trigger all linked reactions
                     if (json_decode($response)->message === true) {
-                        // a faire
-                        $parameters = array("automation_action_id" => 0);//reaction_id
+                        $parameters = array("automation_action_id" => $automation_action_id);
                         $response = $this->sendRequest("http://localhost:8000/automation/reaction/trigger", $parameters);
                         if (isset(json_decode($response)->code)) {
                             continue;
@@ -72,15 +71,11 @@
         public function triggerReaction(Request $request, ActionRepository $action_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
         {
             // Get needed values
-            // $request_content = json_decode($request->getContent());
-            // if (empty($request_content->automation_action_id)) {
-            //     return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
-            // }
-            // $automation_action_id = $request_content->automation_action_id;
-            if (empty($request->query->get("automation_action_id"))) {
-                return new JsonResponse(array("message" => "AutomationAction: Missing field"), 400);
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->automation_action_id)) {
+                return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
-            $automation_action_id = $request->query->get("automation_action_id");
+            $automation_action_id = $request_content->automation_action_id;
             if (empty($automation_action_repository->find($automation_action_id))) {
                 return new JsonResponse(array("message" => "AutomationAction: automation_action not found"), 404);
             }
