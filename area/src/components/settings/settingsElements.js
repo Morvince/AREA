@@ -19,7 +19,7 @@ export const SettingsRect = styled.div`
     border-radius: 30px;
 `;
 
-export const Button = styled(LinkR)`
+export const Button = styled.button`
   position: absolute;
   left: ${props => props.left};
   top: ${props => props.top};

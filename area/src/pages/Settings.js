@@ -4,7 +4,7 @@ import Navebar from '../components/navbar'
 import Settings from '../components/settings'
 
 const SettingsPage = () => {
-    const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   const toggle = () => {
     setIsOpen(!isOpen)
