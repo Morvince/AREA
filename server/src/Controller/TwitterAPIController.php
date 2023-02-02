@@ -13,93 +13,79 @@ use Symfony\Component\Routing\Annotation\Route;
 class TwitterAPIController extends AbstractController
 {
     /**
-     * @Route("/twitter/a/p/i", name="app_twitter_a_p_i")
+     * @Route("/twitter/get_access_token", name="twitter_api_get_access_token")
      */
 
-    private const API_URL = "https://api.twitter.com/2/tweets";
-    private RequestAPI $request_api;
-
-    public function index(): Response
+    function requestAccessToken($consumerKey = "lUyeZYWIWdiZHVbGhx4OUqAgM", $consumerSecret = "FblKc0edbcywBMWIG6toFHC3zbEA11WTTvkNbw4A9TFj9dWKC0", $callbackUrl = "localhost:8000")
     {
-        return $this->render('twitter_api/index.html.twig', [
-            'controller_name' => 'TwitterAPIController',
-        ]);
-    }
+        $auth = base64_encode($consumerKey . ':' . $consumerSecret);
 
-    public function requestToken(Request $request, ServiceRepository $sevice_repository)
-    {
-        $service = $sevice_repository->findByName("twitter")[0];
-        if (empty($service)) {
-            return new JsonResponse(array("status" => "error")); //pas de service spotify en db
-        }
-        $identifiers = explode(";", $service->getIdentifiers());
-        if (count($identifiers) != 2) {
-            return new JsonResponse(array("status" => "error")); //probleme client id ou secret en db
-        }
+        $postData = array(
+            'grant_type' => 'client_credentials'
+        );
 
-        $consumerKey = $identifiers[0];
-        $consumerSecret = $identifiers[1];
-        $accessToken = $identifiers[2];
-        $accessTokenSecret = $identifiers[3];
-
-        $bearerToken = base64_encode($consumerKey . ":" . $consumerSecret); // Génération token accès pour l'oauth
-
-        $curl = curl_init(); // post requête pour le jeton d'accès
-        curl_setopt($curl, CURLOPT_URL, "https://api.twitter.com/oauth2/token");
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, [
-            "Authorization: Basic " . $bearerToken,
-            "Content-Type: application/x-www-form-urlencoded;charset=UTF-8"
-        ]);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        $accessToken = json_decode($response)->access_token; // check la reponse de la requête pour avoir le token d'accès
-    }
-
-    public function writeTweet($accessToken)
-    {
-        // todo utilisation de la fonction pour faire les requêtes
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, "https://api.twitter.com/2/tweets");
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, [
-            "Authorization: Bearer " . $accessToken,
-            "Content-Type: application/json"
-        ]);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode([
-            "status" => "Ceci est un tweet test !"
-        ]));
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.twitter.com/oauth2/token',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => $postData,
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Basic ' . $auth,
+                'Content-Type: application/x-www-form-urlencoded;charset=UTF-8'
+            )
+        ));
+
         $response = curl_exec($curl);
+        $err = curl_error($curl);
+
         curl_close($curl);
 
-        if (json_decode($response)->data->status === "created") { // error handling de la publication du tweet
-            echo "Tweet publié avec succès.";
+        if ($err) {
+            return $err;
         } else {
-            echo "Erreur lors de la publication du tweet";
+            return json_decode($response);
         }
     }
 
-    private function sendTwitterAPIRequest($url, $method, $headers, $data = '') // headers c'est pour les tokens d'id et data c'est si il faut des données en plus pour la requête 
+    /**
+     * @Route("/twitter/change_status", name="twitter_api_change_status")
+     */
+
+    function changeStatus($accessToken, $accessTokenSecret, $status = "Tweet de test !")
     {
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-        $response = curl_exec($curl);
+        // Concaténation des jetons d'accès pour construire l'en-tête d'authentification
+        $bearerToken = base64_encode($accessToken . ":" . $accessTokenSecret);
+        $authorizationHeader = "Authorization: Bearer " . $bearerToken;
 
-        // if ($response === false) {
-        //     $error = curl_error($curl);
-        //     curl_close($curl);
-        //     throw new Exception("cURL request failed: $error"); // gérer les exceptions plus tard
-        // }
+        // encode le contenu du tweet
+        $status = urlencode($status);
 
-        curl_close($curl);
-        return $response;
+        $ch = curl_init();
+        // Configuration de l'URL de l'API Twitter avec l'endpoint pour la gestion des tweets
+        curl_setopt($ch, CURLOPT_URL, "https://api.twitter.com/2/tweets");
+        curl_setopt($ch, CURLOPT_POST, true);
+        // données utilisé par la requếte
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "status=$status");
+        // config du header
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [$authorizationHeader]);
+        // Désactivation de la vérification SSL
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        // Exécution de la requête
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        // Analyse de la réponse de l'API pour déterminer si le tweet a été publié avec succès
+        $responseObject = json_decode($response);
+        if (isset($responseObject->id)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
