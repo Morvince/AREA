@@ -235,6 +235,7 @@
                 return new JsonResponse(array("message" => "Spotify: User not found", "code"), 404);
             }
             $user = $user_repository->findByToken($token)[0];
+            $user_id = $user->getId();
             $service = $sevice_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
