@@ -28,7 +28,7 @@
                 foreach ($users as $user) {
                     if (strcmp($user->getPassword(), $password) === 0 &&
                         (strcmp($user->getUsername(), $login) === 0 || strcmp($user->getEmail(), $login) === 0)) {
-                        return new JsonResponse(array("user_id" => $user->getId()), 200);
+                        return new JsonResponse(array("token" => $user->getToken()), 200);
                     }
                 }
                 return new JsonResponse(array("message" => "User: Wrong password"), 401);
@@ -60,13 +60,15 @@
                 }
                 $password = hash("haval256,5", $password);
                 $password = hash("md5", $password);
+                $token = hash("haval256,5", time());
                 // Put datas in database
                 $user = new User();
                 $user->setUsername($username);
                 $user->setEmail($email);
                 $user->setPassword($password);
+                $user->setToken($token);
                 $user_repository->add($user, true);
-                return new JsonResponse(array("user_id" => $user->getId()), 200);
+                return new JsonResponse(array("token" => $user->getToken()), 200);
             }
             return new JsonResponse(array("message" => "User: Missing field"), 400);
         }

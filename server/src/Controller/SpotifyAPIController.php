@@ -6,6 +6,7 @@
     use App\Repository\AutomationRepository;
     use App\Repository\AutomationActionRepository;
     use App\Repository\ServiceRepository;
+    use App\Repository\UserRepository;
     use App\Repository\UserServiceRepository;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\HttpFoundation\Request;
@@ -149,7 +150,7 @@
             return new JsonResponse(array("token" => json_decode($result)->access_token), 200);
         }
         // La fonction si besoin de passer par le front
-        // public function getAccessToken(Request $request, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
+        // public function getAccessToken(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
         // {
         //     // Get needed values
         //     $request_content = json_decode($request->getContent());
@@ -160,12 +161,17 @@
         //     if ($state != "17") {
         //         return new JsonResponse(array("message" => "Spotify: Bad request to get access token"), 400);
         //     }
-        //     if (empty($request_content->user_id) || empty($request_content->redirect_uri) || empty($request_content->code)) {
+        //     if (empty($request_content->token) || empty($request_content->redirect_uri) || empty($request_content->code)) {
         //         return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
         //     }
+        //     $token = $request_content->token;
+        //     if (empty($user_repository->findByToken($token))) {
+        //         return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
+        //     }
+        //     $user = $user_repository->findByToken($token);
+        //     $user_id = $user->getId();
         //     $code = $request_content->code;
         //     $redirect_uri = $request_content->redirect_uri;
-        //     $user_id = $request_content->user_id;
         //     $service = $sevice_repository->findByName("spotify");
         //     if (empty($service)) {
         //         return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
