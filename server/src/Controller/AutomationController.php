@@ -43,7 +43,7 @@
             }
             $automation_actions = $automation_action_repository->findByAutomationId($automation_id);
             if (empty($automation_actions)) {
-                return new JsonResponse(array(), 200);
+                return new JsonResponse(array("message" => "OK"), 200);
             }
             // formatter une array avec automation in $response
             return new JsonResponse($automation_actions, 200);
