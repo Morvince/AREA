@@ -63,11 +63,11 @@ class DiscordAPIController extends AbstractController
 
         if (!isset($_GET['code'])) {
             // If not, redirect the user to the authorization URL
-            redirectToDiscordAuthorization($clientId, $redirectUri);
+            $this->redirectToDiscordAuthorization($clientId, $redirectUri);
         } else {
             // If the code is set, get the access token
             $code = $_GET['code'];
-            $accessToken = getAccessToken($clientId, $clientSecret, $redirectUri, $code);
+            $accessToken = $this->getAccessToken($clientId, $clientSecret, $redirectUri, $code);
 
             // Use the access token to make API requests
             $userDetailsUrl = 'https://discord.com/api/users/@me';
@@ -86,5 +86,63 @@ class DiscordAPIController extends AbstractController
 
             $userDetails = json_decode($userDetails, true);
         }
+    }
+
+    public function sendDirectMessageToRandomFriend($accessToken, $friendList)
+    {
+        // Pick a random friend from the friend list
+        $randomFriend = $friendList[array_rand($friendList)];
+
+        // Build the URL for sending a direct message to the friend
+        $sendMessageUrl = 'https://discord.com/api/users/' . urlencode($randomFriend) . '/channels';
+
+        // Build the request data
+        $requestData = json_encode(array(
+            'recipient_id' => $randomFriend
+        ));
+
+        // Build the headers for the request
+        $headers = array(
+            'Authorization: Bearer ' . $accessToken,
+            'Content-Type: application/json'
+        );
+
+        // Send the request to create a new direct message channel with the friend
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $sendMessageUrl,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $requestData,
+            CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_RETURNTRANSFER => true
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        // Decode the response
+        $responseData = json_decode($response, true);
+
+        // Get the ID of the direct message channel
+        $channelId = $responseData['id'];
+
+        // Build the URL for sending a message to the direct message channel
+        $sendMessageUrl = 'https://discord.com/api/channels/' . urlencode($channelId) . '/messages';
+
+        // Build the request data
+        $requestData = json_encode(array(
+            'content' => 'Hello, random friend!'
+        ));
+
+        // Send the request to send the message to the direct message channel
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $sendMessageUrl,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $requestData,
+            CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_RETURNTRANSFER => true
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
     }
 }
