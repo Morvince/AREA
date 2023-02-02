@@ -7,7 +7,7 @@ const ButtonBox = (props) => {
   const [backgroundColor, setbackgroundColor] = useState(props.color)
   const [pos, setPos] = useState({ x: props.top, y: props.left })
   const { sharedData, setSharedData } = React.useContext(MyContext);
-
+  const {ID, setID} = React.useContext(MyContext);
   const handleDrag = (e, data) => {
     if (data.x > 300) {
       setbackgroundColor('#f5f5f5')
@@ -15,12 +15,14 @@ const ButtonBox = (props) => {
       setbackgroundColor(props.color)
     }
   }
-
+  
   const handleDragStop = (e, data) => {
     if (data.x < 300) {
       setPos({ x: props.top, y: props.left });
     } else {
-      setSharedData(sharedData => [...sharedData, { service: props.service, index: props.id, color: props.color, top: props.top, left: props.left+500 }])
+      setSharedData(sharedData => [...sharedData, { service: props.service, index: ID, color: props.color, top: props.top, left: props.left+500 }])
+      setID(ID + 1);
+      console.log('ID: ', ID)
     }
     setbackgroundColor(props.color)
   }
