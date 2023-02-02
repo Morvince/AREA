@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 const Landing = () => {
     return (
         <>
-            <Rect top="0px" height="820px" color="#373b48" Rect/>
+            <Rect top="0px" height="820px" color="#373b48"  Rect/>
             <Text lineheight="1.2" fontsize="80px" top="200px" left="550px" 
             color="white" fontweight="bold" > Make everything works <br></br> Together </Text>
             <Text lineheight="1.2" fontsize="40px" top="450px" left="500px" 
@@ -15,6 +15,7 @@ const Landing = () => {
             <Button1 to="/sign" top="29px" left="1600px" >Login</Button1>
             <Button1 to="/home" top="29px" left="1750px" >Get Started</Button1>
             <Button2 to="/home" top="600px" left="760px" width="400px" >Start Now</Button2>
+        
             <Rect top="820px" height="1000px" color="#D4D3DC" Rect/>
             <Icon icon="logos:microsoft-windows" width="300" style={{ position: 'absolute', left: '400px', height: "2500px" }} />
             <Icon icon="flat-color-icons:android-os" width="500" style={{ position: 'absolute', left: '1100px', height: "2500px" }} />
