@@ -21,26 +21,6 @@
         /**
          * @Route("/spotify/connect", name="spotify_api_connect")
          */
-        // public function connect(Request $request, ServiceRepository $sevice_repository)
-        // {
-        //     // Get needed values
-        //     if (empty($request->query->get("user_id"))) {
-        //         return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
-        //     }
-        //     $user_id = $request->query->get("user_id");
-        //     $service = $sevice_repository->findByName("spotify");
-        //     if (empty($service)) {
-        //         return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
-        //     }
-        //     $service = $service[0];
-        //     $identifiers = explode(";", $service->getIdentifiers());
-        //     if (empty($identifiers)) {
-        //         return new JsonResponse(array("message" => "Spotify: Identifiers error"), 422);
-        //     }
-        //     $client_id = $identifiers[0];
-        //     $redirect_uri = "http://localhost:8000/spotify/get_access_token";
-        //     return $this->redirectToAutorisationLink($user_id, $client_id, $redirect_uri);
-        // }
         public function connect(Request $request, ServiceRepository $sevice_repository)
         {
             header('Access-Control-Allow-Origin: *');
@@ -97,58 +77,6 @@
         /**
          * @Route("/spotify/get_access_token", name="spotify_api_get_access_token")
          */
-        // public function getAccessToken(Request $request, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
-        // {
-        //     // Get needed values
-        //     $service = $sevice_repository->findByName("spotify");
-        //     if (empty($service)) {
-        //         return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
-        //     }
-        //     $service = $service[0];
-        //     $identifiers = explode(";", $service->getIdentifiers());
-        //     if (count($identifiers) != 2) {
-        //         return new JsonResponse(array("message" => "Spotify: Identifiers error"), 422);
-        //     }
-        //     $client_id = $identifiers[0];
-        //     $client_secret = $identifiers[1];
-        //     $code = $request->query->get("code");
-        //     $state = $request->query->get("state");
-        //     $redirect_uri = "http://localhost:8000/spotify/get_access_token";
-        //     $user_id = ($state - 17)/10000;
-        //     if ($state != $user_id."0017") {
-        //         return new JsonResponse(array("message" => "Spotify: Bad request to get access token"), 400);
-        //     }
-        //     // Request for the access token
-        //     $ch = curl_init();
-        //     curl_setopt($ch, CURLOPT_URL, "https://accounts.spotify.com/api/token");
-        //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        //     curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=authorization_code&code=$code&redirect_uri=$redirect_uri");
-        //     curl_setopt($ch, CURLOPT_POST, true);
-        //     curl_setopt($ch, CURLOPT_USERPWD, "$client_id:$client_secret");
-        //     $headers = array();
-        //     $headers[] = "Content-Type: application/x-www-form-urlencoded";
-        //     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        //     $result = curl_exec($ch);
-        //     curl_close($ch);
-        //     if (!isset(json_decode($result)->access_token)) {
-        //         return new JsonResponse(array("message" => "Spotify: Bad code to get access token"), 400);
-        //     }
-        //     // Put or edit datas in database
-        //     if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
-        //         $user_service = new UserService();
-        //         $user_service->setUserId($user_id);
-        //         $user_service->setServiceId($service->getId());
-        //         $user_service->setAccessToken(json_decode($result)->access_token);
-        //         $user_service->setRefreshToken(json_decode($result)->refresh_token);
-        //         $user_sevice_repository->add($user_service, true);
-        //     } else {
-        //         $user_service = $user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
-        //         $user_service->setAccessToken(json_decode($result)->access_token);
-        //         $user_service->setRefreshToken(json_decode($result)->refresh_token);
-        //         $user_sevice_repository->edit($user_service, true);
-        //     }
-        //     return new JsonResponse(array("token" => json_decode($result)->access_token), 200);
-        // }
         public function getAccessToken(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
         {
             header('Access-Control-Allow-Origin: *');
@@ -361,17 +289,34 @@
          */
         public function isMusicAddedToPlaylist(Request $request)
         {
+            // Get needed values
             $request_content = json_decode($request->getContent());
-            if (empty($request_content->automation_action_id)) {
+            if (empty($request_content->new) || empty($request_content->old)) {
                 return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
-            return new JsonResponse(array("message" => true), 200);
+            $old_tracks = $request_content->old->tracks->items;
+            $new_tracks = $request_content->new->tracks->items;
+            // Check if tracks have been added to playlist
+            foreach ($new_tracks as $new_track) {
+                $found = false;
+                foreach ($old_tracks as $old_track) {
+                    if (strcmp($new_track->track->id, $old_track->track->id) === 0) {
+                        $found = true;
+                        break(1);
+                    }
+                }
+                if ($found === false) {
+                    return new JsonResponse(array("message" => true), 200);
+                }
+            }
+            return new JsonResponse(array("message" => false), 200);
         }
         /**
          * @Route("/spotify/action/check_music_playlist/get_parameters", name="spotify_api_check_music_playlist_parameters")
          */
         public function getIsMusicAddedToPlaylistParameters(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
         {// en db = playlist_id
+            // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->automation_action_id)) {
                 return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
@@ -392,6 +337,7 @@
             }
             $access_token = $user_sevice_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
             $informations = $automation_action->getInformations();
+            // Request to get the wished playlist
             $playlist = json_decode($this->getPlaylistById($access_token, $informations));
             if (isset($playlist->code)) {
                 return new JsonResponse(array("message" => $playlist->message), $playlist->code);
