@@ -110,7 +110,7 @@
             $result = curl_exec($ch);
             curl_close($ch);
             if (!isset(json_decode($result)->access_token)) {
-                return new JsonResponse(array("message" => "Spotify: Bad code to get access token"), 400);
+                return new JsonResponse(array("message" => "Spotify: Bad code to get access token", "code" => $code), 400);
             }
             // Put or edit datas in database
             if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
