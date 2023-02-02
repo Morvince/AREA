@@ -56,24 +56,6 @@
             $authorization_url = "https://accounts.spotify.com/authorize?client_id=$client_id&response_type=code&redirect_uri=$redirect_uri&scope=$scope&state=$state";
             return new JsonResponse(array("authorization_url" => $authorization_url), 200);
         }
-        private function redirectToAutorisationLink($user_id, $client_id, $redirect_uri)
-        {
-            // Compose the authorization scope
-            $scope = array( "user-read-playback-state", "user-modify-playback-state", "user-read-currently-playing",
-                            "app-remote-control", "streaming",
-                            "playlist-read-private", "playlist-read-collaborative", "playlist-modify-private", "playlist-modify-public",
-                            "user-follow-modify", "user-follow-read",
-                            "user-read-playback-position", "user-top-read", "user-read-recently-played",
-                            "user-library-modify", "user-library-read",
-                            "user-read-email", "user-read-private"
-                        );
-            $scope = implode(" ", $scope);
-            // Set the state when the request is good
-            $state = $user_id."0017";
-            // Compose the authorization url
-            $authorization_url = "https://accounts.spotify.com/authorize?client_id=$client_id&response_type=code&redirect_uri=$redirect_uri&scope=$scope&state=$state";
-            return $this->redirect($authorization_url);
-        }
         /**
          * @Route("/spotify/get_access_token", name="spotify_api_get_access_token")
          */
@@ -96,7 +78,11 @@
             if (empty($user_repository->findByToken($token))) {
                 return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
             }
-            $user = $user_repository->findByToken($token);
+            $user_repository->findByToken($token);
+            if (empty($user_repository->findByToken($token))) {
+                return new JsonResponse(array("message" => "Spotify: User not found", "code"), 404);
+            }
+            $user = $user_repository->findByToken($token)[0];
             $user_id = $user->getId();
             $code = $request_content->code;
             $redirect_uri = $request_content->redirect_uri;
