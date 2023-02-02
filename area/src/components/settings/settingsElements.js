@@ -18,3 +18,26 @@ export const SettingsRect = styled.div`
     background: ${props => props.color};
     border-radius: 30px;
 `;
+
+export const Button = styled(LinkR)`
+  position: absolute;
+  left: ${props => props.left};
+  top: ${props => props.top};
+  border-radius: 30px;
+  background: #ebebeb;
+  white-space: nowrap;
+  padding: 10px 22px;
+  color: black;
+  font-size: 40px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background: black;
+    color: #ebebeb;
+  }
+`;
