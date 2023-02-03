@@ -8,17 +8,17 @@ const Block = (props) => {
   const [pos, setPos] = useState({ x: props.top, y: props.left })
   const { sharedData, setSharedData } = React.useContext(MyContext);
 
-  React.useEffect(() => {}, [sharedData]);
+  React.useEffect(() => {
+  }, [sharedData]);
 
   const handleDrag = (e, data) => {
     var rect = e.target.getBoundingClientRect();
 
     for (var i = 0; i < sharedData.length; i++) {
-      // console.log('triggered')
       if (props.id !== sharedData[i].index) {
-        console.log('reactangle '+props.id+': ', rect.top, 'rectangle 2: ', sharedData[i].top);
         if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130) {
           setbackgroundColor('red')
+          break;
         } else {
           setbackgroundColor(props.color)
         }

@@ -10,12 +10,12 @@ const Servicesbar = () => {
   const [puzzleBlocktemps, setpuzzleBlocktemps] = useState([])
 
   const services = [
-    { nom: 'discord', nombre: 5, info: [], block: [] },
-    { nom: 'spotify', nombre: 1, info: [], block: [] },
-    { nom: 'instagram', nombre: 2, info: [], block: [] },
-    { nom: 'google', nombre: 4, info: [], block: [] },
-    { nom: 'twitter', nombre: 3, info: [], block: [] },
-    { nom: 'openai', nombre: 6, info: [], block: [] },
+    { nom: 'discord', nombre: 5, info: [], action: [true, true, true, true, true ] },
+    { nom: 'spotify', nombre: 1, info: [], action: [false] },
+    { nom: 'instagram', nombre: 2, info: [], action: [false, false] },
+    { nom: 'google', nombre: 4, info: [], action: [false, false, false, false, false] },
+    { nom: 'twitter', nombre: 3, info: [], action: [false, false, false] },
+    { nom: 'openai', nombre: 6, info: [], action: [false, false, false, false, false, false] },
   ];
 
   let t = 0;
@@ -26,19 +26,11 @@ const Servicesbar = () => {
         left: 50,
         color: getColorPuzzleBlock(services[i].nom),
         service: services[i].nom,
-        index: t
+        index: t,
+        action : services[i].action[x]
       });
       t++;
     }
-    services[i].block = services[i].info.map(info => (
-      <ButtonBox
-        top={info.top}
-        left={info.left}
-        color={info.color}
-        service={info.service}
-        // key={i*services[i].length}
-      />
-    ));
   }
 
   function handleClick(service) {
@@ -119,7 +111,7 @@ const Servicesbar = () => {
         <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
           {puzzleBlocktemps.map((info, index) => {
             return (
-              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} />
+              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action}/>
             )
           })}
         </RectangleContener>

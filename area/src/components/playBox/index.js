@@ -17,7 +17,7 @@ const PlayBox = () => {
         <MovableBox>
           {sharedData.map((info) => {
             return (
-              <Block key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service}/>
+              <Block key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action}/>
             )
           })}
         </MovableBox>
@@ -25,4 +25,5 @@ const PlayBox = () => {
     </RectangleArea>
   )
 }
+
 export default PlayBox

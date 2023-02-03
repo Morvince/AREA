@@ -15,12 +15,12 @@ const ButtonBox = (props) => {
       setbackgroundColor(props.color)
     }
   }
-  
+
   const handleDragStop = (e, data) => {
     if (data.x < 300) {
       setPos({ x: props.top, y: props.left });
     } else {
-      setSharedData(sharedData => [...sharedData, { service: props.service, index: ID, color: props.color, top: props.top, left: props.left+500 }])
+      setSharedData(sharedData => [...sharedData, { service: props.service, index: ID, color: props.color, top: props.top, left: props.left+500 , action: props.action}])
       setID(ID + 1);
       console.log('ID: ', ID)
     }
