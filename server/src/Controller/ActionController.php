@@ -14,6 +14,7 @@
          */
         public function getAllActions(ActionRepository $action_repository, ServiceRepository $service_repository)
         {
+            header('Access-Control-Allow-Origin: *');
             // Get needed values
             $actions = $action_repository->findAll();
             if (empty($actions)) {
