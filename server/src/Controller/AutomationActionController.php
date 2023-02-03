@@ -14,20 +14,68 @@
     {
         private RequestAPI $request_api;
         /**
+         * @Route("/automation/action/check", name="automation_action_check")
+         */
+        public function check(ActionRepository $action_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
+        {// check si une des erreurs de requete est un bad token pour le refresh
+            $old_parameters = array();
+            while (true) {
+                foreach ($automation_action_repository->findAll() as $automation_action) {
+                    // Get needed values
+                    $automation_action_id = $automation_action->getId();
+                    $action_id = $automation_action->getActionId();
+                    $action = $action_repository->find($action_id);
+                    if (empty($action)) {
+                        continue;
+                    }
+                    if (strcmp($action->getType(), "action") !== 0) {
+                        continue;
+                    }
+                    $service_id = $action->getServiceId();
+                    $service = $service_repository->find($service_id);
+                    if (empty($service)) {
+                        continue;
+                    }
+                    $url = "http://localhost:8000/".$service->getName()."/".$action->getType()."/".$action->getIdentifier();
+                    // Request to get parameters of the action
+                    $parameters = json_decode($this->sendRequest($url."/get_parameters", array("automation_action_id" => $automation_action_id)));
+                    if (isset($parameters->code)) {
+                        continue;
+                    }
+                    // Stock the old parameters of the action
+                    if (empty($old_parameters[$automation_action_id])) {
+                        $old_parameters[$automation_action_id] = $parameters;
+                        continue;
+                    }
+                    // Request to check if the action is validate
+                    $response = $this->sendRequest($url, array("new" => $parameters, "old" => $old_parameters[$automation_action_id]));
+                    if (isset(json_decode($response)->code)) {
+                        continue;
+                    }
+                    $old_parameters[$automation_action_id] = $parameters;
+                    // Trigger all linked reactions
+                    if (json_decode($response)->message === true) {
+                        $parameters = array("automation_action_id" => $automation_action_id);
+                        $response = $this->sendRequest("http://localhost:8000/automation/reaction/trigger", $parameters);
+                        if (isset(json_decode($response)->code)) {
+                            continue;
+                        }
+                    }
+                }
+                sleep(60);
+            }
+        }
+        /**
          * @Route("/automation/reaction/trigger", name="automation_reaction_trigger")
          */
         public function triggerReaction(Request $request, ActionRepository $action_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
         {
             // Get needed values
-            // $request_content = json_decode($request->getContent());
-            // if (empty($request_content->automation_action_id)) {
-            //     return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
-            // }
-            // $automation_action_id = $request_content->automation_action_id;
-            if (empty($request->query->get("automation_action_id"))) {
-                return new JsonResponse(array("message" => "AutomationAction: Missing field"), 400);
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->automation_action_id)) {
+                return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
-            $automation_action_id = $request->query->get("automation_action_id");
+            $automation_action_id = $request_content->automation_action_id;
             if (empty($automation_action_repository->find($automation_action_id))) {
                 return new JsonResponse(array("message" => "AutomationAction: automation_action not found"), 404);
             }

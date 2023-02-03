@@ -4,7 +4,6 @@
     use App\Repository\ActionRepository;
     use App\Repository\ServiceRepository;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-    use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\HttpFoundation\JsonResponse;
     use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,6 +14,7 @@
          */
         public function getAllActions(ActionRepository $action_repository, ServiceRepository $service_repository)
         {
+            header('Access-Control-Allow-Origin: *');
             // Get needed values
             $actions = $action_repository->findAll();
             if (empty($actions)) {
