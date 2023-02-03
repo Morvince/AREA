@@ -28,10 +28,6 @@
             if (empty($user_repository->findByToken($token))) {
                 return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
             }
-            $user_repository->findByToken($token);
-            if (empty($user_repository->findByToken($token))) {
-                return new JsonResponse(array("message" => "Spotify: User not found", "code"), 404);
-            }
             $user = $user_repository->findByToken($token)[0];
             $user_id = $user->getId();
             // Put a new automation in database

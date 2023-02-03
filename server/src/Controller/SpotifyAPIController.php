@@ -78,10 +78,6 @@
             if (empty($user_repository->findByToken($token))) {
                 return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
             }
-            $user_repository->findByToken($token);
-            if (empty($user_repository->findByToken($token))) {
-                return new JsonResponse(array("message" => "Spotify: User not found", "code"), 404);
-            }
             $user = $user_repository->findByToken($token)[0];
             $user_id = $user->getId();
             $code = $request_content->code;
@@ -126,7 +122,7 @@
                 $user_service->setRefreshToken(json_decode($result)->refresh_token);
                 $user_sevice_repository->edit($user_service, true);
             }
-            return new JsonResponse(array("token" => json_decode($result)->access_token), 200);
+            return new JsonResponse(array("message" => "OK", 200));
         }
         /**
          * @Route("/spotify/refresh_access_token", name="spotify_api_refresh_access_token")
@@ -148,7 +144,7 @@
                 return new JsonResponse(array("message" => "Spotify: Identifiers error"), 422);
             }
             if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
-                return new JsonResponse(array("message" => "Spotify: Refresh token not found", "code"), 404);
+                return new JsonResponse(array("message" => "Spotify: Refresh token not found"), 404);
             }
             $client_id = $identifiers[0];
             $client_secret = $identifiers[1];
@@ -167,12 +163,13 @@
             $result = curl_exec($ch);
             curl_close ($ch);
             if (!isset(json_decode($result)->access_token)) {
+                $user_sevice_repository->remove($user_service);
                 return new JsonResponse(array("message" => "Spotify: Bad refresh token to get access token"), 400);
             }
             // Edit datas in database
             $user_service->setAccessToken(json_decode($result)->access_token);
             $user_sevice_repository->edit($user_service, true);
-            return new JsonResponse(array("spotify_token" => json_decode($result)->access_token), 200);
+            return new JsonResponse(array("message" => "OK"), 200);
         }
 
         /**
@@ -189,10 +186,6 @@
             $token = $request_content->token;
             if (empty($user_repository->findByToken($token))) {
                 return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
-            }
-            $user_repository->findByToken($token);
-            if (empty($user_repository->findByToken($token))) {
-                return new JsonResponse(array("message" => "Spotify: User not found", "code"), 404);
             }
             $user = $user_repository->findByToken($token)[0];
             $user_id = $user->getId();
@@ -229,10 +222,6 @@
             $token = $request_content->token;
             if (empty($user_repository->findByToken($token))) {
                 return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
-            }
-            $user_repository->findByToken($token);
-            if (empty($user_repository->findByToken($token))) {
-                return new JsonResponse(array("message" => "Spotify: User not found", "code"), 404);
             }
             $user = $user_repository->findByToken($token)[0];
             $user_id = $user->getId();
