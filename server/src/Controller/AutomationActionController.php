@@ -3,8 +3,10 @@
 
     use App\Entity\RequestAPI;
     use App\Repository\ActionRepository;
+    use App\Repository\AutomationRepository;
     use App\Repository\AutomationActionRepository;
     use App\Repository\ServiceRepository;
+    use App\Repository\UserServiceRepository;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,7 +18,7 @@
         /**
          * @Route("/automation/action/check", name="automation_action_check")
          */
-        public function check(ActionRepository $action_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
+        public function check(ActionRepository $action_repository, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
         {// check si une des erreurs de requete est un bad token pour le refresh
             $old_parameters = array();
             while (true) {
@@ -40,6 +42,9 @@
                     // Request to get parameters of the action
                     $parameters = json_decode($this->sendRequest($url."/get_parameters", array("automation_action_id" => $automation_action_id)));
                     if (isset($parameters->code)) {
+                        if (str_contains($parameters->message, "Bad token or expired")) {
+                            $this->refreshAccessToken($automation_action, $service, $automation_repository, $user_service_repository);
+                        }
                         continue;
                     }
                     // Stock the old parameters of the action
@@ -50,6 +55,9 @@
                     // Request to check if the action is validate
                     $response = $this->sendRequest($url, array("new" => $parameters, "old" => $old_parameters[$automation_action_id]));
                     if (isset(json_decode($response)->code)) {
+                        if (str_contains(json_decode($response)->message, "Bad token or expired")) {
+                            $this->refreshAccessToken($automation_action, $service, $automation_repository, $user_service_repository);
+                        }
                         continue;
                     }
                     $old_parameters[$automation_action_id] = $parameters;
@@ -64,6 +72,23 @@
                 }
                 sleep(60);
             }
+        }
+        private function refreshAccessToken($automation_action, $service, $automation_repository, $user_service_repository)
+        {
+            $automation_id = $automation_action->getAutomationId();
+            $automation = $automation_repository->find($automation_id);
+            if (empty($automation)) {
+                return;
+            }
+            $response = $this->sendRequest("http://localhost:8000/".$service->getName()."/refresh_access_token", array("user_id" => $automation->getUserId()));
+            if (isset(json_decode($response)->code)) {
+                if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+                    return;
+                }
+                $user_service = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId());
+                $user_service_repository->remove($user_service);
+            }
+            return;
         }
         /**
          * @Route("/automation/reaction/trigger", name="automation_reaction_trigger")
