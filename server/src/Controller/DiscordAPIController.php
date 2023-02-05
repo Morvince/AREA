@@ -8,9 +8,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DiscordAPIController extends AbstractController
 {
-    /**
-     * @Route("/discord/connect", name="discord_api_connect")
-     */
     public function index(): Response
     {
         return $this->render('discord_api/index.html.twig', [
@@ -18,9 +15,13 @@ class DiscordAPIController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/discord/connect", name="discord_api_connect")
+     */
+
     // Function to get the access token
 
-    public function getAccessToken($clientId, $clientSecret, $redirectUri, $code)
+    public function connect($clientId, $clientSecret, $redirectUri, $code)
     {
         // Build the token URL
         $tokenUrl = 'https://discord.com/api/oauth2/token'
@@ -38,6 +39,10 @@ class DiscordAPIController extends AbstractController
         return $response['access_token'];
     }
 
+    /**
+     * @Route("/discord/redirect_OAuth", name="discord_api_OAuth")
+     */
+
     // Function to redirect the user to the Discord authorization URL
     public function redirectToDiscordAuthorization($clientId, $redirectUri)
     {
@@ -53,13 +58,16 @@ class DiscordAPIController extends AbstractController
         exit();
     }
 
-    public function connect()
+    /**
+     * @Route("/discord/get_access_token", name="discord_api_get_access_token")
+     */
+
+    public function get_access_token()
     {
 
-        $redirectUri = "https://discord.com/api/oauth2/authorize?client_id=1070728516188000336&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fdiscord%2Fget_access_token&response_type=code&scope=identify%20guilds%20rpc.voice.read%20gdm.join%20applications.builds.upload%20applications.store.update%20activities.write%20dm_channels.read%20applications.commands.permissions.update%20role_connections.write%20relationships.read%20applications.entitlements%20applications.builds.read%20webhook.incoming%20rpc.voice.write%20rpc%20guilds.join%20email%20guilds.members.read%20connections%20rpc.notifications.read%20rpc.activities.write%20messages.read%20applications.commands%20activities.read%20voice";
+        $redirectUri = "https://discord.com/api/oauth2/authorize?client_id=1070728516188000336&redirect_uri=http://localhost:8000/discord/get_access_token&response_type=code&scope=identify%20guilds%20rpc.voice.read%20gdm.join%20applications.builds.upload%20applications.store.update%20activities.write%20dm_channels.read%20applications.commands.permissions.update%20role_connections.write%20relationships.read%20applications.entitlements%20applications.builds.read%20webhook.incoming%20rpc.voice.write%20rpc%20guilds.join%20email%20guilds.members.read%20connections%20rpc.notifications.read%20rpc.activities.write%20messages.read%20applications.commands%20activities.read%20voice";
         $clientId = "1070728516188000336";
         $clientSecret = "gyAZgaaAs2BWQHI4iGLbdjkaTUujNr7V";
-        $code = $_GET['code'];
 
         if (!isset($_GET['code'])) {
             // If not, redirect the user to the authorization URL
@@ -67,7 +75,7 @@ class DiscordAPIController extends AbstractController
         } else {
             // If the code is set, get the access token
             $code = $_GET['code'];
-            $accessToken = $this->getAccessToken($clientId, $clientSecret, $redirectUri, $code);
+            $accessToken = $this->connect($clientId, $clientSecret, $redirectUri, $code);
 
             // Use the access token to make API requests
             $userDetailsUrl = 'https://discord.com/api/users/@me';
@@ -87,6 +95,10 @@ class DiscordAPIController extends AbstractController
             $userDetails = json_decode($userDetails, true);
         }
     }
+
+    /**
+     * @Route("/discord/send_direct_message", name="discord_api_send_direct")
+     */
 
     public function sendDirectMessageToRandomFriend($accessToken, $friendList)
     {

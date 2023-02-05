@@ -47,7 +47,15 @@ spotify_api_reaction_add_artist_music_to_playlist:
 discord_api_connect:
   path: /discord/connect
   controller: App\Controller\DiscordAPIController::connect
-  methods: [POST]
+discord_api_get_access_token:
+  path: /discord/get_access_token
+  controller: App\Controller\DiscordAPIController::get_access_token
+discord_api_redirect_to_discord_authorization:
+  path: /discord/redirect_OAuth
+  controller: App\Controller\DiscordAPIController::redirectToDiscordAuthorization
+discord_api_send_direct_message_to_random_friend:
+  path: /discord/send_direct_message
+  controller: App\Controller\DiscordAPIController::sendDirectMessageToRandomFriend
 
 # AUTOMATION
 automation_add:
