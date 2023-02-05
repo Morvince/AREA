@@ -127,13 +127,14 @@
         /**
          * @Route("/spotify/refresh_access_token", name="spotify_api_refresh_access_token")
          */
-        public function refreshAccessToken(Request $request, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
+        public function refreshAccessToken(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
         {// a changer pour lutiliser que via le server
             // Get needed values
-            if (empty($request->query->get("user_id"))) {
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->user_id)) {
                 return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
-            $user_id = $request->query->get("user_id");
+            $user_id = $request_content->user_id;
             $service = $sevice_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
@@ -175,7 +176,7 @@
         /**
          * @Route("/spotify/search", name="spotify_api_search")
          */
-        public function search(Request $request, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository, UserRepository $user_repository)
+        public function search(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
         {// type = par exemple artist/track/album/playlist/etc... et search est la recherche
             header('Access-Control-Allow-Origin: *');
             // Get needed values
@@ -211,7 +212,7 @@
         /**
          * @Route("/spotify/get_user_playlists", name="spotify_api_get_user_playlists")
          */
-        public function getUserPlaylists(Request $request, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository, UserRepository $user_repository)
+        public function getUserPlaylists(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
         {
             header('Access-Control-Allow-Origin: *');
             // Get needed values

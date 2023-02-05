@@ -20,6 +20,7 @@ spotify_api_get_access_token:
 spotify_api_refresh_access_token:
     path: /spotify/refresh_access_token
     controller: App\Controller\SpotifyAPIController::refreshAccessToken
+    methods: [POST]
 spotify_api_search:
     path: /spotify/search
     controller: App\Controller\SpotifyAPIController::search
