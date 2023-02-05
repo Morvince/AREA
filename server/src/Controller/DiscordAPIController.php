@@ -5,6 +5,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DiscordAPIController extends AbstractController
 {
@@ -21,79 +23,61 @@ class DiscordAPIController extends AbstractController
 
     // Function to get the access token
 
-    public function connect($clientId, $clientSecret, $redirectUri, $code)
+    /**
+     * @Route("/discord/connect", name="discord_api_connect")
+     */
+    public function connect()
     {
-        // Build the token URL
-        $tokenUrl = 'https://discord.com/api/oauth2/token'
-            . '?client_id=' . urlencode($clientId)
-            . '&client_secret=' . urlencode($clientSecret)
-            . '&grant_type=authorization_code'
-            . '&code=' . urlencode($code)
-            . '&redirect_uri=' . urlencode($redirectUri);
-
-        // Get the response from the token URL
-        $response = file_get_contents($tokenUrl);
-        $response = json_decode($response, true);
-
-        // Return the access token
-        return $response['access_token'];
+        $redirect_uri = "";
+        $client_id = "1070728516188000336";
+        return $this->redirectToAutorisationLinka($client_id, $redirect_uri);
     }
 
-    /**
-     * @Route("/discord/redirect_OAuth", name="discord_api_OAuth")
-     */
-
-    // Function to redirect the user to the Discord authorization URL
-    public function redirectToDiscordAuthorization($clientId, $redirectUri)
+    private function redirectToAutorisationLinka($client_id, $redirect_uri)
     {
-        // Build the authorization URL
-        $authorizeUrl = 'https://discord.com/api/oauth2/authorize'
-            . '?client_id=' . urlencode($clientId)
-            . '&redirect_uri=' . urlencode($redirectUri)
-            . '&response_type=code'
-            . '&scope=' . urlencode('identify');
-
-        // Redirect the user to the authorization URL
-        header('Location: ' . $authorizeUrl);
-        exit();
+        // Set the state when the request is good
+        $state = "17";
+        // Compose the authorization url
+        $authorization_url = "https://discord.com/api/oauth2/authorize?client_id=$client_id&response_type=code&redirect_uri=$redirect_uri&scope=identify&state=$state";
+        return $this->redirect($authorization_url);
     }
 
     /**
      * @Route("/discord/get_access_token", name="discord_api_get_access_token")
      */
 
-    public function get_access_token()
+    public function getAccessToken(Request $request)
     {
-
-        $redirectUri = "https://discord.com/api/oauth2/authorize?client_id=1070728516188000336&redirect_uri=http://localhost:8000/discord/get_access_token&response_type=code&scope=identify%20guilds%20rpc.voice.read%20gdm.join%20applications.builds.upload%20applications.store.update%20activities.write%20dm_channels.read%20applications.commands.permissions.update%20role_connections.write%20relationships.read%20applications.entitlements%20applications.builds.read%20webhook.incoming%20rpc.voice.write%20rpc%20guilds.join%20email%20guilds.members.read%20connections%20rpc.notifications.read%20rpc.activities.write%20messages.read%20applications.commands%20activities.read%20voice";
-        $clientId = "1070728516188000336";
-        $clientSecret = "gyAZgaaAs2BWQHI4iGLbdjkaTUujNr7V";
-
-        if (!isset($_GET['code'])) {
-            // If not, redirect the user to the authorization URL
-            $this->redirectToDiscordAuthorization($clientId, $redirectUri);
-        } else {
-            // If the code is set, get the access token
-            $code = $_GET['code'];
-            $accessToken = $this->connect($clientId, $clientSecret, $redirectUri, $code);
-
-            // Use the access token to make API requests
-            $userDetailsUrl = 'https://discord.com/api/users/@me';
-            $headers = array(
-                'Authorization: Bearer ' . $accessToken
-            );
-
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => $userDetailsUrl,
-                CURLOPT_HTTPHEADER => $headers,
-                CURLOPT_RETURNTRANSFER => true
-            ));
-            $userDetails = curl_exec($curl);
-            curl_close($curl);
-
-            $userDetails = json_decode($userDetails, true);
+        // Get needed values
+        if (empty($request->query->get("state"))) {
+            return new JsonResponse("Spotify: Missing field", 400);
         }
+        $state = $request->query->get("state");
+        if ($state != "17") {
+            return new JsonResponse("Spotify: Bad request to get access token", 400);
+        }
+        if (empty($request->query->get("code"))) {
+            return new JsonResponse("Spotify: Missing field", 400);
+        }
+        $code = $request->query->get("code");
+        $client_id = "1070728516188000336";
+        $client_secret = "gyAZgaaAs2BWQHI4iGLbdjkaTUujNr7V";
+        $redirect_uri = "http://localhost:8000/discord/get_access_token";
+        // Request for the access token
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://discord.com/api/oauth2/token");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "client_id=$client_id&client_secret=$client_secret&grant_type=authorization_code&code=$code&redirect_uri=$redirect_uri&scope=identify");
+        curl_setopt($ch, CURLOPT_POST, true);
+        $headers = array();
+        $headers[] = "Content-Type: application/x-www-form-urlencoded";
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        if (!isset(json_decode($result)->access_token)) {
+            return new JsonResponse("Spotify: Bad code to get access token", 400);
+        }
+        return new JsonResponse(array("token" => json_decode($result)->access_token), 200);
     }
 
     /**

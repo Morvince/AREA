@@ -56,24 +56,6 @@
             $authorization_url = "https://accounts.spotify.com/authorize?client_id=$client_id&response_type=code&redirect_uri=$redirect_uri&scope=$scope&state=$state";
             return new JsonResponse(array("authorization_url" => $authorization_url), 200);
         }
-        private function redirectToAutorisationLink($user_id, $client_id, $redirect_uri)
-        {
-            // Compose the authorization scope
-            $scope = array( "user-read-playback-state", "user-modify-playback-state", "user-read-currently-playing",
-                            "app-remote-control", "streaming",
-                            "playlist-read-private", "playlist-read-collaborative", "playlist-modify-private", "playlist-modify-public",
-                            "user-follow-modify", "user-follow-read",
-                            "user-read-playback-position", "user-top-read", "user-read-recently-played",
-                            "user-library-modify", "user-library-read",
-                            "user-read-email", "user-read-private"
-                        );
-            $scope = implode(" ", $scope);
-            // Set the state when the request is good
-            $state = $user_id."0017";
-            // Compose the authorization url
-            $authorization_url = "https://accounts.spotify.com/authorize?client_id=$client_id&response_type=code&redirect_uri=$redirect_uri&scope=$scope&state=$state";
-            return $this->redirect($authorization_url);
-        }
         /**
          * @Route("/spotify/get_access_token", name="spotify_api_get_access_token")
          */
@@ -96,7 +78,7 @@
             if (empty($user_repository->findByToken($token))) {
                 return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
             }
-            $user = $user_repository->findByToken($token);
+            $user = $user_repository->findByToken($token)[0];
             $user_id = $user->getId();
             $code = $request_content->code;
             $redirect_uri = $request_content->redirect_uri;
@@ -140,13 +122,13 @@
                 $user_service->setRefreshToken(json_decode($result)->refresh_token);
                 $user_sevice_repository->edit($user_service, true);
             }
-            return new JsonResponse(array("token" => json_decode($result)->access_token), 200);
+            return new JsonResponse(array("message" => "OK", 200));
         }
         /**
          * @Route("/spotify/refresh_access_token", name="spotify_api_refresh_access_token")
          */
         public function refreshAccessToken(Request $request, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
-        {
+        {// a changer pour lutiliser que via le server
             // Get needed values
             if (empty($request->query->get("user_id"))) {
                 return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
@@ -162,7 +144,7 @@
                 return new JsonResponse(array("message" => "Spotify: Identifiers error"), 422);
             }
             if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
-                return new JsonResponse(array("message" => "Spotify: Refresh token not found", "code"), 404);
+                return new JsonResponse(array("message" => "Spotify: Refresh token not found"), 404);
             }
             $client_id = $identifiers[0];
             $client_secret = $identifiers[1];
@@ -181,24 +163,32 @@
             $result = curl_exec($ch);
             curl_close ($ch);
             if (!isset(json_decode($result)->access_token)) {
+                $user_sevice_repository->remove($user_service);
                 return new JsonResponse(array("message" => "Spotify: Bad refresh token to get access token"), 400);
             }
             // Edit datas in database
             $user_service->setAccessToken(json_decode($result)->access_token);
             $user_sevice_repository->edit($user_service, true);
-            return new JsonResponse(array("spotify_token" => json_decode($result)->access_token), 200);
+            return new JsonResponse(array("message" => "OK"), 200);
         }
 
         /**
          * @Route("/spotify/search", name="spotify_api_search")
          */
-        public function search(Request $request, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
+        public function search(Request $request, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository, UserRepository $user_repository)
         {// type = par exemple artist/track/album/playlist/etc... et search est la recherche
+            header('Access-Control-Allow-Origin: *');
             // Get needed values
-            if (empty($request->query->get("user_id")) || empty($request->query->get("type")) || empty($request->query->get("search"))) {
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->token) || empty($request_content->type) || empty($request_content->search)) {
                 return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
-            $user_id = $request->query->get("user_id");
+            $token = $request_content->token;
+            if (empty($user_repository->findByToken($token))) {
+                return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
+            }
+            $user = $user_repository->findByToken($token)[0];
+            $user_id = $user->getId();
             $service = $sevice_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
@@ -208,8 +198,8 @@
                 return new JsonResponse(array("message" => "Spotify: Access token not found"), 404);
             }
             $access_token = $user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
-            $type = $request->query->get("type");
-            $search = $request->query->get("search");
+            $type = $request_content->type;
+            $search = $request_content->search;
             $search = str_replace(" ", "%20", $search);
             // Request for the search
             $response = $this->sendRequest($access_token, "search?type=$type&q=$search");
@@ -221,13 +211,20 @@
         /**
          * @Route("/spotify/get_user_playlists", name="spotify_api_get_user_playlists")
          */
-        public function getUserPlaylists(Request $request, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
+        public function getUserPlaylists(Request $request, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository, UserRepository $user_repository)
         {
+            header('Access-Control-Allow-Origin: *');
             // Get needed values
-            if (empty($request->query->get("user_id"))) {
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->token)) {
                 return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
-            $user_id = $request->query->get("user_id");
+            $token = $request_content->token;
+            if (empty($user_repository->findByToken($token))) {
+                return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
+            }
+            $user = $user_repository->findByToken($token)[0];
+            $user_id = $user->getId();
             $service = $sevice_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
