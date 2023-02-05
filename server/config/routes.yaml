@@ -21,13 +21,13 @@ spotify_api_refresh_access_token:
   path: /spotify/refresh_access_token
   controller: App\Controller\SpotifyAPIController::refreshAccessToken
 spotify_api_search:
-    path: /spotify/search
-    controller: App\Controller\SpotifyAPIController::search
-    methods: [POST]
+  path: /spotify/search
+  controller: App\Controller\SpotifyAPIController::search
+  methods: [POST]
 spotify_api_get_user_playlists:
-    path: /spotify/get_user_playlists
-    controller: App\Controller\SpotifyAPIController::getUserPlaylists
-    methods: [POST]
+  path: /spotify/get_user_playlists
+  controller: App\Controller\SpotifyAPIController::getUserPlaylists
+  methods: [POST]
 spotify_api_check_music_playlist:
   path: /spotify/action/check_music_playlist
   controller: App\Controller\SpotifyAPIController::isMusicAddedToPlaylist
@@ -51,40 +51,40 @@ discord_api_connect:
   controller: App\Controller\DiscordAPIController::connect
 discord_api_get_access_token:
   path: /discord/get_access_token
-  controller: App\Controller\DiscordAPIController::get_access_token
+  controller: App\Controller\DiscordAPIController::getAccessToken
 discord_api_send_direct:
   path: /discord/send_direct_message
   controller: App\Controller\DiscordAPIController::sendDirectMessageToRandomFriend
 
 # AUTOMATION
 automation_add:
-    path: /automation/add
-    controller: App\Controller\AutomationController::addAutomation
-    methods: [POST]
+  path: /automation/add
+  controller: App\Controller\AutomationController::addAutomation
+  methods: [POST]
 automation_get:
-    path: /automation/get
-    controller: App\Controller\AutomationController::getAutomation
-    methods: [POST]
+  path: /automation/get
+  controller: App\Controller\AutomationController::getAutomation
+  methods: [POST]
 automation_edit:
-    path: /automation/edit
-    controller: App\Controller\AutomationController::editAutomation
-    methods: [POST]
+  path: /automation/edit
+  controller: App\Controller\AutomationController::editAutomation
+  methods: [POST]
 
 # ACTION
 action_get_all:
-    path: /action/get_all
-    controller: App\Controller\ActionController::getAllActions
-    methods: [POST]
+  path: /action/get_all
+  controller: App\Controller\ActionController::getAllActions
+  methods: [POST]
 
 # AUTOMATION ACTION
 automation_reaction_trigger:
-    path: /automation/reaction/trigger
-    controller: App\Controller\AutomationActionController::triggerReaction
-    methods: [POST]
+  path: /automation/reaction/trigger
+  controller: App\Controller\AutomationActionController::triggerReaction
+  methods: [POST]
 automation_reaction_do:
-    path: /automation/reaction/do
-    controller: App\Controller\AutomationActionController::doReaction
-    methods: [POST]
+  path: /automation/reaction/do
+  controller: App\Controller\AutomationActionController::doReaction
+  methods: [POST]
 automation_action_checks:
-    path: /automation/action/check
-    controller: App\Controller\AutomationActionController::check
+  path: /automation/action/check
+  controller: App\Controller\AutomationActionController::check

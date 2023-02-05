@@ -135,4 +135,42 @@ class DiscordAPIController extends AbstractController
         $response = curl_exec($curl);
         curl_close($curl);
     }
+
+    public function changeNicknameOnDiscord()
+    {
+        // Définissez le nouveau pseudo désiré à mettre en argument quand on va recup un nom d'artiste ou autre par exemple.
+        $new_username = "Morvince'API";
+
+        // Récupérez le jeton d'accès
+        $token = ""; // remplacer par le token d'accès
+
+        // Préparez la requête PATCH pour mettre à jour le pseudo
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://discord.com/api/v6/users/@me",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "PATCH",
+            CURLOPT_POSTFIELDS => "{\"username\":\"$new_username\"}",
+            CURLOPT_HTTPHEADER => array(
+                "Authorization: Bearer $token",
+                "Content-Type: application/json"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;
+        }
+    }
 }
