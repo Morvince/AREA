@@ -20,12 +20,6 @@ class DiscordAPIController extends AbstractController
     /**
      * @Route("/discord/connect", name="discord_api_connect")
      */
-
-    // Function to get the access token
-
-    /**
-     * @Route("/discord/connect", name="discord_api_connect")
-     */
     public function connect()
     {
         $redirect_uri = "";
