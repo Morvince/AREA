@@ -50,7 +50,7 @@ export const Connected = styled.button`
   background: #373b48;
   white-space: nowrap;
   padding: 10px 22px;
-  color: black;
+  color: white;
   font-size: 40px;
   outline: none;
   border: none;
