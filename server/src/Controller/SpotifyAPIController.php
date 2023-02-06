@@ -21,7 +21,7 @@
         /**
          * @Route("/spotify/connect", name="spotify_api_connect")
          */
-        public function connect(Request $request, ServiceRepository $sevice_repository)
+        public function connect(Request $request, ServiceRepository $service_repository)
         {
             header('Access-Control-Allow-Origin: *');
             // Get needed values
@@ -30,7 +30,7 @@
                 return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
             $redirect_uri = $request_content->redirect_uri;
-            $service = $sevice_repository->findByName("spotify");
+            $service = $service_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
             }
@@ -59,7 +59,7 @@
         /**
          * @Route("/spotify/get_access_token", name="spotify_api_get_access_token")
          */
-        public function getAccessToken(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
+        public function getAccessToken(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
         {
             header('Access-Control-Allow-Origin: *');
             // Get needed values
@@ -82,7 +82,7 @@
             $user_id = $user->getId();
             $code = $request_content->code;
             $redirect_uri = $request_content->redirect_uri;
-            $service = $sevice_repository->findByName("spotify");
+            $service = $service_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
             }
@@ -109,25 +109,25 @@
                 return new JsonResponse(array("message" => "Spotify: Bad code to get access token"), 400);
             }
             // Put or edit datas in database
-            if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
                 $user_service = new UserService();
                 $user_service->setUserId($user_id);
                 $user_service->setServiceId($service->getId());
                 $user_service->setAccessToken(json_decode($result)->access_token);
                 $user_service->setRefreshToken(json_decode($result)->refresh_token);
-                $user_sevice_repository->add($user_service, true);
+                $user_service_repository->add($user_service, true);
             } else {
-                $user_service = $user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
+                $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
                 $user_service->setAccessToken(json_decode($result)->access_token);
                 $user_service->setRefreshToken(json_decode($result)->refresh_token);
-                $user_sevice_repository->edit($user_service, true);
+                $user_service_repository->edit($user_service, true);
             }
             return new JsonResponse(array("message" => "OK", 200));
         }
         /**
          * @Route("/spotify/refresh_access_token", name="spotify_api_refresh_access_token")
          */
-        public function refreshAccessToken(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
+        public function refreshAccessToken(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
         {// a changer pour lutiliser que via le server
             // Get needed values
             $request_content = json_decode($request->getContent());
@@ -135,7 +135,7 @@
                 return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
             $user_id = $request_content->user_id;
-            $service = $sevice_repository->findByName("spotify");
+            $service = $service_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
             }
@@ -144,12 +144,12 @@
             if (count($identifiers) != 2) {
                 return new JsonResponse(array("message" => "Spotify: Identifiers error"), 422);
             }
-            if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
                 return new JsonResponse(array("message" => "Spotify: Refresh token not found"), 404);
             }
             $client_id = $identifiers[0];
             $client_secret = $identifiers[1];
-            $user_service = $user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
+            $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
             $refresh_token = $user_service->getRefreshToken();
             // Request for the access token
             $ch = curl_init();
@@ -164,19 +164,19 @@
             $result = curl_exec($ch);
             curl_close ($ch);
             if (!isset(json_decode($result)->access_token)) {
-                $user_sevice_repository->remove($user_service);
+                $user_service_repository->remove($user_service);
                 return new JsonResponse(array("message" => "Spotify: Bad refresh token to get access token"), 400);
             }
             // Edit datas in database
             $user_service->setAccessToken(json_decode($result)->access_token);
-            $user_sevice_repository->edit($user_service, true);
+            $user_service_repository->edit($user_service, true);
             return new JsonResponse(array("message" => "OK"), 200);
         }
 
         /**
          * @Route("/spotify/search", name="spotify_api_search")
          */
-        public function search(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
+        public function search(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
         {// type = par exemple artist/track/album/playlist/etc... et search est la recherche
             header('Access-Control-Allow-Origin: *');
             // Get needed values
@@ -190,15 +190,15 @@
             }
             $user = $user_repository->findByToken($token)[0];
             $user_id = $user->getId();
-            $service = $sevice_repository->findByName("spotify");
+            $service = $service_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
             }
             $service = $service[0];
-            if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
                 return new JsonResponse(array("message" => "Spotify: Access token not found"), 404);
             }
-            $access_token = $user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
+            $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
             $type = $request_content->type;
             $search = $request_content->search;
             $search = str_replace(" ", "%20", $search);
@@ -212,7 +212,7 @@
         /**
          * @Route("/spotify/get_user_playlists", name="spotify_api_get_user_playlists")
          */
-        public function getUserPlaylists(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
+        public function getUserPlaylists(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
         {
             header('Access-Control-Allow-Origin: *');
             // Get needed values
@@ -226,15 +226,15 @@
             }
             $user = $user_repository->findByToken($token)[0];
             $user_id = $user->getId();
-            $service = $sevice_repository->findByName("spotify");
+            $service = $service_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
             }
             $service = $service[0];
-            if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
                 return new JsonResponse(array("message" => "Spotify: Access token not found"), 404);
             }
-            $access_token = $user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
+            $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
             // Request for the user playlists
             $response = $this->sendRequest($access_token, "me/playlists");// changer pour voir seulement celles modifiables
             if (isset(json_decode($response)->code)) {
@@ -312,7 +312,7 @@
         /**
          * @Route("/spotify/action/check_music_playlist/get_parameters", name="spotify_api_check_music_playlist_parameters")
          */
-        public function getIsMusicAddedToPlaylistParameters(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
+        public function getIsMusicAddedToPlaylistParameters(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
         {// en db = playlist_id
             // Get needed values
             $request_content = json_decode($request->getContent());
@@ -324,16 +324,16 @@
             if (empty($automation_action)) {
                 return new JsonResponse(array("message" => "Spotify: automation_action_id not found"), 404);
             }
-            $service = $sevice_repository->findByName("spotify");
+            $service = $service_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
             }
             $service = $service[0];
             $automation = $automation_repository->find($automation_action->getAutomationId());
-            if (empty($user_sevice_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+            if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
                 return new JsonResponse(array("message" => "Spotify: Access token not found"), 404);
             }
-            $access_token = $user_sevice_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
+            $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
             $informations = $automation_action->getInformations();
             // Request to get the wished playlist
             $playlist = json_decode($this->getPlaylistById($access_token, $informations));
@@ -347,7 +347,7 @@
         /**
          * @Route("/spotify/reaction/change_playlist_details", name="spotify_api_reaction_change_playlist_details")
          */
-        public function changePlaylistDetails(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
+        public function changePlaylistDetails(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
         {// en db = name:public(true/false):description;playlist_id
             // Get needed values
             $request_content = json_decode($request->getContent());
@@ -359,16 +359,16 @@
             if (empty($automation_action)) {
                 return new JsonResponse(array("message" => "Spotify: automation_action_id not found"), 404);
             }
-            $service = $sevice_repository->findByName("spotify");
+            $service = $service_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
             }
             $service = $service[0];
             $automation = $automation_repository->find($automation_action->getAutomationId());
-            if (empty($user_sevice_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+            if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
                 return new JsonResponse(array("message" => "Spotify: Access token not found"), 404);
             }
-            $access_token = $user_sevice_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
+            $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
             $informations = $automation_action->getInformations();
             $args = explode(":", $informations);
             if (count($args) != 2) {
@@ -413,7 +413,7 @@
         /**
          * @Route("/spotify/reaction/add_artist_music_to_playlist", name="spotify_api_reaction_add_artist_music_to_playlist")
          */
-        public function addMusicFromArtistListToPlaylist(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $sevice_repository, UserServiceRepository $user_sevice_repository)
+        public function addMusicFromArtistListToPlaylist(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
         {// en db = artist_id;artist_id:playlist_id
             // Get needed values
             srand(time());
@@ -426,16 +426,16 @@
             if (empty($automation_action)) {
                 return new JsonResponse(array("message" => "Spotify: automation_action_id not found"), 404);
             }
-            $service = $sevice_repository->findByName("spotify");
+            $service = $service_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
             }
             $service = $service[0];
             $automation = $automation_repository->find($automation_action->getAutomationId());
-            if (empty($user_sevice_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+            if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
                 return new JsonResponse(array("message" => "Spotify: Access token not found"), 404);
             }
-            $access_token = $user_sevice_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
+            $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
             $informations = $automation_action->getInformations();
             $args = explode(":", $informations);
             if (count($args) != 2) {
