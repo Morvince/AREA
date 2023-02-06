@@ -4,6 +4,8 @@ import PrivateRoutes from './utils/PrivateRoutes';
 import Home from './pages/Home';
 import Sign from './pages/Sign';
 import LandingPage from './pages/Landing';
+import Settings from './pages/Settings';
+import ConnectServices from './pages/ConnectServices';
 
 const PageNotFound = () => {
   return (
@@ -18,7 +20,9 @@ function App() {
         <Route exact path='/' element={<LandingPage/>}/>
         <Route exact path='/sign' element={<Sign/>}/>
         <Route element={<PrivateRoutes/>}>
-          <Route path='/home' element={<Home/>}/>
+          <Route exact path='/home' element={<Home/>}/>
+          <Route exact path='/settings' element={<Settings/>} />
+          <Route exact path='/connectServices' element={<ConnectServices/>}/>
         </Route>
         <Route path='*' element={<PageNotFound/>}/>
       </Routes>

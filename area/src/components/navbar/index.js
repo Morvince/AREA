@@ -29,13 +29,13 @@ const Navbar = ({ toggle, changeY, defaultState }) => {
     <IconContext.Provider value={{ color: '#f9f9f9' }}>
       <Nav scrollNav={scrollNav}>
         <NavbarContainer>
-          <NavLogo to="/" onClick={toggleHome}>Hapilink</NavLogo>
+          <NavLogo to="/" onClick={toggleHome} top="15px" left="20px" fontsize="40px" >Hapilink</NavLogo>
           <MobileIcon onClick={toggle}>
             <FaBars />
           </MobileIcon>
           <NavMenu>
             <NavItem>
-              <NavLinks to="about" smooth={true} duration={500} spy={true} exact='true' offset={-80}>About</NavLinks>
+            <NavLogo to="/settings" onClick={toggleHome} top="23px" left="1600px" fontsize="20px" >Settings</NavLogo>
             </NavItem>
           </NavMenu>
           <NavBtn>
