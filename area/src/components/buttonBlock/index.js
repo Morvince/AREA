@@ -8,6 +8,7 @@ const ButtonBox = (props) => {
   const [pos, setPos] = useState({ x: props.top, y: props.left })
   const { sharedData, setSharedData } = React.useContext(MyContext);
   const { ID, setID } = React.useContext(MyContext);
+  const { linkedList, setLinkedList } = React.useContext(MyContext);
 
   const handleDrag = (e, data) => {
     if (data.x > 300) {
@@ -18,6 +19,7 @@ const ButtonBox = (props) => {
   }
 
   const handleDragStop = (e, data) => {
+    var rect = e.target.getBoundingClientRect();
     if (data.x < 300) {
       setPos({ x: props.top, y: props.left });
     } else {
@@ -28,10 +30,10 @@ const ButtonBox = (props) => {
             return;
           }
         }
+        linkedList.push(ID)
       }
-      setSharedData(sharedData => [...sharedData, { service: props.service, index: ID, color: props.color, top: props.top, left: props.left + 500, action: props.action }])
+      setSharedData(sharedData => [...sharedData, { service: props.service, index: ID, color: props.color, top: rect.top-80, left: rect.left-150, action: props.action, above: null}])
       setID(ID + 1);
-      console.log('ID: ', ID)
     }
     setbackgroundColor(props.color)
   }

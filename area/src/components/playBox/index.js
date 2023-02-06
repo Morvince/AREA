@@ -7,12 +7,15 @@ import MyContext from '../Context'
 const PlayBox = () => {
   const [sharedData, setSharedData] = React.useState([]);
   const [ID, setID] = React.useState(0);
+  const [linkedList, setLinkedList] = React.useState([]);
 
-  React.useEffect(() => {}, [sharedData]);
+  React.useEffect(() => {
+    console.log(linkedList)
+  }, [sharedData]);
 
   return (
     <RectangleArea>
-      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID}}>
+      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList}}>
         <Servicesbar />
         <MovableBox>
           {sharedData.map((info) => {

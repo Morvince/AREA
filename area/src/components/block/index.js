@@ -7,16 +7,16 @@ const Block = (props) => {
   const [backgroundColor, setbackgroundColor] = useState(props.color)
   const [pos, setPos] = useState({ x: props.top, y: props.left })
   const { sharedData, setSharedData } = React.useContext(MyContext);
+  const {linkedList, setLinkedList} = React.useContext(MyContext);
 
-  React.useEffect(() => {
-  }, [sharedData]);
+  React.useEffect(() => {}, [sharedData]);
 
   const handleDrag = (e, data) => {
     var rect = e.target.getBoundingClientRect();
 
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id !== sharedData[i].index) {
-        if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130) {
+        if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130 && rect.left > sharedData[i].left - 10 && rect.left < sharedData[i].left + 10) {
           setbackgroundColor('red')
           break;
         } else {
@@ -24,6 +24,17 @@ const Block = (props) => {
         }
       }
     }
+  }
+
+  const getIdAboveMe = (id) => {
+    for (var i = 0; i < sharedData.length; i++) {
+      if (id !== sharedData[i].index) {
+        if (sharedData[id].top > sharedData[i].top + 110 && sharedData[id].top < sharedData[i].top + 130 && sharedData[id].left > sharedData[i].left - 10 && sharedData[id].left < sharedData[i].left + 10) {
+          return sharedData[i].index
+        }
+      }
+    }
+    return;
   }
 
   const handleDragStop = (e, data) => {
@@ -35,6 +46,32 @@ const Block = (props) => {
         sharedData[i].left = rect.left;
       }
     }
+
+    for (var i = 0; i < sharedData.length; i++) {
+      if (props.id !== sharedData[i].index) {
+        if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130 && rect.left > sharedData[i].left - 10 && rect.left < sharedData[i].left + 10) {
+          setbackgroundColor('red')
+          console.log(getIdAboveMe(props.id))
+          sharedData[props.id].above = getIdAboveMe(props.id)
+          break;
+        } else {
+          setbackgroundColor(props.color)
+          sharedData[props.id].above = getIdAboveMe(props.id)
+          for (var i = 0; i < linkedList.length; i++) {
+            if (linkedList[i] === props.id && props.action === false) {
+              linkedList.splice(i, linkedList.length - i)
+            }
+          }
+        }
+      }
+    }
+
+    for (var i = 0; i < linkedList.length; i++) {
+      if (linkedList[i] === sharedData[props.id].above) {
+        linkedList.splice(i+1, 0, props.id)
+      }
+    }
+    console.log(linkedList)
   }
 
   return (
