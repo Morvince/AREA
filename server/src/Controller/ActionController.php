@@ -29,7 +29,7 @@
                 }
                 array_push($formatted, array("id" => $action->getId(), "name" => $action->getName(), "service" => $service->getName(), "type" => $action->getType()));
             }
-            return new JsonResponse($formatted);
+            return new JsonResponse(array("actions" => $formatted), 200);
         }
     }
 ?>
