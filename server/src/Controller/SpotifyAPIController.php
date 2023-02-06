@@ -485,4 +485,3 @@
             return $this->sendRequest($access_token, "search?type=$type&q=$search");
         }
     }
-?>
