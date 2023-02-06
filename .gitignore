@@ -1,3 +1,4 @@
 .vscode
 .github
 areatest.sql
+.env
