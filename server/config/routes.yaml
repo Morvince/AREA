@@ -79,6 +79,6 @@ automation_reaction_do:
     path: /automation/reaction/do
     controller: App\Controller\AutomationActionController::doReaction
     methods: [POST]
-automation_action_checks:
+automation_action_check:
     path: /automation/action/check
     controller: App\Controller\AutomationActionController::check
