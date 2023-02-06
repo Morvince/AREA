@@ -10,7 +10,7 @@ const Navbar = ({ toggle, changeY, defaultState }) => {
 
   const changeNav = () => {
     if (window.scrollY >= changeY) {
-      setScrollNav(true)
+      setScrollNav(false)
     } else {
       setScrollNav(true)
     }
@@ -29,7 +29,7 @@ const Navbar = ({ toggle, changeY, defaultState }) => {
     <IconContext.Provider value={{ color: '#f9f9f9' }}>
       <Nav scrollNav={scrollNav}>
         <NavbarContainer>
-          <NavLogo to="/" onClick={toggleHome}>Aurore BroRéal</NavLogo>
+          <NavLogo to="/" onClick={toggleHome}>Hapilink</NavLogo>
           <MobileIcon onClick={toggle}>
             <FaBars />
           </MobileIcon>
@@ -39,7 +39,7 @@ const Navbar = ({ toggle, changeY, defaultState }) => {
             </NavItem>
           </NavMenu>
           <NavBtn>
-            <NavBtnLink to="/signin">Sign In</NavBtnLink>
+            <NavBtnLink to="/sign">Sign In</NavBtnLink>
           </NavBtn>
         </NavbarContainer>
       </Nav>
