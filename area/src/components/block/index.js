@@ -51,7 +51,6 @@ const Block = (props) => {
       if (props.id !== sharedData[i].index) {
         if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130 && rect.left > sharedData[i].left - 10 && rect.left < sharedData[i].left + 10) {
           setbackgroundColor('red')
-          console.log(getIdAboveMe(props.id))
           sharedData[props.id].above = getIdAboveMe(props.id)
           break;
         } else {
@@ -71,7 +70,6 @@ const Block = (props) => {
         linkedList.splice(i+1, 0, props.id)
       }
     }
-    console.log(linkedList)
   }
 
   return (

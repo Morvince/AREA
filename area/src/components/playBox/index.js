@@ -10,7 +10,6 @@ const PlayBox = () => {
   const [linkedList, setLinkedList] = React.useState([]);
 
   React.useEffect(() => {
-    console.log(linkedList)
   }, [sharedData]);
 
   return (
