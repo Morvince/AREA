@@ -19,7 +19,7 @@ export const SettingsRect = styled.div`
     border-radius: 30px;
 `;
 
-export const Button = styled.button`
+export const Connect = styled.button`
   position: absolute;
   left: ${props => props.left};
   top: ${props => props.top};
@@ -40,4 +40,20 @@ export const Button = styled.button`
     background: black;
     color: #ebebeb;
   }
+`;
+
+export const Connected = styled.button`
+  position: absolute;
+  left: ${props => props.left};
+  top: ${props => props.top};
+  border-radius: 30px;
+  background: #373b48;
+  white-space: nowrap;
+  padding: 10px 22px;
+  color: black;
+  font-size: 40px;
+  outline: none;
+  border: none;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
 `;
