@@ -57,9 +57,9 @@ const Block = (props) => {
         } else {
           setbackgroundColor(props.color)
           sharedData[props.id].above = getIdAboveMe(props.id)
-          for (var i = 0; i < linkedList.length; i++) {
-            if (linkedList[i] === props.id && props.action === false) {
-              linkedList.splice(i, linkedList.length - i)
+          for (var x = 0; x < linkedList.length; x++) {
+            if (linkedList[x] === props.id && props.action == false) {
+              linkedList.splice(x, linkedList.length - x)
             }
           }
         }
