@@ -177,6 +177,7 @@
          */
         public function isConnected(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
         {// a changer pour lutiliser que via le server
+            header('Access-Control-Allow-Origin: *');
             // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->token)) {

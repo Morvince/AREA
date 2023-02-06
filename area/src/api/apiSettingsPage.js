@@ -1,6 +1,14 @@
 import axios from "axios"
 import { useMutation } from "react-query"
 
+const spotifyConnected = async () => {
+  return await axios.post("/spotify/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
+}
+
+export const useSpotifyConnected = () => {
+  return useMutation(spotifyConnected)
+}
+
 const spotifyConnect = async (data) => {
   return await axios.post("/spotify/connect", data)
 }

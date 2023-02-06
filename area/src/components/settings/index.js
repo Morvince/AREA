@@ -1,18 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Rect, SettingsRect, Connect, Connected } from './settingsElements'
 import { Icon } from '@iconify/react';
-import { useSpotifyConnect } from '../../api/apiSettingsPage';
-import connections from './connections'
+import { useSpotifyConnect, useSpotifyConnected } from '../../api/apiSettingsPage';
 
 const Settings = () => {
     const handleSpotifyConnect = useSpotifyConnect()
-    const [connectionsState, setConnectionsState] = React.useState(connections);
+    const isSpotifyConnected = useSpotifyConnected()
 
-    React.useEffect(() => {
-      const localStorageConnections = localStorage.getItem('connections');
-      if (localStorageConnections) {
-        setConnectionsState(JSON.parse(localStorageConnections));
-      }
+    useEffect(() => {
+      isSpotifyConnected.mutate()
     }, []);
 
     const handleConnectServices = (event) => {
@@ -20,16 +16,11 @@ const Settings = () => {
       switch (event.currentTarget.getAttribute("data-value")) {
         case "spotify":
           handleSpotifyConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
-          setConnectionsState({ ...connectionsState, spotify: true });
           break;
         default:
           break;
       }
     }
-
-    React.useEffect(() => {
-      localStorage.setItem('connections', JSON.stringify(connectionsState));
-    }, [connectionsState]);
 
     return (
       <>
@@ -40,8 +31,10 @@ const Settings = () => {
         <Icon icon="logos:spotify-icon" width="100" style={{ position: 'absolute', left: '100px', top: "450px" }}/>
         <Icon icon="skill-icons:instagram" width="100" style={{ position: 'absolute', left: '100px', top: "650px" }}/>
         <Connect top="265px" left="400px" >Connect</Connect>
-        <Connect to="/" top="465px" left="400px" data-value="spotify" onClick={handleConnectServices} >Connect</Connect>
-        {connectionsState ? <Connected top="465px" left="400px" >Connected</Connected> : <Connect to="/" top="465px" left="400px" data-value="spotify" onClick={handleConnectServices} >Connect</Connect>}
+        {isSpotifyConnected.isSuccess && isSpotifyConnected.data.data.connected ?
+          <Connected top="465px" left="400px" >Connected</Connected> :
+          <Connect to="/" top="465px" left="400px" data-value="spotify" onClick={handleConnectServices} >Connect</Connect>
+        }
 
         <Connect to="/" top="665px" left="400px" >Connect</Connect>
 
