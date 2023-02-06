@@ -8,7 +8,7 @@ const login = async (formData) => {
 export const useLogin = () => {
   return useMutation(login, {
     onSuccess: (data) => {
-      sessionStorage.setItem("user_id", data.data.user_id)
+      sessionStorage.setItem("token", data.data.token)
     }
   })
 }
@@ -20,7 +20,7 @@ const register = async (formData) => {
 export const useRegister = () => {
   return useMutation(register, {
     onSuccess: (data) => {
-      sessionStorage.setItem("user_id", data.data.user_id)
+      sessionStorage.setItem("token", data.data.token)
     }
   })
 }
