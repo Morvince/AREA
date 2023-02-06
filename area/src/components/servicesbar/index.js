@@ -1,22 +1,67 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
 import ButtonBox from '../buttonBlock';
+import { useGetAction } from '../../api/apiServicesPage';
 
 const Servicesbar = () => {
   const [isOpen] = useState(true);
   const [isLeftBoxOpen, setisLeftBoxOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
-  const [puzzleBlocktemps, setpuzzleBlocktemps] = useState([])
+  const [puzzleBlocktemps, setpuzzleBlocktemps] = useState([]);
+  const tmpServices = useGetAction();
+
+  useEffect(() => {
+    tmpServices.mutate()
+  }, []);
 
   const services = [
-    { nom: 'discord', nombre: 5, info: [], action: [true, true, true, true, true ] },
-    { nom: 'spotify', nombre: 1, info: [], action: [false] },
-    { nom: 'instagram', nombre: 2, info: [], action: [false, false] },
-    { nom: 'google', nombre: 4, info: [], action: [false, false, false, false, false] },
-    { nom: 'twitter', nombre: 3, info: [], action: [false, false, false] },
-    { nom: 'openai', nombre: 6, info: [], action: [false, false, false, false, false, false] },
+    { nom: 'discord', nombre: 0, info: [], action: [], name: [] },
+    { nom: 'spotify', nombre: 0, info: [], action: [], name: [] },
+    { nom: 'instagram', nombre: 0, info: [], action: [], name: [] },
+    { nom: 'google', nombre: 0, info: [], action: [], name: [] },
+    { nom: 'twitter', nombre: 0, info: [], action: [], name: [] },
+    { nom: 'openai', nombre: 0, info: [], action: [], name: [] },
   ];
+
+  function fillservices(id, i) {
+    services[id].nombre += 1;
+    services[id].name.push(tmpServices.data.data.actions[i].name);
+    if (tmpServices.data.data.actions[i].type === "reaction") {
+      services[id].action.push(false);
+    } else {
+      services[id].action.push(true);
+    }
+  }
+
+  if (tmpServices.isSuccess) {
+    console.log(tmpServices.data.data.actions)
+    for (let i = 0; i < tmpServices.data.data.actions.length; i++) {
+      switch (tmpServices.data.data.actions[i].service) {
+        case "discord":
+          fillservices(0, i);
+          break;
+        case "spotify":
+          fillservices(1, i);
+          break;
+        case "instagram":
+          fillservices(2, i);
+          break;
+        case "google":
+          fillservices(3, i);
+          break;
+        case "twitter":
+          fillservices(4, i);
+          break;
+        case "openai":
+          fillservices(5, i);
+          break;
+        default:
+          break;
+      }
+    }
+    console.log(services)
+  }
 
   let t = 0;
   for (let i = 0; i < services.length; i++) {
@@ -27,7 +72,8 @@ const Servicesbar = () => {
         color: getColorPuzzleBlock(services[i].nom),
         service: services[i].nom,
         index: t,
-        action : services[i].action[x]
+        action: services[i].action[x],
+        name: services[i].name[x]
       });
       t++;
     }
@@ -111,7 +157,7 @@ const Servicesbar = () => {
         <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
           {puzzleBlocktemps.map((info, index) => {
             return (
-              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action}/>
+              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name}/>
             )
           })}
         </RectangleContener>

@@ -74,7 +74,9 @@ const Block = (props) => {
 
   return (
     <Draggable bounds='parent' onDrag={handleDrag} onStop={handleDragStop}>
-      <RectangleBlock color={backgroundColor} top={pos.x} left={pos.y} />
+      <RectangleBlock color={backgroundColor} top={pos.x} left={pos.y}>
+        {props.name}
+      </RectangleBlock>
     </Draggable>
   )
 }
