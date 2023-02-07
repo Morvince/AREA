@@ -42,7 +42,7 @@
                     // Request to get parameters of the action
                     $parameters = json_decode($this->sendRequest($url."/get_parameters", array("automation_action_id" => $automation_action_id)));
                     if (isset($parameters->code)) {
-                        if (str_contains($parameters->message, "Bad token or expired")) {
+                        if (str_contains($parameters->message, "Bad or expired token")) {
                             $this->refreshAccessToken($automation_action, $service, $automation_repository, $user_service_repository);
                         }
                         continue;
