@@ -1,0 +1,21 @@
+FROM composer:2.5.1 AS composer
+
+FROM php:7.4.19-apache
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+WORKDIR /app/server
+
+RUN apt-get update && apt-get install -y curl zip unzip
+
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash
+
+RUN apt-get install -y symfony-cli
+
+RUN composer require symfony/orm-pack && composer require --dev symfony/maker-bundle && composer require doctrine/doctrine-bundle
+
+RUN docker-php-ext-install pdo pdo_mysql
+
+COPY . .
+
+ENTRYPOINT [ "bash", "./setup_docker_server.sh" ]

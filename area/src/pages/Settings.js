@@ -1,10 +1,9 @@
 import React, {useState} from 'react'
 import Sidebar from '../components/sidebar'
 import Navebar from '../components/navbar'
-import PlayBox from '../components/playBox'
+import Settings from '../components/settings'
 
-const Home = () => {
-
+const SettingsPage = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   const toggle = () => {
@@ -15,9 +14,9 @@ const Home = () => {
     <div>
       <Sidebar isOpen={isOpen} toggle={toggle} />
       <Navebar toggle={toggle} changeY={720} defaultState={false}/>
-      <PlayBox/>
+      < Settings />
     </div>
   )
 }
 
-export default Home
+export default SettingsPage
