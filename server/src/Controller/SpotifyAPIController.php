@@ -114,15 +114,12 @@
                 $user_service = new UserService();
                 $user_service->setUserId($user_id);
                 $user_service->setServiceId($service->getId());
-                $user_service->setAccessToken(json_decode($result)->access_token);
-                $user_service->setRefreshToken(json_decode($result)->refresh_token);
-                $user_service_repository->add($user_service, true);
             } else {
                 $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
-                $user_service->setAccessToken(json_decode($result)->access_token);
-                $user_service->setRefreshToken(json_decode($result)->refresh_token);
-                $user_service_repository->edit($user_service, true);
             }
+            $user_service->setAccessToken(json_decode($result)->access_token);
+            $user_service->setRefreshToken(json_decode($result)->refresh_token);
+            $user_service_repository->add($user_service, true);
             return new JsonResponse(array("message" => "OK", 200));
         }
         /**
@@ -164,13 +161,13 @@
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             $result = curl_exec($ch);
             curl_close($ch);
-            if (!isset(json_decode($result)->access_token)) {
+            if (empty(json_decode($result)->access_token)) {
                 $user_service_repository->remove($user_service);
                 return new JsonResponse(array("message" => "Spotify: Expired refresh token"), 400);
             }
             // Edit datas in database
             $user_service->setAccessToken(json_decode($result)->access_token);
-            $user_service_repository->edit($user_service, true);
+            $user_service_repository->add($user_service, true);
             return new JsonResponse(array("message" => "OK"), 200);
         }
         /**
@@ -287,7 +284,7 @@
                         $response = json_encode(array("message" => "Spotify: Bad request", "code" => 400));
                         break;
                     case 401:
-                        $response = json_encode(array("message" => "Spotify: Bad token or expired", "code" => 401));
+                        $response = json_encode(array("message" => "Spotify: Bad or expired token", "code" => 401));
                         break;
                     case 403:
                         $response = json_encode(array("message" => "Spotify: Forbidden", "code" => 403));
@@ -355,7 +352,7 @@
             $automation_action_id = $request_content->automation_action_id;
             $automation_action = $automation_action_repository->find($automation_action_id);
             if (empty($automation_action)) {
-                return new JsonResponse(array("message" => "Spotify: automation_action_id not found"), 404);
+                return new JsonResponse(array("message" => "Spotify: automation_action ID not found"), 404);
             }
             $service = $service_repository->findByName("spotify");
             if (empty($service)) {
@@ -367,9 +364,12 @@
                 return new JsonResponse(array("message" => "Spotify: Access token not found"), 404);
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
-            $informations = $automation_action->getInformations();
+            $informations = json_decode($automation_action->getInformations());
+            if (empty($informations->playlist_id)) {
+                return new JsonResponse(array("message" => "Spotify: Playlist ID not found"), 404);
+            }
             // Request to get the wished playlist
-            $playlist = json_decode($this->getPlaylistById($access_token, $informations));
+            $playlist = json_decode($this->getPlaylistById($access_token, $informations->playlist_id));
             if (isset($playlist->code)) {
                 return new JsonResponse(array("message" => $playlist->message), $playlist->code);
             }
@@ -390,7 +390,7 @@
             $automation_action_id = $request_content->automation_action_id;
             $automation_action = $automation_action_repository->find($automation_action_id);
             if (empty($automation_action)) {
-                return new JsonResponse(array("message" => "Spotify: automation_action_id not found"), 404);
+                return new JsonResponse(array("message" => "Spotify: automation_action ID not found"), 404);
             }
             $service = $service_repository->findByName("spotify");
             if (empty($service)) {
@@ -402,22 +402,20 @@
                 return new JsonResponse(array("message" => "Spotify: Access token not found"), 404);
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
-            $informations = $automation_action->getInformations();
-            $args = explode(":", $informations);
-            if (count($args) != 2) {
-                return new JsonResponse(array("message" => "Spotify: Informations error"), 422);
+            $informations = json_decode($automation_action->getInformations());
+            if (empty($informations->playlist_id)) {
+                return new JsonResponse(array("message" => "Spotify: Playlist ID not found"), 404);
             }
-            $data = explode(";", $args[0]);
-            $playlist = json_decode($this->getPlaylistById($access_token, $args[1]));
+            $playlist = json_decode($this->getPlaylistById($access_token, $informations->playlist_id));
             if (isset($playlist->code)) {
                 return new JsonResponse(array("message" => $playlist->message), $playlist->code);
             }
             $name = $playlist->name;
-            if (!empty($data[0])) {
-                $name = $data[0];
+            if (!empty($informations->name)) {
+                $name = $informations->name;
             }
             $public = $playlist->public;
-            switch ($data[1]) {
+            switch ($informations->public) {
                 case "false":
                     $public = false;
                     break;
@@ -428,8 +426,8 @@
                     break;
             }
             $description = $playlist->description;
-            if (!empty($data[2])) {
-                $description = $data[2];
+            if (!empty($informations->description)) {
+                $description = $informations->description;
             }
             $parameters = array(
                 "name" => $name,
@@ -457,7 +455,7 @@
             $automation_action_id = $request_content->automation_action_id;
             $automation_action = $automation_action_repository->find($automation_action_id);
             if (empty($automation_action)) {
-                return new JsonResponse(array("message" => "Spotify: automation_action_id not found"), 404);
+                return new JsonResponse(array("message" => "Spotify: automation_action ID not found"), 404);
             }
             $service = $service_repository->findByName("spotify");
             if (empty($service)) {
@@ -469,14 +467,12 @@
                 return new JsonResponse(array("message" => "Spotify: Access token not found"), 404);
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
-            $informations = $automation_action->getInformations();
-            $args = explode(":", $informations);
-            if (count($args) != 2) {
-                return new JsonResponse(array("message" => "Spotify: Informations error"), 422);
+            $informations = json_decode($automation_action->getInformations());
+            if (empty($informations->artists_id)) {
+                return new JsonResponse(array("message" => "Spotify: Artists ID not found"), 404);
             }
-            $artists_id = explode(";", $args[0]);
             $artists_name = array();
-            foreach ($artists_id as $artist_id) {
+            foreach ($informations->artists_id as $artist_id) {
                 if (!empty($artist_id)) {
                     $response = json_decode($this->getArtistById($access_token, $artist_id));
                     if (!empty($response->name)) {
@@ -485,9 +481,12 @@
                 }
             }
             if (empty($artists_name)) {
-                return new JsonResponse(array("message" => "Spotify: artist_id not found"), 404);
+                return new JsonResponse(array("message" => "Spotify: Artist ID not found"), 404);
             }
-            $playlist_id = $args[1];
+            if (empty($informations->playlist_id)) {
+                return new JsonResponse(array("message" => "Spotify: Playlist ID not found"), 404);
+            }
+            $playlist_id = $informations->playlist_id;
             $music_uri = $this->getRandomMusicFromArtist($access_token, $artists_name[rand(0, count($artists_name) - 1)]);
             // Request to add a song to a playlist
             $response = $this->sendRequest($access_token, "playlists/$playlist_id/tracks?uris=$music_uri", "POST");
