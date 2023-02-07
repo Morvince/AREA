@@ -268,7 +268,12 @@
             if (isset(json_decode($response)->code)) {
                 return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
             }
-            return new JsonResponse($response, 200);
+            $response = json_decode($response);
+            $formatted = array();
+            foreach ($response->items as $item) {
+                array_push($formatted, array("name" => $item->name, "id" => $item->id));
+            }
+            return new JsonResponse($formatted, 200);
         }
         private function sendRequest($access_token, $endpoint, $method = "GET", $parameters = array())
         {
