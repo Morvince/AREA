@@ -88,7 +88,7 @@
                 $automation_action->setActionId($action->id);
                 $automation_action->setAutomationId($automation_id);
                 $automation_action->setNumber($action->number);
-                $automation_action->setInformations($action->informations);
+                $automation_action->setInformations(json_encode($action->informations));
                 $automation_action_repository->add($automation_action, true);
             }
             return new JsonResponse(array("message" => "OK"), 200);
