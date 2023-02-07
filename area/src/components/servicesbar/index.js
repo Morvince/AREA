@@ -16,12 +16,12 @@ const Servicesbar = () => {
   }, []);
 
   const services = [
-    { nom: 'discord', nombre: 0, info: [], action: [], name: [] },
-    { nom: 'spotify', nombre: 0, info: [], action: [], name: [] },
-    { nom: 'instagram', nombre: 0, info: [], action: [], name: [] },
-    { nom: 'google', nombre: 0, info: [], action: [], name: [] },
-    { nom: 'twitter', nombre: 0, info: [], action: [], name: [] },
-    { nom: 'openai', nombre: 0, info: [], action: [], name: [] },
+    { nom: 'discord',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'instagram', nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'google',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'openai',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
   ];
 
   function fillservices(id, i) {
@@ -31,6 +31,11 @@ const Servicesbar = () => {
       services[id].action.push(false);
     } else {
       services[id].action.push(true);
+    }
+    if (id == 0 && tmpServices.data.data.actions[i].name === "spotify") {
+      services[id].nbrBox.push(2);
+    } else {
+      services[id].nbrBox.push(0);
     }
   }
 
@@ -73,7 +78,8 @@ const Servicesbar = () => {
         service: services[i].nom,
         index: t,
         action: services[i].action[x],
-        name: services[i].name[x]
+        name: services[i].name[x],
+        nbrBox: services[i].nbrBox[x]
       });
       t++;
     }
@@ -157,7 +163,7 @@ const Servicesbar = () => {
         <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
           {puzzleBlocktemps.map((info, index) => {
             return (
-              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name}/>
+              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox}/>
             )
           })}
         </RectangleContener>
