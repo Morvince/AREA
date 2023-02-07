@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import Sidebar from '../components/sidebar'
-import Landing from '../components/Landing'
+import Landing from '../components/landing'
 
 const LandingPage = () => {
     const [isOpen, setIsOpen] = useState(false)
