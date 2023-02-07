@@ -28,14 +28,6 @@
             }
         }
 
-        public function edit(UserService $entity, bool $flush = false)
-        {
-            $this->getEntityManager()->persist($entity);
-            if ($flush) {
-                $this->getEntityManager()->flush();
-            }
-        }
-
         public function remove(UserService $entity, bool $flush = false)
         {
             $this->getEntityManager()->remove($entity);
