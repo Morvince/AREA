@@ -88,7 +88,7 @@ class DiscordAPIController extends AbstractController
         }
         $service = $service[0];
         $identifiers = explode(";", $service->getIdentifiers());
-        if (count($identifiers) != 2) {
+        if (count($identifiers) != 3) {
             return new JsonResponse(array("message" => "Discord: Identifiers error"), 422);
         }
         $user_id = 1;
@@ -126,6 +126,30 @@ class DiscordAPIController extends AbstractController
         return new JsonResponse(array("token" => json_decode($result)), 200);
     }
 
+    /**
+     * @Route("/discord/action/check_music_playlist", name="spotify_api_check_music_playlist")
+     */
+
+    public function isUsernameChanged(Request $request)
+    {
+        // Get needed values
+        $request_content = json_decode($request->getContent());
+        if (empty($request_content->new) || empty($request_content->old)) {
+            return new JsonResponse(array("message" => "Discord: Missing field"), 400);
+        }
+        $old_username = $request_content->old->username;
+        $new_username = $request_content->new->username;
+        // Check if username have been changed
+
+        $changed = false;
+        if (strcmp($new_username, $old_username) === 0)
+            $changed = true;
+        if ($changed === false) {
+            return new JsonResponse(array("message" => true), 200);
+        }
+        return new JsonResponse(array("message" => false), 200);
+    }
+
     private function getChannelsAndGuildID(ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
     {
         $service = $service_repository->findByName("discord");
@@ -138,13 +162,13 @@ class DiscordAPIController extends AbstractController
         }
         $access_token = $user_service_repository->findByUserIdAndServiceId(1, $service->getId())[0]->getAccessToken();
         // Récupération de la liste des guildes associées au bot
-        $guilds = $this->request_api->send($access_token, "https://discordapp.com/api/v6/users/@me/guilds", "GET", "");
+        $guilds = $this->request_api->send($access_token, "https://discordapp.com/api/v6/users/@me/guilds", "GET", array());
         $guilds = json_decode($guilds);
 
         // Boucle sur les guildes pour récupérer les channels associés au bot
         $channels = array();
         foreach ($guilds as $guild) {
-            $response = $this->request_api->send($access_token, "https://discordapp.com/api/v6/guilds/{$guild->id}/channels", "GET", "");
+            $response = $this->request_api->send($access_token, "https://discordapp.com/api/v6/guilds/" . $guild->id . "/channels", "GET", array());
             $channels = array_merge($channels, json_decode($response));
         }
     }
@@ -169,9 +193,15 @@ class DiscordAPIController extends AbstractController
         if (empty($this->request_api)) {
             $this->request_api = new RequestAPI();
         }
+
+        $identifiers = explode(";", $service->getIdentifiers());
+        if (count($identifiers) != 3) {
+            return new JsonResponse(array("message" => "Discord: Identifiers error"), 422);
+        }
+
         $result = $this->request_api->send($access_token, "https://discordapp.com/api/v6/users/@me", "GET", array());
         $username = json_decode($result)->id;
-        $token = "MTA3MDcyODUxNjE4ODAwMDMzNg.GB_wSS.HbWsa0b9_lOinT7QKXQ071K0kv8fobKOYWVOyE";
+        $token = $identifiers[2];
         // return new JsonResponse(json_decode($result)); // pour check si on peut recup d'autres infos sur le user
 
         $channelID = "1056478509700222988";
