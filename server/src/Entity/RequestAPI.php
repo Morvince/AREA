@@ -59,7 +59,9 @@
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($parameters));
             $response = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            echo "AAAA";
             if ($code > 200) {
+                echo $response;
                 curl_close($ch);
                 $new_response = array("message" => json_decode($response)->message, "code" => $code);
                 return (json_encode($new_response));
