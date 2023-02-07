@@ -273,7 +273,7 @@
             foreach ($response->items as $item) {
                 array_push($formatted, array("name" => $item->name, "id" => $item->id));
             }
-            return new JsonResponse($formatted, 200);
+            return new JsonResponse(array("playlists" => $formatted), 200);
         }
         private function sendRequest($access_token, $endpoint, $method = "GET", $parameters = array())
         {
