@@ -53,12 +53,9 @@ discord_api_connect:
 discord_api_get_access_token:
   path: /discord/get_access_token
   controller: App\Controller\DiscordAPIController::getAccessToken
-discord_api_send_direct:
-  path: /discord/send_direct_message
-  controller: App\Controller\DiscordAPIController::sendDirectMessageToRandomFriend
-discord_api_change_nickname:
-  path: /discord/change_nickname_on_discord
-  controller: App\Controller\DiscordAPIController::changeNicknameOnDiscord
+discord_api_send_channel:
+  path: /discord/send_channel_message
+  controller: App\Controller\DiscordAPIController::sendChannelMessage
 
 # AUTOMATION
 automation_add:

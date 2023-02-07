@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\RequestAPI;
 use App\Entity\UserService;
 use App\Repository\AutomationRepository;
 use App\Repository\AutomationActionRepository;
@@ -13,10 +14,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Encoder\JsonDecode;
 
 class DiscordAPIController extends AbstractController
 {
     private $access_token;
+    private RequestAPI $request_api;
 
     public function index(): Response
     {
@@ -30,7 +33,7 @@ class DiscordAPIController extends AbstractController
      */
     public function connect(ServiceRepository $service_repository)
     {
-        $redirect_uri = "";
+        $redirect_uri = "http://localhost:8000/discord/get_access_token";
         $service = $service_repository->findByName("discord");
         if (empty($service)) {
             return new JsonResponse(array("message" => "Discord: Service not found"), 404);
@@ -40,7 +43,7 @@ class DiscordAPIController extends AbstractController
         if (empty($identifiers)) {
             return new JsonResponse(array("message" => "Discord: Identifiers error"), 422);
         }
-        $client_id = $identifiers[0];
+        $client_id = "1070728516188000336"; //$identifiers[0];
         return $this->redirectToAutorisationLinka($client_id, $redirect_uri);
     }
 
@@ -51,7 +54,7 @@ class DiscordAPIController extends AbstractController
         $scope = array(
             "email", "guilds",
             "connections", "messages.read",
-            "identify"
+            "identify", "gdm.join", "bot"
         ); // uniquement les permissions qui ont fonctionné ensemble (todo: check si il y en a plus possible)
         $scope = implode(" ", $scope);
         // Compose the authorization url
@@ -63,7 +66,7 @@ class DiscordAPIController extends AbstractController
      * @Route("/discord/get_access_token", name="discord_api_get_access_token")
      */
 
-    public function getAccessToken(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
+    public function getAccessToken(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
     {
         // Get needed values
         if (empty($request->query->get("state"))) {
@@ -88,12 +91,13 @@ class DiscordAPIController extends AbstractController
         if (count($identifiers) != 2) {
             return new JsonResponse(array("message" => "Discord: Identifiers error"), 422);
         }
+        $user_id = 1;
         $client_id = $identifiers[0];
         $client_secret = $identifiers[1];
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://discord.com/api/oauth2/token");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "client_id=$client_id&client_secret=$client_secret&grant_type=authorization_code&code=$code&redirect_uri=$redirect_uri&scope=identify");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "client_id=$client_id&client_secret=$client_secret&grant_type=authorization_code&code=$code&redirect_uri=$redirect_uri");
         curl_setopt($ch, CURLOPT_POST, true);
         $headers = array();
         $headers[] = "Content-Type: application/x-www-form-urlencoded";
@@ -102,100 +106,91 @@ class DiscordAPIController extends AbstractController
         curl_close($ch);
         $this->access_token = json_decode($result);
         if (!isset(json_decode($result)->access_token)) {
-            return new JsonResponse("Spotify: Bad code to get access token", 400);
+            return new JsonResponse("Discord: Bad code to get access token", 400);
         }
-        return new JsonResponse(array("token" => json_decode($result)->access_token), 200);
+        // Put or edit datas in database
+        if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            $user_service = new UserService();
+            $user_service->setUserId($user_id);
+            $user_service->setServiceId($service->getId());
+            $user_service->setAccessToken(json_decode($result)->access_token);
+            $user_service->setRefreshToken(json_decode($result)->refresh_token);
+            $user_service_repository->add($user_service, true);
+        } else {
+            $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
+            $user_service->setAccessToken(json_decode($result)->access_token);
+            $user_service->setRefreshToken(json_decode($result)->refresh_token);
+            $user_service_repository->edit($user_service, true);
+        }
+
+        return new JsonResponse(array("token" => json_decode($result)), 200);
+    }
+
+    private function getChannelsAndGuildID(ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
+    {
+        $service = $service_repository->findByName("discord");
+        if (empty($service)) {
+            return new JsonResponse(array("message" => "Discord: Service not found"), 404);
+        }
+        $service = $service[0];
+        if (empty($user_service_repository->findByUserIdAndServiceId(1, $service->getId()))) {
+            return new JsonResponse(array("message" => "Discord: Access token not found"), 404);
+        }
+        $access_token = $user_service_repository->findByUserIdAndServiceId(1, $service->getId())[0]->getAccessToken();
+        // Récupération de la liste des guildes associées au bot
+        $guilds = $this->request_api->send($access_token, "https://discordapp.com/api/v6/users/@me/guilds", "GET", "");
+        $guilds = json_decode($guilds);
+
+        // Boucle sur les guildes pour récupérer les channels associés au bot
+        $channels = array();
+        foreach ($guilds as $guild) {
+            $response = $this->request_api->send($access_token, "https://discordapp.com/api/v6/guilds/{$guild->id}/channels", "GET", "");
+            $channels = array_merge($channels, json_decode($response));
+        }
     }
 
     /**
-     * @Route("/discord/send_direct_message", name="discord_api_send_direct")
+     * @Route("/discord/send_channel_message", name="discord_api_send_channel")
      */
 
-    // public function sendDirectMessageToRandomFriend(ServiceRepository $service_repository, $friendList)
-    // {
-
-    //     // Pick a random friend from the friend list
-    //     $randomFriend = $friendList[array_rand($friendList)];
-
-    //     // Build the URL for sending a direct message to the friend
-    //     $sendMessageUrl = 'https://discord.com/api/users/' . urlencode($randomFriend) . '/channels';
-
-    //     // Build the request data
-    //     $requestData = json_encode(array(
-    //         'recipient_id' => $randomFriend
-    //     ));
-
-    //     // Build the headers for the request
-    //     $headers = array(
-    //         'Authorization: Bearer ' . $accessToken,
-    //         'Content-Type: application/json'
-    //     );
-
-    //     // Send the request to create a new direct message channel with the friend
-    //     $curl = curl_init();
-    //     curl_setopt_array($curl, array(
-    //         CURLOPT_URL => $sendMessageUrl,
-    //         CURLOPT_POST => true,
-    //         CURLOPT_POSTFIELDS => $requestData,
-    //         CURLOPT_HTTPHEADER => $headers,
-    //         CURLOPT_RETURNTRANSFER => true
-    //     ));
-    //     $response = curl_exec($curl);
-    //     curl_close($curl);
-
-    //     // Decode the response
-    //     $responseData = json_decode($response, true);
-
-    //     // Get the ID of the direct message channel
-    //     $channelId = $responseData['id'];
-
-    //     // Build the URL for sending a message to the direct message channel
-    //     $sendMessageUrl = 'https://discord.com/api/channels/' . urlencode($channelId) . '/messages';
-
-    //     // Build the request data
-    //     $requestData = json_encode(array(
-    //         'content' => 'Hello, random friend!'
-    //     ));
-
-    //     // Send the request to send the message to the direct message channel
-    //     $curl = curl_init();
-    //     curl_setopt_array($curl, array(
-    //         CURLOPT_URL => $sendMessageUrl,
-    //         CURLOPT_POST => true,
-    //         CURLOPT_POSTFIELDS => $requestData,
-    //         CURLOPT_HTTPHEADER => $headers,
-    //         CURLOPT_RETURNTRANSFER => true
-    //     ));
-    //     $response = curl_exec($curl);
-    //     curl_close($curl);
-    // }
-
-    /**
-     * @Route("/discord/change_nickname_on_discord", name="discord_api_change_nickname")
-     */
-
-    public function changeNicknameOnDiscord(ServiceRepository $service_repository)
+    public function sendChannelMessage(ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
     {
-        // Définissez le nouveau pseudo désiré à mettre en argument quand on va recup un nom d'artiste ou autre par exemple.
-        $new_username = "Morvince'API";
-
         // Récupérez le jeton d'accès
-        $token = $this->access_token; // remplacer par le token d'accès et le recup avec la db
+        $service = $service_repository->findByName("discord");
+        if (empty($service)) {
+            return new JsonResponse(array("message" => "Discord: Service not found"), 404);
+        }
+        $service = $service[0];
+        if (empty($user_service_repository->findByUserIdAndServiceId(1, $service->getId()))) {
+            return new JsonResponse(array("message" => "Discord: Access token not found"), 404);
+        }
+        $access_token = $user_service_repository->findByUserIdAndServiceId(1, $service->getId())[0]->getAccessToken();
 
-        // Préparez la requête PATCH pour mettre à jour le pseudo
+        if (empty($this->request_api)) {
+            $this->request_api = new RequestAPI();
+        }
+        $result = $this->request_api->send($access_token, "https://discordapp.com/api/v6/users/@me", "GET", array());
+        $username = json_decode($result)->id;
+        $token = "MTA3MDcyODUxNjE4ODAwMDMzNg.GB_wSS.HbWsa0b9_lOinT7QKXQ071K0kv8fobKOYWVOyE";
+        // return new JsonResponse(json_decode($result)); // pour check si on peut recup d'autres infos sur le user
+
+        $channelID = "1056478509700222988";
+        $message = "<@" . $username . "> is listening that [enter song name] !";
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://discord.com/api/v6/users/@me",
+            CURLOPT_URL => "https://discordapp.com/api/v6/channels/$channelID/messages",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "PATCH",
-            CURLOPT_POSTFIELDS => "{\"username\":\"$new_username\"}",
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "{\"content\":\"$message\"}",
             CURLOPT_HTTPHEADER => array(
-                "Authorization: Bearer $token",
+                "Authorization: Bot $token",
                 "Content-Type: application/json"
             ),
         ));
@@ -210,5 +205,6 @@ class DiscordAPIController extends AbstractController
         } else {
             echo $response;
         }
+        return new JsonResponse(array("token" => json_decode($response)), 200);
     }
 }
