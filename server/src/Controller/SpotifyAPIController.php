@@ -173,6 +173,33 @@
             $user_service_repository->edit($user_service, true);
             return new JsonResponse(array("message" => "OK"), 200);
         }
+        /**
+         * @Route("/spotify/connected", name="spotify_api_connected")
+         */
+        public function isConnected(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
+        {// a changer pour lutiliser que via le server
+            header('Access-Control-Allow-Origin: *');
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->token)) {
+                return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
+            }
+            $token = $request_content->token;
+            if (empty($user_repository->findByToken($token))) {
+                return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
+            }
+            $user = $user_repository->findByToken($token)[0];
+            $user_id = $user->getId();
+            $service = $sevice_repository->findByName("spotify");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
+            }
+            $service = $service[0];
+            if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+                return new JsonResponse(array("connected" => false), 200);
+            }
+            return new JsonResponse(array("connected" => true), 200);
+        }
 
         /**
          * @Route("/spotify/search", name="spotify_api_search")

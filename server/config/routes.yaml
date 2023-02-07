@@ -18,9 +18,13 @@ spotify_api_get_access_token:
   controller: App\Controller\SpotifyAPIController::getAccessToken
   methods: [POST]
 spotify_api_refresh_access_token:
-  path: /spotify/refresh_access_token
-  controller: App\Controller\SpotifyAPIController::refreshAccessToken
-  methods: [POST]
+    path: /spotify/refresh_access_token
+    controller: App\Controller\SpotifyAPIController::refreshAccessToken
+    methods: [POST]
+spotify_api_connected:
+    path: /spotify/connected
+    controller: App\Controller\SpotifyAPIController::isConnected
+    methods: [POST]
 spotify_api_search:
   path: /spotify/search
   controller: App\Controller\SpotifyAPIController::search
@@ -83,9 +87,9 @@ automation_reaction_trigger:
   controller: App\Controller\AutomationActionController::triggerReaction
   methods: [POST]
 automation_reaction_do:
-  path: /automation/reaction/do
-  controller: App\Controller\AutomationActionController::doReaction
-  methods: [POST]
-automation_action_checks:
-  path: /automation/action/check
-  controller: App\Controller\AutomationActionController::check
+    path: /automation/reaction/do
+    controller: App\Controller\AutomationActionController::doReaction
+    methods: [POST]
+automation_action_check:
+    path: /automation/action/check
+    controller: App\Controller\AutomationActionController::check
