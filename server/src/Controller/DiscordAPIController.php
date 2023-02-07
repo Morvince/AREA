@@ -37,7 +37,6 @@ class DiscordAPIController extends AbstractController
         $client_id = $identifiers[0];
         return $this->redirectToAutorisationLinka($client_id, $redirect_uri);
     }
-
     private function redirectToAutorisationLinka($client_id, $redirect_uri)
     {
         // Set the state when the request is good
@@ -52,7 +51,6 @@ class DiscordAPIController extends AbstractController
         $authorization_url = "https://discord.com/api/oauth2/authorize?client_id=$client_id&response_type=code&redirect_uri=$redirect_uri&scope=$scope&state=$state";
         return $this->redirect($authorization_url);
     }
-
     /**
      * @Route("/discord/get_access_token", name="discord_api_get_access_token")
      */
@@ -111,13 +109,13 @@ class DiscordAPIController extends AbstractController
         return new JsonResponse(array("message" => "OK"), 200);
     }
 
+    // Action
     /**
      * @Route("/discord/action/check_username", name="discord_api_check_username")
      */
     public function isUsernameChanged(Request $request)
     {
         // Get needed values
-        echo "a";
         $request_content = json_decode($request->getContent());
         if (empty($request_content->new) || empty($request_content->old)) {
             return new JsonResponse(array("message" => "Discord: Missing field"), 400);
@@ -125,20 +123,17 @@ class DiscordAPIController extends AbstractController
         $old_username = $request_content->old->username;
         $new_username = $request_content->new->username;
         // Check if username have been changed
-
         if (strcmp($new_username, $old_username) === 0) {
             return new JsonResponse(array("message" => false), 200);
         }
         return new JsonResponse(array("message" => true), 200);
     }
-
     /**
      * @Route("/discord/action/check_username/get_parameters", name="discord_api_check_username_parameters")
      */
     public function getIsUsernameChangedParameters(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
     {
         // Get needed values
-        echo "a";
         $request_content = json_decode($request->getContent());
         if (empty($request_content->automation_action_id)) {
             return new JsonResponse(array("message" => "Discord: Missing field"), 400);
@@ -158,16 +153,13 @@ class DiscordAPIController extends AbstractController
             return new JsonResponse(array("message" => "Discord: Access token not found"), 404);
         }
         $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
-        echo "a";
         $result = $this->getUsername($access_token);
-        echo "b";
         $username = json_decode($result)->username;
         if (isset($username->code)) {
             return new JsonResponse(array("message" => $username->message), $username->code);
         }
-        return new JsonResponse($username, 200);
+        return new JsonResponse(array("username" => $username), 200);
     }
-
     private function getUsername($access_token)
     {
         if (empty($this->request_api)) {
@@ -201,6 +193,7 @@ class DiscordAPIController extends AbstractController
         }
     }
 
+    // Reaction
     /**
      * @Route("/discord/reaction/send_channel_message", name="discord_api_send_channel_message")
      */
