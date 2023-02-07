@@ -201,7 +201,7 @@ class DiscordAPIController extends AbstractController
 
         $result = $this->request_api->send($access_token, "https://discordapp.com/api/v6/users/@me", "GET", array());
         $username = json_decode($result)->id;
-        $token = $identifiers[2];
+        $bot_token = $identifiers[2];
         // return new JsonResponse(json_decode($result)); // pour check si on peut recup d'autres infos sur le user
 
         $channelID = "1056478509700222988";
@@ -220,7 +220,7 @@ class DiscordAPIController extends AbstractController
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => "{\"content\":\"$message\"}",
             CURLOPT_HTTPHEADER => array(
-                "Authorization: Bot $token",
+                "Authorization: Bot $bot_token",
                 "Content-Type: application/json"
             ),
         ));
