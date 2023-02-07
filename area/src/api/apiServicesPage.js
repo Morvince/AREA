@@ -8,3 +8,11 @@ const getAction = async () => {
 export const useGetAction = () => {
   return useMutation(getAction)
 }
+
+const addAutomation = async (data) => {
+  return await axios.post("/automation/add", JSON.stringify({token: sessionStorage.getItem("token")}))
+}
+
+export const useAddAutomation = () => {
+  return useMutation(addAutomation)
+}

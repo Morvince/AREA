@@ -2,14 +2,29 @@ import React, { useState } from 'react'
 import Draggable from 'react-draggable'
 import { RectangleBlock } from './blockElements'
 import MyContext from '../Context'
+import { useGetUserPlaylist } from '../../api/apiSpotify';
 
 const Block = (props) => {
   const [backgroundColor, setbackgroundColor] = useState(props.color)
   const [pos, setPos] = useState({ x: props.top, y: props.left })
   const { sharedData, setSharedData } = React.useContext(MyContext);
   const {linkedList, setLinkedList} = React.useContext(MyContext);
+  const userPlaylist = useGetUserPlaylist();
 
-  React.useEffect(() => {}, [sharedData]);
+  const [name, setName] = useState('');
+  const [desc, setDesc] = useState('');
+
+  React.useEffect(() => {
+    userPlaylist.mutate()
+  }, [sharedData]);
+
+  const handleChangeDesc = (event) => {
+    setName(event.target.value);
+  };
+
+  const handleChangeName = (event) => {
+    setDesc(event.target.value);
+  };
 
   const handleDrag = (e, data) => {
     var rect = e.target.getBoundingClientRect();
@@ -72,10 +87,26 @@ const Block = (props) => {
     }
   }
 
+  function renderInput() {
+    if (props.nbrBox === 2) {
+      return (
+        <div>
+          <input id="name" type="text" placeholder="Name" onChange={handleChangeName}/>
+          <input id="description" type="text" placeholder="Description" onChange={handleChangeDesc}/>
+        </div>
+      )
+    }
+  }
+
+  if (userPlaylist.isSuccess) {
+    // console.log(userPlaylist.data.data)
+  }
+
   return (
     <Draggable bounds='parent' onDrag={handleDrag} onStop={handleDragStop}>
       <RectangleBlock color={backgroundColor} top={pos.x} left={pos.y}>
         {props.name}
+        {renderInput()}
       </RectangleBlock>
     </Draggable>
   )

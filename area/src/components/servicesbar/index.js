@@ -17,7 +17,7 @@ const Servicesbar = () => {
 
   const services = [
     { nom: 'discord',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], nbrBox: [2,0]},
     { nom: 'instagram', nombre: 0, info: [], action: [], name: [], nbrBox: []},
     { nom: 'google',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
     { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
@@ -32,15 +32,9 @@ const Servicesbar = () => {
     } else {
       services[id].action.push(true);
     }
-    if (id == 0 && tmpServices.data.data.actions[i].name === "spotify") {
-      services[id].nbrBox.push(2);
-    } else {
-      services[id].nbrBox.push(0);
-    }
   }
 
   if (tmpServices.isSuccess) {
-    console.log(tmpServices.data.data.actions)
     for (let i = 0; i < tmpServices.data.data.actions.length; i++) {
       switch (tmpServices.data.data.actions[i].service) {
         case "discord":
@@ -65,7 +59,6 @@ const Servicesbar = () => {
           break;
       }
     }
-    console.log(services)
   }
 
   let t = 0;
