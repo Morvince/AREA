@@ -38,8 +38,10 @@ const Block = (props) => {
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id !== sharedData[i].index) {
         if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130 && rect.left > sharedData[i].left - 10 && rect.left < sharedData[i].left + 10) {
-          setbackgroundColor('red')
-          break;
+          if (sharedData[i].action === true) {
+            setbackgroundColor('red')
+            break;
+          }
         } else {
           setbackgroundColor(props.color)
         }
@@ -71,9 +73,11 @@ const Block = (props) => {
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id !== sharedData[i].index) {
         if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130 && rect.left > sharedData[i].left - 10 && rect.left < sharedData[i].left + 10) {
-          setbackgroundColor('red')
-          sharedData[props.id].above = getIdAboveMe(props.id)
-          break;
+          if (sharedData[i].action === true) {
+            setbackgroundColor('red')
+            sharedData[props.id].above = getIdAboveMe(props.id)
+            break;
+          }
         } else {
           setbackgroundColor(props.color)
           sharedData[props.id].above = getIdAboveMe(props.id)
