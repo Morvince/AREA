@@ -8,8 +8,14 @@ const Block = (props) => {
   const [backgroundColor, setbackgroundColor] = useState(props.color)
   const [pos, setPos] = useState({ x: props.top, y: props.left })
   const { sharedData, setSharedData } = React.useContext(MyContext);
-  const {linkedList, setLinkedList} = React.useContext(MyContext);
+  const { linkedList, setLinkedList } = React.useContext(MyContext);
   const userPlaylist = useGetUserPlaylist();
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(!open);
+  };
 
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
@@ -82,7 +88,7 @@ const Block = (props) => {
 
     for (var i = 0; i < linkedList.length; i++) {
       if (linkedList[i] === sharedData[props.id].above) {
-        linkedList.splice(i+1, 0, props.id)
+        linkedList.splice(i + 1, 0, props.id)
       }
     }
   }
@@ -91,15 +97,15 @@ const Block = (props) => {
     if (props.nbrBox === 2) {
       return (
         <div>
-          <input id="name" type="text" placeholder="Name" onChange={handleChangeName}/>
-          <input id="description" type="text" placeholder="Description" onChange={handleChangeDesc}/>
+          <input id="name" type="text" placeholder="Name" onChange={handleChangeName} />
+          <input id="description" type="text" placeholder="Description" onChange={handleChangeDesc} />
         </div>
       )
     }
   }
 
   if (userPlaylist.isSuccess) {
-    // console.log(userPlaylist.data.data)
+    console.log(userPlaylist.data.data)
   }
 
   return (
@@ -107,6 +113,19 @@ const Block = (props) => {
       <RectangleBlock color={backgroundColor} top={pos.x} left={pos.y}>
         {props.name}
         {renderInput()}
+        <div className="dropdown">
+          <button onClick={handleOpen}>Dropdown</button>
+          {open ? (
+            <ul className="menu">
+              <li className="menu-item">
+                <button>Menu 1</button>
+              </li>
+              <li className="menu-item">
+                <button>Menu 2</button>
+              </li>
+            </ul>
+          ) : null}
+        </div>
       </RectangleBlock>
     </Draggable>
   )
