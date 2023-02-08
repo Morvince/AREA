@@ -4,47 +4,36 @@ import Servicesbar from '../servicesbar'
 import Block from '../block'
 import MyContext from '../Context'
 import { useGetUserPlaylist } from '../../api/apiSpotify';
+import { useEditAutomation } from '../../api/apiServicesPage';
 
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = React.useState([]);
   const [ID, setID] = React.useState(0);
   const [linkedList, setLinkedList] = React.useState([]);
+  const [playlist, setPlaylist] = React.useState([]);
   const automationId = props.automationId;
   const userPlaylist = useGetUserPlaylist();
-  const [playlist, setPlaylist] = React.useState([]);
+  const editAutomation = useEditAutomation();
 
   React.useEffect(() => {
     userPlaylist.mutate()
     if (userPlaylist.isSuccess) {
       setPlaylist(userPlaylist.data.data);
-      console.log(playlist)
     }
   }, [sharedData]);
 
   function sendAutomation() {
-    // POST -> automation_id : INT
-    //              actions : array(
-    //                     [i] => array(
-    //                                 id => INT,
-    //                                 number => INT, (ordre dans la liste)
-    //                                 informations => array() : exemple = "name" : String, "playlist_id" : String, ...
-    //                             );
-    //                 );
-    //create this array
     var actions = [];
-    var i = [];
-    //iterate over the linked list
+    var i = {id: 0, number: 0, informations: {}};
+
     for (var j = 0; j < linkedList.length; j++) {
-      i.push(sharedData[j].dbId);
-      i.push(j);
-      i.push(sharedData[j].toSend);
+      i.id = sharedData[j].dbId;
+      i.number = j+1;
+      i.action = sharedData[j].toSend;
       actions.push(i);
-      i = [];
+      i = {id: 0, number: 0, informations: {}}
     }
-    console.log({
-      automation_id: automationId,
-      actions: actions
-    });
+    editAutomation.mutate({id: automationId, actions: actions})
   }
 
   return (
@@ -55,7 +44,7 @@ const PlayBox = (props) => {
         <MovableBox>
           {sharedData.map((info) => {
             return (
-              <Block key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox}/>
+              <Block key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} />
             )
           })}
         </MovableBox>
