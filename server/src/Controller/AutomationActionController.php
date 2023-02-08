@@ -151,7 +151,7 @@
             $parameters = array("automation_action_id" => $automation_action_id);
             $response = $this->sendRequest($url, $parameters);
             if (isset($response->code)) {
-                return new JsonResponse(array("message" => $response["message"]), $response["code"]);
+                return new JsonResponse(array("message" => $response->message), $response->code);
             }
             return new JsonResponse($response, 200);
         }
