@@ -28,3 +28,35 @@ const spotifyAccess = async (data) => {
 export const useSpotifyAccess = () => {
   return useMutation(spotifyAccess)
 }
+
+
+
+
+
+const discordConnected = async () => {
+  return await axios.post("/discord/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
+}
+
+export const useDiscordConnected = () => {
+  return useMutation(discordConnected)
+}
+
+const discordConnect = async (data) => {
+  return await axios.post("/discord/connect", data)
+}
+
+export const useDiscordConnect = () => {
+  return useMutation(discordConnect, {
+    onSuccess: (data) => {
+      window.location.replace(data.data.authorization_url)
+    }
+  })
+}
+
+const discordAccess = async (data) => {
+  return await axios.post("/discord/get_access_token", data)
+}
+
+export const useDiscordAccess = () => {
+  return useMutation(discordAccess)
+}
