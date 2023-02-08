@@ -72,7 +72,8 @@ const Servicesbar = () => {
         index: t,
         action: services[i].action[x],
         name: services[i].name[x],
-        nbrBox: services[i].nbrBox[x]
+        nbrBox: services[i].nbrBox[x],
+        dbID: tmpServices.data.data.actions[x].id,
       });
       t++;
     }
@@ -156,7 +157,7 @@ const Servicesbar = () => {
         <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
           {puzzleBlocktemps.map((info, index) => {
             return (
-              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox}/>
+              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} dbID={info.dbID}/>
             )
           })}
         </RectangleContener>

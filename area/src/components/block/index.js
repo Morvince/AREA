@@ -2,14 +2,13 @@ import React, { useState } from 'react'
 import Draggable from 'react-draggable'
 import { RectangleBlock } from './blockElements'
 import MyContext from '../Context'
-import { useGetUserPlaylist } from '../../api/apiSpotify';
 
 const Block = (props) => {
   const [backgroundColor, setbackgroundColor] = useState(props.color)
   const [pos, setPos] = useState({ x: props.top, y: props.left })
   const { sharedData, setSharedData } = React.useContext(MyContext);
   const { linkedList, setLinkedList } = React.useContext(MyContext);
-  const userPlaylist = useGetUserPlaylist();
+  const { playlist, setPlaylist } = React.useContext(MyContext);
 
   const [open, setOpen] = React.useState(false);
 
@@ -20,16 +19,18 @@ const Block = (props) => {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
 
+
   React.useEffect(() => {
-    userPlaylist.mutate()
   }, [sharedData]);
 
   const handleChangeDesc = (event) => {
     setName(event.target.value);
+    sharedData[props.id].toSend = { name: event.target.value, desc: desc, playlist_id: playlist.playlists[0].id }
   };
 
   const handleChangeName = (event) => {
     setDesc(event.target.value);
+    sharedData[props.id].toSend = { name: event.target.value, desc: desc, playlist_id: playlist.playlists[0].id }
   };
 
   const handleDrag = (e, data) => {
@@ -38,7 +39,7 @@ const Block = (props) => {
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id !== sharedData[i].index) {
         if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130 && rect.left > sharedData[i].left - 10 && rect.left < sharedData[i].left + 10) {
-          if (sharedData[i].action === true) {
+          if (props.action === false) {
             setbackgroundColor('red')
             break;
           }
@@ -73,7 +74,7 @@ const Block = (props) => {
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id !== sharedData[i].index) {
         if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130 && rect.left > sharedData[i].left - 10 && rect.left < sharedData[i].left + 10) {
-          if (sharedData[i].action === true) {
+          if (props.action === false) {
             setbackgroundColor('red')
             sharedData[props.id].above = getIdAboveMe(props.id)
             break;
@@ -108,28 +109,11 @@ const Block = (props) => {
     }
   }
 
-  if (userPlaylist.isSuccess) {
-    console.log(userPlaylist.data.data)
-  }
-
   return (
     <Draggable bounds='parent' onDrag={handleDrag} onStop={handleDragStop}>
       <RectangleBlock color={backgroundColor} top={pos.x} left={pos.y}>
         {props.name}
         {renderInput()}
-        <div className="dropdown">
-          <button onClick={handleOpen}>Dropdown</button>
-          {open ? (
-            <ul className="menu">
-              <li className="menu-item">
-                <button>Menu 1</button>
-              </li>
-              <li className="menu-item">
-                <button>Menu 2</button>
-              </li>
-            </ul>
-          ) : null}
-        </div>
       </RectangleBlock>
     </Draggable>
   )
