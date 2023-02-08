@@ -42,10 +42,11 @@
             }
             $client_id = $identifiers[0];
             // Compose the authorization scope
-            $scope = array( "email", "guilds",
-                            "connections", "messages.read",
-                            "identify"
-                        );
+            $scope = array(
+                "email", "guilds",
+                "connections", "messages.read",
+                "identify", "gdm.join", "bot"
+            );
             $scope = implode(" ", $scope);
             // Set the state when the request is good
             $state = "17";
@@ -122,7 +123,7 @@
          * @Route("/discord/refresh_access_token", name="discord_api_refresh_access_token")
          */
         public function refreshAccessToken(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
-        {// a changer pour lutiliser que via le server
+        { // a changer pour lutiliser que via le server
             // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->user_id)) {
@@ -156,7 +157,7 @@
             $headers[] = "Content-Type: application/x-www-form-urlencoded";
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             $result = curl_exec($ch);
-            curl_close ($ch);
+            curl_close($ch);
             if (!isset(json_decode($result)->access_token)) {
                 $user_service_repository->remove($user_service);
                 return new JsonResponse(array("message" => "Discord: Expired refresh token"), 400);
@@ -170,7 +171,7 @@
          * @Route("/discord/connected", name="discord_api_connected")
          */
         public function isConnected(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
-        {// a changer pour lutiliser que via le server
+        { // a changer pour lutiliser que via le server
             header('Access-Control-Allow-Origin: *');
             // Get needed values
             $request_content = json_decode($request->getContent());
@@ -198,7 +199,7 @@
             if (empty($this->request_api)) {
                 $this->request_api = new RequestAPI();
             }
-            $response = $this->request_api->send($access_token, self::API_URL.$endpoint, $method, $parameters);
+            $response = $this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters);
             if (isset(json_decode($response)->error)) {
                 switch (json_decode($response)->error->status) {
                     case 400:
