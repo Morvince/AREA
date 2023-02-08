@@ -32,7 +32,7 @@
         private $number;
 
         /**
-         * @ORM\Column(type="string", length=512)
+         * @ORM\Column(type="json")
          */
         private $informations;
 

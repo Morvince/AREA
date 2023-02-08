@@ -62,7 +62,7 @@
             if ($code > 200) {
                 curl_close($ch);
                 if (empty(json_decode($response)->message)) {
-                    return (json_encode(array("message" => "Error: External", "code" => $code)));
+                    return (json_encode(array("message" => array("error" => json_decode($response)), "code" => $code)));
                 }
                 $new_response = array("message" => json_decode($response)->message, "code" => $code);
                 return (json_encode($new_response));
