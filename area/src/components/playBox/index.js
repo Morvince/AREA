@@ -29,7 +29,7 @@ const PlayBox = (props) => {
     for (var j = 0; j < linkedList.length; j++) {
       i.id = sharedData[j].dbId;
       i.number = j+1;
-      i.action = sharedData[j].toSend;
+      i.informations = sharedData[j].toSend;
       actions.push(i);
       i = {id: 0, number: 0, informations: {}}
     }
