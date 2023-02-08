@@ -46,8 +46,8 @@ const Sign = () => {
         {(slideForm === 0 || slideForm === 2) && handleLogin.isError ? <ErrorMessage color={black}>{handleLogin.error.response.data.message}</ErrorMessage> :
           slideForm === 1 && handleRegister.isError ? <ErrorMessage color={white}>{handleRegister.error.response.data.message}</ErrorMessage> : null}
       </div>
-      {handleLogin.isSuccess && <Navigate to="/home" replace={true}/>}
-      {handleRegister.isSuccess && <Navigate to="/home" replace={true}/>}
+      {handleLogin.isSuccess && <Navigate to="/" replace={true}/>}
+      {handleRegister.isSuccess && <Navigate to="/" replace={true}/>}
     </SignPage>
   )
 }

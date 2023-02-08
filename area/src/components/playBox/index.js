@@ -5,6 +5,7 @@ import Block from '../block'
 import MyContext from '../Context'
 import { useGetUserPlaylist } from '../../api/apiSpotify';
 import { useEditAutomation } from '../../api/apiServicesPage';
+import { useNavigate } from 'react-router-dom';
 
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = React.useState([]);
@@ -14,6 +15,7 @@ const PlayBox = (props) => {
   const automationId = props.automationId;
   const userPlaylist = useGetUserPlaylist();
   const editAutomation = useEditAutomation();
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     userPlaylist.mutate()
@@ -34,6 +36,9 @@ const PlayBox = (props) => {
       i = {id: 0, number: 0, informations: {}}
     }
     editAutomation.mutate({id: automationId, actions: actions})
+    if (editAutomation.isSuccess) {
+      navigate('/', { replace: true });
+    }
   }
 
   return (
