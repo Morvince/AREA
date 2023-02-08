@@ -7,9 +7,31 @@ const Block = (props) => {
   const [backgroundColor, setbackgroundColor] = useState(props.color)
   const [pos, setPos] = useState({ x: props.top, y: props.left })
   const { sharedData, setSharedData } = React.useContext(MyContext);
-  const {linkedList, setLinkedList} = React.useContext(MyContext);
+  const { linkedList, setLinkedList } = React.useContext(MyContext);
+  const { playlist, setPlaylist } = React.useContext(MyContext);
 
-  React.useEffect(() => {}, [sharedData]);
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(!open);
+  };
+
+  const [name, setName] = useState('');
+  const [desc, setDesc] = useState('');
+
+
+  React.useEffect(() => {
+  }, [sharedData]);
+
+  const handleChangeDesc = (event) => {
+    setName(event.target.value);
+    sharedData[props.id].toSend = { name: event.target.value, desc: desc, playlist_id: playlist.playlists[0].id }
+  };
+
+  const handleChangeName = (event) => {
+    setDesc(event.target.value);
+    sharedData[props.id].toSend = { name: event.target.value, desc: desc, playlist_id: playlist.playlists[0].id }
+  };
 
   const handleDrag = (e, data) => {
     var rect = e.target.getBoundingClientRect();
@@ -17,8 +39,10 @@ const Block = (props) => {
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id !== sharedData[i].index) {
         if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130 && rect.left > sharedData[i].left - 10 && rect.left < sharedData[i].left + 10) {
-          setbackgroundColor('red')
-          break;
+          if (props.action === false) {
+            setbackgroundColor('red')
+            break;
+          }
         } else {
           setbackgroundColor(props.color)
         }
@@ -50,9 +74,11 @@ const Block = (props) => {
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id !== sharedData[i].index) {
         if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130 && rect.left > sharedData[i].left - 10 && rect.left < sharedData[i].left + 10) {
-          setbackgroundColor('red')
-          sharedData[props.id].above = getIdAboveMe(props.id)
-          break;
+          if (props.action === false) {
+            setbackgroundColor('red')
+            sharedData[props.id].above = getIdAboveMe(props.id)
+            break;
+          }
         } else {
           setbackgroundColor(props.color)
           sharedData[props.id].above = getIdAboveMe(props.id)
@@ -67,14 +93,28 @@ const Block = (props) => {
 
     for (var i = 0; i < linkedList.length; i++) {
       if (linkedList[i] === sharedData[props.id].above) {
-        linkedList.splice(i+1, 0, props.id)
+        linkedList.splice(i + 1, 0, props.id)
       }
+    }
+  }
+
+  function renderInput() {
+    if (props.nbrBox === 2) {
+      return (
+        <div>
+          <input id="name" type="text" placeholder="Name" onChange={handleChangeName} />
+          <input id="description" type="text" placeholder="Description" onChange={handleChangeDesc} />
+        </div>
+      )
     }
   }
 
   return (
     <Draggable bounds='parent' onDrag={handleDrag} onStop={handleDragStop}>
-      <RectangleBlock color={backgroundColor} top={pos.x} left={pos.y} />
+      <RectangleBlock color={backgroundColor} top={pos.x} left={pos.y}>
+        {props.name}
+        {renderInput()}
+      </RectangleBlock>
     </Draggable>
   )
 }

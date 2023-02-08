@@ -9,4 +9,8 @@ export const RectangleBlock = styled.div`
     background: ${props => props.color};
     border-radius: 25px;
     box-shadow: 5px 5px 1px 0 #373b48;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;

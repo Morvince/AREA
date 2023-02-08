@@ -8,7 +8,7 @@ const ButtonBox = (props) => {
   const [pos, setPos] = useState({ x: props.top, y: props.left })
   const { sharedData, setSharedData } = React.useContext(MyContext);
   const { ID, setID } = React.useContext(MyContext);
-  const { linkedList, setLinkedList } = React.useContext(MyContext);
+  const { linkedList } = React.useContext(MyContext);
 
   const handleDrag = (e, data) => {
     if (data.x > 300) {
@@ -32,7 +32,7 @@ const ButtonBox = (props) => {
         }
         linkedList.push(ID)
       }
-      setSharedData(sharedData => [...sharedData, { service: props.service, index: ID, color: props.color, top: rect.top-80, left: rect.left-150, action: props.action, above: null}])
+      setSharedData(sharedData => [...sharedData, { service: props.service, index: ID, color: props.color, top: rect.top-80, left: rect.left-150, action: props.action, above: null, name: props.name, nbrBox: props.nbrBox, dbId: props.dbID, toSend: []}])
       setID(ID + 1);
     }
     setbackgroundColor(props.color)
@@ -44,7 +44,9 @@ const ButtonBox = (props) => {
       onStop={handleDragStop}
       position={{ x: 0, y: 0 }}
     >
-      <Rectangle color={backgroundColor} top={pos.x} left={pos.y} />
+      <Rectangle color={backgroundColor} top={pos.x} left={pos.y}>
+        {props.name}
+      </Rectangle>
     </Draggable>
   )
 }
