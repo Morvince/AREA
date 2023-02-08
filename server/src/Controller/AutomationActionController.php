@@ -19,7 +19,7 @@
          * @Route("/automation/action/check", name="automation_action_check")
          */
         public function check(ActionRepository $action_repository, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
-        {// check si une des erreurs de requete est un bad token pour le refresh
+        { // check si une des erreurs de requete est un bad token pour le refresh
             $old_parameters = array();
             while (true) {
                 foreach ($automation_action_repository->findAll() as $automation_action) {
@@ -38,9 +38,9 @@
                     if (empty($service)) {
                         continue;
                     }
-                    $url = "http://localhost:8000/".$service->getName()."/".$action->getType()."/".$action->getIdentifier();
+                    $url = "http://localhost:8000/" . $service->getName() . "/" . $action->getType() . "/" . $action->getIdentifier();
                     // Request to get parameters of the action
-                    $parameters = json_decode($this->sendRequest($url."/get_parameters", array("automation_action_id" => $automation_action_id)));
+                    $parameters = json_decode($this->sendRequest($url . "/get_parameters", array("automation_action_id" => $automation_action_id)));
                     if (isset($parameters->code)) {
                         if (str_contains($parameters->message, "Bad or expired token")) {
                             $this->refreshAccessToken($automation_action, $service, $automation_repository, $user_service_repository);
@@ -70,7 +70,7 @@
                         }
                     }
                 }
-                sleep(60);
+                sleep(10);
             }
         }
         private function refreshAccessToken($automation_action, $service, $automation_repository, $user_service_repository)
@@ -80,7 +80,7 @@
             if (empty($automation)) {
                 return;
             }
-            $response = $this->sendRequest("http://localhost:8000/".$service->getName()."/refresh_access_token", array("user_id" => $automation->getUserId()));
+            $response = $this->sendRequest("http://localhost:8000/" . $service->getName() . "/refresh_access_token", array("user_id" => $automation->getUserId()));
             if (isset(json_decode($response)->code)) {
                 if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
                     return;
@@ -145,7 +145,7 @@
                 return new JsonResponse(array("message" => "AutomationAction: Service not found"), 404);
             }
             $service = $service_repository->find($service_id);
-            $url = "http://localhost:8000/".$service->getName()."/".$action->getType()."/".$action->getIdentifier();
+            $url = "http://localhost:8000/" . $service->getName() . "/" . $action->getType() . "/" . $action->getIdentifier();
             // Post request to the action url
             $parameters = array("automation_action_id" => $automation_action_id);
             $response = $this->sendRequest($url, $parameters);
