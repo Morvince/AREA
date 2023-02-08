@@ -21,6 +21,23 @@ services:
     depends_on:
       - areadb
 
+  tools:
+    build:
+      context: ./server
+      dockerfile: Dockerfile-symfony
+    image: area_symfony:latest
+    container_name: ${CONTAINER_NAME_PREFIX}tools
+    restart: unless-stopped
+    volumes:
+      - ./server:/app/server/
+    environment:
+      DATABASE_URL: mysql://root:${MARIADB_ROOT_PASSWORD}@areadb:3306/${MARIADB_DATABASE}
+    networks:
+      - areadb_network
+      - web_network
+    depends_on:
+      - areadb
+
   client_web:
     build:
       context: ./area
