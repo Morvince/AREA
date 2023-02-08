@@ -38,7 +38,7 @@
                     if (empty($service)) {
                         continue;
                     }
-                    $url = "http://localhost:8000/" . $service->getName() . "/" . $action->getType() . "/" . $action->getIdentifier();
+                    $url = "tools:8000/" . $service->getName() . "/" . $action->getType() . "/" . $action->getIdentifier();
                     // Request to get parameters of the action
                     $parameters = json_decode($this->sendRequest($url . "/get_parameters", array("automation_action_id" => $automation_action_id)));
                     if (isset($parameters->code)) {
@@ -70,7 +70,7 @@
                         }
                     }
                 }
-                sleep(10);
+                sleep(60);
             }
         }
         private function refreshAccessToken($automation_action, $service, $automation_repository, $user_service_repository)
@@ -80,7 +80,7 @@
             if (empty($automation)) {
                 return;
             }
-            $response = $this->sendRequest("http://localhost:8000/" . $service->getName() . "/refresh_access_token", array("user_id" => $automation->getUserId()));
+            $response = $this->sendRequest("tools:8000/" . $service->getName() . "/refresh_access_token", array("user_id" => $automation->getUserId()));
             if (isset(json_decode($response)->code)) {
                 if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
                     return;
@@ -111,7 +111,7 @@
             }
             $automation_reactions = $automation_action_repository->findAutomationReactions($automation_id);
             foreach ($automation_reactions as $automation_reaction) {
-                $url = "http://localhost:8000/automation/reaction/do";
+                $url = "tools:8000/automation/reaction/do";
                 $parameters = array("automation_action_id" => $automation_reaction->getId());
                 $response = $this->sendRequest($url, $parameters);
                 if (isset(json_decode($response)->code)) {
@@ -145,7 +145,7 @@
                 return new JsonResponse(array("message" => "AutomationAction: Service not found"), 404);
             }
             $service = $service_repository->find($service_id);
-            $url = "http://localhost:8000/" . $service->getName() . "/" . $action->getType() . "/" . $action->getIdentifier();
+            $url = "tools:8000/" . $service->getName() . "/" . $action->getType() . "/" . $action->getIdentifier();
             // Post request to the action url
             $parameters = array("automation_action_id" => $automation_action_id);
             $response = $this->sendRequest($url, $parameters);

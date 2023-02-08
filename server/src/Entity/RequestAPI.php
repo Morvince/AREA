@@ -15,7 +15,7 @@
             $headers = array(
                 "Accept: application/json",
                 "Content-Type: application/json",
-                "Authorization: Bearer $access_token" //"Authorization: Basic ".base64_encode($clientId.":".$clientSecret)
+                "Authorization: Bearer $access_token"
             );
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -39,10 +39,10 @@
             $response = curl_exec($ch);
             if (curl_error($ch)) {
                 curl_close($ch);
-                return json_encode(array("message" => json_decode($response)->error->message, "code" => json_decode($response)->error->status));
+                return (json_encode(array("message" => json_decode($response)->error->message, "code" => json_decode($response)->error->status)));
             }
             curl_close($ch);
-            return $response;
+            return ($response);
         }
         public function sendRoute($url, $parameters)
         {
@@ -61,6 +61,9 @@
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if ($code > 200) {
                 curl_close($ch);
+                if (empty(json_decode($response)->message)) {
+                    return (json_encode(array("message" => "Error: External", "code" => $code)));
+                }
                 $new_response = array("message" => json_decode($response)->message, "code" => $code);
                 return (json_encode($new_response));
             }

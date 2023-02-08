@@ -265,6 +265,9 @@
             if (isset(json_decode($response)->code)) {
                 return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
             }
+            if (empty(json_decode($response)->items)) {
+                return new JsonResponse(array("message" => $response), 500);
+            }
             $response = json_decode($response);
             $formatted = array();
             foreach ($response->items as $item) {
