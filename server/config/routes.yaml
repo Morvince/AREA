@@ -68,6 +68,12 @@ discord_api_check_username_parameters:
 discord_api_send_channel_message:
   path: /discord/reaction/send_channel_message
   controller: App\Controller\DiscordAPIController::sendChannelMessage
+discord_api_check_user_join:
+  path: /discord/action/check_user_join
+  controller: App\Controller\DiscordAPIController::isUserJoined
+discord_api_check_user_join_parameters:
+  path: /discord/action/check_user_join/get_parameters
+  controller: App\Controller\DiscordAPIController::getIsUserJoinParameters
 
 # AUTOMATION
 automation_add:

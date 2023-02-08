@@ -170,6 +170,79 @@ class DiscordAPIController extends AbstractController
         return $result;
     }
 
+    /**
+     * @Route("/discord/action/check_user_join", name="discord_api_check_user_join")
+     */
+    public function isUserJoined(Request $request)
+    {
+        // Get needed values
+        $request_content = json_decode($request->getContent());
+        if (empty($request_content->new) || empty($request_content->old)) {
+            return new JsonResponse(array("message" => "Discord: Missing field"), 400);
+        }
+        $old_users = $request_content->old->users->items;
+        $new_users = $request_content->new->users->items;
+        // Check if user join a server
+        foreach ($new_users as $new_user) {
+            $found = false;
+            foreach ($old_users as $old_user) {
+                if (strcmp($new_user->users->id, $old_user->users->id) === 0) {
+                    $found = true;
+                    break (1);
+                }
+            }
+            if ($found === false) {
+                return new JsonResponse(array("message" => true), 200);
+            }
+        }
+        return new JsonResponse(array("message" => true), 200);
+    }
+
+    /**
+     * @Route("/discord/action/check_user_join/get_parameters", name="discord_api_check_user_join_parameters")
+     */
+    public function getIsUserJoinParameters(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
+    {
+        // Get needed values
+        $request_content = json_decode($request->getContent());
+        if (empty($request_content->automation_action_id)) {
+            return new JsonResponse(array("message" => "Discord: Missing field"), 400);
+        }
+        $automation_action_id = $request_content->automation_action_id;
+        $automation_action = $automation_action_repository->find($automation_action_id);
+        if (empty($automation_action)) {
+            return new JsonResponse(array("message" => "Discord: automation_action_id not found"), 404);
+        }
+        $service = $service_repository->findByName("discord");
+        if (empty($service)) {
+            return new JsonResponse(array("message" => "Discord: Service not found"), 404);
+        }
+        $service = $service[0];
+        $automation = $automation_repository->find($automation_action->getAutomationId());
+        if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+            return new JsonResponse(array("message" => "Discord: Access token not found"), 404);
+        }
+        $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
+        $informations = json_decode($automation_action->getInformations());
+        if (empty($informations->guild_id)) {
+            return new JsonResponse(array("message" => "Discord: Guild ID not found"), 404);
+        }
+        // potentiellement faire avec le bot token si il n'y a pas de résultat avec le access token
+        $user_list = json_decode($this->getUserList($access_token, $informations->guild_id));
+        if (isset($user_list->code)) {
+            return new JsonResponse(array("message" => $user_list->message), $user_list->code);
+        }
+        return new JsonResponse(array("user_list" => $user_list), 200);
+    }
+    private function getUserList($access_token, $guild_id)
+    {
+        if (empty($this->request_api)) {
+            $this->request_api = new RequestAPI();
+        }
+        $user_list = $this->request_api->send($access_token, "https://discordapp.com/api/guilds/$guild_id/members", "GET", array());
+        return $user_list;
+    }
+
     private function getChannelsAndGuildID(ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
     {
         $service = $service_repository->findByName("discord");
