@@ -4,7 +4,7 @@
 
 ## Stack [MSPR]
 
-![Symfony](https://img.shields.io/badge/Symfony-%3E%3D5.2-brightgreen.svg)](https://symfony.com)
+[![Symfony](https://img.shields.io/badge/Symfony-%3E%3D5.2-brightgreen.svg)](https://symfony.com)
 ![PHP](https://img.shields.io/badge/PHP-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white)
 ![ReactJS](https://img.shields.io/badge/ReactJS-%2320232A.svg?style=for-the-badge&logo=react&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-%232496ED.svg?style=for-the-badge&logo=docker&logoColor=white)
