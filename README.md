@@ -16,15 +16,7 @@ AREA is a project that aims to be able to connect different services in order to
 
 ## Services
 
-<img alt="Spotify logo" src="https://cdn.svgporn.com/logos/spotify.svg" width="50">
-
-<img alt="Discord logo" src="https://cdn.svgporn.com/logos/discord.svg" width="50">
-
-<img alt="Instagram logo" src="https://cdn.svgporn.com/logos/instagram.svg" width="50">
-
-<img alt="Twitter logo" src="https://cdn.svgporn.com/logos/twitter.svg" width="50">
-
-<img alt="OpenAI logo" src="https://cdn.svgporn.com/logos/openai.svg" width="50">
+<img alt="Spotify logo" src="https://cdn.svgporn.com/logos/spotify.svg" width="50"> <img alt="Discord logo" src="https://cdn.svgporn.com/logos/discord.svg" width="50"> <img alt="Instagram logo" src="https://cdn.svgporn.com/logos/instagram.svg" width="50"> <img alt="Twitter logo" src="https://cdn.svgporn.com/logos/twitter.svg" width="50"> <img alt="OpenAI logo" src="https://cdn.svgporn.com/logos/openai.svg" width="50">
 
 ====
 
