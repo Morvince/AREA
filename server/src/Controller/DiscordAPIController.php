@@ -166,6 +166,33 @@
             $user_service_repository->add($user_service, true);
             return new JsonResponse(array("message" => "OK"), 200);
         }
+        /**
+         * @Route("/discord/connected", name="discord_api_connected")
+         */
+        public function isConnected(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
+        {// a changer pour lutiliser que via le server
+            header('Access-Control-Allow-Origin: *');
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->token)) {
+                return new JsonResponse(array("message" => "Discord: Missing field"), 400);
+            }
+            $token = $request_content->token;
+            if (empty($user_repository->findByToken($token))) {
+                return new JsonResponse(array("message" => "Discord: Bad auth token"), 400);
+            }
+            $user = $user_repository->findByToken($token)[0];
+            $user_id = $user->getId();
+            $service = $sevice_repository->findByName("discord");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Discord: Service not found"), 404);
+            }
+            $service = $service[0];
+            if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+                return new JsonResponse(array("connected" => false), 200);
+            }
+            return new JsonResponse(array("connected" => true), 200);
+        }
         private function sendRequest($access_token, $endpoint, $method = "GET", $parameters = array())
         {
             if (empty($this->request_api)) {
@@ -267,8 +294,8 @@
             if (empty($request_content->new) || empty($request_content->old)) {
                 return new JsonResponse(array("message" => "Discord: Missing field"), 400);
             }
-            $old_users = $request_content->old->users->items;
-            $new_users = $request_content->new->users->items;
+            $old_users = $request_content->old->users;
+            $new_users = $request_content->new->users;
             // Check if user join a server
             foreach ($new_users as $new_user) {
                 $found = false;
