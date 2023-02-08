@@ -65,7 +65,7 @@
         {
             header('Access-Control-Allow-Origin: *');
             // Get needed values
-            $request_content = json_decode($request->getContent(), true);
+            $request_content = json_decode($request->getContent());
             if (empty($request_content->automation_id)) {
                 return new JsonResponse(array("message" => "Automation: Missing field"), 400);
             }
