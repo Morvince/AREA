@@ -36,6 +36,11 @@
          */
         private $identifier;
 
+        /**
+         * @ORM\Column(type="json")
+         */
+        private $fields;
+
         // Getter
         public function getId()
         {
@@ -57,6 +62,10 @@
         {
             return $this->identifier;
         }
+        public function getFields()
+        {
+            return json_decode($this->fields);
+        }
 
         // Setter
         public function setServiceId(int $service_id)
@@ -77,6 +86,11 @@
         public function setIdentifier(string $identifier)
         {
             $this->identifier = $identifier;
+            return $this;
+        }
+        public function setFields(string $fields)
+        {
+            $this->fields = $fields;
             return $this;
         }
     }

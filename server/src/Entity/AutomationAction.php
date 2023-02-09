@@ -55,7 +55,7 @@
         }
         public function getInformations()
         {
-            return $this->informations;
+            return json_decode($this->informations);
         }
 
         // Setter

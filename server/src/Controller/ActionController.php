@@ -27,7 +27,7 @@
                 if (empty($service)) {
                     continue;
                 }
-                array_push($formatted, array("id" => $action->getId(), "name" => $action->getName(), "service" => $service->getName(), "type" => $action->getType()));
+                array_push($formatted, array("id" => $action->getId(), "name" => $action->getName(), "service" => $service->getName(), "type" => $action->getType(), "fields" => array()));
             }
             return new JsonResponse(array("actions" => $formatted), 200);
         }
