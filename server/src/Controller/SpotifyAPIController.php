@@ -428,26 +428,12 @@
             if (!empty($informations["name"])) {
                 $name = $informations["name"];
             }
-            $public = $playlist->public;
-            if (!empty($informations["public"])) {
-                switch ($informations["public"]) {
-                    case "false":
-                        $public = false;
-                        break;
-                    case "true":
-                        $public = true;
-                        break;
-                    default:
-                        break;
-                }
-            }
             $description = $playlist->description;
             if (!empty($informations["description"])) {
                 $description = $informations["description"];
             }
             $parameters = array(
                 "name" => $name,
-                "public" => $public,
                 "description" => $description
             );
             // Request to change playlist details
