@@ -102,7 +102,6 @@ export const Button_without_bg = styled(LinkR)`
     position: absolute;
     color: black;
     display: inline-block;
-    background-color: grey;
     text-align: center;
     line-height: 25px;
     font-size: 20px;
