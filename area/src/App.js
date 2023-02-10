@@ -6,6 +6,7 @@ import Sign from './pages/Sign';
 import LandingPage from './pages/Landing';
 import Settings from './pages/Settings';
 import ConnectServices from './pages/ConnectServices';
+import Login from './pages/Login';
 
 const PageNotFound = () => {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Routes>
         <Route exact path='/' element={<LandingPage/>}/>
         <Route exact path='/sign' element={<Sign/>}/>
+        <Route exact path='/login' element={<Login/>}/>
         <Route element={<PrivateRoutes/>}>
           <Route exact path='/home' element={<Home/>}/>
           <Route exact path='/settings' element={<Settings/>} />
