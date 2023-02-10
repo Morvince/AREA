@@ -18,8 +18,8 @@
         /**
          * @Route("/automation/action/check", name="automation_action_check")
          */
-        public function check(ActionRepository $action_repository, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
-        { // check si une des erreurs de requete est un bad token pour le refresh
+        public function check(Request $request, ActionRepository $action_repository, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
+        {
             $old_parameters = array();
             while (true) {
                 foreach ($automation_action_repository->findAll() as $automation_action) {
@@ -60,17 +60,19 @@
                         }
                         continue;
                     }
+                    // return new JsonResponse(array("reponse" => $response, "old" => $old_parameters, "new" => $parameters));
                     $old_parameters[$automation_action_id] = $parameters;
                     // Trigger all linked reactions
                     if ($response->message === true) {
                         $parameters = array("automation_action_id" => $automation_action_id);
                         $response = $this->sendRequest("http://localhost:8000/automation/reaction/trigger", $parameters);
+                        return new JsonResponse($response);
                         if (isset($response->code)) {
                             continue;
                         }
                     }
                 }
-                sleep(60);
+                sleep(10);
             }
         }
         private function refreshAccessToken($automation_action, $service, $automation_repository, $user_service_repository)
@@ -81,7 +83,7 @@
                 return;
             }
             $response = $this->sendRequest("http://localhost:8000/" . $service->getName() . "/refresh_access_token", array("user_id" => $automation->getUserId()));
-            if (isset(json_decode($response)->code)) {
+            if (isset($response->code)) {
                 if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
                     return;
                 }
@@ -115,8 +117,8 @@
                 $parameters = array("automation_action_id" => $automation_reaction->getId());
                 $response = $this->sendRequest($url, $parameters);
                 return new JsonResponse($response);
-                if (isset(json_decode($response)->code)) {
-                    return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
+                if (isset($response->code)) {
+                    return new JsonResponse(array("message" => $response->message), $response->code);
                 }
             }
             return new JsonResponse(array("message" => "OK"), 200);
@@ -125,7 +127,7 @@
          * @Route("/automation/reaction/do", name="automation_reaction_do")
          */
         public function doReaction(Request $request, ActionRepository $action_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
-        {
+        {//boucle inf crash container server ici donc a la request du trigger
             // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->automation_action_id)) {
