@@ -55,7 +55,7 @@ export const Text = styled.div`
     font-weight: ${props => props.fontweight};
 `;
 
-export const Button_with_bg = styled(LinkR)`
+export const Button_with_bg1 = styled(LinkR)`
     position: absolute;
     display: inline-block;
     text-align: center;
@@ -76,10 +76,33 @@ export const Button_with_bg = styled(LinkR)`
     }
 `;
 
+export const Button_with_bg2 = styled(LinkR)`
+    position: absolute;
+    display: inline-block;
+    text-align: center;
+    font-size: 30px;
+    line-height: 75px;
+    color: white;
+    background-color : #560bad;
+    height: ${props => props.height};
+    width: ${props => props.width};
+    top: ${props => props.top};
+    left: ${props => props.left};
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        background: #b5179e;
+        color: white;
+    }
+`;
+
 export const Button_without_bg = styled(LinkR)`
     position: absolute;
     color: black;
     display: inline-block;
+    background-color: grey;
     text-align: center;
     line-height: 25px;
     font-size: 20px;
