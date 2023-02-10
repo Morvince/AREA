@@ -15,7 +15,8 @@ RUN curl -sSk https://getcomposer.org/installer | php -- --disable-tls && \
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install pdo pdo_mysql gd opcache intl zip calendar dom mbstring zip gd xsl
 RUN pecl install apcu && docker-php-ext-enable apcu
+RUN composer require symfony/orm-pack && composer require --dev symfony/maker-bundle && composer require doctrine/doctrine-bundle
 
 WORKDIR /var/www/server/
-
-RUN chmod 777 /var/wwww/server/var/log
+COPY . .
+RUN composer install

@@ -10,7 +10,6 @@ services:
     container_name: ${CONTAINER_NAME_PREFIX}server
     volumes:
         - ./vhosts:/etc/apache2/sites-enabled
-        - ./server:/var/www/server
     restart: unless-stopped
     ports:
       - 8080:80
