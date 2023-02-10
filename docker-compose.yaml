@@ -8,11 +8,12 @@ services:
       dockerfile: Dockerfile-symfony
     image: area_symfony:latest
     container_name: ${CONTAINER_NAME_PREFIX}server
-    restart: unless-stopped
     volumes:
-      - ./server:/app/server/
+        - ./vhosts:/etc/apache2/sites-enabled
+        - ./server:/var/www/server
+    restart: unless-stopped
     ports:
-      - 8080:8000
+      - 8080:80
     environment:
       DATABASE_URL: mysql://root:${MARIADB_ROOT_PASSWORD}@areadb:3306/${MARIADB_DATABASE}
     networks:

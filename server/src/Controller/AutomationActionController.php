@@ -38,7 +38,7 @@
                     if (empty($service)) {
                         continue;
                     }
-                    $url = "http://localhost:8000/" . $service->getName() . "/" . $action->getType() . "/" . $action->getIdentifier();
+                    $url = "http://localhost/" . $service->getName() . "/" . $action->getType() . "/" . $action->getIdentifier();
                     // Request to get parameters of the action
                     $parameters = $this->sendRequest($url . "/get_parameters", array("automation_action_id" => $automation_action_id));
                     if (isset($parameters->code)) {
@@ -65,7 +65,7 @@
                     // Trigger all linked reactions
                     if ($response->message === true) {
                         $parameters = array("automation_action_id" => $automation_action_id);
-                        $response = $this->sendRequest("http://localhost:8000/automation/reaction/trigger", $parameters);
+                        $response = $this->sendRequest("http://localhost/automation/reaction/trigger", $parameters);
                         return new JsonResponse($response);
                         if (isset($response->code)) {
                             continue;
@@ -82,7 +82,7 @@
             if (empty($automation)) {
                 return;
             }
-            $response = $this->sendRequest("http://localhost:8000/" . $service->getName() . "/refresh_access_token", array("user_id" => $automation->getUserId()));
+            $response = $this->sendRequest("http://localhost/" . $service->getName() . "/refresh_access_token", array("user_id" => $automation->getUserId()));
             if (isset($response->code)) {
                 if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
                     return;
@@ -113,7 +113,7 @@
             }
             $automation_reactions = $automation_action_repository->findAutomationReactions($automation_id);
             foreach ($automation_reactions as $automation_reaction) {
-                $url = "http://localhost:8000/automation/reaction/do";
+                $url = "http://localhost/automation/reaction/do";
                 $parameters = array("automation_action_id" => $automation_reaction->getId());
                 $response = $this->sendRequest($url, $parameters);
                 return new JsonResponse($response);
@@ -148,7 +148,7 @@
                 return new JsonResponse(array("message" => "AutomationAction: Service not found"), 404);
             }
             $service = $service_repository->find($service_id);
-            $url = "http://localhost:8000/" . $service->getName() . "/" . $action->getType() . "/" . $action->getIdentifier();
+            $url = "http://localhost/" . $service->getName() . "/" . $action->getType() . "/" . $action->getIdentifier();
             // Post request to the action url
             $parameters = array("automation_action_id" => $automation_action_id);
             $response = $this->sendRequest($url, $parameters);
