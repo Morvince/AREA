@@ -474,4 +474,59 @@ class DiscordAPIController extends AbstractController
 
         return new JsonResponse(array("token" => json_decode($response)), 200);
     }
+
+    /**
+     * @Route("/discord/reaction/react_message", name="discord_api_react_message")
+     */
+
+    public function reactWithMessage(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
+    {
+        $service = $service_repository->findByName("discord");
+        if (empty($service)) {
+            return new JsonResponse(array("message" => "Discord: Service not found"), 404);
+        }
+        $service = $service[0];
+        if (empty($user_service_repository->findByUserIdAndServiceId(1, $service->getId()))) {
+            return new JsonResponse(array("message" => "Discord: Access token not found"), 404);
+        }
+        $access_token = $user_service_repository->findByUserIdAndServiceId(1, $service->getId())[0]->getAccessToken();
+        if (empty($this->request_api)) {
+            $this->request_api = new RequestAPI();
+        }
+        $identifiers = explode(";", $service->getIdentifiers());
+        if (count($identifiers) != 3) {
+            return new JsonResponse(array("message" => "Discord: Identifiers error"), 422);
+        }
+        $request_content = json_decode($request->getContent()); // début de la récup du field informations link au fiels qui est link au front
+        $automation_action_id = $request_content->automation_action_id;
+        $automation_action = $automation_action_repository->find($automation_action_id);
+        $bot_token = $identifiers[2];
+        if (empty($automation_action)) {
+            return new JsonResponse(array("message" => "Discord: Automation_action ID not found"), 404);
+        }
+        $informations = json_decode($automation_action->getInformations()); // attribution des valeurs d'informations dans la var info
+        if (empty($informations->channel_id) && empty($informations->message)) {
+            return new JsonResponse(array("message" => "Discord: Informations not found"), 404);
+        }
+        $ch = curl_init("https://discord.com/api/v6/channels/{$informations->channel_id}/messages");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "Authorization: Bot {$bot_token}"
+        ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $messages = json_decode($response, true);
+        $last_message_id = $messages[count($messages) - 1]["id"];
+        $emoji = "EMOJI"; // rajouter les codes (UNICODE) pour les émojis des lettres, faire un array d'émoji
+        $ch = curl_init("https://discord.com/api/v6/channels/{$informations->channel_id}/messages/{$last_message_id}/reactions/{$emoji}/@me");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "Authorization: Bot {$bot_token}"
+        ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return new JsonResponse(array("token" => json_decode($response)), 200);
+    }
 }
