@@ -28,7 +28,7 @@ spotify_api_connected:
 spotify_api_search:
   path: /spotify/search
   controller: App\Controller\SpotifyAPIController::search
-  methods: [POST]
+  methods: [GET]
 spotify_api_get_user_playlists:
   path: /spotify/get_user_playlists
   controller: App\Controller\SpotifyAPIController::getUserPlaylists
@@ -49,6 +49,9 @@ spotify_api_reaction_add_artist_music_to_playlist:
   path: /spotify/reaction/add_artist_music_to_playlist
   controller: App\Controller\SpotifyAPIController::addMusicFromArtistListToPlaylist
   methods: [POST]
+# spotify_test:
+#   path: /spotify/test
+#   controller: App\Controller\SpotifyAPIController::test
 
 # DISCORD
 discord_api_connect:
