@@ -86,6 +86,10 @@ discord_api_send_channel_message:
   path: /discord/reaction/send_channel_message
   controller: App\Controller\DiscordAPIController::sendChannelMessage
   methods: [POST]
+discord_api_change_nickname:
+  path: /discord/reaction/change_nickname
+  controller: App\Controller\DiscordAPIController::changeNicknameOnServer
+  methods: [POST]
 
 # AUTOMATION
 automation_add:
