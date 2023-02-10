@@ -90,6 +90,10 @@ discord_api_change_nickname:
   path: /discord/reaction/change_nickname
   controller: App\Controller\DiscordAPIController::changeNicknameOnServer
   methods: [POST]
+discord_api_react_message:
+  path: /discord/reaction/react_message
+  controller: App\Controller\DiscordAPIController::reactWithMessage
+  methods: [POST]
 
 # AUTOMATION
 automation_add:
