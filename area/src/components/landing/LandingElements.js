@@ -43,8 +43,6 @@ export const SecondWave = ({ top, height, color }) => {
       </StyledSvg>
     );
   };
-  
-
 
 export const Text = styled.div`
     position: absolute;
@@ -95,4 +93,14 @@ export const Button_without_bg = styled(LinkR)`
     &:hover {
         color: #4361ee;
     }
+`;
+
+export const Shape = styled.div`
+    width: ${props => props.width};
+    height: ${props => props.height};
+    top: ${props => props.top};
+    left: ${props => props.left};
+    position: absolute;
+    background: ${props => props.color};
+    border-radius: 50px;
 `;
