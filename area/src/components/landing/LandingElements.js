@@ -126,3 +126,12 @@ export const Shape = styled.div`
     background: ${props => props.color};
     border-radius: 50px;
 `;
+
+export const IconWrapper = styled.div`
+  opacity: 0.7;
+  transition: opacity 0.1s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
