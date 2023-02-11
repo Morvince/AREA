@@ -60,13 +60,11 @@
                         }
                         continue;
                     }
-                    // return new JsonResponse(array("reponse" => $response, "old" => $old_parameters, "new" => $parameters));
                     $old_parameters[$automation_action_id] = $parameters;
                     // Trigger all linked reactions
                     if ($response->message === true) {
                         $parameters = array("automation_action_id" => $automation_action_id);
                         $response = $this->sendRequest("http://localhost/automation/reaction/trigger", $parameters);
-                        return new JsonResponse($response);
                         if (isset($response->code)) {
                             continue;
                         }
