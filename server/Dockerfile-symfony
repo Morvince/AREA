@@ -1,21 +1,22 @@
-FROM composer:2.5.1 AS composer
+FROM php:7.4-apache
 
-FROM php:7.4.19-apache
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-COPY --from=composer /usr/bin/composer /usr/bin/composer
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends locales apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev;
 
-WORKDIR /app/server
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen
 
-RUN apt-get update && apt-get install -y curl zip unzip
+RUN curl -sSk https://getcomposer.org/installer | php -- --disable-tls && \
+   mv composer.phar /usr/local/bin/composer
 
-RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash
-
-RUN apt-get install -y symfony-cli
-
+RUN docker-php-ext-configure intl
+RUN docker-php-ext-install pdo pdo_mysql gd opcache intl zip calendar dom mbstring zip gd xsl
+RUN pecl install apcu && docker-php-ext-enable apcu
 RUN composer require symfony/orm-pack && composer require --dev symfony/maker-bundle && composer require doctrine/doctrine-bundle
 
-RUN docker-php-ext-install pdo pdo_mysql
-
+WORKDIR /var/www/server/
 COPY . .
-
-ENTRYPOINT [ "bash", "./setup_docker_server.sh" ]
+RUN composer install

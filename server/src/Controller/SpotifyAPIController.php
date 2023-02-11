@@ -335,8 +335,8 @@
             if (empty($request_content->new) || empty($request_content->old)) {
                 return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
-            $old_tracks = $request_content->old->tracks->items;
-            $new_tracks = $request_content->new->tracks->items;
+            $old_tracks = $request_content->old;
+            $new_tracks = $request_content->new;
             // Check if tracks have been added to playlist
             foreach ($new_tracks as $new_track) {
                 $found = false;
@@ -386,7 +386,7 @@
             if (isset($playlist->code)) {
                 return new JsonResponse(array("message" => $playlist->message), $playlist->code);
             }
-            return new JsonResponse($playlist, 200);
+            return new JsonResponse($playlist->tracks->items, 200);
         }
 
         // Reaction
