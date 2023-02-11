@@ -21,7 +21,7 @@ const Navbar = ({ toggle, changeY, defaultState }) => {
       <NavRectBg> </NavRectBg>
       <ButtonHapilink to="/" > Hapilink </ButtonHapilink>
       <ButtonCreate onClick={redirect} > Create </ButtonCreate>
-      <ButtonAreas to="/doc" > My Areas </ButtonAreas>
+      <ButtonAreas to="/areas" > My Areas </ButtonAreas>
       <ButtonDocumentation to="/doc" > Documentation </ButtonDocumentation>
     </>
   )
