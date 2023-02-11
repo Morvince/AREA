@@ -1,5 +1,5 @@
 import React from 'react'
-import { Rect, FirstWave, SecondWave, Text, Button_with_bg1, Button_with_bg2, Button_without_bg, Shape, IconWrapper } from './LandingElements';
+import { Rect, FirstWave, SecondWave, Text, ButtonWithBg, ButtonTryIt, Shape, IconWrapper, ButtonNewAccount, ButtonLogin } from './LandingElements';
 import { Icon } from '@iconify/react';
 import { useAddAutomation } from '../../api/apiServicesPage';
 import { useNavigate } from 'react-router-dom';
@@ -23,11 +23,8 @@ const Landing = () => {
     return (
         <>
             {/* navebar :  */}
-            <Rect top="0px" height="100px" color="#D4D3DC" Rect />
-            <Text lineheight="1.2" fontsize="35px" top="2%" left="15%" color="black" fontweight="bold" > Hapilink </Text>
-            <Button_without_bg to="/login" top="1.5%" left="80%" height="50px" width="110px"> Log In </Button_without_bg>
-            <Button_without_bg to="/doc" top="1.5%" left="45%" height="50px" width="180px"> Documentation </Button_without_bg>
-            <Button_with_bg1 to="/sign" top="1.5%" left="88%" height="50px" width="190px"> New Account </Button_with_bg1>
+            <ButtonLogin to="/login" > Log In </ButtonLogin>
+            <ButtonNewAccount to="/sign" > New Account </ButtonNewAccount>
 
             {/* first part  */}
             <Rect top="80px" height="3700px" color="#373b48" Rect />
@@ -36,7 +33,7 @@ const Landing = () => {
                 color="white" fontweight="bold" > Make everything works <br></br> Together </Text>
             <Text lineheight="1.2" fontsize="30px" top="52%" left="30%"
                 color="white" fontweight="" > Link all your application in order to make your life easier ! </Text>
-            <Button_with_bg1 top="85%" left="42%" height="50px" width="300px" onClick={redirect}>Start Now</Button_with_bg1>
+            <ButtonWithBg top="85%" left="42%" height="50px" width="300px" onClick={redirect}>Start Now</ButtonWithBg>
 
             {/* Disponible on windows and android */}
             <FirstWave top="900px" height="1000px" color="#D4D3DC" FirstWave/>
@@ -94,7 +91,7 @@ const Landing = () => {
             {/* final part */}
             <Text lineheight="1.2" fontsize="40px" top="405%" left="20%"
                 color="white" fontweight="" > <em> Now you just have to try it by yourself and let the magic happen ! </em> </Text>
-            <Button_with_bg2 top="440%" left="42%" height="100px" width="300px" onClick={redirect}>Try it !!</Button_with_bg2>
+            <ButtonTryIt top="440%" left="42%" height="100px" width="300px" onClick={redirect}>Try it !!</ButtonTryIt>
         </>
     )
 };

@@ -55,7 +55,7 @@ export const Text = styled.div`
     font-weight: ${props => props.fontweight};
 `;
 
-export const Button_with_bg1 = styled(LinkR)`
+export const ButtonWithBg = styled(LinkR)`
     position: absolute;
     display: inline-block;
     text-align: center;
@@ -76,7 +76,7 @@ export const Button_with_bg1 = styled(LinkR)`
     }
 `;
 
-export const Button_with_bg2 = styled(LinkR)`
+export const ButtonTryIt = styled(LinkR)`
     position: absolute;
     display: inline-block;
     text-align: center;
@@ -98,7 +98,7 @@ export const Button_with_bg2 = styled(LinkR)`
     }
 `;
 
-export const Button_without_bg = styled(LinkR)`
+export const ButtonWithoutBg = styled(LinkR)`
     position: absolute;
     color: black;
     display: inline-block;
@@ -134,4 +134,40 @@ export const IconWrapper = styled.div`
   &:hover {
     opacity: 0.7;
   }
+`;
+
+export const ButtonNewAccount = styled(LinkR)`
+    position: absolute;
+    display: inline-block;
+    text-align: center;
+    line-height: 25px;
+    color: white;
+    background-color : #560bad;
+    height: 50px;
+    width: 190px;
+    top: 1.5%;
+    left: 88%;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        background: #b5179e;
+        color: white;
+    }
+`;
+   
+export const ButtonLogin = styled(LinkR)`
+    position: absolute;
+    color: black;
+    display: inline-block;
+    text-align: center;
+    line-height: 25px;
+    font-size: 20px;
+    top: 3%;
+    left: 80%;
+    text-decoration: none;
+    &:hover {
+        color: #4361ee;
+    }
 `;

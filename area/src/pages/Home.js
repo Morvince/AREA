@@ -15,8 +15,8 @@ const Home = () => {
   return (
     <div>
       <Sidebar isOpen={isOpen} toggle={toggle} />
-      <Navebar toggle={toggle} changeY={720} defaultState={false} />
       <PlayBox automationId={location.state.automationId.automation_id} />
+      <Navebar toggle={toggle} changeY={720} defaultState={false} />
     </div>
   )
 }

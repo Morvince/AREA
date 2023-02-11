@@ -1,49 +1,28 @@
-import React, {useState} from 'react'
-import { useEffect } from 'react'
-import { FaBars } from 'react-icons/fa'
-import { Nav, NavbarContainer, NavLogo, MobileIcon, NavMenu, NavItem, NavLinks, NavBtn, NavBtnLink } from './navbarElements'
-import { IconContext } from 'react-icons/lib'
-import { animateScroll as scroll } from 'react-scroll'
+import React from 'react'
+import { useNavigate } from 'react-router-dom';
+import { useAddAutomation } from '../../api/apiServicesPage';
+import { NavRectBg, NavTextHapilink, ButtonAreas, ButtonCreate, ButtonDocumentation, ButtonHapilink } from './navbarElements'
 
 const Navbar = ({ toggle, changeY, defaultState }) => {
-  const [scrollNav, setScrollNav] = useState(defaultState)
+  const navigate = useNavigate();
 
-  const changeNav = () => {
-    if (window.scrollY >= changeY) {
-      setScrollNav(false)
-    } else {
-      setScrollNav(true)
-    }
+  const tmpAutomation = useAddAutomation();
+
+  function redirect() {
+      tmpAutomation.mutate();
   }
 
-  useEffect(() => {
-    window.addEventListener('scroll', changeNav)
-  }, [])
-
-  const toggleHome = () => {
-    scroll.scrollToTop();
+  if (tmpAutomation.isSuccess) {
+      navigate("/home", { replace: true, state: { automationId: tmpAutomation.data.data } })
   }
 
   return (
     <>
-    <IconContext.Provider value={{ color: '#f9f9f9' }}>
-      <Nav scrollNav={scrollNav}>
-        <NavbarContainer>
-          <NavLogo to="/" onClick={toggleHome} top="15px" left="20px" fontSize="40px" >Hapilink</NavLogo>
-          <MobileIcon onClick={toggle}>
-            <FaBars />
-          </MobileIcon>
-          <NavMenu>
-            <NavItem>
-            <NavLogo to="/settings" onClick={toggleHome} top="23px" left="1600px" fontSize="20px" >Settings</NavLogo>
-            </NavItem>
-          </NavMenu>
-          <NavBtn>
-            <NavBtnLink to="/sign">Sign In</NavBtnLink>
-          </NavBtn>
-        </NavbarContainer>
-      </Nav>
-    </IconContext.Provider>
+      <NavRectBg> </NavRectBg>
+      <ButtonHapilink to="/" > Hapilink </ButtonHapilink>
+      <ButtonCreate onClick={redirect} > Create </ButtonCreate>
+      <ButtonAreas to="/doc" > My Areas </ButtonAreas>
+      <ButtonDocumentation to="/doc" > Documentation </ButtonDocumentation>
     </>
   )
 }
