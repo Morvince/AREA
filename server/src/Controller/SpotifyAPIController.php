@@ -126,7 +126,7 @@
          * @Route("/spotify/refresh_access_token", name="spotify_api_refresh_access_token")
          */
         public function refreshAccessToken(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
-        { // a changer pour lutiliser que via le server
+        {
             // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->user_id)) {
