@@ -4,7 +4,7 @@ export const Rectangle = styled.div`
     width: 250px;
     height: 125px;
     position: absolute;
-    z-index: 25;
+    z-index: 10;
     top: ${position => position.y};
     left: ${position => position.x};
     background: ${props => props.color};
