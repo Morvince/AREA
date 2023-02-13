@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile-symfony
+    image: area_symfony:latest
+    container_name: ${CONTAINER_NAME_PREFIX}server
+    volumes:
+        - ./vhosts:/etc/apache2/sites-enabled
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    environment:
+      DATABASE_URL: mysql://root:${MARIADB_ROOT_PASSWORD}@areadb:3306/${MARIADB_DATABASE}
+    networks:
+      - areadb_network
+      - web_network
+    depends_on:
+      - areadb
+
+  client_web:
+    build:
+      context: ./area
+      dockerfile: Dockerfile-reactjs
+    image: area_reactjs:latest
+    container_name: ${CONTAINER_NAME_PREFIX}client_web
+    restart: unless-stopped
+    volumes:
+      - ./area/src:/app/client_web/src/:ro
+    ports:
+      - 8081:8081
+    environment:
+      - PORT=8081 #for the command npm start
+    networks:
+      - web_network
+    depends_on:
+      - server
+
+  areadb:
+    image: mariadb
+    container_name: ${CONTAINER_NAME_PREFIX}db
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/mysql/
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+    networks:
+      - areadb_network
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: ${CONTAINER_NAME_PREFIX}db_admin
+    restart: unless-stopped
+    ports:
+      - 8082:80
+    environment:
+      - PMA_ARBITRARY=1
+    networks:
+      - areadb_network
+    depends_on:
+      - areadb
+
+volumes:
+  db_data:
+
+networks:
+  web_network:
+  areadb_network:

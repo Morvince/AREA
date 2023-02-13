@@ -29,11 +29,13 @@ export const NavbarContainer = styled.div`
 `;
 
 export const NavLogo = styled(LinkR)`
+  position: absolute;
+  top: ${props => props.top};
+  left: ${props => props.left};
   color: #ebebeb;
   justify-self: flex-start;
   cursor: pointer;
-  font-size: 1.5rem;
-  display: flex;
+  font-size: ${props => props.fontsize};
   align-items: center;
   margin-left: 24px;
   font-weight: bold;
@@ -95,6 +97,9 @@ export const NavBtn = styled.nav`
 `;
 
 export const NavBtnLink = styled(LinkR)`
+  position: absolute;
+  left: 1800px;
+  top: 15px;
   border-radius: 50px;
   background: #ebebeb;
   white-space: nowrap;
