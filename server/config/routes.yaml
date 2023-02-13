@@ -49,9 +49,6 @@ spotify_api_reaction_add_artist_music_to_playlist:
   path: /spotify/reaction/add_artist_music_to_playlist
   controller: App\Controller\SpotifyAPIController::addMusicFromArtistListToPlaylist
   methods: [POST]
-# spotify_test:
-#   path: /spotify/test
-#   controller: App\Controller\SpotifyAPIController::test
 
 # DISCORD
 discord_api_connect:

@@ -234,17 +234,6 @@
             return new JsonResponse($response, 200);
         }
         /**
-         * @Route("/spotify/test", name="spotify_test")
-         */
-        public function test(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
-        {
-            if (empty($this->request_api)) {
-                $this->request_api = new RequestAPI();
-            }
-            $response = $this->request_api->sendRoute("tools:8000/spotify/get_user_playlists", array("token" => "ea469788fb5e36ebe666b294a449360e62522eeb5658c1998be297e0ac5553f9"));
-            return new JsonResponse($response);
-        }
-        /**
          * @Route("/spotify/get_user_playlists", name="spotify_api_get_user_playlists")
          */
         public function getUserPlaylists(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
@@ -283,7 +272,7 @@
             foreach ($response->items as $item) {
                 array_push($formatted, array("name" => $item->name, "id" => $item->id));
             }
-            return new JsonResponse(array("playlists" => $formatted), 200);
+            return new JsonResponse(array("items" => $formatted), 200);
         }
         private function sendRequest($access_token, $endpoint, $method = "GET", $parameters = array())
         {
