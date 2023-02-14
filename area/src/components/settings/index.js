@@ -17,6 +17,7 @@ const Settings = () => {
     useEffect(() => {
       isSpotifyConnected.mutate()
       isDiscordConnected.mutate()
+      isGithubConnected.mutate()
     }, []);
 
     const handleConnectServices = (event) => {

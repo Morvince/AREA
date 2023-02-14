@@ -46,7 +46,7 @@
                 "admin:org_hook", "gist", "notifications", "user", "project",
                 "delete_repo", "write:discussion", "read:discussion",
                 "write:packages", "read:packages", "delete:packages",
-                "admin:gpg_key", "codespace", "workflow"
+                "admin:gpg_key", "codespace", "workflow", "offline_access"
             );
             $scope = implode(" ", $scope);
             // Set the state when the request is good
@@ -99,8 +99,10 @@
             curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=authorization_code&code=$code&redirect_uri=$redirect_uri");
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_USERPWD, "$client_id:$client_secret");
-            $headers = array();
-            $headers[] = "Content-Type: application/x-www-form-urlencoded";
+            $headers = array(
+                            "Accept: application/json",
+                            "Content-Type: application/x-www-form-urlencoded"
+                        );
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             $result = curl_exec($ch);
             curl_close($ch);
@@ -116,7 +118,6 @@
                 $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
             }
             $user_service->setAccessToken(json_decode($result)->access_token);
-            $user_service->setRefreshToken(json_decode($result)->refresh_token);
             $user_service_repository->add($user_service, true);
             return new JsonResponse(array("message" => "OK", 200));
         }
@@ -143,29 +144,10 @@
             if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
                 return new JsonResponse(array("message" => "Github: Refresh token not found"), 404);
             }
-            $client_id = $identifiers[0];
-            $client_secret = $identifiers[1];
             $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
-            $refresh_token = $user_service->getRefreshToken();
-            // Request for the access token
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, "https://github.com/login/oauth/access_token");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=refresh_token&refresh_token=$refresh_token&client_id=$client_id&client_secret=$client_secret");
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_USERPWD, "$client_id:$client_secret");
-            $headers = array();
-            $headers[] = "Content-Type: application/x-www-form-urlencoded";
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            $result = curl_exec($ch);
-            curl_close($ch);
-            if (empty(json_decode($result)->access_token)) {
+            if (!empty($user_service)) {
                 $user_service_repository->remove($user_service);
-                return new JsonResponse(array("message" => "Github: Expired refresh token"), 400);
             }
-            // Edit datas in database
-            $user_service->setAccessToken(json_decode($result)->access_token);
-            $user_service_repository->add($user_service, true);
             return new JsonResponse(array("message" => "OK"), 200);
         }
         /**
