@@ -1,0 +1,91 @@
+import styled from "styled-components";
+
+export const BgColor = styled.div`
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: #373b48;
+`;
+
+export const ContainerLeft = styled.div`
+    width: 40%;
+    height: 100%;
+    top: 40%;
+    left: 2%;
+    position: absolute;
+    background: ${props => props.color};
+`;
+
+export const IntroText = styled.div`
+    position: absolute;
+    line-height: ${props => props.lineheight};
+    text-align: center;
+    font-size: ${props => props.fontsize};
+    top: ${props => props.top};
+    left: ${props => props.left};
+    color: ${props => props.color};
+    font-weight: ${props => props.fontweight};
+`;
+
+export const BoxContent = styled.div`
+    position: relative;
+    width: 100%;
+    height: 30%;
+    background: ${props => props.background};
+    border-radius: 15px;
+    margin-top: -95px;
+    margin-bottom : 100px;
+    opacity: 0.7;
+    color : white;
+`;
+
+export const DiscordBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: #5470d6;
+    height: 20%;
+    border-radius: 15px;
+    opacity: 0.7;
+    margin-bottom: 100px;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 1;
+    }
+`;
+
+export const SpotifyBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: #10a143;
+    height: 20%;
+    border-radius: 15px;
+    opacity: 0.7;
+    margin-bottom: 100px;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 1;
+    }
+`;
+
+export const InstagramBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: #c2134f;
+    height: 20%;
+    border-radius: 15px;
+    opacity: 0.7;
+    margin-bottom: 100px;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 1;
+    }
+`;
