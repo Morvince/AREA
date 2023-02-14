@@ -1,11 +1,12 @@
 import React from 'react'
-import { Rect, FirstWave, SecondWave, Text, ButtonWithBg, ButtonTryIt, Shape, IconWrapper, ButtonNewAccount, ButtonLogin } from './LandingElements';
+import { Rect, FirstWave, SecondWave, Text, ButtonWithBg, ButtonTryIt, Shape, IconWrapper, ButtonNewAccount, ButtonLogin, YoutubeScreen } from './LandingElements';
 import { Icon } from '@iconify/react';
 import { useAddAutomation } from '../../api/apiServicesPage';
 import { useNavigate } from 'react-router-dom';
 import landing from './landing.png'
 import android from './android.png'
 import windows from './windows.png'
+import YouTube from 'react-youtube';
 
 const Landing = () => {
     const navigate = useNavigate();
@@ -19,6 +20,14 @@ const Landing = () => {
     if (tmpAutomation.isSuccess) {
         navigate("/home", { replace: true, state: { automationId: tmpAutomation.data.data } })
     }
+
+    const YoutubeOptions = {
+      height: '650',
+      width: '1024',
+      playerVars: {
+        autoplay: 0,
+      },
+  };
 
     return (
         <>
@@ -83,7 +92,7 @@ const Landing = () => {
                     <Icon icon="logos:openai-icon" width="100" style={{ position: 'absolute', left: '73%', top: "320%" }} />
                 </a>
             </IconWrapper>
-            <Rect top="3740px" height="2000px" color="black" Rect />
+            <Rect top="3740px" height="1400px" color="black" Rect />
             <Text lineheight="1.2" fontsize="50px" top="350%" left="20%"
                 color="white" fontweight="bold" > Connect apps together and let automations work </Text>
             <SecondWave top="332%" height="1000px" color="#373b48" SecondWave />
@@ -91,7 +100,10 @@ const Landing = () => {
             {/* final part */}
             <Text lineheight="1.2" fontsize="40px" top="405%" left="20%"
                 color="white" fontweight="" > <em> Now you just have to try it by yourself and let the magic happen ! </em> </Text>
-            <ButtonTryIt top="550%" left="42%" height="100px" width="300px" onClick={redirect}>Try it !!</ButtonTryIt>
+            <YoutubeScreen>
+              <YouTube videoId="WFw_Whjj51k" opts={YoutubeOptions} />
+            </YoutubeScreen>
+            <ButtonTryIt top="490%" left="42%" height="100px" width="300px" onClick={redirect}>Try it !!</ButtonTryIt>
         </>
     )
 };

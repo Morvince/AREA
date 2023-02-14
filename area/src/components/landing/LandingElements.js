@@ -171,3 +171,9 @@ export const ButtonLogin = styled(LinkR)`
         color: #4361ee;
     }
 `;
+
+export const YoutubeScreen = styled.div`
+  position: absolute;
+  top: 415%;
+  left: 23%;
+`;
