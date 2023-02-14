@@ -19,7 +19,7 @@
         private RequestAPI $request_api;
 
         /**
-         * @Route("/spotify/connect", name="spotify_api_connect")
+         * @Route("/github/connect", name="github_api_connect")
          */
         public function connect(Request $request, ServiceRepository $service_repository)
         {
@@ -56,7 +56,7 @@
             return new JsonResponse(array("authorization_url" => $authorization_url), 200);
         }
         /**
-         * @Route("/spotify/get_access_token", name="spotify_api_get_access_token")
+         * @Route("/github/get_access_token", name="github_api_get_access_token")
          */
         public function getAccessToken(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
         {
@@ -121,7 +121,7 @@
             return new JsonResponse(array("message" => "OK", 200));
         }
         /**
-         * @Route("/spotify/refresh_access_token", name="spotify_api_refresh_access_token")
+         * @Route("/github/refresh_access_token", name="github_api_refresh_access_token")
          */
         public function refreshAccessToken(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
         {
@@ -169,7 +169,7 @@
             return new JsonResponse(array("message" => "OK"), 200);
         }
         /**
-         * @Route("/spotify/connected", name="spotify_api_connected")
+         * @Route("/github/connected", name="github_api_connected")
          */
         public function isConnected(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
         {

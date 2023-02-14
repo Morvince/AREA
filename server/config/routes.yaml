@@ -84,6 +84,24 @@ discord_api_send_channel_message:
   controller: App\Controller\DiscordAPIController::sendChannelMessage
   methods: [POST]
 
+# GITHUB
+github_api_connect:
+  path: /github/connect
+  controller: App\Controller\GithubAPIController::connect
+  methods: [POST]
+github_api_get_access_token:
+  path: /github/get_access_token
+  controller: App\Controller\GithubAPIController::getAccessToken
+  methods: [POST]
+github_api_refresh_access_token:
+  path: /github/refresh_access_token
+  controller: App\Controller\GithubAPIController::refreshAccessToken
+  methods: [POST]
+github_api_connected:
+  path: /github/connected
+  controller: App\Controller\GithubAPIController::isConnected
+  methods: [POST]
+
 # AUTOMATION
 automation_add:
   path: /automation/add
