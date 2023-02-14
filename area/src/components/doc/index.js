@@ -7,9 +7,23 @@ const Doc = () => {
   const [spotifyOpen, setSpotifyOpen] = useState(false);
   const [instagramOpen, setInstagramOpen] = useState(false);
 
-  const toggleDiscordOpen = () => setDiscordOpen(!discordOpen);
-  const toggleSpotifyOpen = () => setSpotifyOpen(!spotifyOpen);
-  const toggleInstagramOpen = () => setInstagramOpen(!instagramOpen);
+  const toggleDiscordOpen = () => {
+    setDiscordOpen(!discordOpen);
+    setSpotifyOpen(false);
+    setInstagramOpen(false);
+  };
+  
+  const toggleSpotifyOpen = () => {
+    setSpotifyOpen(!spotifyOpen);
+    setDiscordOpen(false);
+    setInstagramOpen(false);
+  };
+  
+  const toggleInstagramOpen = () => {
+    setInstagramOpen(!instagramOpen);
+    setDiscordOpen(false);
+    setSpotifyOpen(false);
+  };
 
   return (
     <>
@@ -27,7 +41,7 @@ const Doc = () => {
         <InstagramBox onClick={toggleInstagramOpen}>
           <Icon icon="skill-icons:instagram" width="100" height="100" />
         </InstagramBox>
-        {instagramOpen && <BoxContent background="#c2134f">Instagram content here</BoxContent>}
+        {instagramOpen && <BoxContent background="#c2134f">Instragram content here</BoxContent>}
       </ContainerLeft>
     </>
   )

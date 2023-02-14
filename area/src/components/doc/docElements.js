@@ -13,7 +13,9 @@ export const ContainerLeft = styled.div`
     top: 40%;
     left: 2%;
     position: absolute;
-    background: ${props => props.color};
+    margin-bottom: 100px;
+    display: flex;
+    flex-direction: column;
 `;
 
 export const IntroText = styled.div`
@@ -29,8 +31,9 @@ export const IntroText = styled.div`
 
 export const BoxContent = styled.div`
     position: relative;
+    display: flex;
     width: 100%;
-    height: 30%;
+    height: 60%;
     background: ${props => props.background};
     border-radius: 15px;
     margin-top: -95px;
@@ -45,7 +48,7 @@ export const DiscordBox = styled.div`
     align-items: center;
     position: relative;
     background: #5470d6;
-    height: 20%;
+    height: 30%;
     border-radius: 15px;
     opacity: 0.7;
     margin-bottom: 100px;
@@ -62,7 +65,7 @@ export const SpotifyBox = styled.div`
     align-items: center;
     position: relative;
     background: #10a143;
-    height: 20%;
+    height: 30%;
     border-radius: 15px;
     opacity: 0.7;
     margin-bottom: 100px;
@@ -79,7 +82,7 @@ export const InstagramBox = styled.div`
     align-items: center;
     position: relative;
     background: #c2134f;
-    height: 20%;
+    height: 30%;
     border-radius: 15px;
     opacity: 0.7;
     margin-bottom: 100px;
