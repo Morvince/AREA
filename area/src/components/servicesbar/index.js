@@ -130,34 +130,65 @@ const Servicesbar = () => {
     }
   }
 
+  function getIcon(string) {
+    switch (string) {
+      case "discord":
+        return "skill-icons:discord";
+      case "spotify":
+        return "logos:spotify-icon";
+      case "instagram":
+        return "skill-icons:instagram";
+      case "google":
+        return "logos:google-icon";
+      case "twitter":
+        return "skill-icons:twitter";
+      case "openai":
+        return "logos:openai-icon";
+      default:
+        return "logos:openai-icon";
+    }
+  }
+
   return (
     <LeftColumn>
       <ServicesBarContainer className={isOpen ? 'open' : 'closed'} color={getColor()}>
         <ServicesName>Services</ServicesName>
         <ServicesBarWrapper>
           <IconBox onClick={() => handleClick("discord")}>
-            <Icon icon="skill-icons:discord" width="75" height="75" />
+            <Icon icon={getIcon("discord")} width="75" height="75" />
           </IconBox>
           <IconBox onClick={() => handleClick("spotify")}>
-            <Icon icon="logos:spotify-icon" width="75" height="75" />
+            <Icon icon={getIcon("spotify")} width="75" height="75" />
           </IconBox>
           <IconBox onClick={() => handleClick("instagram")}>
-            <Icon icon="skill-icons:instagram" width="75" height="75" />
+            <Icon icon={getIcon("instagram")} width="75" height="75" />
           </IconBox>
           <IconBox onClick={() => handleClick("google")}>
-            <Icon icon="logos:google-icon" width="75" height="75" />
+            <Icon icon={getIcon("google")} width="75" height="75" />
           </IconBox>
           <IconBox onClick={() => handleClick("twitter")}>
-            <Icon icon="skill-icons:twitter" width="75" height="75" />
+            <Icon icon={getIcon("twitter")} width="75" height="75" />
           </IconBox>
           <IconBox onClick={() => handleClick("openai")}>
-            <Icon icon="logos:openai-icon" width="75" height="75" />
+            <Icon icon={getIcon("openai")} width="75" height="75" />
           </IconBox>
         </ServicesBarWrapper>
         <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
           {puzzleBlocktemps.map((info, index) => {
             return (
-              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} dbID={info.dbID}/>
+              <ButtonBox
+                key={info.index}
+                id={info.index}
+                top={info.top}
+                left={info.left}
+                color={info.color}
+                service={info.service}
+                action={info.action}
+                name={info.name}
+                nbrBox={info.nbrBox}
+                dbID={info.dbID}
+                icon={getIcon(info.service)}
+              />
             )
           })}
         </RectangleContener>
