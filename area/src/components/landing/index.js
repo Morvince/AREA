@@ -83,7 +83,7 @@ const Landing = () => {
                     <Icon icon="logos:openai-icon" width="100" style={{ position: 'absolute', left: '73%', top: "320%" }} />
                 </a>
             </IconWrapper>
-            <Rect top="3740px" height="1000px" color="black" Rect />
+            <Rect top="3740px" height="2000px" color="black" Rect />
             <Text lineheight="1.2" fontsize="50px" top="350%" left="20%"
                 color="white" fontweight="bold" > Connect apps together and let automations work </Text>
             <SecondWave top="332%" height="1000px" color="#373b48" SecondWave />
@@ -91,7 +91,7 @@ const Landing = () => {
             {/* final part */}
             <Text lineheight="1.2" fontsize="40px" top="405%" left="20%"
                 color="white" fontweight="" > <em> Now you just have to try it by yourself and let the magic happen ! </em> </Text>
-            <ButtonTryIt top="440%" left="42%" height="100px" width="300px" onClick={redirect}>Try it !!</ButtonTryIt>
+            <ButtonTryIt top="550%" left="42%" height="100px" width="300px" onClick={redirect}>Try it !!</ButtonTryIt>
         </>
     )
 };

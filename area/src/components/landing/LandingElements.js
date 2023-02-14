@@ -128,11 +128,11 @@ export const Shape = styled.div`
 `;
 
 export const IconWrapper = styled.div`
-  opacity: 1;
+  opacity: 0.7;
   transition: opacity 0.1s ease;
 
   &:hover {
-    opacity: 0.7;
+    opacity: 1;
   }
 `;
 
