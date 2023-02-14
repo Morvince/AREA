@@ -7,17 +7,6 @@ export const BgColor = styled.div`
     background: #373b48;
 `;
 
-export const ContainerLeft = styled.div`
-    width: 40%;
-    height: 100%;
-    top: 40%;
-    left: 2%;
-    position: absolute;
-    margin-bottom: 100px;
-    display: flex;
-    flex-direction: column;
-`;
-
 export const IntroText = styled.div`
     position: absolute;
     line-height: ${props => props.lineheight};
@@ -29,7 +18,18 @@ export const IntroText = styled.div`
     font-weight: ${props => props.fontweight};
 `;
 
-export const BoxContent = styled.div`
+export const ContainerLeft = styled.div`
+    width: 40%;
+    height: 100%;
+    top: 40%;
+    left: 5%;
+    position: absolute;
+    margin-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+`;
+
+export const BoxContentLeft = styled.div`
     position: relative;
     display: flex;
     width: 100%;
@@ -82,6 +82,81 @@ export const InstagramBox = styled.div`
     align-items: center;
     position: relative;
     background: #c2134f;
+    height: 30%;
+    border-radius: 15px;
+    opacity: 0.7;
+    margin-bottom: 100px;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 1;
+    }
+`;
+
+export const ContainerRight = styled.div`
+    width: 40%;
+    height: 100%;
+    top: 40%;
+    left: 55%;
+    position: absolute;
+    margin-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+`;
+
+export const BoxContentRight = styled.div`
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 60%;
+    background: ${props => props.background};
+    border-radius: 15px;
+    margin-top: -95px;
+    margin-bottom : 100px;
+    opacity: 0.7;
+    color : white;
+`;
+
+export const GoogleBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: #d92516;
+    height: 30%;
+    border-radius: 15px;
+    opacity: 0.7;
+    margin-bottom: 100px;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 1;
+    }
+`;
+
+export const TwitterBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: #1486cc;
+    height: 30%;
+    border-radius: 15px;
+    opacity: 0.7;
+    margin-bottom: 100px;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 1;
+    }
+`;
+
+export const GithubBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: #686f84;
     height: 30%;
     border-radius: 15px;
     opacity: 0.7;
