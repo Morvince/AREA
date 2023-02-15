@@ -90,6 +90,10 @@ discord_api_change_nickname:
   path: /discord/reaction/change_nickname
   controller: App\Controller\DiscordAPIController::changeNicknameOnServer
   methods: [POST]
+discord_api_get_user_channels:
+  path: /discord/reaction/get_user_channels
+  controller: App\Controller\DiscordAPIController::getUserChannels
+  methods: [POST]
 discord_api_react_message:
   path: /discord/reaction/react_message
   controller: App\Controller\DiscordAPIController::reactWithMessage

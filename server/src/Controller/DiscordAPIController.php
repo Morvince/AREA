@@ -350,6 +350,98 @@ class DiscordAPIController extends AbstractController
         return new JsonResponse(array("users" => $users), 200);
     }
 
+    /**
+     * @Route("/discord/get_user_channels", name="discord_api_get_user_channels")
+     */
+    public function getUserChannels(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
+    {
+        // Get needed values
+        $request_content = json_decode($request->getContent());
+        if (empty($request_content->token)) {
+            return new JsonResponse(array("message" => "Discord: Missing field"), 400);
+        }
+        $token = $request_content->token;
+        if (empty($user_repository->findByToken($token))) {
+            return new JsonResponse(array("message" => "Discord: Bad auth token"), 400);
+        }
+        $user = $user_repository->findByToken($token)[0];
+        $user_id = $user->getId();
+        $service = $service_repository->findByName("discord");
+        if (empty($service)) {
+            return new JsonResponse(array("message" => "Discord: Service not found"), 404);
+        }
+        $service = $service[0];
+        if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            return new JsonResponse(array("message" => "Discord: Access token not found"), 404);
+        }
+        $identifiers = explode(";", $service->getIdentifiers());
+        if (count($identifiers) != 3) {
+            return new JsonResponse(array("message" => "Discord: Identifiers error"), 422);
+        }
+        $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
+        // Request for the user channels
+        $bot_token = $identifiers[2];
+        $guilds_url = 'https://discord.com/api/users/@me/guilds';
+        $guilds_headers = [
+            'Authorization: Bot ' . $bot_token,
+            'Content-Type: application/json',
+        ];
+        $guilds_options = [
+            'http' => [
+                'header' => $guilds_headers,
+                'method' => 'GET',
+            ],
+        ];
+        $guilds_context = stream_context_create($guilds_options);
+        $guilds_response = file_get_contents($guilds_url, false, $guilds_context);
+        $guilds_data = json_decode($guilds_response, true);
+
+        // Récupérer l'ID de la première guilde
+        $guild_id = $guilds_data[0]['id'];
+
+        // Récupérer la liste des canaux autorisés pour le bot dans la guilde
+        $channels_url = "https://discord.com/api/guilds/$guild_id/channels";
+        $channels_headers = [
+            'Authorization: Bot ' . $bot_token,
+            'Content-Type: application/json',
+        ];
+        $channels_options = [
+            'http' => [
+                'header' => $channels_headers,
+                'method' => 'GET',
+            ],
+        ];
+        $channels_context = stream_context_create($channels_options);
+        $channels_response = file_get_contents($channels_url, false, $channels_context);
+        $channels_data = json_decode($channels_response, true);
+
+        $allowed_channels = array();
+        $bot_id = 0; // add l'id du bot
+
+        // Vérifier les permissions pour chaque canal
+        foreach ($channels_data as $channel) {
+            $permissions_url = "https://discord.com/api/channels/{$channel['id']}/permissions/{$bot_id}";
+            $permissions_headers = [
+                'Authorization: Bot ' . $bot_token,
+                'Content-Type: application/json',
+            ];
+            $permissions_options = [
+                'http' => [
+                    'header' => $permissions_headers,
+                    'method' => 'GET',
+                ],
+            ];
+            $permissions_context = stream_context_create($permissions_options);
+            $permissions_response = file_get_contents($permissions_url, false, $permissions_context);
+            $permissions_data = json_decode($permissions_response, true);
+
+            if ($permissions_data['allow'] & 1024) {
+                $allowed_channels[] = $channel['id'];
+            }
+        }
+        return new JsonResponse(array("channels" => $allowed_channels), 200);
+    }
+
     // Reaction
     /**
      * @Route("/discord/reaction/send_channel_message", name="discord_api_send_channel_message")
@@ -391,7 +483,7 @@ class DiscordAPIController extends AbstractController
         if (empty($informations->channel_id) && empty($informations->message)) {
             return new JsonResponse(array("message" => "Discord: Informations not found"), 404);
         }
-        $message = $informations->message; // set le message de l'utilisateur, lui proposer des phrases si c'est spotify ou autre chose
+        $message = $informations->message; // set le message de l'utilisateur, lui proposer des phrases si c'est Discord ou autre chose
         $tag_message = "<@$username>"; // début du message qui identifie l'utilisateur en question
         $message = $tag_message . $message; // concaténation pour le message final qui identifie bien l'user
         $curl = curl_init();
@@ -529,4 +621,5 @@ class DiscordAPIController extends AbstractController
 
         return new JsonResponse(array("token" => json_decode($response)), 200);
     }
+    // check pour faire une autre réaction.
 }
