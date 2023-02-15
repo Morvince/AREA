@@ -78,7 +78,7 @@ export const CircleArcTop = styled.div`
     width: 60px;
     height: 30px;
     border-radius: 0 0 50px 50px;
-    background: #0f8a3a;
+    background: ${props => props.background};
     position: absolute;
     top: 0px;
     left: 50px;

@@ -11,21 +11,47 @@ const ButtonBox = (props) => {
   const { ID, setID } = React.useContext(MyContext)
   const { linkedList } = React.useContext(MyContext)
 
-  function hexToRGB(hex, alpha) {
-    var r = parseInt(hex.slice(1, 3), 16),
-      g = parseInt(hex.slice(3, 5), 16),
-      b = parseInt(hex.slice(5, 7), 16);
+  function getIcon(string) {
+    switch (string) {
+      case "discord":
+        return "ic:baseline-discord";
+      case "spotify":
+        return "mdi:spotify";
+      case "instagram":
+        return "uil:instagram-alt" ;
+      case "google":
+        return "uil:google";
+      case "twitter":
+        return "mdi:twitter" ;
+      case "openai":
+        return "simple-icons:openai" ;
+      default:
+        return "simple-icons:openai" ;
+    }
+  }
 
-    if (alpha) {
-      return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
-    } else {
-      return "rgb(" + r + ", " + g + ", " + b + ")";
+  function getColor(selectedService) {
+    switch (selectedService) {
+      case "discord":
+        return "#7289da";
+      case "spotify":
+        return "#1db954";
+      case "instagram":
+        return "#e1306c";
+      case "google":
+        return "#EA4335";
+      case "twitter":
+        return "#1da1f2";
+      case "openai":
+        return "#434857";
+      default:
+        return "#373B48";
     }
   }
 
   const handleDrag = (e, data) => {
     if (data.x > 300) {
-      setbackgroundColor(hexToRGB(props.color, 0.5))
+      setbackgroundColor(getColor(props.service))
     } else {
       setbackgroundColor(props.color)
     }
@@ -59,14 +85,14 @@ const ButtonBox = (props) => {
     >
       <Rectangle color={backgroundColor} top={pos.x} left={pos.y}>
         <RectangleWrapper>
-          {(props.action === false) ? <CircleArcTop background={props.color} /> : null}
-          <CircleArcBot background={props.color} />
+          {(props.action === false) ? <CircleArcTop background={backgroundColor} /> : null}
+          <CircleArcBot background={backgroundColor} />
           <AutomationText>
             {props.name}
           </AutomationText>
           <LogoWrapper>
             <AutomationRectangle>
-              <Icon icon="mdi:spotify" width="35" height="35" color="white" />
+              <Icon icon={getIcon(props.service)} width="35" height="35" color="white" />
             </AutomationRectangle>
             <ArrowRectangle onClick={() => { console.log("click") }}>
               <Icon icon="material-symbols:arrow-forward-ios-rounded" color="white" width="55" height="55" />
