@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import Draggable from 'react-draggable'
-import { RectangleBlock } from './blockElements'
+import { RectangleBlock, RectangleWrapper, AutomationText, LogoWrapper, AutomationRectangle, ArrowRectangle, CircleArcBot, CircleArcTop } from './blockElements'
 import MyContext from '../Context'
+import { Icon } from '@iconify/react';
+
 
 const Block = (props) => {
   const [backgroundColor, setbackgroundColor] = useState(props.color)
@@ -9,7 +11,6 @@ const Block = (props) => {
   const { sharedData, setSharedData } = React.useContext(MyContext);
   const { linkedList, setLinkedList } = React.useContext(MyContext);
   const { playlist, setPlaylist } = React.useContext(MyContext);
-
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -109,11 +110,62 @@ const Block = (props) => {
     }
   }
 
+  function getIcon(string) {
+    switch (string) {
+      case "discord":
+        return "ic:baseline-discord";
+      case "spotify":
+        return "mdi:spotify";
+      case "instagram":
+        return "uil:instagram-alt" ;
+      case "google":
+        return "uil:google";
+      case "twitter":
+        return "mdi:twitter" ;
+      case "openai":
+        return "simple-icons:openai" ;
+      default:
+        return "simple-icons:openai" ;
+    }
+  }
+
+  function getColor(selectedService) {
+    switch (selectedService) {
+      case "discord":
+        return "#7289da";
+      case "spotify":
+        return "#1db954";
+      case "instagram":
+        return "#e1306c";
+      case "google":
+        return "#EA4335";
+      case "twitter":
+        return "#1da1f2";
+      case "openai":
+        return "#434857";
+      default:
+        return "#373B48";
+    }
+  }
+
   return (
-    <Draggable bounds='parent' onDrag={handleDrag} onStop={handleDragStop}>
+    <Draggable bounds='parent' onClick={} onDrag={handleDrag} onStop={handleDragStop}>
       <RectangleBlock color={backgroundColor} top={pos.x} left={pos.y}>
-        {props.name}
-        {renderInput()}
+        <RectangleWrapper>
+          {(props.action === false) ? <CircleArcTop background={getColor(props.service)} /> : null}
+          <CircleArcBot background={backgroundColor} />
+          <AutomationText>
+            {props.name}
+          </AutomationText>
+          <LogoWrapper>
+            <AutomationRectangle>
+              <Icon icon={getIcon(props.service)} width="35" height="35" color="white" />
+            </AutomationRectangle>
+            <ArrowRectangle onClick={() => { console.log("click") }}>
+              <Icon icon="material-symbols:arrow-forward-ios-rounded" color="white" width="55" height="55" />
+            </ArrowRectangle>
+          </LogoWrapper>
+        </RectangleWrapper>
       </RectangleBlock>
     </Draggable>
   )

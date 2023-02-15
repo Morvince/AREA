@@ -85,7 +85,7 @@ const ButtonBox = (props) => {
     >
       <Rectangle color={backgroundColor} top={pos.x} left={pos.y}>
         <RectangleWrapper>
-          {(props.action === false) ? <CircleArcTop background={backgroundColor} /> : null}
+          {(props.action === false) ? <CircleArcTop background={getColor(props.service)} /> : null}
           <CircleArcBot background={backgroundColor} />
           <AutomationText>
             {props.name}
