@@ -11,9 +11,21 @@ const ButtonBox = (props) => {
   const { ID, setID } = React.useContext(MyContext)
   const { linkedList } = React.useContext(MyContext)
 
+  function hexToRGB(hex, alpha) {
+    var r = parseInt(hex.slice(1, 3), 16),
+      g = parseInt(hex.slice(3, 5), 16),
+      b = parseInt(hex.slice(5, 7), 16);
+
+    if (alpha) {
+      return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
+    } else {
+      return "rgb(" + r + ", " + g + ", " + b + ")";
+    }
+  }
+
   const handleDrag = (e, data) => {
     if (data.x > 300) {
-      setbackgroundColor('#f5f5f5')
+      setbackgroundColor(hexToRGB(props.color, 0.5))
     } else {
       setbackgroundColor(props.color)
     }
@@ -47,7 +59,7 @@ const ButtonBox = (props) => {
     >
       <Rectangle color={backgroundColor} top={pos.x} left={pos.y}>
         <RectangleWrapper>
-          {(props.action === false) ? <CircleArcTop background={props.color} /> : null }
+          {(props.action === false) ? <CircleArcTop background={props.color} /> : null}
           <CircleArcBot background={props.color} />
           <AutomationText>
             {props.name}
