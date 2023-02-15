@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import Sidebar from '../components/sidebar'
 import Navebar from '../components/navbar'
-import PlayBox from '../components/playBox'
 import { useLocation } from 'react-router-dom'
+import Doc from '../components/doc'
 
-const Home = () => {
+const Documentation = () => {
 
   const [isOpen, setIsOpen] = useState(false)
   const location = useLocation()
@@ -15,10 +15,10 @@ const Home = () => {
   return (
     <div>
       <Sidebar isOpen={isOpen} toggle={toggle} />
-      <PlayBox automationId={location.state.automationId.automation_id} />
+      <Doc> </Doc>
       <Navebar toggle={toggle} changeY={720} defaultState={false} />
     </div>
   )
 }
 
-export default Home
+export default Documentation
