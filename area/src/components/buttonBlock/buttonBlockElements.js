@@ -63,10 +63,21 @@ export const ArrowRectangle = styled.div`
     align-items: center;
 `;
 
-export const CircleArc = styled.div`
-    width: 4rem;
-    height: 2rem;
-    border-radius: 0 0 10rem 10rem;
+export const CircleArcBot = styled.div`
+    width: 60px;
+    height: 30px;
+    border-radius: 0 0 50px 50px;
+    box-shadow: 5px 5px 1px 0 #373b48;
+    background: ${props => props.background};
+    position: absolute;
+    top: 125px;
+    left: 50px;
+`;
+
+export const CircleArcTop = styled.div`
+    width: 60px;
+    height: 30px;
+    border-radius: 0 0 50px 50px;
     background: #0f8a3a;
     position: absolute;
     top: 0px;

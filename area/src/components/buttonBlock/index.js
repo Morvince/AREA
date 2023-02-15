@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Draggable from 'react-draggable';
-import { Rectangle, AutomationText, LogoWrapper, AutomationRectangle, ArrowRectangle, RectangleWrapper, CircleArc } from './buttonBlockElements';
+import { Rectangle, AutomationText, LogoWrapper, AutomationRectangle, ArrowRectangle, RectangleWrapper, CircleArcBot, CircleArcTop } from './buttonBlockElements';
 import { Icon } from '@iconify/react';
 import MyContext from '../Context';
 
@@ -47,7 +47,9 @@ const ButtonBox = (props) => {
     >
       <Rectangle color={backgroundColor} top={pos.x} left={pos.y}>
         <RectangleWrapper>
-          <CircleArc />
+          <CircleArcTop background={props.color} />
+          <CircleArcTop background={props.color} />
+          <CircleArcBot background={props.color} />
           <AutomationText>
             {props.name}
           </AutomationText>

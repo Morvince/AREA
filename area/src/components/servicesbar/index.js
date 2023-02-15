@@ -65,7 +65,7 @@ const Servicesbar = () => {
   for (let i = 0; i < services.length; i++) {
     for (let x = 0; x < services[i].nombre; x++) {
       services[i].info.push({
-        top: (x * 140) + 10,
+        top: (x * 165) + 10,
         left: 50,
         color: getColorPuzzleBlock(services[i].nom),
         service: services[i].nom,
