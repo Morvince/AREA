@@ -149,7 +149,7 @@ const Block = (props) => {
   }
 
   return (
-    <Draggable bounds='parent' onClick={} onDrag={handleDrag} onStop={handleDragStop}>
+    <Draggable bounds='parent' onDrag={handleDrag} onStop={handleDragStop}>
       <RectangleBlock color={backgroundColor} top={pos.x} left={pos.y}>
         <RectangleWrapper>
           {(props.action === false) ? <CircleArcTop background={getColor(props.service)} /> : null}
