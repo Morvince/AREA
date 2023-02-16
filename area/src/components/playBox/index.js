@@ -47,17 +47,18 @@ const PlayBox = (props) => {
     <RectangleArea>
       <BinLeft> </BinLeft>
       <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, playlist, setPlaylist }}>
-        <Servicesbar />
-        <MovableBox>
-          {sharedData.map((info) => {
-            return (
-              <Block key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} />
-              )
-            })}
-        </MovableBox>
-      </MyContext.Provider>
-      <BinRight></BinRight>
-      <BinWhite></BinWhite>
+      <Servicesbar />
+      <MovableBox>
+        {sharedData.map((info) => {
+          return (
+            <Block key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} />
+            )
+          })}
+      </MovableBox>
+    </MyContext.Provider>
+    <BinRight></BinRight>
+    <BinWhite></BinWhite>
+    <Icon icon="mdi:delete-circle-outline" color="#373b48" width="40" style={{position: 'absolute', top: '20%', left: '80.3%'}}/>
     <ValidateButton className={iconColor === 'green' ? 'green' : 'red'} onClick={sendAutomation} disabled={iconColor === 'red'}>
       <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={iconColor} />
     </ValidateButton>

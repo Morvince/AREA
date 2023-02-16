@@ -68,13 +68,6 @@ export const BinRight = styled.div`
   top: 25%;
   background: #373b48;
   border-radius: 0px 10px 10px 0px;
-  transition: all 0.3s ease-in-out;
-
-  &:hover {
-    left: 1825px;
-    width: 2.6%;
-    border-radius: 10px;
-  }
 `;
 
 export const BinWhite = styled.div`
