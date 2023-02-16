@@ -1,5 +1,5 @@
 import React from 'react'
-import { RectangleArea, MovableBox, TickButton, ValidateButton } from './playBoxElements'
+import { RectangleArea, MovableBox, TickButton, ValidateButton, BinLeft, BinRight, BinWhite } from './playBoxElements'
 import Servicesbar from '../servicesbar'
 import Block from '../block'
 import MyContext from '../Context'
@@ -45,6 +45,7 @@ const PlayBox = (props) => {
 
   return (
     <RectangleArea>
+      <BinLeft> </BinLeft>
       <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, playlist, setPlaylist }}>
         <Servicesbar />
         <MovableBox>
@@ -54,10 +55,12 @@ const PlayBox = (props) => {
               )
             })}
         </MovableBox>
-        <ValidateButton className={iconColor === 'green' ? 'green' : 'red'} onClick={sendAutomation} disabled={iconColor === 'red'}>
-        <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={iconColor} />
-      </ValidateButton>
       </MyContext.Provider>
+      <BinRight></BinRight>
+      <BinWhite></BinWhite>
+    <ValidateButton className={iconColor === 'green' ? 'green' : 'red'} onClick={sendAutomation} disabled={iconColor === 'red'}>
+      <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={iconColor} />
+    </ValidateButton>
     </RectangleArea>
   )
 }
