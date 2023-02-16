@@ -1,7 +1,8 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAddAutomation } from '../../api/apiServicesPage';
-import { NavRectBg, NavTextHapilink, ButtonAreas, ButtonCreate, ButtonDocumentation, ButtonHapilink } from './navbarElements'
+import { NavRectBg, ButtonAreas, ButtonCreate, ButtonDocumentation, ButtonHapilink, NewAreas } from './navbarElements'
+import { getAreasCounter, resetAreasCounter } from '../../utils/AreasCounter'
 
 const Navbar = ({ toggle, changeY, defaultState }) => {
   const navigate = useNavigate();
@@ -19,9 +20,10 @@ const Navbar = ({ toggle, changeY, defaultState }) => {
   return (
     <>
       <NavRectBg> </NavRectBg>
+      {getAreasCounter() > 0 ? <NewAreas> {getAreasCounter()} </NewAreas> : null}
       <ButtonHapilink to="/" > Hapilink </ButtonHapilink>
       <ButtonCreate onClick={redirect} > Create </ButtonCreate>
-      <ButtonAreas to="/areas" > My Areas </ButtonAreas>
+      <ButtonAreas to="/areas" onClick={resetAreasCounter}> My Areas </ButtonAreas>
       <ButtonDocumentation to="/doc" > Documentation </ButtonDocumentation>
     </>
   )

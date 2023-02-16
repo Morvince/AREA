@@ -68,3 +68,18 @@ export const ButtonDocumentation = styled(LinkR)`
         color: #4361ee;
     }
 `;
+
+export const NewAreas = styled.div`
+  display: flex;
+  position: absolute;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  left: 43%;
+  top: 2.9%;
+  background: green;
+  color: white;
+  border-radius: 50%;
+`;
