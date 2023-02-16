@@ -35,16 +35,12 @@ export const ValidateButton = styled.button`
   background: white;
   transition: all 0.1s ease-in-out;
 
-  &.iconColor {
-    &.green {
-      cursor: pointer;
-      opacity: 1;
-    }
+  &.green {
+    cursor: pointer;
+  }
 
-    &.red {
-      cursor: not-allowed;
-      opacity: 1;
-    }
+  &.red {
+    cursor: not-allowed;
   }
 
   &:hover {

@@ -54,7 +54,7 @@ const PlayBox = (props) => {
               )
             })}
         </MovableBox>
-        <ValidateButton className={iconColor === 'green' ? 'green' : 'red'} onClick={sendAutomation}>
+        <ValidateButton className={iconColor === 'green' ? 'green' : 'red'} onClick={sendAutomation} disabled={iconColor === 'red'}>
         <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={iconColor} />
       </ValidateButton>
       </MyContext.Provider>
