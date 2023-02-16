@@ -1,11 +1,12 @@
 import React from 'react'
-import { RectangleArea, MovableBox, TickButton } from './playBoxElements'
+import { RectangleArea, MovableBox, TickButton, ValidateButton } from './playBoxElements'
 import Servicesbar from '../servicesbar'
 import Block from '../block'
 import MyContext from '../Context'
 import { useGetUserPlaylist } from '../../api/apiSpotify';
 import { useEditAutomation } from '../../api/apiServicesPage';
-import { useNavigate } from 'react-router-dom';
+import { Redirect, useNavigate } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = React.useState([]);
@@ -16,6 +17,7 @@ const PlayBox = (props) => {
   const userPlaylist = useGetUserPlaylist();
   const editAutomation = useEditAutomation();
   const navigate = useNavigate();
+  const iconColor = (sharedData).length > 1 ? 'green' : 'red';
 
   React.useEffect(() => {
     userPlaylist.mutate()
@@ -45,14 +47,16 @@ const PlayBox = (props) => {
     <RectangleArea>
       <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, playlist, setPlaylist }}>
         <Servicesbar />
-        <button onClick={sendAutomation}>Validate</button>
         <MovableBox>
           {sharedData.map((info) => {
             return (
               <Block key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} />
-            )
-          })}
+              )
+            })}
         </MovableBox>
+        <ValidateButton className={iconColor === 'green' ? 'green' : 'red'} onClick={sendAutomation}>
+        <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={iconColor} />
+      </ValidateButton>
       </MyContext.Provider>
     </RectangleArea>
   )

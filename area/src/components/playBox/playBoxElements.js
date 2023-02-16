@@ -24,3 +24,30 @@ export const TickButton = styled.button`
   border: none;
   border-radius: 50%;
 `;
+
+export const ValidateButton = styled.button`
+  position: absolute;
+  top: 89%;
+  left: 93%;
+  cursor: pointer;
+  opacity: 0.5;
+  border: none;
+  background: white;
+  transition: all 0.1s ease-in-out;
+
+  &.iconColor {
+    &.green {
+      cursor: pointer;
+      opacity: 1;
+    }
+
+    &.red {
+      cursor: not-allowed;
+      opacity: 1;
+    }
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+`;
