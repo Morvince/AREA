@@ -1,5 +1,5 @@
 import React from 'react'
-import { RectangleArea, MovableBox, TickButton, ValidateButton, BinLeft, BinRight, BinWhite, NewAreas } from './playBoxElements'
+import { RectangleArea, MovableBox, TickButton, ValidateButton, BinLeft, BinRight, BinWhite } from './playBoxElements'
 import Servicesbar from '../servicesbar'
 import Block from '../block'
 import MyContext from '../Context'
@@ -7,7 +7,6 @@ import { useGetUserPlaylist } from '../../api/apiSpotify';
 import { useEditAutomation } from '../../api/apiServicesPage';
 import { Redirect, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import { incrementAreasCounter } from '../../utils/AreasCounter'
 
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = React.useState([]);
@@ -19,6 +18,7 @@ const PlayBox = (props) => {
   const editAutomation = useEditAutomation();
   const navigate = useNavigate();
   const iconColor = (sharedData).length > 1 ? 'green' : 'red';
+  const { onValidate } = props;
 
   React.useEffect(() => {
     userPlaylist.mutate()
@@ -31,7 +31,7 @@ const PlayBox = (props) => {
     var actions = [];
     var i = {id: 0, number: 0, informations: {}};
 
-    incrementAreasCounter();
+    onValidate();
     for (var j = 0; j < linkedList.length; j++) {
       i.id = sharedData[j].dbId;
       i.number = j+1;
