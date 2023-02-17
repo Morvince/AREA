@@ -13,8 +13,8 @@ const Block = (props) => {
   const { playlist, setPlaylist } = React.useContext(MyContext);
   const [open, setOpen] = React.useState(false);
 
-  const handleOpen = () => {
-    setOpen(!open);
+  const handleOpen = (e, data) => {
+    console.log("open")
   };
 
   const [name, setName] = useState('');
@@ -36,6 +36,8 @@ const Block = (props) => {
 
   const handleDrag = (e, data) => {
     var rect = e.target.getBoundingClientRect();
+
+    e.target.style.zIndex = 1;
 
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id !== sharedData[i].index) {
@@ -64,7 +66,7 @@ const Block = (props) => {
 
   const handleDragStop = (e, data) => {
     var rect = e.target.getBoundingClientRect();
-
+    e.target.style.zIndex = 100;
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id === sharedData[i].index) {
         sharedData[i].top = rect.top;
@@ -149,7 +151,7 @@ const Block = (props) => {
   }
 
   return (
-    <Draggable bounds='parent' onDrag={handleDrag} onStop={handleDragStop}>
+    <Draggable bounds='parent' onDrag={handleDrag} onStop={handleDragStop} >
       <RectangleBlock color={backgroundColor} top={pos.x} left={pos.y}>
         <RectangleWrapper>
           {(props.action === false) ? <CircleArcTop background={getColor(props.service)} /> : null}
