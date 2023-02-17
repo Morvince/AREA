@@ -88,7 +88,7 @@ const Landing = () => {
                 </a>
             </IconWrapper>
             <IconWrapper>
-                <a href="https://openai.com/" > 
+                <a href="https://github.com/about" > 
                     <Icon icon="mdi:github" width="130" style={{ position: 'absolute', left: '73%', top: "318.5%" }} />
                 </a>
             </IconWrapper>

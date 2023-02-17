@@ -38,6 +38,7 @@ const Servicesbar = () => {
       switch (event.currentTarget.getAttribute("data-value")) {
         case "spotify":
           handleSpotifyConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+
           break;
         case "discord":
           handleDiscordConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
@@ -69,7 +70,7 @@ const Servicesbar = () => {
     { nom: 'instagram', nombre: 0, info: [], action: [], name: [], nbrBox: []},
     { nom: 'google',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
     { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'openai',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'github',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
   ];
 
   function fillservices(id, i) {
@@ -100,7 +101,7 @@ const Servicesbar = () => {
         case "twitter":
           fillservices(4, i);
           break;
-        case "openai":
+        case "github":
           fillservices(5, i);
           break;
         default:
@@ -152,7 +153,7 @@ const Servicesbar = () => {
         return "#EA4335";
       case "twitter":
         return "#1da1f2";
-      case "openai":
+      case "github":
         return "#434857";
       default:
         return "#373B48";
@@ -171,7 +172,7 @@ const Servicesbar = () => {
         return "#d92516";
       case "twitter":
         return "#1486cc";
-      case "openai":
+      case "github":
         return "#686f84";
       default:
         return "#454b5e";
@@ -213,7 +214,7 @@ const Servicesbar = () => {
               <Icon icon="skill-icons:twitter" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
             }
           </IconBox>
-          <IconBox onClick={() => handleClick("openai")}>
+          <IconBox onClick={() => handleClick("github")}>
             {isGithubConnected.isSuccess && isGithubConnected.data.data.connected ?
               <Icon icon="mdi:github" width="75" height="75" > </Icon> :
               <Icon icon="mdi:github" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
