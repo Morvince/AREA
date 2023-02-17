@@ -84,7 +84,7 @@ export const RectangleContener = styled.div`
 
 export const ButtonConnect = styled.button`
   position: absolute;
-  left: 25%;
+  left: 22%;
   top: 50%;
   border-radius: 30px;
   background: #D4D3DC;

@@ -18,7 +18,7 @@ const spotifyConnect = async (data) => {
 export const useSpotifyConnect = () => {
   return useMutation(spotifyConnect, {
     onSuccess: (data) => {
-      window.location.replace(data.data.authorization_url)
+      window.location.replace(data.data.authorization_url + "&service=Spotify")
     }
   })
 }
@@ -85,7 +85,7 @@ const instagramConnect = async (data) => {
 export const useInstagramConnect = () => {
   return useMutation(instagramConnect, {
     onSuccess: (data) => {
-      window.location.replace(data.data.authorization_url)
+      window.location.replace(data.data.authorization_url  + "&service=Instagram")
     }
   })
 }
@@ -118,7 +118,7 @@ const googleConnect = async (data) => {
 export const useGoogleConnect = () => {
   return useMutation(googleConnect, {
     onSuccess: (data) => {
-      window.location.replace(data.data.authorization_url)
+      window.location.replace(data.data.authorization_url + "&service=Google")
     }
   })
 }
@@ -150,7 +150,7 @@ const twitterConnect = async (data) => {
 export const useTwitterConnect = () => {
   return useMutation(twitterConnect, {
     onSuccess: (data) => {
-      window.location.replace(data.data.authorization_url)
+      window.location.replace(data.data.authorization_url + "&service=Twitter")
     }
   })
 }
@@ -182,7 +182,7 @@ const githubConnect = async (data) => {
 export const useGithubConnect = () => {
   return useMutation(githubConnect, {
     onSuccess: (data) => {
-      window.location.replace(data.data.authorization_url)
+      window.location.replace(data.data.authorization_url + "&service=Github")
     }
   })
 }
