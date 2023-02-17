@@ -243,16 +243,115 @@
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
             // Request for the user playlists
-            $response = $this->sendRequest($access_token, "user/repos");
-            if (isset(json_decode($response)->code)) {
-                return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
+            $response = json_decode($this->sendRequest($access_token, "user/repos"));
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
             }
-            $response = json_decode($response);
             $formatted = array();
             foreach ($response->items as $item) {
                 array_push($formatted, array("name" => $item->full_name, "id" => $item->id));
             }
             return new JsonResponse(array("items" => $formatted), 200);
+        }
+        /**
+         * @Route("/github/get_repo_branches", name="github_api_get_repos_branches")
+         */
+        public function getRepoBranches(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
+        {
+            header('Access-Control-Allow-Origin: *');
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->token)) {
+                return new JsonResponse(array("message" => "Github: Missing field"), 400);
+            }
+            $token = $request_content->token;
+            if (empty($user_repository->findByToken($token))) {
+                return new JsonResponse(array("message" => "Github: Bad auth token"), 400);
+            }
+            $user = $user_repository->findByToken($token)[0];
+            $user_id = $user->getId();
+            $service = $service_repository->findByName("github");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Github: Service not found"), 404);
+            }
+            $service = $service[0];
+            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+                return new JsonResponse(array("message" => "Github: Access token not found"), 404);
+            }
+            $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
+            if (empty($request_content->repo)) {
+                return new JsonResponse(array("message" => array()), 200);
+            }
+            $repo = $request_content->repo;
+            // Request for the branches of the repo
+            $response = json_decode($this->sendRequest($access_token, "repos/$repo/branches"));
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
+            }
+            $formatted = array();
+            foreach ($response->items as $item) {
+                array_push($formatted, array("name" => $item->name, "id" => $item->commit->sha));
+            }
+            return new JsonResponse(array("items" => $formatted), 200);
+        }
+        // Action
+        /**
+         * @Route("/github/action/check_last_commit", name="github_api_check_last_commit")
+         */
+        public function hasBranchNewCommit(Request $request)
+        {
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->new) || empty($request_content->old)) {
+                return new JsonResponse(array("message" => "Github: Missing field"), 400);
+            }
+            $old_date = $request_content->old;
+            $new_date = $request_content->new;
+            // Check if a new commit has been pushed
+            if (strtotime($old_date) < strtotime($new_date)) {
+                return new JsonResponse(array("message" => true), 200);
+            }
+            return new JsonResponse(array("message" => false), 200);
+        }
+        /**
+         * @Route("/github/action/check_last_commit/get_parameters", name="github_api_check_last_commit_parameters")
+         */
+        public function getHasBranchNewCommitParameters(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
+        {
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->automation_action_id)) {
+                return new JsonResponse(array("message" => "Github: Missing field"), 400);
+            }
+            $automation_action_id = $request_content->automation_action_id;
+            $automation_action = $automation_action_repository->find($automation_action_id);
+            if (empty($automation_action)) {
+                return new JsonResponse(array("message" => "Github: automation_action ID not found"), 404);
+            }
+            $service = $service_repository->findByName("github");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Github: Service not found"), 404);
+            }
+            $service = $service[0];
+            $automation = $automation_repository->find($automation_action->getAutomationId());
+            if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+                return new JsonResponse(array("message" => "Github: Access token not found"), 404);
+            }
+            $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
+            $informations = $automation_action->getInformations();
+            if (empty($informations->repo)) {
+                return new JsonResponse(array("message" => "Github: No repository URL"), 404);
+            }
+            // Request to get the last commit
+            // $response = json_decode($this->sendRequest($access_token, "repos/Morvince/AREA/commits/102-implement-github-service")); pour specifier une branche
+            $response = json_decode($this->sendRequest($access_token, "repos/$informations->repo/commits"));
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
+            }
+            if (empty($response)) {
+                return new JsonResponse("2001-03-17 17:16:18", 200);
+            }
+            return new JsonResponse($response[0]->commit->author->date, 200);
         }
 
         // Reaction
@@ -294,12 +393,25 @@
                 "title" => $informations->title,
                 "body" => $informations->body
             );
-            // Request to change playlist details
+            // Request to create an issue
             $response = json_decode($this->sendRequest($access_token, "repos/$informations->repo/issues", "POST", $parameters));
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
             return new JsonResponse(array("message" => "OK"), 200);
+        }
+        /**
+         * @Route("/github/test", name="github_api_test")
+         */
+        public function test(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
+        {
+            $service = $service_repository->findByName("github");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Github: Service not found"), 404);
+            }
+            $service = $service[0];
+            $access_token = $user_service_repository->findByUserIdAndServiceId(1, $service->getId())[0]->getAccessToken();
+            return new JsonResponse(array("message" => strtotime("2001-03-17 17:16:18")), 200);
         }
     }
 ?>
