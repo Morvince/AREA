@@ -183,7 +183,6 @@ const Servicesbar = () => {
       <ServicesBarContainer className={isOpen ? 'open' : 'closed'} color={getColor()}>
         <ServicesName>Services</ServicesName>
         <ServicesBarWrapper>
-
           <IconBox onClick={() => handleClick("discord")}>
             {isDiscordConnected.isSuccess && isDiscordConnected.data.data.connected ?
               <Icon icon="skill-icons:discord" width="75" height="75" > </Icon> :
@@ -208,8 +207,6 @@ const Servicesbar = () => {
               <Icon icon="logos:google-icon" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
             }
           </IconBox>
-
-
           <IconBox onClick={() => handleClick("twitter")}>
             {isTwitterConnected.isSuccess && isTwitterConnected.data.data.connected ?
               <Icon icon="skill-icons:twitter" width="75" height="75" > </Icon> :
