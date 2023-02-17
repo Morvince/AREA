@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { Rect, SettingsRect, Connect, Connected } from './settingsElements'
 import { Icon } from '@iconify/react';
-import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected } from '../../api/apiSettingsPage';
+import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected } from '../../api/apiSettingsPage';
 
 const Settings = () => {
-  const handleSpotifyConnect = useSpotifyConnect()
-  const isSpotifyConnected = useSpotifyConnected()
-  const handleDiscordConnect = useDiscordConnect()
-  const isDiscordConnected = useDiscordConnected()
+  const handleSpotifyConnect = useSpotifyConnect();
+  const isSpotifyConnected = useSpotifyConnected();
+  const handleDiscordConnect = useDiscordConnect();
+  const isDiscordConnected = useDiscordConnected();
+  const handleInstagramConnect = useInstagramConnect();
+  const isInstagramConnected = useInstagramConnected();
 
     useEffect(() => {
-      isSpotifyConnected.mutate()
-      isDiscordConnected.mutate()
+      isSpotifyConnected.mutate();
+      isDiscordConnected.mutate();
+      isInstagramConnected.mutate();
     }, []);
 
     const handleConnectServices = (event) => {
@@ -22,6 +25,9 @@ const Settings = () => {
           break;
         case "discord":
           handleDiscordConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+          break;
+        case "instagram":
+            handleInstagramConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
           break;
         default:
           break;

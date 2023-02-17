@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
 import ButtonBox from '../buttonBlock';
 import { useGetAction } from '../../api/apiServicesPage';
+import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected, useGoogleConnect, useGoogleConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
 
 const Servicesbar = () => {
   const [isOpen] = useState(true);
@@ -10,6 +11,53 @@ const Servicesbar = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [puzzleBlocktemps, setpuzzleBlocktemps] = useState([]);
   const tmpServices = useGetAction();
+  const handleSpotifyConnect = useSpotifyConnect();
+  const isSpotifyConnected = useSpotifyConnected();
+  const handleDiscordConnect = useDiscordConnect()
+  const isDiscordConnected = useDiscordConnected()
+  const handleInstagramConnect = useInstagramConnect();
+  const isInstagramConnected = useInstagramConnected();
+  const handleGoogleConnect = useGoogleConnect();
+  const isGoogleConnected = useGoogleConnected();
+  const handleTwitterConnect = useTwitterConnect();
+  const isTwitterConnected = useTwitterConnected();
+  const handleGithubConnect = useGithubConnect();
+  const isGithubConnected = useGithubConnected();
+
+    useEffect(() => {
+      isSpotifyConnected.mutate();
+      isDiscordConnected.mutate();
+      isInstagramConnected.mutate();
+      isGoogleConnected.mutate();
+      isTwitterConnected.mutate();
+      isGithubConnected.mutate();
+    }, []);
+
+    const handleConnectServices = (event) => {
+      event.preventDefault()
+      switch (event.currentTarget.getAttribute("data-value")) {
+        case "spotify":
+          handleSpotifyConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+          break;
+        case "discord":
+          handleDiscordConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+          break;
+        case "instagram":
+            handleInstagramConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+        break;
+        case "google":
+            handleGoogleConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+        break;
+        case "twitter":
+            handleTwitterConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+        break;
+        case "github":
+            handleGithubConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+        break;
+        default:
+          break;
+      }
+    }
 
   useEffect(() => {
     tmpServices.mutate()
@@ -135,23 +183,44 @@ const Servicesbar = () => {
       <ServicesBarContainer className={isOpen ? 'open' : 'closed'} color={getColor()}>
         <ServicesName>Services</ServicesName>
         <ServicesBarWrapper>
+
           <IconBox onClick={() => handleClick("discord")}>
-            <Icon icon="skill-icons:discord" width="75" height="75" />
+            {isDiscordConnected.isSuccess && isDiscordConnected.data.data.connected ?
+              <Icon icon="skill-icons:discord" width="75" height="75" > </Icon> :
+              <Icon icon="skill-icons:discord" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
+            }
           </IconBox>
           <IconBox onClick={() => handleClick("spotify")}>
-            <Icon icon="logos:spotify-icon" width="75" height="75" />
+            {isSpotifyConnected.isSuccess && isSpotifyConnected.data.data.connected ?
+              <Icon icon="logos:spotify-icon" width="75" height="75" > </Icon> :
+              <Icon icon="logos:spotify-icon" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
+            }
           </IconBox>
           <IconBox onClick={() => handleClick("instagram")}>
-            <Icon icon="skill-icons:instagram" width="75" height="75" />
+            {isInstagramConnected.isSuccess && isInstagramConnected.data.data.connected ?
+              <Icon icon="skill-icons:instagram" width="75" height="75" > </Icon> :
+              <Icon icon="skill-icons:instagram" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
+            }
           </IconBox>
           <IconBox onClick={() => handleClick("google")}>
-            <Icon icon="logos:google-icon" width="75" height="75" />
+            {isGoogleConnected.isSuccess && isGoogleConnected.data.data.connected ?
+              <Icon icon="logos:google-icon" width="75" height="75" > </Icon> :
+              <Icon icon="logos:google-icon" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
+            }
           </IconBox>
+
+
           <IconBox onClick={() => handleClick("twitter")}>
-            <Icon icon="skill-icons:twitter" width="75" height="75" />
+            {isTwitterConnected.isSuccess && isTwitterConnected.data.data.connected ?
+              <Icon icon="skill-icons:twitter" width="75" height="75" > </Icon> :
+              <Icon icon="skill-icons:twitter" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
+            }
           </IconBox>
           <IconBox onClick={() => handleClick("openai")}>
-            <Icon icon="mdi:github" width="75" height="75" />
+            {isGithubConnected.isSuccess && isGithubConnected.data.data.connected ?
+              <Icon icon="mdi:github" width="75" height="75" > </Icon> :
+              <Icon icon="mdi:github" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
+            }
           </IconBox>
         </ServicesBarWrapper>
       </ServicesBarContainer>
