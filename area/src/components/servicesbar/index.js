@@ -173,26 +173,26 @@ const Servicesbar = () => {
             <Icon icon="mdi:github" width="75" height="75" />
           </IconBox>
         </ServicesBarWrapper>
-        <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
-          {puzzleBlocktemps.map((info, index) => {
-            return (
-              <ButtonBox
-                key={info.index}
-                id={info.index}
-                top={info.top}
-                left={info.left}
-                color={info.color}
-                service={info.service}
-                action={info.action}
-                name={info.name}
-                nbrBox={info.nbrBox}
-                dbID={info.dbID}
-                icon={getIcon(info.service)}
-              />
-            )
-          })}
-        </RectangleContener>
       </ServicesBarContainer>
+      <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
+        {puzzleBlocktemps.map((info, index) => {
+          return (
+            <ButtonBox
+              key={info.index}
+              id={info.index}
+              top={info.top}
+              left={info.left}
+              color={info.color}
+              service={info.service}
+              action={info.action}
+              name={info.name}
+              nbrBox={info.nbrBox}
+              dbID={info.dbID}
+              icon={getIcon(info.service)}
+            />
+          )
+        })}
+      </RectangleContener>
     </LeftColumn >
   );
 }
