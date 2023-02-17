@@ -101,6 +101,14 @@ github_api_connected:
   path: /github/connected
   controller: App\Controller\GithubAPIController::isConnected
   methods: [POST]
+github_api_reaction_create_issue:
+  path: /github/reaction/create_issue
+  controller: App\Controller\GithubAPIController::createIssue
+  methods: [POST]
+github_api_get_user_repos:
+  path: /github/get_user_repos
+  controller: App\Controller\GithubAPIController::getUserRepos
+  methods: [POST]
 
 # AUTOMATION
 automation_add:

@@ -173,7 +173,7 @@
         /**
          * @Route("/spotify/connected", name="spotify_api_connected")
          */
-        public function isConnected(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
+        public function isConnected(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
         {
             header('Access-Control-Allow-Origin: *');
             // Get needed values
@@ -187,12 +187,12 @@
             }
             $user = $user_repository->findByToken($token)[0];
             $user_id = $user->getId();
-            $service = $sevice_repository->findByName("spotify");
+            $service = $service_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
             }
             $service = $service[0];
-            if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
                 return new JsonResponse(array("connected" => false), 200);
             }
             return new JsonResponse(array("connected" => true), 200);

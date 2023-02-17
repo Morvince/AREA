@@ -153,7 +153,7 @@
         /**
          * @Route("/github/connected", name="github_api_connected")
          */
-        public function isConnected(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
+        public function isConnected(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
         {
             header('Access-Control-Allow-Origin: *');
             // Get needed values
@@ -167,12 +167,12 @@
             }
             $user = $user_repository->findByToken($token)[0];
             $user_id = $user->getId();
-            $service = $sevice_repository->findByName("github");
+            $service = $service_repository->findByName("github");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Github: Service not found"), 404);
             }
             $service = $service[0];
-            if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
                 return new JsonResponse(array("connected" => false), 200);
             }
             return new JsonResponse(array("connected" => true), 200);
@@ -182,7 +182,7 @@
             if (empty($this->request_api)) {
                 $this->request_api = new RequestAPI();
             }
-            $response = $this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters);
+            $response = $this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters, "User-Agent: Area");
             if (isset(json_decode($response)->error)) {
                 switch (json_decode($response)->error->status) {
                     case 400:
@@ -214,6 +214,92 @@
                 }
             }
             return $response;
+        }
+
+        /**
+         * @Route("/github/get_user_repos", name="github_api_get_user_repos")
+         */
+        public function getUserRepos(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
+        {
+            header('Access-Control-Allow-Origin: *');
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->token)) {
+                return new JsonResponse(array("message" => "Github: Missing field"), 400);
+            }
+            $token = $request_content->token;
+            if (empty($user_repository->findByToken($token))) {
+                return new JsonResponse(array("message" => "Github: Bad auth token"), 400);
+            }
+            $user = $user_repository->findByToken($token)[0];
+            $user_id = $user->getId();
+            $service = $service_repository->findByName("github");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Github: Service not found"), 404);
+            }
+            $service = $service[0];
+            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+                return new JsonResponse(array("message" => "Github: Access token not found"), 404);
+            }
+            $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
+            // Request for the user playlists
+            $response = $this->sendRequest($access_token, "user/repos");
+            if (isset(json_decode($response)->code)) {
+                return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
+            }
+            $response = json_decode($response);
+            $formatted = array();
+            foreach ($response->items as $item) {
+                array_push($formatted, array("name" => $item->full_name, "id" => $item->id));
+            }
+            return new JsonResponse(array("items" => $formatted), 200);
+        }
+
+        // Reaction
+        /**
+         * @Route("/github/reaction/create_issue", name="github_api_reaction_create_issue")
+         */
+        public function createIssue(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
+        {
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->automation_action_id)) {
+                return new JsonResponse(array("message" => "Github: Missing field"), 400);
+            }
+            $automation_action_id = $request_content->automation_action_id;
+            $automation_action = $automation_action_repository->find($automation_action_id);
+            if (empty($automation_action)) {
+                return new JsonResponse(array("message" => "Github: automation_action ID not found"), 404);
+            }
+            $service = $service_repository->findByName("github");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Github: Service not found"), 404);
+            }
+            $service = $service[0];
+            $automation = $automation_repository->find($automation_action->getAutomationId());
+            if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+                return new JsonResponse(array("message" => "Github: Access token not found"), 404);
+            }
+            $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
+            $informations = $automation_action->getInformations();
+            if (explode("/", $informations->repo) !== 2) {
+                return new JsonResponse(array("message" => "Github: Bad repository URL"), 404);
+            }
+            if (empty($informations->title)) {
+                return new JsonResponse(array("message" => "Github: An issue need a Title"), 404);
+            }
+            $parameters = array(
+                "owner" => explode("/", $informations->repo)[0],
+                "repo" => explode("/", $informations->repo)[1],
+                "title" => $informations->title,
+                "body" => $informations->body
+            );
+            // Request to change playlist details
+            $response = json_decode($this->sendRequest($access_token, "repos/$informations->repo/issues", "POST", $parameters));
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
+            }
+            return new JsonResponse(array("message" => "OK"), 200);
         }
     }
 ?>
