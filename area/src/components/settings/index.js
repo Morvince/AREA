@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { Rect, SettingsRect, Connect, Connected } from './settingsElements'
 import { Icon } from '@iconify/react';
-import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected } from '../../api/apiSettingsPage';
+import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
 
 const Settings = () => {
+  // SPOTIFY
   const handleSpotifyConnect = useSpotifyConnect()
   const isSpotifyConnected = useSpotifyConnected()
+  // DISCORD
   const handleDiscordConnect = useDiscordConnect()
   const isDiscordConnected = useDiscordConnected()
+  // GITHUB
+  const handleGithubConnect = useGithubConnect()
+  const isGithubConnected = useGithubConnected()
 
     useEffect(() => {
       isSpotifyConnected.mutate()
       isDiscordConnected.mutate()
+      isGithubConnected.mutate()
     }, []);
 
     const handleConnectServices = (event) => {
@@ -22,6 +28,9 @@ const Settings = () => {
           break;
         case "discord":
           handleDiscordConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+          break;
+        case "github":
+          handleGithubConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
           break;
         default:
           break;
@@ -49,10 +58,14 @@ const Settings = () => {
         <SettingsRect top="200px" height="600px" color="#D4D3DC" width="25%" left="60%" SettingsRect/>
         <Icon icon="logos:google-icon" width="100" style={{ position: 'absolute', left: '63%', top: "250px" }}/>
         <Icon icon="skill-icons:twitter" width="100" style={{ position: 'absolute', left: '63%', top: "450px" }}/>
-        <Icon icon="logos:openai-icon" width="100" style={{ position: 'absolute', left: '63%', top: "650px" }}/>
+        <Icon icon="logos:github-icon" width="100" style={{ position: 'absolute', left: '63%', top: "650px" }}/>
         <Connect to="/" top="265px" left="70.5%" >Connect</Connect>
         <Connect to="/" top="465px" left="71.5%" >Connect</Connect>
         <Connect to="/" top="665px" left="71.5%" >Connect</Connect>
+        {isGithubConnected.isSuccess && isGithubConnected.data.data.connected ?
+          <Connected top="665px" left="70.5%" >Connected</Connected> :
+          <Connect to="/" top="665px" left="71.5%" data-value="github" onClick={handleConnectServices} >Connect</Connect>
+        }
       </>
     )
 };
