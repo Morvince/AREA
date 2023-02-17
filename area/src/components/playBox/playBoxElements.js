@@ -7,6 +7,7 @@ export const RectangleArea = styled.div`
   width: 120%;
   height: 100%;
   z-index: 0;
+  background-color: #ebebeb;
 `;
 
 export const MovableBox = styled.div`
@@ -33,7 +34,7 @@ export const ValidateButton = styled.button`
   cursor: pointer;
   opacity: 0.5;
   border: none;
-  background: white;
+  background: #ebebeb;
   transition: all 0.1s ease-in-out;
   z-index: 100000;
 
@@ -76,6 +77,6 @@ export const BinWhite = styled.div`
   height: 50%;
   left: 81.8%;
   top: 25%;
-  background: white;
+  background: #ebebeb;
 
 `;
