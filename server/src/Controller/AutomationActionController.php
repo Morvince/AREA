@@ -70,7 +70,7 @@
                         }
                     }
                 }
-                sleep(10);
+                sleep(60);
             }
         }
         private function refreshAccessToken($automation_action, $service, $automation_repository, $user_service_repository)

@@ -49,9 +49,6 @@ spotify_api_reaction_add_artist_music_to_playlist:
   path: /spotify/reaction/add_artist_music_to_playlist
   controller: App\Controller\SpotifyAPIController::addMusicFromArtistListToPlaylist
   methods: [POST]
-# spotify_test:
-#   path: /spotify/test
-#   controller: App\Controller\SpotifyAPIController::test
 
 # DISCORD
 discord_api_connect:
@@ -86,6 +83,47 @@ discord_api_send_channel_message:
   path: /discord/reaction/send_channel_message
   controller: App\Controller\DiscordAPIController::sendChannelMessage
   methods: [POST]
+
+# GITHUB
+github_api_connect:
+  path: /github/connect
+  controller: App\Controller\GithubAPIController::connect
+  methods: [POST]
+github_api_get_access_token:
+  path: /github/get_access_token
+  controller: App\Controller\GithubAPIController::getAccessToken
+  methods: [POST]
+github_api_refresh_access_token:
+  path: /github/refresh_access_token
+  controller: App\Controller\GithubAPIController::refreshAccessToken
+  methods: [POST]
+github_api_connected:
+  path: /github/connected
+  controller: App\Controller\GithubAPIController::isConnected
+  methods: [POST]
+github_api_check_last_commit:
+  path: /github/action/check_last_commit
+  controller: App\Controller\GithubAPIController::hasBranchNewCommit
+  methods: [POST]
+github_api_check_last_commit_parameters:
+  path: /github/action/check_last_commit/get_parameters
+  controller: App\Controller\GithubAPIController::getHasBranchNewCommitParameters
+  methods: [POST]
+github_api_reaction_create_issue:
+  path: /github/reaction/create_issue
+  controller: App\Controller\GithubAPIController::createIssue
+  methods: [POST]
+github_api_get_user_repos:
+  path: /github/get_user_repos
+  controller: App\Controller\GithubAPIController::getUserRepos
+  methods: [POST]
+github_api_get_repo_branches:
+  path: /github/get_repo_branches
+  controller: App\Controller\GithubAPIController::getRepoBranches
+  methods: [POST]
+github_api_test:
+  path: /github/test
+  controller: App\Controller\GithubAPIController::test
 
 # AUTOMATION
 automation_add:
