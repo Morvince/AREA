@@ -41,7 +41,7 @@ export const ServicesBarWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 60%;
-  height: 65%;
+  height: 68%;
   background-color: #ebebeb;
   border-radius: 10px;
   padding: 5px;
