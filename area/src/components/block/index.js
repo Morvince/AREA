@@ -37,7 +37,7 @@ const Block = (props) => {
   const handleDrag = (e, data) => {
     var rect = e.target.getBoundingClientRect();
 
-    e.target.style.zIndex = 1;
+    // e.target.style.zIndex = 1;
 
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id !== sharedData[i].index) {
@@ -66,7 +66,7 @@ const Block = (props) => {
 
   const handleDragStop = (e, data) => {
     var rect = e.target.getBoundingClientRect();
-    e.target.style.zIndex = 100;
+    // e.target.style.zIndex = 100;
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id === sharedData[i].index) {
         sharedData[i].top = rect.top;

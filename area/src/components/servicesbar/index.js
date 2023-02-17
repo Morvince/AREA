@@ -175,7 +175,7 @@ const Servicesbar = () => {
         </ServicesBarWrapper>
       </ServicesBarContainer>
       <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
-        {puzzleBlocktemps.map((info, index) => {
+        {puzzleBlocktemps.map((info) => {
           return (
             <ButtonBox
               key={info.index}
