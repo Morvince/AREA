@@ -16,12 +16,12 @@ const Servicesbar = () => {
   }, []);
 
   const services = [
-    { nom: 'discord',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], nbrBox: [2,0]},
-    { nom: 'instagram', nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'google',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'openai',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'discord', nombre: 0, info: [], action: [], name: [], nbrBox: [] },
+    { nom: 'spotify', nombre: 0, info: [], action: [], name: [], nbrBox: [2, 0] },
+    { nom: 'instagram', nombre: 0, info: [], action: [], name: [], nbrBox: [] },
+    { nom: 'google', nombre: 0, info: [], action: [], name: [], nbrBox: [] },
+    { nom: 'twitter', nombre: 0, info: [], action: [], name: [], nbrBox: [] },
+    { nom: 'openai', nombre: 0, info: [], action: [], name: [], nbrBox: [] },
   ];
 
   function fillservices(id, i) {
@@ -170,7 +170,7 @@ const Servicesbar = () => {
             <Icon icon={getIcon("twitter")} width="75" height="75" />
           </IconBox>
           <IconBox onClick={() => handleClick("openai")}>
-            <Icon icon={getIcon("openai")} width="75" height="75" />
+            <Icon icon="mdi:github" width="75" height="75" />
           </IconBox>
         </ServicesBarWrapper>
         <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
@@ -193,7 +193,7 @@ const Servicesbar = () => {
           })}
         </RectangleContener>
       </ServicesBarContainer>
-    </LeftColumn>
+    </LeftColumn >
   );
 }
 
