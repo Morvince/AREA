@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
+import { ServicesBarContainer, ServicesBarWrapper, IconBox, ButtonConnect, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
 import ButtonBox from '../buttonBlock';
 import { useGetAction } from '../../api/apiServicesPage';
 import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected, useGoogleConnect, useGoogleConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
@@ -35,10 +35,9 @@ const Servicesbar = () => {
 
     const handleConnectServices = (event) => {
       event.preventDefault()
-      switch (event.currentTarget.getAttribute("data-value")) {
+      switch (selectedService) {
         case "spotify":
           handleSpotifyConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
-
           break;
         case "discord":
           handleDiscordConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
@@ -72,6 +71,41 @@ const Servicesbar = () => {
     { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
     { nom: 'github',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
   ];
+
+  function checkIfConnected() {
+    switch (selectedService) {
+      case "discord":
+        if (isDiscordConnected.isSuccess && isDiscordConnected.data.data.connected)
+          return true;
+        else
+          return false;
+      case "spotify":
+        if (isSpotifyConnected.isSuccess && isSpotifyConnected.data.data.connected)
+          return true;
+        else
+          return false;
+      case "instagram":
+        if (isInstagramConnected.isSuccess && isInstagramConnected.data.data.connected)
+          return true;
+        else
+          return false;
+      case "google":
+        if (isGoogleConnected.isSuccess && isGoogleConnected.data.data.connected)
+          return true;
+        else
+          return false;
+      case "twitter":
+        if (isTwitterConnected.isSuccess && isTwitterConnected.data.data.connected)
+          return true;
+        else
+          return false;
+      case "github":
+        if (isGithubConnected.isSuccess && isGithubConnected.data.data.connected)
+          return true;
+        else
+          return false;
+    }
+  }
 
   function fillservices(id, i) {
     services[id].nombre += 1;
@@ -187,47 +221,51 @@ const Servicesbar = () => {
           <IconBox onClick={() => handleClick("discord")}>
             {isDiscordConnected.isSuccess && isDiscordConnected.data.data.connected ?
               <Icon icon="skill-icons:discord" width="75" height="75" > </Icon> :
-              <Icon icon="skill-icons:discord" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
+              <Icon icon="skill-icons:discord" width="75" height="75" opacity="0.5" > </Icon> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("spotify")}>
             {isSpotifyConnected.isSuccess && isSpotifyConnected.data.data.connected ?
               <Icon icon="logos:spotify-icon" width="75" height="75" > </Icon> :
-              <Icon icon="logos:spotify-icon" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
+              <Icon icon="logos:spotify-icon" width="75" height="75" opacity="0.5"> </Icon> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("instagram")}>
             {isInstagramConnected.isSuccess && isInstagramConnected.data.data.connected ?
               <Icon icon="skill-icons:instagram" width="75" height="75" > </Icon> :
-              <Icon icon="skill-icons:instagram" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
+              <Icon icon="skill-icons:instagram" width="75" height="75" opacity="0.5" > </Icon> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("google")}>
             {isGoogleConnected.isSuccess && isGoogleConnected.data.data.connected ?
               <Icon icon="logos:google-icon" width="75" height="75" > </Icon> :
-              <Icon icon="logos:google-icon" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
+              <Icon icon="logos:google-icon" width="75" height="75" opacity="0.5" > </Icon> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("twitter")}>
             {isTwitterConnected.isSuccess && isTwitterConnected.data.data.connected ?
               <Icon icon="skill-icons:twitter" width="75" height="75" > </Icon> :
-              <Icon icon="skill-icons:twitter" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
+              <Icon icon="skill-icons:twitter" width="75" height="75" opacity="0.5" > </Icon> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("github")}>
             {isGithubConnected.isSuccess && isGithubConnected.data.data.connected ?
               <Icon icon="mdi:github" width="75" height="75" > </Icon> :
-              <Icon icon="mdi:github" width="75" height="75" opacity="0.5" onClick={handleConnectServices} > </Icon> 
+              <Icon icon="mdi:github" width="75" height="75" opacity="0.5"> </Icon> 
             }
           </IconBox>
         </ServicesBarWrapper>
       </ServicesBarContainer>
       <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
-        {puzzleBlocktemps.map((info, index) => {
-          return (
-            <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} dbID={info.dbID}/>
-          )
-        })}
+        {checkIfConnected() == true ?
+          puzzleBlocktemps.map((info, index) => {
+            return (
+              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} dbID={info.dbID}/>
+            )
+          }) : 
+          <ButtonConnect onClick={handleConnectServices}> Connect </ButtonConnect>
+        }
+
       </RectangleContener>
     </LeftColumn>
   );
