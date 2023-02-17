@@ -89,7 +89,7 @@ const Landing = () => {
             </IconWrapper>
             <IconWrapper>
                 <a href="https://openai.com/" > 
-                    <Icon icon="logos:openai-icon" width="100" style={{ position: 'absolute', left: '73%', top: "320%" }} />
+                    <Icon icon="mdi:github" width="130" style={{ position: 'absolute', left: '73%', top: "318.5%" }} />
                 </a>
             </IconWrapper>
             <Rect top="3740px" height="1400px" color="black" Rect />

@@ -74,7 +74,7 @@ const Doc = () => {
         </TwitterBox>
         {twitterOpen && <BoxContentRight background="#1486cc">Twitter content here</BoxContentRight>}
         <GithubBox onClick={toggleGithubOpen}>
-          <Icon icon="logos:openai-icon" width="100" height="100" />
+          <Icon icon="mdi:github" width="130" height="130" />
         </GithubBox>
         {githubOpen && <BoxContentRight background="#686f84">Github content here</BoxContentRight>}
       </ContainerRight>

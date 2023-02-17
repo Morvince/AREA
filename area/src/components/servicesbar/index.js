@@ -151,7 +151,7 @@ const Servicesbar = () => {
             <Icon icon="skill-icons:twitter" width="75" height="75" />
           </IconBox>
           <IconBox onClick={() => handleClick("openai")}>
-            <Icon icon="logos:openai-icon" width="75" height="75" />
+            <Icon icon="mdi:github" width="75" height="75" />
           </IconBox>
         </ServicesBarWrapper>
       </ServicesBarContainer>
