@@ -12,6 +12,7 @@ export const ServicesBarContainer = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: ${props => props.color};
+  top: 4%;
   width: 150px;
   height: 100%;
   left: 0;
@@ -68,15 +69,15 @@ export const RectangleContener = styled.div`
   position: absolute;
   width: 350px;
   height: 100%;
-  z-index: 998;
-  transition: all 0.2s ease-in-out;
+  z-index: 1;
+  transition: all 0.3s ease-in-out;
   background-color: ${props => props.color};
 
   &.open {
-    transform: translateX(270px);
+    transform: translateX(200px);
   }
 
   &.closed {
-    transform: translateX(-350px);
+    transform: translateX(-400px);
   }
 `;

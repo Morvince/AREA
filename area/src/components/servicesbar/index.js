@@ -151,17 +151,17 @@ const Servicesbar = () => {
             <Icon icon="skill-icons:twitter" width="75" height="75" />
           </IconBox>
           <IconBox onClick={() => handleClick("openai")}>
-            <Icon icon="logos:openai-icon" width="75" height="75" />
+            <Icon icon="mdi:github" width="75" height="75" />
           </IconBox>
         </ServicesBarWrapper>
-        <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
-          {puzzleBlocktemps.map((info, index) => {
-            return (
-              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} dbID={info.dbID}/>
-            )
-          })}
-        </RectangleContener>
       </ServicesBarContainer>
+      <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
+        {puzzleBlocktemps.map((info, index) => {
+          return (
+            <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} dbID={info.dbID}/>
+          )
+        })}
+      </RectangleContener>
     </LeftColumn>
   );
 }

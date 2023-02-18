@@ -126,7 +126,7 @@
          * @Route("/spotify/refresh_access_token", name="spotify_api_refresh_access_token")
          */
         public function refreshAccessToken(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
-        { // a changer pour lutiliser que via le server
+        {
             // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->user_id)) {
@@ -173,7 +173,7 @@
         /**
          * @Route("/spotify/connected", name="spotify_api_connected")
          */
-        public function isConnected(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
+        public function isConnected(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
         {
             header('Access-Control-Allow-Origin: *');
             // Get needed values
@@ -187,12 +187,12 @@
             }
             $user = $user_repository->findByToken($token)[0];
             $user_id = $user->getId();
-            $service = $sevice_repository->findByName("spotify");
+            $service = $service_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
             }
             $service = $service[0];
-            if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
                 return new JsonResponse(array("connected" => false), 200);
             }
             return new JsonResponse(array("connected" => true), 200);
@@ -234,17 +234,6 @@
             return new JsonResponse($response, 200);
         }
         /**
-         * @Route("/spotify/test", name="spotify_test")
-         */
-        public function test(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
-        {
-            if (empty($this->request_api)) {
-                $this->request_api = new RequestAPI();
-            }
-            $response = $this->request_api->sendRoute("tools:8000/spotify/get_user_playlists", array("token" => "ea469788fb5e36ebe666b294a449360e62522eeb5658c1998be297e0ac5553f9"));
-            return new JsonResponse($response);
-        }
-        /**
          * @Route("/spotify/get_user_playlists", name="spotify_api_get_user_playlists")
          */
         public function getUserPlaylists(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
@@ -283,7 +272,7 @@
             foreach ($response->items as $item) {
                 array_push($formatted, array("name" => $item->name, "id" => $item->id));
             }
-            return new JsonResponse(array("playlists" => $formatted), 200);
+            return new JsonResponse(array("items" => $formatted), 200);
         }
         private function sendRequest($access_token, $endpoint, $method = "GET", $parameters = array())
         {
@@ -326,7 +315,7 @@
 
         // Action
         /**
-         * @Route("/spotify/action/check_music_playlist", name="spotify_api_check_music_playlist")
+         * @Route("/spotify/action/check_music_playlist", name="spotify_api_action_check_music_playlist")
          */
         public function isMusicAddedToPlaylist(Request $request)
         {
@@ -335,8 +324,8 @@
             if (empty($request_content->new) || empty($request_content->old)) {
                 return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
-            $old_tracks = $request_content->old->tracks->items;
-            $new_tracks = $request_content->new->tracks->items;
+            $old_tracks = $request_content->old;
+            $new_tracks = $request_content->new;
             // Check if tracks have been added to playlist
             foreach ($new_tracks as $new_track) {
                 $found = false;
@@ -353,7 +342,7 @@
             return new JsonResponse(array("message" => false), 200);
         }
         /**
-         * @Route("/spotify/action/check_music_playlist/get_parameters", name="spotify_api_check_music_playlist_parameters")
+         * @Route("/spotify/action/check_music_playlist/get_parameters", name="spotify_api_action_check_music_playlist_parameters")
          */
         public function getIsMusicAddedToPlaylistParameters(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
         {
@@ -386,7 +375,7 @@
             if (isset($playlist->code)) {
                 return new JsonResponse(array("message" => $playlist->message), $playlist->code);
             }
-            return new JsonResponse($playlist, 200);
+            return new JsonResponse($playlist->tracks->items, 200);
         }
 
         // Reaction

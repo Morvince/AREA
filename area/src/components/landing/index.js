@@ -1,8 +1,12 @@
 import React from 'react'
-import { Rect, Text, Button1, Button2 } from './LandingElements';
+import { Rect, FirstWave, SecondWave, Text, ButtonWithBg, ButtonTryIt, Shape, IconWrapper, ButtonNewAccount, ButtonLogin, YoutubeScreen } from './LandingElements';
 import { Icon } from '@iconify/react';
 import { useAddAutomation } from '../../api/apiServicesPage';
 import { useNavigate } from 'react-router-dom';
+import landing from './landing.png'
+import android from './android.png'
+import windows from './windows.png'
+import YouTube from 'react-youtube';
 
 const Landing = () => {
     const navigate = useNavigate();
@@ -17,45 +21,89 @@ const Landing = () => {
         navigate("/home", { replace: true, state: { automationId: tmpAutomation.data.data } })
     }
 
+    const YoutubeOptions = {
+      height: '650',
+      width: '1024',
+      playerVars: {
+        autoplay: 0,
+      },
+  };
+
     return (
         <>
-            <Rect top="0px" height="820px" color="#373b48" Rect />
-            <Text lineheight="1.2" fontsize="80px" top="200px" left="550px"
+            {/* navebar :  */}
+            <ButtonLogin to="/login" > Log In </ButtonLogin>
+            <ButtonNewAccount to="/sign" > New Account </ButtonNewAccount>
+
+            {/* first part  */}
+            <Rect top="80px" height="3700px" color="#373b48" Rect />
+            <img src={landing} alt="image" style={{ position: 'absolute', top: '110px', width: '100%'}} />
+            <Text lineheight="1.2" fontsize="60px" top="30%" left="32%"
                 color="white" fontweight="bold" > Make everything works <br></br> Together </Text>
-            <Text lineheight="1.2" fontsize="40px" top="450px" left="500px"
+            <Text lineheight="1.2" fontsize="30px" top="52%" left="30%"
                 color="white" fontweight="" > Link all your application in order to make your life easier ! </Text>
-            <Text lineheight="1.2" fontsize="45px" top="20px" left="25px"
-                color="white" fontweight="bold" > Hapilink </Text>
-            <Button1 to="/sign" top="29px" left="1750px" >Login</Button1>
-            <Button2 top="600px" left="760px" width="400px" onClick={redirect}>Start Now</Button2>
+            <ButtonWithBg top="85%" left="42%" height="50px" width="300px" onClick={redirect}>Start Now</ButtonWithBg>
 
-            <Rect top="820px" height="1000px" color="#D4D3DC" Rect />
-            <Icon icon="logos:microsoft-windows" width="300" style={{ position: 'absolute', left: '400px', height: "2500px" }} />
-            <Icon icon="flat-color-icons:android-os" width="500" style={{ position: 'absolute', left: '1100px', height: "2500px" }} />
-            <Text lineheight="1.2" fontsize="50px" top="900px" left="580px"
-                color="black" fontweight="bold" > Available on windows and Android !  </Text>
-            <Text lineheight="1.2" fontsize="40px" top="1600px" left="210px"
-                color="black" fontweight="bold" > Use the application where and when you want thanks to our mobile and computer app. </Text>
-
-            <Text lineheight="1.2" fontsize="50px" top="2000px" left="400px"
-                color="black" fontweight="bold" > Link different services between our SIX applications </Text>
-            <Icon icon="skill-icons:discord" width="300" style={{ position: 'absolute', left: '100px', top: "2150px" }} />
-            <Icon icon="logos:spotify-icon" width="300" style={{ position: 'absolute', left: '100px', top: "2600px" }} />
-            <Icon icon="skill-icons:instagram" width="300" style={{ position: 'absolute', left: '800px', top: "2150px" }} />
-            <Icon icon="logos:google-icon" width="300" style={{ position: 'absolute', left: '800px', top: "2600px" }} />
-            <Icon icon="skill-icons:twitter" width="300" style={{ position: 'absolute', left: '1500px', top: "2150px" }} />
-            <Icon icon="logos:openai-icon" width="300" style={{ position: 'absolute', left: '1500px', top: "2600px" }} />
-
-
-            <Rect top="3100px" height="1100px" color="#373b48" Rect />
-            <Text lineheight="1.2" fontsize="50px" top="3250px" left="400px"
+            {/* Disponible on windows and android */}
+            <FirstWave top="900px" height="1000px" color="#D4D3DC" FirstWave/>
+            <Rect top="1190px" height="1500px" color="#D4D3DC" Rect />
+            <Text lineheight="1.2" fontsize="50px" top="130%" left="30%"
+                color="black" fontweight="bold" > Available on Windows and Android !  </Text>
+            <Text lineheight="1.9" fontsize="40px" top="155%" left="12%"
+                color="black" fontweight="" > <em> Automate from anywhere, anytime. <br></br> Our Android app and our Windows website <br></br> will make it easy. </em> </Text>
+            <Icon icon="logos:microsoft-windows" width="150" style={{ position: 'absolute', left: '65%', top: "160%" }} />
+            <Icon icon="flat-color-icons:android-os" width="250" style={{ position: 'absolute', left: '80%', top: "155%" }} />
+            <SecondWave top="2190px" height="1000px" color="#D4D3DC" SecondWave />
+            <img src={windows} alt="image" style={{ position: 'absolute', top: '200%', left: '8%', width: "1150px", height: "600px"}} />
+            <img src={android} alt="image" style={{ position: 'absolute', top: '200%', left: '76%', width: "320px", height: "600px"}} />
+        
+            {/* Six applications  */}
+            <Text lineheight="1.2" fontsize="50px" top="290%" left="15%"
+                color="white" fontweight="bold" > <em> Link EVERYTHING your want between our SIX applications </em> </Text>
+            <Rect top="320%" height="100px" color="black" Rect />
+            <Shape top="315%" left="18%" height="20%" width="65%" color="white" Shape />
+            <IconWrapper>
+                <a href="https://discord.com/company" > 
+                    <Icon icon="skill-icons:discord" width="100" style={{ position: 'absolute', left: '23%', top: "320%" }} />
+                </a>
+            </IconWrapper>
+            <IconWrapper>
+                <a href="https://newsroom.spotify.com/company-info/" > 
+                    <Icon icon="logos:spotify-icon" width="100" style={{ position: 'absolute', left: '33%', top: "320%" }} />
+                </a>
+            </IconWrapper>
+            <IconWrapper>
+                <a href="https://about.instagram.com/fr-fr" > 
+                    <Icon icon="skill-icons:instagram" width="100" style={{ position: 'absolute', left: '43%', top: "320%" }} />
+                </a>
+            </IconWrapper>
+            <IconWrapper>
+                <a href="https://about.google/" > 
+                    <Icon icon="logos:google-icon" width="100" style={{ position: 'absolute', left: '53%', top: "320%" }} />
+                </a>
+            </IconWrapper>
+            <IconWrapper>
+                <a href="https://about.twitter.com/fr" > 
+                    <Icon icon="skill-icons:twitter" width="100" style={{ position: 'absolute', left: '63%', top: "320%" }} />
+                </a>
+            </IconWrapper>
+            <IconWrapper>
+                <a href="https://openai.com/" > 
+                    <Icon icon="mdi:github" width="130" style={{ position: 'absolute', left: '73%', top: "318.5%" }} />
+                </a>
+            </IconWrapper>
+            <Rect top="3740px" height="1400px" color="black" Rect />
+            <Text lineheight="1.2" fontsize="50px" top="350%" left="20%"
                 color="white" fontweight="bold" > Connect apps together and let automations work </Text>
-            <Text lineheight="1.2" fontsize="40px" top="3350px" left="600px"
-                color="white" fontweight="bold" > There are unlimited ways to connect ! </Text>
-            <Text lineheight="1.2" fontsize="40px" top="3700px" left="750px"
-                color="white" fontweight="bold" > PUT SCREENSHOT  </Text>
-            <Button2 to="/home" top="4000px" left="795px" width="250px" >Try it</Button2>
+            <SecondWave top="332%" height="1000px" color="#373b48" SecondWave />
 
+            {/* final part */}
+            <Text lineheight="1.2" fontsize="40px" top="405%" left="20%"
+                color="white" fontweight="" > <em> Now you just have to try it by yourself and let the magic happen ! </em> </Text>
+            <YoutubeScreen>
+              <YouTube videoId="WFw_Whjj51k" opts={YoutubeOptions} />
+            </YoutubeScreen>
+            <ButtonTryIt top="490%" left="42%" height="100px" width="300px" onClick={redirect}>Try it !!</ButtonTryIt>
         </>
     )
 };
