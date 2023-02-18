@@ -95,6 +95,9 @@ discord_api_react_message:
   path: /discord/reaction/react_message
   controller: App\Controller\DiscordAPIController::reactWithMessage
   methods: [POST]
+discord_api_test:
+  path: /discord/test
+  controller: App\Controller\DiscordAPIController::test
 
 # GITHUB
 github_api_connect:

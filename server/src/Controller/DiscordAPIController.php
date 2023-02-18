@@ -379,8 +379,8 @@ class DiscordAPIController extends AbstractController
             return new JsonResponse(array("message" => "Discord: Identifiers error"), 422);
         }
         $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
-        // Request for the user channels
-        $bot_token = $identifiers[2];
+        // Request for the user server
+        $bot_token = $identifiers[2]; // recup du token avec l'identif 2
         $guilds_url = 'https://discord.com/api/users/@me/guilds';
         $guilds_headers = [
             'Authorization: Bot ' . $bot_token,
@@ -392,14 +392,15 @@ class DiscordAPIController extends AbstractController
                 'method' => 'GET',
             ],
         ];
+        // pour récup la liste des id des serveurs
         $guilds_context = stream_context_create($guilds_options);
         $guilds_response = file_get_contents($guilds_url, false, $guilds_context);
         $guilds_data = json_decode($guilds_response, true);
 
-        // Récupérer l'ID de la première guilde
+        // Récupérer l'ID du premier serveur et en set un random
         $guild_id = $guilds_data[0]['id'];
 
-        // Récupérer la liste des canaux autorisés pour le bot dans la guilde
+        // faire la même récup mais avec les channels
         $channels_url = "https://discord.com/api/guilds/$guild_id/channels";
         $channels_headers = [
             'Authorization: Bot ' . $bot_token,
@@ -483,12 +484,12 @@ class DiscordAPIController extends AbstractController
         if (empty($informations->channel_id) && empty($informations->message)) {
             return new JsonResponse(array("message" => "Discord: Informations not found"), 404);
         }
-        $message = $informations->message; // set le message de l'utilisateur, lui proposer des phrases si c'est Discord ou autre chose
+        $message = "lets try this"; //$informations->message; // set le message de l'utilisateur, lui proposer des phrases si c'est Discord ou autre chose
         $tag_message = "<@$username>"; // début du message qui identifie l'utilisateur en question
         $message = $tag_message . $message; // concaténation pour le message final qui identifie bien l'user
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://discordapp.com/api/v6/channels/$informations->channel_id/messages",
+            CURLOPT_URL => "https://discordapp.com/api/v6/channels/1056478509700222988/1072543579425218604/messages",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -511,6 +512,26 @@ class DiscordAPIController extends AbstractController
             echo $response;
         }
         return new JsonResponse(array("token" => json_decode($response)), 200);
+    }
+
+    /**
+     * @Route("/discord/test", name="discord_api_test")
+     */
+    public function test(Request $request, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
+    {
+        // echo "ok";
+        // return new JsonResponse("");
+        $parameters = array("automation_action_id" => 5);
+        $url = "http://localhost/discord/reaction/send_channel_message";
+        if (empty($this->request_api)) {
+            $this->request_api = new RequestAPI();
+        }
+        $response = $this->request_api->sendRoute($url, $parameters);
+        $response = json_decode($response);
+        if (isset($response->code)) {
+            return new JsonResponse(array("message" => $response->message), $response->code);
+        }
+        return new JsonResponse($response, 200);
     }
 
     /**
@@ -621,5 +642,4 @@ class DiscordAPIController extends AbstractController
 
         return new JsonResponse(array("token" => json_decode($response)), 200);
     }
-    // check pour faire une autre réaction.
 }
