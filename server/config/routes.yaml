@@ -33,11 +33,11 @@ spotify_api_get_user_playlists:
   path: /spotify/get_user_playlists
   controller: App\Controller\SpotifyAPIController::getUserPlaylists
   methods: [POST]
-spotify_api_check_music_playlist:
+spotify_api_action_check_music_playlist:
   path: /spotify/action/check_music_playlist
   controller: App\Controller\SpotifyAPIController::isMusicAddedToPlaylist
   methods: [POST]
-spotify_api_check_music_playlist_parameters:
+spotify_api_action_check_music_playlist_parameters:
   path: /spotify/action/check_music_playlist/get_parameters
   controller: App\Controller\SpotifyAPIController::getIsMusicAddedToPlaylistParameters
   methods: [POST]
@@ -101,18 +101,6 @@ github_api_connected:
   path: /github/connected
   controller: App\Controller\GithubAPIController::isConnected
   methods: [POST]
-github_api_check_last_commit:
-  path: /github/action/check_last_commit
-  controller: App\Controller\GithubAPIController::hasBranchNewCommit
-  methods: [POST]
-github_api_check_last_commit_parameters:
-  path: /github/action/check_last_commit/get_parameters
-  controller: App\Controller\GithubAPIController::getHasBranchNewCommitParameters
-  methods: [POST]
-github_api_reaction_create_issue:
-  path: /github/reaction/create_issue
-  controller: App\Controller\GithubAPIController::createIssue
-  methods: [POST]
 github_api_get_user_repos:
   path: /github/get_user_repos
   controller: App\Controller\GithubAPIController::getUserRepos
@@ -121,9 +109,18 @@ github_api_get_repo_branches:
   path: /github/get_repo_branches
   controller: App\Controller\GithubAPIController::getRepoBranches
   methods: [POST]
-github_api_test:
-  path: /github/test
-  controller: App\Controller\GithubAPIController::test
+github_api_action_check_last_commit:
+  path: /github/action/check_last_commit
+  controller: App\Controller\GithubAPIController::hasBranchNewCommit
+  methods: [POST]
+github_api_action_check_last_commit_parameters:
+  path: /github/action/check_last_commit/get_parameters
+  controller: App\Controller\GithubAPIController::getHasBranchNewCommitParameters
+  methods: [POST]
+github_api_reaction_create_issue:
+  path: /github/reaction/create_issue
+  controller: App\Controller\GithubAPIController::createIssue
+  methods: [POST]
 
 # AUTOMATION
 automation_add:
