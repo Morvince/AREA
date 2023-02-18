@@ -37,22 +37,28 @@ const Servicesbar = () => {
       event.preventDefault()
       switch (selectedService) {
         case "spotify":
+          sessionStorage.setItem("serviceToConnect", "spotify")
           handleSpotifyConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
           break;
         case "discord":
+          sessionStorage.setItem("serviceToConnect", "discord")
           handleDiscordConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
           break;
         case "instagram":
-            handleInstagramConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+          sessionStorage.setItem("serviceToConnect", "instagram")
+          handleInstagramConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
         break;
         case "google":
-            handleGoogleConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+          sessionStorage.setItem("serviceToConnect", "google")
+          handleGoogleConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
         break;
         case "twitter":
-            handleTwitterConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+          sessionStorage.setItem("serviceToConnect", "twitter")
+          handleTwitterConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
         break;
         case "github":
-            handleGithubConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+          sessionStorage.setItem("serviceToConnect", "github")
+          handleGithubConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
         break;
         default:
           break;
@@ -262,7 +268,7 @@ const Servicesbar = () => {
             return (
               <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} dbID={info.dbID}/>
             )
-          }) : 
+          }) :
           <ButtonConnect onClick={handleConnectServices}> Connect </ButtonConnect>
         }
 

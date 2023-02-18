@@ -12,81 +12,68 @@ const ConnectServices = () => {
   const handleTwitterAccess = useTwitterAccess()
   const handleGithubAccess = useGithubAccess()
 
-  const navigate = useNavigate();
-
   const tmpAutomation = useAddAutomation();
-
-  function redirect() {
-      tmpAutomation.mutate();
-  }
+  const navigate = useNavigate()
 
   useEffect(() => {
-    console.log(params.get("service"))
-    switch (params.get("service")) {
-      case "Spotify":
+    switch (sessionStorage.getItem("serviceToConnect")) {
+      case "spotify":
         handleSpotifyAccess.mutate(JSON.stringify({
           state: params.get("state"),
           token: sessionStorage.getItem("token"),
           code: params.get("code"),
           redirect_uri: "http://localhost:8081/connectServices"
-        }));
+        }), {onSettled: () => { tmpAutomation.mutate(null, {onSuccess: (data) => { navigate("/home", {replace: true, state: {automationId: data.data}}) }}) }});
         break;
-      case "Discord":
+      case "discord":
         console.log("passe dans le case\n")
         handleDiscordAccess.mutate(JSON.stringify({
         state: params.get("state"),
         token: sessionStorage.getItem("token"),
         code: params.get("code"),
         redirect_uri: "http://localhost:8081/connectServices"
-        }));
+        }), {onSettled: () => { tmpAutomation.mutate(null, {onSuccess: (data) => { navigate("/home", {replace: true, state: {automationId: data.data}}) }}) }});
         break;
-      case "Instagram":
+      case "instagram":
         handleInstagramAccess.mutate(JSON.stringify({
         state: params.get("state"),
         token: sessionStorage.getItem("token"),
         code: params.get("code"),
         redirect_uri: "http://localhost:8081/connectServices"
-        }));
+        }), {onSettled: () => { tmpAutomation.mutate(null, {onSuccess: (data) => { navigate("/home", {replace: true, state: {automationId: data.data}}) }}) }});
         break;
-      case "Google":
+      case "google":
         handleGoogleAccess.mutate(JSON.stringify({
         state: params.get("state"),
         token: sessionStorage.getItem("token"),
         code: params.get("code"),
         redirect_uri: "http://localhost:8081/connectServices"
-        }));
+        }), {onSettled: () => { tmpAutomation.mutate(null, {onSuccess: (data) => { navigate("/home", {replace: true, state: {automationId: data.data}}) }}) }});
         break;
-      case "Twitter":
+      case "twitter":
         handleTwitterAccess.mutate(JSON.stringify({
         state: params.get("state"),
         token: sessionStorage.getItem("token"),
         code: params.get("code"),
         redirect_uri: "http://localhost:8081/connectServices"
-        }));
+        }), {onSettled: () => { tmpAutomation.mutate(null, {onSuccess: (data) => { navigate("/home", {replace: true, state: {automationId: data.data}}) }}) }});
         break;
-      case "Github":
+      case "github":
         handleGithubAccess.mutate(JSON.stringify({
         state: params.get("state"),
         token: sessionStorage.getItem("token"),
         code: params.get("code"),
         redirect_uri: "http://localhost:8081/connectServices"
-        }));
+        }), {onSettled: () => { tmpAutomation.mutate(null, {onSuccess: (data) => { navigate("/home", {replace: true, state: {automationId: data.data}}) }}) }});
         break;
     }
   }, [])
 
-  console.log(handleDiscordAccess.status);
-  // || handleSpotifyAccess.isIdle || handleSpotifyAccess.isLoading || handleInstagramAccess.isIdle || handleInstagramAccess.isLoading || handleGoogleAccess.isIdle || handleGoogleAccess.isLoading || handleTwitterAccess.isIdle || handleSpotifyAccess.isLoading || handleGithubAccess.isIdle || handleGithubAccess.isLoading
-  if (handleDiscordAccess.isIdle || handleDiscordAccess.isLoading )
-    return (
-      <div style={{height:"100vh", display: "flex", justifyContent: "center", alignItems: "center"}}>
-        <h1>Loading...</h1>
-      </div>
-    )
-  else
-    redirect();
-    if (tmpAutomation.isSuccess)
-      navigate("/home", { replace: true, state: { automationId: tmpAutomation.data.data } }) 
+  return (
+    <div style={{height:"100vh", display: "flex", justifyContent: "center", alignItems: "center"}}>
+      <h1>Loading...</h1>
+    </div>
+  )
 }
 
 export default ConnectServices
