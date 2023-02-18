@@ -315,7 +315,7 @@
 
         // Action
         /**
-         * @Route("/spotify/action/check_music_playlist", name="spotify_api_check_music_playlist")
+         * @Route("/spotify/action/check_music_playlist", name="spotify_api_action_check_music_playlist")
          */
         public function isMusicAddedToPlaylist(Request $request)
         {
@@ -342,7 +342,7 @@
             return new JsonResponse(array("message" => false), 200);
         }
         /**
-         * @Route("/spotify/action/check_music_playlist/get_parameters", name="spotify_api_check_music_playlist_parameters")
+         * @Route("/spotify/action/check_music_playlist/get_parameters", name="spotify_api_action_check_music_playlist_parameters")
          */
         public function getIsMusicAddedToPlaylistParameters(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
         {

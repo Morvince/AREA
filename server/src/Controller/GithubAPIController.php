@@ -294,9 +294,10 @@
             }
             return new JsonResponse(array("items" => $formatted), 200);
         }
+
         // Action
         /**
-         * @Route("/github/action/check_last_commit", name="github_api_check_last_commit")
+         * @Route("/github/action/check_last_commit", name="github_api_action_check_last_commit")
          */
         public function hasBranchNewCommit(Request $request)
         {
@@ -314,7 +315,7 @@
             return new JsonResponse(array("message" => false), 200);
         }
         /**
-         * @Route("/github/action/check_last_commit/get_parameters", name="github_api_check_last_commit_parameters")
+         * @Route("/github/action/check_last_commit/get_parameters", name="github_api_action_check_last_commit_parameters")
          */
         public function getHasBranchNewCommitParameters(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
         {
@@ -401,17 +402,68 @@
             return new JsonResponse(array("message" => "OK"), 200);
         }
         /**
-         * @Route("/github/test", name="github_api_test")
+         * @Route("/github/reaction/create_edit_readme", name="github_api_reaction_create_edit_readme")
          */
-        public function test(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
+        public function createEditReadme(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
         {
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->automation_action_id)) {
+                return new JsonResponse(array("message" => "Github: Missing field"), 400);
+            }
+            $automation_action_id = $request_content->automation_action_id;
+            $automation_action = $automation_action_repository->find($automation_action_id);
+            if (empty($automation_action)) {
+                return new JsonResponse(array("message" => "Github: automation_action ID not found"), 404);
+            }
             $service = $service_repository->findByName("github");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Github: Service not found"), 404);
             }
             $service = $service[0];
-            $access_token = $user_service_repository->findByUserIdAndServiceId(1, $service->getId())[0]->getAccessToken();
-            return new JsonResponse(array("message" => strtotime("2001-03-17 17:16:18")), 200);
+            $automation = $automation_repository->find($automation_action->getAutomationId());
+            if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+                return new JsonResponse(array("message" => "Github: Access token not found"), 404);
+            }
+            $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
+            $informations = $automation_action->getInformations();
+            if (explode("/", $informations->repo) !== 2) {
+                return new JsonResponse(array("message" => "Github: Bad repository URL"), 404);
+            }
+            $response = json_decode($this->sendRequest($access_token, "repos/$informations->repo/contents"));
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
+            }
+            $path = "README.md";
+            $found_sha = "";
+            foreach ($response as $item) {
+                if (strcmp($item->name, $path) === 0) {
+                    $found_sha = $item->sha;
+                }
+            }
+            if (!empty($found_sha)) {
+                $data = array(
+                    "owner" => explode("/", $informations->repo)[0],
+                    "repo" => explode("/", $informations->repo)[1],
+                    "path" => $path,
+                    "message" => "[AREA API] : Updating $path",
+                    "content" => base64_encode($informations->content),
+                    "sha" => $found_sha
+                );
+            } else {
+                $data = array(
+                    "owner" => explode("/", $informations->repo)[0],
+                    "repo" => explode("/", $informations->repo)[1],
+                    "path" => $path,
+                    "message" => "[AREA API] : Creating $path",
+                    "content" => base64_encode($informations->content)
+                );
+            }
+            $response = json_decode($this->sendRequest($access_token, "repos/$informations->repo/contents/$path", "PUT", $data));
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
+            }
+            return new JsonResponse(array("message" => "OK"), 200);
         }
     }
 ?>
