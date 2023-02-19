@@ -227,11 +227,15 @@
             $search = $request->query->get("search");
             $search = str_replace(" ", "%20", $search);
             // Request for the search
-            $response = $this->sendRequest($access_token, "search?type=$type&q=$search");
-            if (isset(json_decode($response)->code)) {
-                return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
+            $response = json_decode($this->sendRequest($access_token, "search?type=$type&q=$search"));
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
             }
-            return new JsonResponse($response, 200);
+            $formatted = array();
+            foreach ($response[$type."s"]->items as $item) {
+                array_push($formatted, array("name" => $item->name, "id" => $item->id));
+            }
+            return new JsonResponse(array("items" => $formatted), 200);
         }
         /**
          * @Route("/spotify/get_user_playlists", name="spotify_api_get_user_playlists")
@@ -260,14 +264,13 @@
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
             // Request for the user playlists
-            $response = $this->sendRequest($access_token, "me/playlists"); // changer pour voir seulement celles modifiables
-            if (isset(json_decode($response)->code)) {
-                return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
+            $response = json_decode($this->sendRequest($access_token, "me/playlists")); // changer pour voir seulement celles modifiables
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
             }
-            if (empty(json_decode($response)->items)) {
+            if (empty($response->items)) {
                 return new JsonResponse(array("message" => $response), 500);
             }
-            $response = json_decode($response);
             $formatted = array();
             foreach ($response->items as $item) {
                 array_push($formatted, array("name" => $item->name, "id" => $item->id));
