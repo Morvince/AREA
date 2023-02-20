@@ -10,14 +10,14 @@ const Block = (props) => {
   const { sharedData, setSharedData } = React.useContext(MyContext);
   const { linkedList, setLinkedList } = React.useContext(MyContext);
   const { playlist, setPlaylist } = React.useContext(MyContext);
-  const [open, setOpen] = useState(false);
+  const {open, setOpen} = React.useContext(MyContext);
 
   const handleOpen = (e, data) => {
-    if (open === false) {
-      setOpen(true);
+    if (open === "null") {
+      setOpen(props.service);
       console.log("1open : ", open)
     } else {
-      setOpen(false);
+      setOpen("null");
       console.log("2open : ", open)
     }
   };

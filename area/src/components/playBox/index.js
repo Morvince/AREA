@@ -9,9 +9,10 @@ import { Icon } from '@iconify/react';
 
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = React.useState([]);
-  const [ID, setID] = React.useState(0);
   const [linkedList, setLinkedList] = React.useState([]);
   const [playlist, setPlaylist] = React.useState([]);
+  const [open, setOpen] = React.useState("null");
+  const [ID, setID] = React.useState(0);
   const automationId = props.automationId;
   const userPlaylist = useGetUserPlaylist();
   const editAutomation = useEditAutomation();
@@ -43,7 +44,7 @@ const PlayBox = (props) => {
   return (
     <RectangleArea>
       <BinLeft />
-      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, playlist, setPlaylist }}>
+      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, playlist, setPlaylist, open, setOpen }}>
         <Servicesbar />
         <MovableBox>
           {sharedData.map((info) => {
