@@ -20,7 +20,7 @@ const ButtonBox = (props) => {
       case "instagram":
         return "uil:instagram-alt" ;
       case "google":
-        return "uil:google";
+        return "logos:google-gmail";
       case "twitter":
         return "mdi:twitter" ;
       case "openai":

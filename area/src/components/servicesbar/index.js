@@ -137,7 +137,7 @@ const Servicesbar = () => {
       case "spotify":
         return "logos:spotify-icon";
       case "instagram":
-        return "skill-icons:instagram";
+        return "logos:google-gmail";
       case "google":
         return "logos:google-icon";
       case "twitter":
