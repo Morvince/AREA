@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const LeftColumn = styled.div`
-  /* position: absolute; */
   display: flex;
   width: 150px;
 `;
