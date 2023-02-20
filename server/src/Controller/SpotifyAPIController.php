@@ -227,11 +227,15 @@
             $search = $request->query->get("search");
             $search = str_replace(" ", "%20", $search);
             // Request for the search
-            $response = $this->sendRequest($access_token, "search?type=$type&q=$search");
-            if (isset(json_decode($response)->code)) {
-                return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
+            $response = json_decode($this->sendRequest($access_token, "search?type=$type&q=$search"));
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
             }
-            return new JsonResponse($response, 200);
+            $formatted = array();
+            foreach ($response[$type."s"]->items as $item) {
+                array_push($formatted, array("name" => $item->name, "id" => $item->id));
+            }
+            return new JsonResponse(array("items" => $formatted), 200);
         }
         /**
          * @Route("/spotify/get_user_playlists", name="spotify_api_get_user_playlists")
@@ -260,14 +264,13 @@
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
             // Request for the user playlists
-            $response = $this->sendRequest($access_token, "me/playlists"); // changer pour voir seulement celles modifiables
-            if (isset(json_decode($response)->code)) {
-                return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
+            $response = json_decode($this->sendRequest($access_token, "me/playlists")); // changer pour voir seulement celles modifiables
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
             }
-            if (empty(json_decode($response)->items)) {
+            if (empty($response->items)) {
                 return new JsonResponse(array("message" => $response), 500);
             }
-            $response = json_decode($response);
             $formatted = array();
             foreach ($response->items as $item) {
                 array_push($formatted, array("name" => $item->name, "id" => $item->id));
@@ -315,7 +318,7 @@
 
         // Action
         /**
-         * @Route("/spotify/action/check_music_playlist", name="spotify_api_check_music_playlist")
+         * @Route("/spotify/action/check_music_playlist", name="spotify_api_action_check_music_playlist")
          */
         public function isMusicAddedToPlaylist(Request $request)
         {
@@ -342,7 +345,7 @@
             return new JsonResponse(array("message" => false), 200);
         }
         /**
-         * @Route("/spotify/action/check_music_playlist/get_parameters", name="spotify_api_check_music_playlist_parameters")
+         * @Route("/spotify/action/check_music_playlist/get_parameters", name="spotify_api_action_check_music_playlist_parameters")
          */
         public function getIsMusicAddedToPlaylistParameters(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
         {
