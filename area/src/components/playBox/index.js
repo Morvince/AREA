@@ -40,6 +40,7 @@ const PlayBox = (props) => {
       i = {id: 0, number: 0, informations: {}}
     }
     editAutomation.mutate({id: automationId, actions: actions})
+    setSharedData([]);
   }
 
   return (
