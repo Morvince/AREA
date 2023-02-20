@@ -280,7 +280,7 @@
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
             if (empty($request_content->repo)) {
-                return new JsonResponse(array("message" => array()), 200);
+                return new JsonResponse(array("items" => array()), 200);
             }
             $repo = $request_content->repo;
             // Request for the branches of the repo

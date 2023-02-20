@@ -169,3 +169,8 @@ automation_reaction_do:
 automation_action_check:
   path: /automation/action/check
   controller: App\Controller\AutomationActionController::check
+
+# SERVER
+server_about_json:
+  path: /about.json
+  controller: App\Controller\ServerController::about
