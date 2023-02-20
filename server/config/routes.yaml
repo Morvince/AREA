@@ -83,9 +83,9 @@ discord_api_send_channel_message:
   path: /discord/reaction/send_channel_message
   controller: App\Controller\DiscordAPIController::sendChannelMessage
   methods: [POST]
-discord_api_change_nickname:
-  path: /discord/reaction/change_nickname
-  controller: App\Controller\DiscordAPIController::changeNicknameOnServer
+discord_api_add_user:
+  path: /discord/reaction/add_user
+  controller: App\Controller\DiscordAPIController::addUserOnServer
   methods: [POST]
 discord_api_get_user_channels:
   path: /discord/reaction/get_user_channels

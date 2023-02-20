@@ -46,7 +46,7 @@ class DiscordAPIController extends AbstractController
         $scope = array(
             "email", "guilds",
             "connections", "messages.read",
-            "identify", "gdm.join", "bot"
+            "identify", "gdm.join", "bot", "guilds.join"
         );
         $scope = implode(" ", $scope);
         // Set the state when the request is good
@@ -450,15 +450,29 @@ class DiscordAPIController extends AbstractController
     public function sendChannelMessage(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
     {
         // Récupérez le jeton d'accès
+        $request_content = json_decode($request->getContent()); // début de la récup du field informations link au fiels qui est link au front
+        if (empty($request_content->automation_action_id)) {
+            return new JsonResponse(array("message" => "Discord: Missing field"), 400);
+        }
+        $automation_action_id = $request_content->automation_action_id;
+        $automation_action = $automation_action_repository->find($automation_action_id);
+        if (empty($automation_action)) {
+            return new JsonResponse(array("message" => "Discord: Automation_action ID not found"), 404);
+        }
+        $informations = $automation_action->getInformations(); // attribution des valeurs d'informations dans la var info
+        if (empty($informations->channel_id) && empty($informations->message)) {
+            return new JsonResponse(array("message" => "Discord: Informations not found"), 404);
+        }
         $service = $service_repository->findByName("discord");
         if (empty($service)) {
             return new JsonResponse(array("message" => "Discord: Service not found"), 404);
         }
         $service = $service[0];
-        if (empty($user_service_repository->findByUserIdAndServiceId(1, $service->getId()))) {
+        $automation = $automation_repository->find($automation_action->getAutomationId());
+        if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
             return new JsonResponse(array("message" => "Discord: Access token not found"), 404);
         }
-        $access_token = $user_service_repository->findByUserIdAndServiceId(1, $service->getId())[0]->getAccessToken();
+        $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
         if (empty($this->request_api)) {
             $this->request_api = new RequestAPI();
         }
@@ -471,6 +485,62 @@ class DiscordAPIController extends AbstractController
         $name = json_decode($result)->username;
         $bot_token = $identifiers[2];
         // return new JsonResponse(json_decode($result)); // pour check si on peut recup d'autres infos sur le user
+        $message = $informations->message; // set le message de l'utilisateur, lui proposer des phrases si c'est Discord ou autre chose
+        $tag_message = "<@$username>"; // début du message qui identifie l'utilisateur en question
+        $message = $tag_message . $message; // concaténation pour le message final qui identifie bien l'user
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://discordapp.com/api/v6/channels/$informations->channel_id/messages",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => json_encode(array("content" => $message)),
+            CURLOPT_HTTPHEADER => array(
+                "Authorization: Bot $bot_token",
+                "Content-Type: application/json"
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+        return new JsonResponse(array("token" => json_decode($response)), 200);
+    }
+
+    /**
+     * @Route("/discord/test", name="discord_api_test")
+     */
+    public function test(Request $request, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
+    {
+        echo "ok";
+        // return new JsonResponse("");
+        $parameters = array("automation_action_id" => 2);
+        $url = "http://localhost/discord/reaction/add_user";
+        if (empty($this->request_api)) {
+            $this->request_api = new RequestAPI();
+        }
+        $response = $this->request_api->sendRoute($url, $parameters);
+        $response = json_decode($response);
+        if (isset($response->code)) {
+            return new JsonResponse(array("message" => $response->message), $response->code);
+        }
+        return new JsonResponse(array("response" => $response), 200);
+    }
+
+    /**
+     * @Route("/discord/reaction/add_user", name="discord_api_add_user")
+     */
+
+    public function addUserOnServer(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
+    {
+        // Récupérez le jeton d'accès
+        $service = $service_repository->findByName("discord");
+        if (empty($service)) {
+            return new JsonResponse(array("message" => "Discord: Service not found"), 404);
+        }
+        $service = $service[0];
         $request_content = json_decode($request->getContent()); // début de la récup du field informations link au fiels qui est link au front
         if (empty($request_content->automation_action_id)) {
             return new JsonResponse(array("message" => "Discord: Missing field"), 400);
@@ -480,110 +550,43 @@ class DiscordAPIController extends AbstractController
         if (empty($automation_action)) {
             return new JsonResponse(array("message" => "Discord: Automation_action ID not found"), 404);
         }
-        $informations = json_decode($automation_action->getInformations()); // attribution des valeurs d'informations dans la var info
-        if (empty($informations->channel_id) && empty($informations->message)) {
-            return new JsonResponse(array("message" => "Discord: Informations not found"), 404);
-        }
-        $message = "lets try this"; //$informations->message; // set le message de l'utilisateur, lui proposer des phrases si c'est Discord ou autre chose
-        $tag_message = "<@$username>"; // début du message qui identifie l'utilisateur en question
-        $message = $tag_message . $message; // concaténation pour le message final qui identifie bien l'user
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://discordapp.com/api/v6/channels/1056478509700222988/1072543579425218604/messages",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "{\"content\":\"$message\"}",
-            CURLOPT_HTTPHEADER => array(
-                "Authorization: Bot $bot_token",
-                "Content-Type: application/json"
-            ),
-        ));
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            echo $response;
-        }
-        return new JsonResponse(array("token" => json_decode($response)), 200);
-    }
-
-    /**
-     * @Route("/discord/test", name="discord_api_test")
-     */
-    public function test(Request $request, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
-    {
-        // echo "ok";
-        // return new JsonResponse("");
-        $parameters = array("automation_action_id" => 5);
-        $url = "http://localhost/discord/reaction/send_channel_message";
-        if (empty($this->request_api)) {
-            $this->request_api = new RequestAPI();
-        }
-        $response = $this->request_api->sendRoute($url, $parameters);
-        $response = json_decode($response);
-        if (isset($response->code)) {
-            return new JsonResponse(array("message" => $response->message), $response->code);
-        }
-        return new JsonResponse($response, 200);
-    }
-
-    /**
-     * @Route("/discord/reaction/change_nickname", name="discord_api_change_nickname")
-     */
-
-    public function changeNicknameOnServer(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
-    {
-        $service = $service_repository->findByName("discord");
-        if (empty($service)) {
-            return new JsonResponse(array("message" => "Discord: Service not found"), 404);
-        }
-        $service = $service[0];
-        if (empty($user_service_repository->findByUserIdAndServiceId(1, $service->getId()))) {
+        $automation = $automation_repository->find($automation_action->getAutomationId());
+        if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
             return new JsonResponse(array("message" => "Discord: Access token not found"), 404);
         }
-        $access_token = $user_service_repository->findByUserIdAndServiceId(1, $service->getId())[0]->getAccessToken();
+        $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
         if (empty($this->request_api)) {
             $this->request_api = new RequestAPI();
+        }
+        $informations = $automation_action->getInformations(); // attribution des valeurs d'informations dans la var info
+        if (empty($informations->user_id) && empty($informations->guild_id)) {
+            return new JsonResponse(array("message" => "Discord: Informations not found"), 404);
         }
         $identifiers = explode(";", $service->getIdentifiers());
         if (count($identifiers) != 3) {
             return new JsonResponse(array("message" => "Discord: Identifiers error"), 422);
         }
-        $request_content = json_decode($request->getContent()); // début de la récup du field informations link au fiels qui est link au front
-        $automation_action_id = $request_content->automation_action_id;
-        $automation_action = $automation_action_repository->find($automation_action_id);
-        if (empty($automation_action)) {
-            return new JsonResponse(array("message" => "Discord: Automation_action ID not found"), 404);
-        }
-        $informations = json_decode($automation_action->getInformations()); // attribution des valeurs d'informations dans la var info
-        if (empty($informations->channel_id) && empty($informations->message)) {
-            return new JsonResponse(array("message" => "Discord: Informations not found"), 404);
-        }
-        $nickname = $informations->nickname; // récup le nickname que l'user veut utiliser
+        $result = $this->request_api->send($access_token, "https://discordapp.com/api/v6/users/@me", "GET", array());
+        $bot_token = $identifiers[2];
+        $url = "https://discord.com/api/v9/guilds/$informations->guild_id/members/$informations->user_id";
+        $headers = array(
+            "Content-Type: application/json",
+            "Authorization: Bot $bot_token"
+        );
+        $data = array(
+            "access_token" => $bot_token,
+            // "roles" => array($roleId) // potentiellement permettre d'add un rôle
+        );
 
-        $url = "https://discord.com/api/v6/guilds/$informations->guild_id/members/@me/nick";
-        // requête patch de façon à modifier le nickname des utilisateurs sur un serveur.
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array("nick" => $nickname)));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "Authorization: Bot your_token",
-            "Content-Type: application/json"
-        ));
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
         $response = curl_exec($ch);
-        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-        if ($status != 200) {
-            return new JsonResponse(array("token" => json_decode($response)), 400);
-        }
+        curl_close($ch);
 
         return new JsonResponse(array("token" => json_decode($response)), 200);
     }
@@ -594,33 +597,41 @@ class DiscordAPIController extends AbstractController
 
     public function reactWithMessage(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
     {
+        header('Access-Control-Allow-Origin: *');
+        // Récupérez le jeton d'accès
         $service = $service_repository->findByName("discord");
         if (empty($service)) {
             return new JsonResponse(array("message" => "Discord: Service not found"), 404);
         }
         $service = $service[0];
-        if (empty($user_service_repository->findByUserIdAndServiceId(1, $service->getId()))) {
+        $request_content = json_decode($request->getContent()); // début de la récup du field informations link au fiels qui est link au front
+        if (empty($request_content->automation_action_id)) {
+            return new JsonResponse(array("message" => "Discord: Missing field"), 400);
+        }
+        $automation_action_id = $request_content->automation_action_id;
+        $automation_action = $automation_action_repository->find($automation_action_id);
+        if (empty($automation_action)) {
+            return new JsonResponse(array("message" => "Discord: Automation_action ID not found"), 404);
+        }
+        $automation = $automation_repository->find($automation_action->getAutomationId());
+        if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
             return new JsonResponse(array("message" => "Discord: Access token not found"), 404);
         }
-        $access_token = $user_service_repository->findByUserIdAndServiceId(1, $service->getId())[0]->getAccessToken();
+        $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
         if (empty($this->request_api)) {
             $this->request_api = new RequestAPI();
+        }
+        $informations = $automation_action->getInformations(); // attribution des valeurs d'informations dans la var info
+        if (empty($informations->reaction) && empty($informations->channel_id)) {
+            return new JsonResponse(array("message" => "Discord: Informations not found"), 404);
         }
         $identifiers = explode(";", $service->getIdentifiers());
         if (count($identifiers) != 3) {
             return new JsonResponse(array("message" => "Discord: Identifiers error"), 422);
         }
-        $request_content = json_decode($request->getContent()); // début de la récup du field informations link au fiels qui est link au front
-        $automation_action_id = $request_content->automation_action_id;
-        $automation_action = $automation_action_repository->find($automation_action_id);
+        $result = $this->request_api->send($access_token, "https://discordapp.com/api/v6/users/@me", "GET", array());
         $bot_token = $identifiers[2];
-        if (empty($automation_action)) {
-            return new JsonResponse(array("message" => "Discord: Automation_action ID not found"), 404);
-        }
-        $informations = json_decode($automation_action->getInformations()); // attribution des valeurs d'informations dans la var info
-        if (empty($informations->channel_id) && empty($informations->message)) {
-            return new JsonResponse(array("message" => "Discord: Informations not found"), 404);
-        }
+        $emoji = "U+1F600"; // rajouter les codes (UNICODE) pour les émojis des lettres, faire un array d'émoji
         $ch = curl_init("https://discord.com/api/v6/channels/{$informations->channel_id}/messages");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             "Authorization: Bot {$bot_token}"
@@ -628,12 +639,12 @@ class DiscordAPIController extends AbstractController
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
         curl_close($ch);
+
         $messages = json_decode($response, true);
         $last_message_id = $messages[count($messages) - 1]["id"];
-        $emoji = "EMOJI"; // rajouter les codes (UNICODE) pour les émojis des lettres, faire un array d'émoji
-        $ch = curl_init("https://discord.com/api/v6/channels/{$informations->channel_id}/messages/{$last_message_id}/reactions/{$emoji}/@me");
+        $ch = curl_init("https://discord.com/api/v6/channels/$informations->channel_id/messages/$last_message_id/reactions/$emoji/@me");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "Authorization: Bot {$bot_token}"
+            "Authorization: Bot $bot_token"
         ));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
