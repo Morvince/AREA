@@ -1,20 +1,28 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAddAutomation } from '../../api/apiServicesPage';
 import { NavRectBg, ButtonAreas, ButtonCreate, ButtonDocumentation, ButtonHapilink, NewAreas } from './navbarElements'
 import { getAreasCounter, resetAreasCounter } from '../../utils/AreasCounter'
 
 const Navbar = ({ toggle, changeY, defaultState }) => {
-  const navigate = useNavigate();
 
+  const location = useLocation()
   const tmpAutomation = useAddAutomation();
-
-  function redirect() {
+  function redirect(event) {
+      event.preventDefault()
+      if (location.pathname === "/home")
+        return
       tmpAutomation.mutate();
   }
 
   if (tmpAutomation.isSuccess) {
-      navigate("/home", { replace: true, state: { automationId: tmpAutomation.data.data } })
+    return (
+      <Navigate to="/home" state={{automationId: tmpAutomation.data.data}}/>
+    )
+  } else if (tmpAutomation.isError) {
+    return (
+      <Navigate to="/login"/>
+    )
   }
 
   return (

@@ -81,3 +81,27 @@ export const RectangleContener = styled.div`
     transform: translateX(-400px);
   }
 `;
+
+export const ButtonConnect = styled.button`
+  position: absolute;
+  left: 22%;
+  top: 50%;
+  border-radius: 30px;
+  background: #D4D3DC;
+  white-space: nowrap;
+  padding: 10px 22px;
+  color: black;
+  font-size: 40px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  user-select: none;
+
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background: black;
+    color: #D4D3DC;
+  }
+`;
