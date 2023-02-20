@@ -13,12 +13,12 @@ const Block = (props) => {
   const {open, setOpen} = React.useContext(MyContext);
 
   const handleOpen = (e, data) => {
-    if (open === "null") {
-      setOpen(props.service);
-      console.log("1open : ", open)
+    if (open === null) {
+      setOpen("bite");
+      console.log("open1 : ", open)
     } else {
-      setOpen("null");
-      console.log("2open : ", open)
+      setOpen(null);
+      console.log("open2 : ", open)
     }
   };
 

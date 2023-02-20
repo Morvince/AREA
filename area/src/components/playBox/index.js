@@ -11,7 +11,7 @@ const PlayBox = (props) => {
   const [sharedData, setSharedData] = React.useState([]);
   const [linkedList, setLinkedList] = React.useState([]);
   const [playlist, setPlaylist] = React.useState([]);
-  const [open, setOpen] = React.useState("null");
+  const [open, setOpen] = React.useState(null);
   const [ID, setID] = React.useState(0);
   const automationId = props.automationId;
   const userPlaylist = useGetUserPlaylist();
