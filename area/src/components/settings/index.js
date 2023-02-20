@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Rect, SettingsRect, Connect, Connected } from './settingsElements'
 import { Icon } from '@iconify/react';
-import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected } from '../../api/apiSettingsPage';
+import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
 
 const Settings = () => {
   const handleSpotifyConnect = useSpotifyConnect();
@@ -10,6 +10,8 @@ const Settings = () => {
   const isDiscordConnected = useDiscordConnected();
   const handleInstagramConnect = useInstagramConnect();
   const isInstagramConnected = useInstagramConnected();
+  const handleGithubConnect = useGithubConnect();
+  const isGithubConnected = useGithubConnected();
 
     useEffect(() => {
       isSpotifyConnected.mutate();
