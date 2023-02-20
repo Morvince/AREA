@@ -48,6 +48,15 @@
             ;
         }
 
+        public function findAllOrderByType()
+        {
+            return $this->createQueryBuilder("action")
+                ->orderBy("action.type")
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+
         public function findByTypeAndServiceId($action_type, $service_id)
         {
             return $this->createQueryBuilder("action")

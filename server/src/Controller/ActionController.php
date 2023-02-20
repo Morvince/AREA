@@ -16,7 +16,7 @@
         {
             header('Access-Control-Allow-Origin: *');
             // Get needed values
-            $actions = $action_repository->findAll();
+            $actions = $action_repository->findAllOrderByType();
             if (empty($actions)) {
                 return new JsonResponse(array("message" => "Action: No action found"), 404);
             }
