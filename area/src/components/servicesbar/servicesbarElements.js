@@ -41,7 +41,7 @@ export const ServicesBarWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 60%;
-  height: 68%;
+  height: 70%;
   background-color: #ebebeb;
   border-radius: 10px;
   padding: 5px;
@@ -73,7 +73,7 @@ export const RectangleContener = styled.div`
   background-color: ${props => props.color};
 
   &.open {
-    transform: translateX(200px);
+    transform: translateX(175px);
   }
 
   &.closed {
