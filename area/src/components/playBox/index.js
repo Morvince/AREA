@@ -19,8 +19,8 @@ const PlayBox = (props) => {
   const [isLinkedListEmpty, setIsLinkedListEmpty] = React.useState(true);
 
   React.useEffect(() => {
-    console.log(linkedList);
-    if (linkedList.length > 1) {
+    console.log(sharedData.length);
+    if (sharedData.length > 1) {
       setIsLinkedListEmpty(false);
     } else {
       setIsLinkedListEmpty(true);
