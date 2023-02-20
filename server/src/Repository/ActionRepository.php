@@ -48,6 +48,18 @@
             ;
         }
 
+        public function findByTypeAndServiceId($action_type, $service_id)
+        {
+            return $this->createQueryBuilder("action")
+                ->where("action.type = :type")
+                ->andWhere("action.service_id = :service_id")
+                ->setParameter("type", $action_type)
+                ->setParameter("service_id", $service_id)
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+
     //    /**
     //     * @return Action[] Returns an array of Action objects
     //     */

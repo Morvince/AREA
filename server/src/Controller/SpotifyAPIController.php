@@ -126,7 +126,7 @@
          * @Route("/spotify/refresh_access_token", name="spotify_api_refresh_access_token")
          */
         public function refreshAccessToken(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
-        { // a changer pour lutiliser que via le server
+        {
             // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->user_id)) {
@@ -173,7 +173,7 @@
         /**
          * @Route("/spotify/connected", name="spotify_api_connected")
          */
-        public function isConnected(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
+        public function isConnected(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
         {
             header('Access-Control-Allow-Origin: *');
             // Get needed values
@@ -187,12 +187,12 @@
             }
             $user = $user_repository->findByToken($token)[0];
             $user_id = $user->getId();
-            $service = $sevice_repository->findByName("spotify");
+            $service = $service_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
             }
             $service = $service[0];
-            if (empty($user_sevice_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
                 return new JsonResponse(array("connected" => false), 200);
             }
             return new JsonResponse(array("connected" => true), 200);
@@ -227,22 +227,15 @@
             $search = $request->query->get("search");
             $search = str_replace(" ", "%20", $search);
             // Request for the search
-            $response = $this->sendRequest($access_token, "search?type=$type&q=$search");
-            if (isset(json_decode($response)->code)) {
-                return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
+            $response = json_decode($this->sendRequest($access_token, "search?type=$type&q=$search"));
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
             }
-            return new JsonResponse($response, 200);
-        }
-        /**
-         * @Route("/spotify/test", name="spotify_test")
-         */
-        public function test(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
-        {
-            if (empty($this->request_api)) {
-                $this->request_api = new RequestAPI();
+            $formatted = array();
+            foreach ($response[$type."s"]->items as $item) {
+                array_push($formatted, array("name" => $item->name, "id" => $item->id));
             }
-            $response = $this->request_api->sendRoute("tools:8000/spotify/get_user_playlists", array("token" => "ea469788fb5e36ebe666b294a449360e62522eeb5658c1998be297e0ac5553f9"));
-            return new JsonResponse($response);
+            return new JsonResponse(array("items" => $formatted), 200);
         }
         /**
          * @Route("/spotify/get_user_playlists", name="spotify_api_get_user_playlists")
@@ -271,19 +264,18 @@
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
             // Request for the user playlists
-            $response = $this->sendRequest($access_token, "me/playlists"); // changer pour voir seulement celles modifiables
-            if (isset(json_decode($response)->code)) {
-                return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
+            $response = json_decode($this->sendRequest($access_token, "me/playlists")); // changer pour voir seulement celles modifiables
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
             }
-            if (empty(json_decode($response)->items)) {
+            if (empty($response->items)) {
                 return new JsonResponse(array("message" => $response), 500);
             }
-            $response = json_decode($response);
             $formatted = array();
             foreach ($response->items as $item) {
                 array_push($formatted, array("name" => $item->name, "id" => $item->id));
             }
-            return new JsonResponse(array("playlists" => $formatted), 200);
+            return new JsonResponse(array("items" => $formatted), 200);
         }
         private function sendRequest($access_token, $endpoint, $method = "GET", $parameters = array())
         {
@@ -326,7 +318,7 @@
 
         // Action
         /**
-         * @Route("/spotify/action/check_music_playlist", name="spotify_api_check_music_playlist")
+         * @Route("/spotify/action/check_music_playlist", name="spotify_api_action_check_music_playlist")
          */
         public function isMusicAddedToPlaylist(Request $request)
         {
@@ -353,7 +345,7 @@
             return new JsonResponse(array("message" => false), 200);
         }
         /**
-         * @Route("/spotify/action/check_music_playlist/get_parameters", name="spotify_api_check_music_playlist_parameters")
+         * @Route("/spotify/action/check_music_playlist/get_parameters", name="spotify_api_action_check_music_playlist_parameters")
          */
         public function getIsMusicAddedToPlaylistParameters(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
         {

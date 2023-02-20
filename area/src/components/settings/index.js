@@ -26,8 +26,8 @@ const Settings = () => {
         case "discord":
           handleDiscordConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
           break;
-        case "instagram":
-            handleInstagramConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+        case "github":
+          handleGithubConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
           break;
         default:
           break;
@@ -55,10 +55,14 @@ const Settings = () => {
         <SettingsRect top="200px" height="600px" color="#D4D3DC" width="25%" left="60%" SettingsRect/>
         <Icon icon="logos:google-icon" width="100" style={{ position: 'absolute', left: '63%', top: "250px" }}/>
         <Icon icon="skill-icons:twitter" width="100" style={{ position: 'absolute', left: '63%', top: "450px" }}/>
-        <Icon icon="logos:openai-icon" width="100" style={{ position: 'absolute', left: '63%', top: "650px" }}/>
+        <Icon icon="logos:github-icon" width="100" style={{ position: 'absolute', left: '63%', top: "650px" }}/>
         <Connect to="/" top="265px" left="70.5%" >Connect</Connect>
         <Connect to="/" top="465px" left="71.5%" >Connect</Connect>
         <Connect to="/" top="665px" left="71.5%" >Connect</Connect>
+        {isGithubConnected.isSuccess && isGithubConnected.data.data.connected ?
+          <Connected top="665px" left="70.5%" >Connected</Connected> :
+          <Connect to="/" top="665px" left="71.5%" data-value="github" onClick={handleConnectServices} >Connect</Connect>
+        }
       </>
     )
 };

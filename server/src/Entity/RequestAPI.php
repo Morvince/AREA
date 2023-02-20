@@ -10,12 +10,13 @@
     {
         public function __construct() {}
 
-        public function send($access_token, $url, $method, $parameters)
+        public function send($access_token, $url, $method, $parameters, $added_header = null)
         {
             $headers = array(
                 "Accept: application/json",
                 "Content-Type: application/json",
-                "Authorization: Bearer $access_token"
+                "Authorization: Bearer $access_token",
+                $added_header
             );
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -25,6 +26,7 @@
             switch ($method) {
                 case "POST":
                     curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($parameters));
                     break;
                 case "PUT":
                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");

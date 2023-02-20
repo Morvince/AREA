@@ -31,12 +31,6 @@ export const useSpotifyAccess = () => {
   return useMutation(spotifyAccess)
 }
 
-
-
-
-// DISCORD :
-
-
 const discordConnected = async () => {
   return await axios.post("/discord/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
 }
