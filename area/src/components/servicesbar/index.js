@@ -226,15 +226,15 @@ const Servicesbar = () => {
       case "spotify":
         return "logos:spotify-icon";
       case "instagram":
-        return "logos:google-gmail";
+        return "skill-icons:instagram";
       case "google":
-        return "logos:google-icon";
+        return "logos:google-gmail";
       case "twitter":
         return "skill-icons:twitter";
-      case "openai":
-        return "logos:openai-icon";
+      case "github":
+        return "mdi:github";
       default:
-        return "logos:openai-icon";
+        return "mdi:github";
     }
   }
 
@@ -245,38 +245,38 @@ const Servicesbar = () => {
         <ServicesBarWrapper>
           <IconBox onClick={() => handleClick("discord")}>
             {isDiscordConnected.isSuccess && isDiscordConnected.data.data.connected ?
-              <Icon icon="skill-icons:discord" width="75" height="75" /> :
-              <Icon icon="skill-icons:discord" width="75" height="75" opacity="0.5" />
+              <Icon icon={getIcon("discord")} width="75" height="75" /> :
+              <Icon icon={getIcon("discord")} width="75" height="75" opacity="0.5" />
             }
           </IconBox>
           <IconBox onClick={() => handleClick("spotify")}>
             {isSpotifyConnected.isSuccess && isSpotifyConnected.data.data.connected ?
-              <Icon icon="logos:spotify-icon" width="75" height="75" > </Icon> :
-              <Icon icon="logos:spotify-icon" width="75" height="75" opacity="0.5"/> 
+              <Icon icon={getIcon("spotify")} width="75" height="75" > </Icon> :
+              <Icon icon={getIcon("spotify")} width="75" height="75" opacity="0.5"/> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("instagram")}>
             {isInstagramConnected.isSuccess && isInstagramConnected.data.data.connected ?
-              <Icon icon="skill-icons:instagram" width="75" height="75" />:
-              <Icon icon="skill-icons:instagram" width="75" height="75" opacity="0.5" />
+              <Icon icon={getIcon("instagram")} width="75" height="75" />:
+              <Icon icon={getIcon("instagram")} width="75" height="75" opacity="0.5" />
             }
           </IconBox>
           <IconBox onClick={() => handleClick("google")}>
             {isGoogleConnected.isSuccess && isGoogleConnected.data.data.connected ?
-              <Icon icon="logos:google-icon" width="75" height="75" />:
-              <Icon icon="logos:google-icon" width="75" height="75" opacity="0.5" ></Icon>
+              <Icon icon={getIcon("google")} width="75" height="75" />:
+              <Icon icon={getIcon("google")} width="75" height="75" opacity="0.5" ></Icon>
             }
           </IconBox>
           <IconBox onClick={() => handleClick("twitter")}>
             {isTwitterConnected.isSuccess && isTwitterConnected.data.data.connected ?
-              <Icon icon="skill-icons:twitter" width="75" height="75" />:
-              <Icon icon="skill-icons:twitter" width="75" height="75" opacity="0.5" > </Icon>
+              <Icon icon={getIcon("twitter")} width="75" height="75" />:
+              <Icon icon={getIcon("twitter")} width="75" height="75" opacity="0.5" > </Icon>
             }
           </IconBox>
           <IconBox onClick={() => handleClick("github")}>
             {isGithubConnected.isSuccess && isGithubConnected.data.data.connected ?
-              <Icon icon="mdi:github" width="75" height="75" /> :
-              <Icon icon="mdi:github" width="75" height="75" opacity="0.5"/>
+              <Icon icon={getIcon("github")} width="75" height="75" /> :
+              <Icon icon={getIcon("github")} width="75" height="75" opacity="0.5"/>
             }
           </IconBox>
         </ServicesBarWrapper>
