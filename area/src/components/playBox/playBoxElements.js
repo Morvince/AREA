@@ -78,5 +78,4 @@ export const BinWhite = styled.div`
   left: 81.8%;
   top: 25%;
   background: #ebebeb;
-
 `;

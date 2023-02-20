@@ -271,7 +271,6 @@ const Servicesbar = () => {
           }) :
           <ButtonConnect onClick={handleConnectServices}> Connect </ButtonConnect>
         }
-
       </RectangleContener>
     </LeftColumn>
   );
