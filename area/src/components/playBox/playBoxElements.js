@@ -79,30 +79,3 @@ export const BinWhite = styled.div`
   top: 25%;
   background: #ebebeb;
 `;
-
-export const VerticalBinBarre = styled.div`
-  position: absolute;
-  width: 0.1%;
-  height : 50%;
-  top: 25%;
-  left: 70%;
-  background-color: red;
-`;
-
-export const HorizontaleBinBarreUp = styled.div`
-  position: absolute;
-  width: 5%;
-  height : 0.1%;
-  top: 25%;
-  left: 65%;
-  background-color: red;
-`;
-
-export const HorizontaleBinBarreDown = styled.div`
-  position: absolute;
-  width: 5%;
-  height : 0.1%;
-  top: 75%;
-  left: 65%;
-  background-color: red;
-`;

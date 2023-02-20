@@ -1,5 +1,5 @@
 import React from 'react'
-import { RectangleArea, MovableBox, ValidateButton, BinLeft, BinRight, BinWhite, VerticalBinBarre, HorizontaleBinBarre, HorizontaleBinBarreUp, HorizontaleBinBarreDown } from './playBoxElements'
+import { RectangleArea, MovableBox, ValidateButton, BinLeft, BinRight, BinWhite } from './playBoxElements'
 import Servicesbar from '../servicesbar'
 import Block from '../block'
 import MyContext from '../Context'
@@ -19,7 +19,6 @@ const PlayBox = (props) => {
   const [isLinkedListEmpty, setIsLinkedListEmpty] = React.useState(true);
 
   React.useEffect(() => {
-    console.log(sharedData.length);
     if (sharedData.length > 1) {
       setIsLinkedListEmpty(false);
     } else {
@@ -64,9 +63,6 @@ const PlayBox = (props) => {
       </MyContext.Provider>
       <BinRight></BinRight>
       <BinWhite></BinWhite>
-      <VerticalBinBarre> </VerticalBinBarre>
-      <HorizontaleBinBarreUp></HorizontaleBinBarreUp>
-      <HorizontaleBinBarreDown> </HorizontaleBinBarreDown>
       <Icon icon="mdi:delete-circle-outline" color="#373b48" width="40" style={{ position: 'absolute', top: '20%', left: '80.3%' }} />
       <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={sendAutomation} disabled={isLinkedListEmpty === true}>
         <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />

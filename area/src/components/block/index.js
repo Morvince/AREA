@@ -97,19 +97,25 @@ const Block = (props) => {
       }
     }
 
-    if (rect.left >= 1300) {
-      console.log("BEFORE CUT")
-      console.log(sharedData);
+    // console.log("BEFORE IF");
+    // console.log(sharedData);
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    if (rect.left >= screenWidth * 0.85 && rect.top >= screenHeight * 0.25 && rect.top <= screenHeight * 0.61) {
+      // console.log("BEFORE CUT")
+      // console.log(sharedData);
       const indexToRemove = sharedData.findIndex((item) => item.index === props.id);
+      // console.log("index to remove : ");
+      // console.log(indexToRemove);
       if (indexToRemove !== -1) {
         sharedData.splice(indexToRemove, 1);
         sharedData.forEach((item, i) => {
         item.index = i;
         });
         setSharedData([...sharedData]);
-        console.log("AFTER CUT")
-        console.log("sharedData");
-        console.log(sharedData);
+        // console.log("AFTER CUT")
+        // console.log("sharedData");
+        // console.log(sharedData);
       }
     }
   }
