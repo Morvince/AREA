@@ -122,6 +122,24 @@ github_api_reaction_create_issue:
   controller: App\Controller\GithubAPIController::createIssue
   methods: [POST]
 
+# GMAIL
+gmail_api_connect:
+  path: /gmail/connect
+  controller: App\Controller\GmailAPIController::connect
+  methods: [POST]
+gmail_api_get_access_token:
+  path: /gmail/get_access_token
+  controller: App\Controller\GmailAPIController::getAccessToken
+  methods: [POST]
+gmail_api_refresh_access_token:
+  path: /gmail/refresh_access_token
+  controller: App\Controller\GmailAPIController::refreshAccessToken
+  methods: [POST]
+gmail_api_connected:
+  path: /gmail/connected
+  controller: App\Controller\GmailAPIController::isConnected
+  methods: [POST]
+
 # AUTOMATION
 automation_add:
   path: /automation/add

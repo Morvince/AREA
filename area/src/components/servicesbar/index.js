@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import { ServicesBarContainer, ServicesBarWrapper, IconBox, ButtonConnect, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
 import ButtonBox from '../buttonBlock';
 import { useGetAction } from '../../api/apiServicesPage';
-import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected, useGoogleConnect, useGoogleConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
+import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected, useGmailConnect, useGmailConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
 
 const Servicesbar = () => {
   const [isOpen] = useState(true);
@@ -17,8 +17,8 @@ const Servicesbar = () => {
   const isDiscordConnected = useDiscordConnected()
   const handleInstagramConnect = useInstagramConnect();
   const isInstagramConnected = useInstagramConnected();
-  const handleGoogleConnect = useGoogleConnect();
-  const isGoogleConnected = useGoogleConnected();
+  const handleGmailConnect = useGmailConnect();
+  const isGmailConnected = useGmailConnected();
   const handleTwitterConnect = useTwitterConnect();
   const isTwitterConnected = useTwitterConnected();
   const handleGithubConnect = useGithubConnect();
@@ -28,7 +28,7 @@ const Servicesbar = () => {
       isSpotifyConnected.mutate();
       isDiscordConnected.mutate();
       isInstagramConnected.mutate();
-      isGoogleConnected.mutate();
+      isGmailConnected.mutate();
       isTwitterConnected.mutate();
       isGithubConnected.mutate();
     }, []);
@@ -48,9 +48,9 @@ const Servicesbar = () => {
           sessionStorage.setItem("serviceToConnect", "instagram")
           handleInstagramConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
         break;
-        case "google":
-          sessionStorage.setItem("serviceToConnect", "google")
-          handleGoogleConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+        case "gmail":
+          sessionStorage.setItem("serviceToConnect", "gmail")
+          handleGmailConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
         break;
         case "twitter":
           sessionStorage.setItem("serviceToConnect", "twitter")
@@ -73,7 +73,7 @@ const Servicesbar = () => {
     { nom: 'discord',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
     { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], nbrBox: [2,0]},
     { nom: 'instagram', nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'google',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'gmail',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
     { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
     { nom: 'github',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
   ];
@@ -95,8 +95,8 @@ const Servicesbar = () => {
           return true;
         else
           return false;
-      case "google":
-        if (isGoogleConnected.isSuccess && isGoogleConnected.data.data.connected)
+      case "gmail":
+        if (isGmailConnected.isSuccess && isGmailConnected.data.data.connected)
           return true;
         else
           return false;
@@ -135,7 +135,7 @@ const Servicesbar = () => {
         case "instagram":
           fillservices(2, i);
           break;
-        case "google":
+        case "gmail":
           fillservices(3, i);
           break;
         case "twitter":
@@ -189,7 +189,7 @@ const Servicesbar = () => {
         return "#1db954";
       case "instagram":
         return "#e1306c";
-      case "google":
+      case "gmail":
         return "#EA4335";
       case "twitter":
         return "#1da1f2";
@@ -208,7 +208,7 @@ const Servicesbar = () => {
         return "#10a143";
       case "instagram":
         return "#c2134f";
-      case "google":
+      case "gmail":
         return "#d92516";
       case "twitter":
         return "#1486cc";
@@ -242,10 +242,10 @@ const Servicesbar = () => {
               <Icon icon="skill-icons:instagram" width="75" height="75" opacity="0.5" > </Icon> 
             }
           </IconBox>
-          <IconBox onClick={() => handleClick("google")}>
-            {isGoogleConnected.isSuccess && isGoogleConnected.data.data.connected ?
-              <Icon icon="logos:google-icon" width="75" height="75" > </Icon> :
-              <Icon icon="logos:google-icon" width="75" height="75" opacity="0.5" > </Icon> 
+          <IconBox onClick={() => handleClick("gmail")}>
+            {isGmailConnected.isSuccess && isGmailConnected.data.data.connected ?
+              <Icon icon="logos:google-gmail" width="75" height="75" > </Icon> :
+              <Icon icon="logos:google-gmail" width="75" height="75" opacity="0.5" > </Icon> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("twitter")}>
