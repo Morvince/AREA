@@ -53,6 +53,7 @@ export const Text = styled.div`
     left: ${props => props.left};
     color: ${props => props.color};
     font-weight: ${props => props.fontweight};
+    user-select: none;
 `;
 
 export const ButtonWithBg = styled(LinkR)`
