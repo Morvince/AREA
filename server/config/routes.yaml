@@ -139,6 +139,14 @@ gmail_api_connected:
   path: /gmail/connected
   controller: App\Controller\GmailAPIController::isConnected
   methods: [POST]
+gmail_api_action_check_mail:
+  path: /gmail/action/check_mail
+  controller: App\Controller\GmailAPIController::hasInboxNewMail
+  methods: [POST]
+gmail_api_action_check_mail_parameters:
+  path: /gmail/action/check_mail/get_parameters
+  controller: App\Controller\GmailAPIController::getHasInboxNewMailParameters
+  methods: [POST]
 
 # AUTOMATION
 automation_add:
