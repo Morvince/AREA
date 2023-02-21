@@ -2,18 +2,20 @@ import styled from "styled-components";
 
 export const BgColor = styled.div`
     width: 100%;
-    height: 100%;
+    height: 200%;
     position: fixed;
     background: #373b48;
 `;
 
 export const BlankZone = styled.div`
-    width: 80%;
-    height: 80%;
-    position: fixed;
-    top: 15%;
-    left: 10%;
-    background: white;
+  width: 80%;
+  height: 80%;
+  position: fixed;
+  top: 15%;
+  left: 10%;
+  background: white;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const NumberOfAreasText = styled.div`
@@ -26,16 +28,17 @@ export const NumberOfAreasText = styled.div`
 `;
 
 export const AreaZone = styled.div`
-    background: grey;
-    position: absolute;
-    top: 25%;
-    left: 5%;
-    height: 10%;
-    width: 90%;
-    border: 2px solid black;
+  background: grey;
+  position: relative;
+  top: 25%;
+  height: 10%;
+  width: 99%;
+  left: 0.5%;
+  margin-bottom: 20px;
+  border: 2px solid black;
 `;
 
-export const AreaContainer = styled.div`
+export const Container = styled.div`
   position: absolute;
   top: 110%;
   left: 0;
