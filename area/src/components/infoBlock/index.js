@@ -1,38 +1,42 @@
 import React from 'react'
 import { InfoBlockContainer, InfoWrapper, InfoTitle, InfoAction, InputBox } from './infoBlockElements'
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
+import Select from 'react-select'
+import Draggable from 'react-draggable'
 
-const InfoBlock = () => {
-
+const DropdownSection = () => {
   const options = [
-    { value: 'one', label: 'One' },
-    { value: 'two', label: 'Two', className: 'myOptionClassName' },
-    {
-     type: 'group', name: 'group1', items: [
-       { value: 'three', label: 'Three', className: 'myOptionClassName' },
-       { value: 'four', label: 'Four' }
-     ]
-    },
-    {
-     type: 'group', name: 'group2', items: [
-       { value: 'five', label: 'Five' },
-       { value: 'six', label: 'Six' }
-     ]
-    }
-  ];
-  const defaultOption = options[0];
+    { value: 'général', label: 'général' },
+  ]
 
   return (
-    <InfoBlockContainer>
-      <InfoWrapper>
-        <InfoTitle>Titre</InfoTitle>
-        <InfoAction>
-          <InputBox id="mail" type="text" placeholder="Name" />
-        </InfoAction>
-          <Dropdown options={options} value={defaultOption} placeholder="Select an option" />
-      </InfoWrapper>
-    </InfoBlockContainer>
+    <InfoAction>
+      <Select options={options} />
+    </InfoAction>
+  )
+}
+
+const TextSection = (props) => {
+  return (
+    <InfoAction>
+      <InputBox id="mail" type="text" placeholder={props.text} />
+    </InfoAction>
+  )
+}
+
+const InfoBlock = () => {
+  return (
+    <Draggable>
+      <InfoBlockContainer>
+        <InfoWrapper>
+          <InfoTitle>Quel message veut-tu ecrire</InfoTitle>
+          <TextSection text="Message" />
+        </InfoWrapper>
+        <InfoWrapper>
+          <InfoTitle>Dans quel channel veut tu écrire se message ?</InfoTitle>
+          <DropdownSection />
+        </InfoWrapper>
+      </InfoBlockContainer>
+    </Draggable>
   )
 }
 
