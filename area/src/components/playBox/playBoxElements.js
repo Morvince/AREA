@@ -36,7 +36,6 @@ export const ValidateButton = styled.button`
   opacity: 0.5;
   border: none;
   transition: all 0.1s ease-in-out;
-  z-index: 100000;
 
   &.green {
     cursor: pointer;

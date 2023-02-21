@@ -52,6 +52,10 @@ const PlayBox = (props) => {
     <RectangleArea>
       <BinLeft> </BinLeft>
       <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, playlist, setPlaylist }}>
+      <Icon icon="mdi:delete-circle-outline" color="#373b48" width="40" style={{ position: 'absolute', top: '20%', left: '80.3%' }} />
+      <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={sendAutomation} disabled={isLinkedListEmpty === true}>
+        <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
+      </ValidateButton>
         <Servicesbar />
         <MovableBox>
           {sharedData.map((info) => {
@@ -63,10 +67,6 @@ const PlayBox = (props) => {
       </MyContext.Provider>
       <BinRight></BinRight>
       <BinWhite></BinWhite>
-      <Icon icon="mdi:delete-circle-outline" color="#373b48" width="40" style={{ position: 'absolute', top: '20%', left: '80.3%' }} />
-      <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={sendAutomation} disabled={isLinkedListEmpty === true}>
-        <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
-      </ValidateButton>
     </RectangleArea>
   )
 }
