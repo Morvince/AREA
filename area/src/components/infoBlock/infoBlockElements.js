@@ -21,6 +21,8 @@ export const InfoWrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const InfoTitle = styled.div`
@@ -43,7 +45,8 @@ export const InfoAction = styled.div`
   font-family: 'Calistoga', cursive;
   font-size: 18px;
   font-weight: 600;
-  padding : 10px
+  padding : 0px 10px 10px 10px;
+  width: 93%;
 `;
 
 export const InputBox = styled.input`
@@ -57,7 +60,7 @@ export const InputBox = styled.input`
   font-size: 18px;
   font-weight: 600;
   outline: none;
-  border-radius: 15px;
+  border-radius: 4px;
   &::placeholder {
     color: #373b48;
   }
@@ -69,4 +72,11 @@ export const InputBox = styled.input`
   &:focus::placeholder {
     color: transparent;
   }
+`;
+
+export const LittleBorder = styled.div`
+  width: 75%;
+  height: 1px;
+  background: #fff;
+  margin: 5px 0px;
 `;

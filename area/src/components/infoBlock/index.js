@@ -1,11 +1,11 @@
 import React from 'react'
-import { InfoBlockContainer, InfoWrapper, InfoTitle, InfoAction, InputBox } from './infoBlockElements'
+import { InfoBlockContainer, InfoWrapper, InfoTitle, InfoAction, InputBox, LittleBorder } from './infoBlockElements'
 import Select from 'react-select'
 import Draggable from 'react-draggable'
 
 const DropdownSection = () => {
   const options = [
-    { value: 'général', label: 'général' },
+    { value: 'générazdadazdazdadl', label: 'géazdazdazdazdanéral' },
   ]
 
   return (
@@ -31,6 +31,7 @@ const InfoBlock = () => {
           <InfoTitle>Quel message veut-tu ecrire</InfoTitle>
           <TextSection text="Message" />
         </InfoWrapper>
+        <LittleBorder />
         <InfoWrapper>
           <InfoTitle>Dans quel channel veut tu écrire se message ?</InfoTitle>
           <DropdownSection />
