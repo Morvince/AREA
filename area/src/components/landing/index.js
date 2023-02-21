@@ -3,9 +3,9 @@ import { Rect, FirstWave, SecondWave, Text, ButtonWithBg, ButtonTryIt, Shape, Ic
 import { Icon } from '@iconify/react';
 import { useAddAutomation } from '../../api/apiServicesPage';
 import { Navigate } from 'react-router-dom';
-import landing from './landing.png'
-import android from './android.png'
-import windows from './windows.png'
+import landing from '../../assets/landing.png'
+import android from '../../assets/android.png'
+import windows from '../../assets/windows.png'
 import YouTube from 'react-youtube';
 
 const Landing = () => {
