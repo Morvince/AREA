@@ -60,9 +60,11 @@ const Block = (props) => {
     }
     return;
   }
-
+  
   const handleDragStop = (e, data) => {
     var rect = e.target.getBoundingClientRect();
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
 
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id === sharedData[i].index) {
@@ -99,8 +101,6 @@ const Block = (props) => {
 
     // console.log("BEFORE IF");
     // console.log(sharedData);
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
     if (rect.left >= screenWidth * 0.85 && rect.top >= screenHeight * 0.25 && rect.top <= screenHeight * 0.61) {
       // console.log("BEFORE CUT")
       // console.log(sharedData);
