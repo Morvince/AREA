@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { AreaName, AreaZone, ArrowArea, BgColor, BlankZone, ButtonDelete, ButtonEdit, NumberOfAreasText, Container } from './areasElements';
 import { Icon } from '@iconify/react';
-import styled from "styled-components";
 
 const EditAreas = () => {
   const [areas, setAreas] = useState(Array.from({ length: 4 }, (_, index) => index + 1));
