@@ -4,7 +4,9 @@
     use App\Entity\Automation;
     use App\Entity\AutomationAction;
     use App\Repository\AutomationRepository;
+    use App\Repository\ActionRepository;
     use App\Repository\UserRepository;
+    use App\Repository\ServiceRepository;
     use App\Repository\AutomationActionRepository;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\HttpFoundation\Request;
@@ -39,24 +41,42 @@
         /**
          * @Route("/automation/get", name="automation_get")
          */
-        public function getAutomation(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository)
+        public function getAutomation(Request $request, UserRepository $user_repository, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ActionRepository $action_repository, ServiceRepository $service_repository)
         {
             header('Access-Control-Allow-Origin: *');
             // Get needed values
             $request_content = json_decode($request->getContent());
-            if (empty($request_content->automation_id)) {
+            if (empty($request_content->token)) {
                 return new JsonResponse(array("message" => "Automation: Missing field"), 400);
             }
-            $automation_id = $request_content->automation_id;
-            if (empty($automation_repository->findById($automation_id))) {
-                return new JsonResponse(array("message" => "Automation: Automation not found"), 404);
+            $token = $request_content->token;
+            if (empty($user_repository->findByToken($token))) {
+                return new JsonResponse(array("message" => "Automation: Bad auth token"), 400);
             }
-            $automation_actions = $automation_action_repository->findByAutomationId($automation_id);
-            if (empty($automation_actions)) {
-                return new JsonResponse(array("message" => "OK"), 200);
+            $user = $user_repository->findByToken($token)[0];
+            if (empty($automation_repository->findByUserId($user->getId()))) {
+                return new JsonResponse(array("automations" => array()), 200);
             }
-            // formatter une array avec automation in $response
-            return new JsonResponse($automation_actions, 200);
+            $automations = $automation_repository->findByUserId($user->getId());
+            $formatted = array();
+            foreach ($automations as $automation) {
+                $automation_actions = $automation_action_repository->findByAutomationId($automation->getId());
+                $tmp_automation_actions = array();
+                foreach ($automation_actions as $automation_action) {
+                    if (empty($action_repository->find($automation_action->getActionId()))) {
+                        return new JsonResponse(array("message" => "Automation: Missing action"), 400);
+                    }
+                    $action = $action_repository->find($automation_action->getActionId());
+                    if (empty($service_repository->find($action->getServiceId()))) {
+                        return new JsonResponse(array("message" => "Automation: Missing service"), 400);
+                    }
+                    $service = $service_repository->find($action->getServiceId());
+                    array_push($tmp_automation_actions, array("id" => $action->getId(), "name" => $action->getName(), "service" => $service->getName(), "type" => $action->getType(), "number" => $automation_action->getNumber(), "fields" => $action->getFields(), "values" => $automation_action->getInformations()));
+                }
+                $tmp_automation = array("name" => "Name en db", "id" => $automation->getId(), "automation_actions" => $tmp_automation_actions);
+                array_push($formatted, $tmp_automation);
+            }
+            return new JsonResponse(array("automations" => $formatted), 200);
         }
         /**
          * @Route("/automation/edit", name="automation_edit")
