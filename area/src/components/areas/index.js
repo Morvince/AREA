@@ -7,9 +7,8 @@ const EditAreas = () => {
   const [openArea, setOpenArea] = useState(-1);
 
   const onArrowClick = (index) => {
-    console.log(`Arrow clicked for Area${index}`);
+    setOpenArea(openArea === index ? -1 : index);
   };
-
   return (
     <>
       <BgColor> 
