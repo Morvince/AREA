@@ -32,11 +32,10 @@ export const ValidateButton = styled.button`
   top: 89%;
   left: 78%;
   cursor: pointer;
+  padding: none;
   opacity: 0.5;
   border: none;
-  background: #ebebeb;
   transition: all 0.1s ease-in-out;
-  z-index: 100000;
 
   &.green {
     cursor: pointer;
@@ -78,5 +77,4 @@ export const BinWhite = styled.div`
   left: 81.8%;
   top: 25%;
   background: #ebebeb;
-
 `;

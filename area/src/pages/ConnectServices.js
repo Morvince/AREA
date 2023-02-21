@@ -26,7 +26,6 @@ const ConnectServices = () => {
         }), {onSettled: () => { tmpAutomation.mutate(null, {onSuccess: (data) => { navigate("/home", {replace: true, state: {automationId: data.data}}) }}) }});
         break;
       case "discord":
-        console.log("passe dans le case\n")
         handleDiscordAccess.mutate(JSON.stringify({
         state: params.get("state"),
         token: sessionStorage.getItem("token"),
