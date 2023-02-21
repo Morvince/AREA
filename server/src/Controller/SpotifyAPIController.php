@@ -284,34 +284,7 @@
             }
             $response = $this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters);
             if (isset(json_decode($response)->error)) {
-                switch (json_decode($response)->error->status) {
-                    case 400:
-                        $response = json_encode(array("message" => "Spotify: Bad request", "code" => 400));
-                        break;
-                    case 401:
-                        $response = json_encode(array("message" => "Spotify: Bad or expired token", "code" => 401));
-                        break;
-                    case 403:
-                        $response = json_encode(array("message" => "Spotify: Forbidden", "code" => 403));
-                        break;
-                    case 404:
-                        $response = json_encode(array("message" => "Spotify: Ressource not found", "code" => 404));
-                        break;
-                    case 429:
-                        $response = json_encode(array("message" => "Spotify: Too many requests", "code" => 429));
-                        break;
-                    case 500:
-                        $response = json_encode(array("message" => "Spotify: Internal server error", "code" => 500));
-                        break;
-                    case 502:
-                        $response = json_encode(array("message" => "Spotify: Bad gateway", "code" => 502));
-                        break;
-                    case 503:
-                        $response = json_encode(array("message" => "Spotify: Service unavailable", "code" => 503));
-                        break;
-                    default:
-                        break;
-                }
+                $response = json_encode(array("message" => "Spotify: ".json_decode($response)->error->message, "code" => json_decode($response)->error->status));
             }
             return $response;
         }
