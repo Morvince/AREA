@@ -18,6 +18,7 @@ export const useAddAutomation = () => {
 }
 
 const editAutomation = async (data) => {
+  console.log(data);
   return await axios.post("/automation/edit", JSON.stringify({automation_id: data.id, actions: data.actions}))
 }
 

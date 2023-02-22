@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AreaName, AreaZone, ArrowArea, BgColor, ButtonDelete, ButtonEdit, NumberOfAreasText, GlobalContainer, BoxContent } from './areasElements';
 import { Icon } from '@iconify/react';
+import { useGetInfosAreas } from '../../api/apiAreasPage';
 
 const EditAreas = () => {
-  const [areas, setAreas] = useState(Array.from({ length: 30}, (_, index) => index + 1));
+  const [areas, setAreas] = useState(Array.from({ length: 1}, (_, index) => index + 1));
   const [openArea, setOpenArea] = useState(-1);
+  const [infosFromDb, setInfosFromDb] = useState([]);
+  const getInfosFromDb = useGetInfosAreas();
 
   const containerHeight = (areas.length * 175 + (openArea !== -1 ? 400 : 0)) + 'px';
+
+  useEffect(() => {
+    getInfosFromDb.mutate(null, {onSuccess: (data)=> {setInfosFromDb(data)}});
+  },[]);
+  console.log(infosFromDb);
 
   return (
     <>
