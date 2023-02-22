@@ -44,15 +44,13 @@ class TwitterAPIController extends AbstractController
         $client_id = $identifiers[0];
         // Compose the authorization scope
         $scope = array(
-            "read", "write",
-            "read/write", "follow",
-            "list", "email"
+            "tweet.read", "tweet.write", "like.write", "follows.write"
         );
         $scope = implode(" ", $scope);
         // Set the state when the request is good
         $state = "17";
         // Compose the authorization url
-        $authorization_url = "https://api.twitter.com/oauth/authorize?client_id=$client_id&redirect_uri=$redirect_uri&response_type=code&scope=your_requested_scopes&state=$state";
+        $authorization_url = "https://api.twitter.com/oauth/authorize?client_id=$client_id&redirect_uri=$redirect_uri&response_type=code&scope=$scope&state=state";
         return new JsonResponse(array("authorization_url" => $authorization_url), 200);
     }
     /**
