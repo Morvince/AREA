@@ -6,7 +6,7 @@ export const InfoBlockContainer = styled.div`
   position: absolute;
   top: ${(props) => props.top};
   left: ${(props) => props.left};
-  background: #5470d6;
+  background: ${(props) => props.background};
   border-radius: 25px;
   box-shadow: 5px 5px 1px 0 #373b48;
   display: flex;
