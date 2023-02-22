@@ -8,7 +8,9 @@
      */
     class RequestAPI
     {
-        public function __construct() {}
+        public function __construct()
+        {
+        }
 
         public function send($access_token, $url, $method, $parameters, $added_header = null)
         {
