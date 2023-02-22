@@ -28,7 +28,7 @@ export const GlobalContainer = styled.div`
   margin-bottom: 100px;
   display: flex;
   flex-direction: column;
-  background: red;
+  /* background: red; */
 `;
 
 export const NumberOfAreasText = styled.div`
@@ -61,7 +61,8 @@ export const AreaName = styled.div`
   font-weight: bold;
   display: inline-block;
   user-select: none;
-  padding: 10px;
+  padding: 20px;
+  left: 0%;
 `;
 
 export const ButtonEdit = styled.div`
