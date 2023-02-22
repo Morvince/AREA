@@ -10,13 +10,13 @@ export const BgColor = styled.div`
 
 export const AreaZone = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
-  position: relative;
+  position: absolute;
   background: grey;
   height: 100px;
-  margin-bottom: 75px;
+  width: 100%;
   border: 2px solid black;
+  top: ${props => props.top};
 `;
 
 export const GlobalContainer = styled.div`
@@ -41,7 +41,7 @@ export const NumberOfAreasText = styled.div`
 `;
 
 export const BoxContent = styled.div`
-  position: relative;
+  position: absolute;
   display: flex;
   width: 100%;
   height: 400px;
@@ -83,7 +83,8 @@ export const ButtonEdit = styled.div`
   padding: 20px;
 
   &:hover {
-  background-color: rgba(0, 0, 0, 1);
+    background-color: rgba(0, 0, 0, 1);
+    cursor: pointer;
   }
 `;
 
@@ -106,7 +107,8 @@ export const ButtonDelete = styled.div`
   padding: 20px;
 
   &:hover {
-  background-color: rgba(255, 12, 0, 1);
+    background-color: rgba(255, 12, 0, 1);
+    cursor: pointer;
   }
 `;
 
