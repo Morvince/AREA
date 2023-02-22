@@ -54,7 +54,7 @@ const PlayBox = (props) => {
   function getTop(id) {
     for (var i = 0; i < sharedData.length; i++) {
       if (id === sharedData[i].index)
-        return ((sharedData[i].top - 130) + "px")
+        return (Math.trunc(sharedData[i].top - 130) + "px")
     }
   }
 
@@ -62,7 +62,7 @@ const PlayBox = (props) => {
     for (var i = 0; i < sharedData.length; i++) {
       if (id === sharedData[i].index)
         console.log(sharedData[i])
-      return ((sharedData[i].left - 100) + "px")
+      return (Math.trunc(sharedData[i].left - 100) + "px")
     }
   }
 
