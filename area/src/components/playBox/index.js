@@ -18,15 +18,21 @@ const PlayBox = (props) => {
   const automationId = props.automationId;
   const userPlaylist = useGetUserPlaylist();
   const editAutomation = useEditAutomation();
-  const iconColor = (sharedData).length > 1 ? 'green' : 'red';
   const { onValidate } = props;
+  const [isLinkedListEmpty, setIsLinkedListEmpty] = React.useState(true);
 
   useEffect(() => {
+    if (sharedData.length > 1) {
+      setIsLinkedListEmpty(false);
+    } else {
+      setIsLinkedListEmpty(true);
+    }
     userPlaylist.mutate()
     if (userPlaylist.isSuccess) {
       setPlaylist(userPlaylist.data.data);
     }
-  }, [sharedData]);
+
+  }, [sharedData, linkedList]);
 
   function sendAutomation() {
     var actions = [];
@@ -41,12 +47,14 @@ const PlayBox = (props) => {
       i = { id: 0, number: 0, informations: {} }
     }
     editAutomation.mutate({ id: automationId, actions: actions })
+    setSharedData([]);
+    setLinkedList([]);
   }
 
   function getTop(id) {
     for (var i = 0; i < sharedData.length; i++) {
       if (id === sharedData[i].index)
-        return ((sharedData[i].top-130)+"px")
+        return ((sharedData[i].top - 130) + "px")
     }
   }
 
@@ -54,7 +62,7 @@ const PlayBox = (props) => {
     for (var i = 0; i < sharedData.length; i++) {
       if (id === sharedData[i].index)
         console.log(sharedData[i])
-        return ((sharedData[i].left-100)+"px")
+      return ((sharedData[i].left - 100) + "px")
     }
   }
 
@@ -62,23 +70,23 @@ const PlayBox = (props) => {
     <RectangleArea>
       <BinLeft />
       <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, playlist, setPlaylist, open, setOpen }}>
+      <Icon icon="mdi:delete-circle-outline" color="#373b48" width="40" style={{ position: 'absolute', top: '20%', left: '80.3%' }} />
+      <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={sendAutomation} disabled={isLinkedListEmpty === true}>
+        <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
+      </ValidateButton>
         <Servicesbar />
         <MovableBox>
-        <InfoBlock IsVisible={open} top={getTop(open)} left={getLeft(open)} />
+          <InfoBlock IsVisible={open} top={getTop(open)} left={getLeft(open)} />
           {sharedData.map((info) => {
             return (
               <Block key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} />
-            )
+              )
           })}
         </MovableBox>
       </MyContext.Provider>
       <BinRight />
       <BinWhite />
-      <Icon icon="mdi:delete-circle-outline" color="#373b48" width="40" style={{ position: 'absolute', top: '20%', left: '80.3%' }} />
-      <ValidateButton className={iconColor === 'green' ? 'green' : 'red'} onClick={sendAutomation} disabled={iconColor === 'red'}>
-        <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={iconColor} />
-      </ValidateButton>
-    </RectangleArea>
+    </RectangleArea >
   )
 }
 

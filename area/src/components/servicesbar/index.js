@@ -282,15 +282,14 @@ const Servicesbar = () => {
         </ServicesBarWrapper>
       </ServicesBarContainer>
       <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
-        {checkIfConnected() == true ?
+        {checkIfConnected() == false ?
+          <ButtonConnect onClick={handleConnectServices}> Connect </ButtonConnect> :
           puzzleBlocktemps.map((info, index) => {
             return (
               <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} dbID={info.dbID}  icon={getIcon(info.service)}/>
             )
-          }) :
-          <ButtonConnect onClick={handleConnectServices}> Connect </ButtonConnect>
+          })
         }
-
       </RectangleContener>
     </LeftColumn >
   );

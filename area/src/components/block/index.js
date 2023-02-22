@@ -66,6 +66,8 @@ const Block = (props) => {
 
   const handleDragStop = (e) => {
     var rect = e.target.getBoundingClientRect();
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
 
     //reset the block with the right information
     setbackgroundColor(props.color)
@@ -103,6 +105,26 @@ const Block = (props) => {
     for (var i = 0; i < linkedList.length; i++) {
       if (linkedList[i] === sharedData[props.id].above)
         linkedList.splice(i + 1, 0, props.id)
+    }
+
+    // console.log("BEFORE IF");
+    // console.log(sharedData);
+    if (rect.left >= screenWidth * 0.85 && rect.top >= screenHeight * 0.25 && rect.top <= screenHeight * 0.61) {
+      // console.log("BEFORE CUT")
+      // console.log(sharedData);
+      const indexToRemove = sharedData.findIndex((item) => item.index === props.id);
+      // console.log("index to remove : ");
+      // console.log(indexToRemove);
+      if (indexToRemove !== -1) {
+        sharedData.splice(indexToRemove, 1);
+        sharedData.forEach((item, i) => {
+        item.index = i;
+        });
+        setSharedData([...sharedData]);
+        // console.log("AFTER CUT")
+        // console.log("sharedData");
+        // console.log(sharedData);
+      }
     }
   }
 
@@ -159,7 +181,7 @@ const Block = (props) => {
     <Draggable bounds='parent' onDrag={handleDrag} onStop={handleDragStop} >
       <RectangleBlock color={backgroundColor} top={pos.x} left={pos.y}>
         <RectangleWrapper>
-          {(props.action === false) ? <CircleArcTop background=" #ebebeb" /> : null}
+          {(props.action === false) ? <CircleArcTop background="#ebebeb" /> : null}
           <CircleArcBot background={backgroundColor} />
           <AutomationText>
             {props.name}
