@@ -1,49 +1,38 @@
-import React, {useState} from 'react'
-import { useEffect } from 'react'
-import { FaBars } from 'react-icons/fa'
-import { Nav, NavbarContainer, NavLogo, MobileIcon, NavMenu, NavItem, NavLinks, NavBtn, NavBtnLink } from './navbarElements'
-import { IconContext } from 'react-icons/lib'
-import { animateScroll as scroll } from 'react-scroll'
+import React from 'react'
+import { Navigate, useLocation } from 'react-router-dom';
+import { useAddAutomation } from '../../api/apiServicesPage';
+import { NavRectBg, ButtonAreas, ButtonCreate, ButtonDocumentation, ButtonHapilink, NewAreas } from './navbarElements'
+import { getAreasCounter, resetAreasCounter } from '../../utils/AreasCounter'
 
 const Navbar = ({ toggle, changeY, defaultState }) => {
-  const [scrollNav, setScrollNav] = useState(defaultState)
 
-  const changeNav = () => {
-    if (window.scrollY >= changeY) {
-      setScrollNav(false)
-    } else {
-      setScrollNav(true)
-    }
+  const location = useLocation()
+  const tmpAutomation = useAddAutomation();
+  function redirect(event) {
+      event.preventDefault()
+      if (location.pathname === "/home")
+        return
+      tmpAutomation.mutate();
   }
 
-  useEffect(() => {
-    window.addEventListener('scroll', changeNav)
-  }, [])
-
-  const toggleHome = () => {
-    scroll.scrollToTop();
+  if (tmpAutomation.isSuccess) {
+    return (
+      <Navigate to="/home" state={{automationId: tmpAutomation.data.data}}/>
+    )
+  } else if (tmpAutomation.isError) {
+    return (
+      <Navigate to="/login"/>
+    )
   }
 
   return (
     <>
-    <IconContext.Provider value={{ color: '#f9f9f9' }}>
-      <Nav scrollNav={scrollNav}>
-        <NavbarContainer>
-          <NavLogo to="/" onClick={toggleHome}>Aurore BroRéal</NavLogo>
-          <MobileIcon onClick={toggle}>
-            <FaBars />
-          </MobileIcon>
-          <NavMenu>
-            <NavItem>
-              <NavLinks to="about" smooth={true} duration={500} spy={true} exact='true' offset={-80}>About</NavLinks>
-            </NavItem>
-          </NavMenu>
-          <NavBtn>
-            <NavBtnLink to="/signin">Sign In</NavBtnLink>
-          </NavBtn>
-        </NavbarContainer>
-      </Nav>
-    </IconContext.Provider>
+      <NavRectBg> </NavRectBg>
+      {getAreasCounter() > 0 ? <NewAreas> {getAreasCounter()} </NewAreas> : null}
+      <ButtonHapilink to="/" > Hapilink </ButtonHapilink>
+      <ButtonCreate onClick={redirect} > Create </ButtonCreate>
+      <ButtonAreas to="/areas" onClick={resetAreasCounter}> My Areas </ButtonAreas>
+      <ButtonDocumentation to="/doc" > Documentation </ButtonDocumentation>
     </>
   )
 }

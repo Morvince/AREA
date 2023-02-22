@@ -1,8 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components'
-import SignBoxComponent from '../components/signBoxElements/index';
-import SignMessage from '../components/signMessage/index';
+import { SignBoxComponent } from '../components/signBoxElements/index';
+import { SignMessage } from '../components/signMessage/index';
 import { black, white } from '../color';
+import { useLogin, useRegister } from '../api/apiSignPage';
+import { Navigate } from 'react-router-dom';
+import { useAddAutomation } from '../api/apiServicesPage';
 
 const SignPage = styled.div`
   display: flex;
@@ -13,9 +16,24 @@ const SignPage = styled.div`
   transition: background-color 0.3s;
 `;
 
+const ErrorMessage = styled.p`
+  margin-left: 200px;
+  font-size: 20px;
+  font-style: italic;
+  color: ${props => props.color};
+`;
+
 const Sign = () => {
   const [slideForm, setSlideForm] = useState(0)
-  const bgColor = slideForm === 0 || slideForm === 2 ? white : black
+  const bgColor = slideForm === 0 || slideForm === 2 ? black : white
+  const handleLogin = useLogin()
+  const handleRegister = useRegister()
+  const tmpAutomation = useAddAutomation();
+
+    function redirect(event) {
+        event.preventDefault()
+        tmpAutomation.mutate();
+    }
 
   const handleSlideForm = useCallback(function(event) {
     event.preventDefault()
@@ -27,10 +45,20 @@ const Sign = () => {
       setSlideForm(s => s - 1)
   }, [slideForm])
 
+  if (tmpAutomation.isSuccess) {
+    return (
+        <Navigate to="/home" replace={true} state={{automationId: tmpAutomation.data.data}}/>
+    )
+  }
+
   return (
     <SignPage bgColor={bgColor}>
       <SignMessage slideForm={slideForm}/>
-      <SignBoxComponent slideForm={slideForm} handleSlideForm={handleSlideForm}/>
+      <SignBoxComponent slideForm={slideForm} handleSlideForm={handleSlideForm} handleLogin={handleLogin} handleRegister={handleRegister} tempAutomation={tmpAutomation}/>
+      <div style={{position: "absolute", width: "100%", alignSelf: "flex-end", textAlign: "center", marginBottom: "110px"}}>
+        {(slideForm === 0 || slideForm === 2) && handleLogin.isError ? <ErrorMessage color={black}>{handleLogin.error.response.data.message}</ErrorMessage> :
+          slideForm === 1 && handleRegister.isError ? <ErrorMessage color={white}>{handleRegister.error.response.data.message}</ErrorMessage> : null}
+      </div>
     </SignPage>
   )
 }

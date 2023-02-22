@@ -1,21 +1,30 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Sidebar from '../components/sidebar'
 import Navebar from '../components/navbar'
-import Servicesbar from '../components/servicesbar'
+import PlayBox from '../components/playBox'
+import { useLocation } from 'react-router-dom'
+import { incrementAreasCounter } from '../utils/AreasCounter'
 
 const Home = () => {
 
   const [isOpen, setIsOpen] = useState(false)
+  const location = useLocation()
+  const [navbarKey, setNavbarKey] = useState(0)
 
   const toggle = () => {
     setIsOpen(!isOpen)
   }
 
+  const onValidate = () => {
+    incrementAreasCounter()
+    setNavbarKey(prevKey => prevKey + 1)
+  }
+
   return (
     <div>
       <Sidebar isOpen={isOpen} toggle={toggle} />
-      <Navebar toggle={toggle} changeY={720} defaultState={false}/>
-      <Servicesbar />
+      <PlayBox automationId={location.state.automationId.automation_id} onValidate={onValidate} />
+      <Navebar toggle={toggle} changeY={720} defaultState={false} key={navbarKey} />
     </div>
   )
 }

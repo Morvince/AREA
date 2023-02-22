@@ -32,7 +32,7 @@
         private $number;
 
         /**
-         * @ORM\Column(type="string", length=255)
+         * @ORM\Column(type="json")
          */
         private $informations;
 
@@ -55,7 +55,7 @@
         }
         public function getInformations()
         {
-            return $this->informations;
+            return json_decode($this->informations);
         }
 
         // Setter

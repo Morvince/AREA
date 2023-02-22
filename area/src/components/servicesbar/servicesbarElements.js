@@ -1,14 +1,19 @@
 import styled from 'styled-components';
 
+export const LeftColumn = styled.div`
+  display: flex;
+  width: 150px;
+`;
+
 export const ServicesBarContainer = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: ${props => props.color};
+  top: 4%;
   width: 150px;
   height: 100%;
-  position: fixed;
   left: 0;
   z-index: 999;
   transition: transform .2s ease-in-out;
@@ -59,47 +64,43 @@ export const IconBox = styled.div`
   }
 `;
 
-export const SwitchSlider = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 150px;
-  width: 20px;
-  height: 60px;
-  background-color: #9966ff;
-  border-radius: 0 50px 50px 0;
-  cursor: pointer;
-  transition: transform .2s ease-in-out;
-
-  &.open {
-    transform: translateX(0);
-  }
-
-  &.closed {
-    transform: translateX(-150px);
-  }
-
-  &:hover {
-    background-color: green;
-  }
-
-  &:active {
-    background-color: red;
-  }
-`;
-
 export const RectangleContener = styled.div`
   position: absolute;
   width: 350px;
   height: 100%;
-  z-index: 998;
-  transition: all 0.2s ease-in-out;
+  z-index: 1;
+  transition: all 0.3s ease-in-out;
   background-color: ${props => props.color};
 
   &.open {
-    transform: translateX(160px);
+    transform: translateX(200px);
   }
 
   &.closed {
-    transform: translateX(-200px);
+    transform: translateX(-400px);
+  }
+`;
+
+export const ButtonConnect = styled.button`
+  position: absolute;
+  left: 22%;
+  top: 50%;
+  border-radius: 30px;
+  background: #D4D3DC;
+  white-space: nowrap;
+  padding: 10px 22px;
+  color: black;
+  font-size: 40px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  user-select: none;
+
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background: black;
+    color: #D4D3DC;
   }
 `;

@@ -10,12 +10,13 @@
     {
         public function __construct() {}
 
-        public function send($access_token, $url, $method, $parameters)
+        public function send($access_token, $url, $method, $parameters, $added_header = null)
         {
             $headers = array(
                 "Accept: application/json",
                 "Content-Type: application/json",
-                "Authorization: Bearer $access_token"//"Authorization: Basic ".base64_encode($clientId.":".$clientSecret)
+                "Authorization: Bearer $access_token",
+                $added_header
             );
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -25,6 +26,7 @@
             switch ($method) {
                 case "POST":
                     curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($parameters));
                     break;
                 case "PUT":
                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
@@ -39,12 +41,13 @@
             $response = curl_exec($ch);
             if (curl_error($ch)) {
                 curl_close($ch);
-                return json_encode(array("message" => json_decode($response)->error->message, "code" => json_decode($response)->error->status));
+                return (json_encode(array("message" => json_decode($response)->error->message, "code" => json_decode($response)->error->status)));
             }
             curl_close($ch);
-            return $response;
+            return ($response);
         }
-        public function sendRoute($url, $parameters) {
+        public function sendRoute($url, $parameters)
+        {
             $headers = array(
                 "Accept: application/json",
                 "Content-Type: application/json",
@@ -60,8 +63,11 @@
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if ($code > 200) {
                 curl_close($ch);
-                $response = array("message" => json_decode($response)->message, "code" => $code);
-                return (json_encode($response));
+                if (empty(json_decode($response)->message)) {
+                    return (json_encode(array("message" => array("error" => json_decode($response)), "code" => $code)));
+                }
+                $new_response = array("message" => json_decode($response)->message, "code" => $code);
+                return (json_encode($new_response));
             }
             curl_close($ch);
             return ($response);

@@ -1,116 +1,85 @@
 import styled from 'styled-components';
 import { Link as LinkR } from 'react-router-dom';
-import { Link as LinkS } from 'react-scroll';
 
-export const Nav = styled.nav`
-  background: ${({ scrollNav }) => (scrollNav ? '#373b48' : '#373b48')};
-  height: 80px;
-  /* margin-top: -80px; */
+export const NavRectBg = styled.div`
+    width: 100%;
+    height: 80px;
+    top: 0%;
+    position: absolute;
+    background: #D4D3DC;
+`;
+
+export const ButtonHapilink = styled(LinkR)`
+    position: absolute;
+    line-height: 1.2;
+    text-align: center;
+    font-size: 35px;
+    top: 2%;
+    left: 15%;
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    &:hover {
+        color: #4361ee;
+    }
+`;
+
+export const ButtonCreate = styled(LinkR)`
+    position: absolute;
+    line-height: 25px;
+    text-align: center;
+    font-size: 20px;
+    top: 3%;
+    left: 35%;
+    color: black;
+    display: inline-block;
+    text-decoration: none;
+    &:hover {
+        color: #4361ee;
+    }
+`;
+
+export const ButtonAreas = styled(LinkR)`
+    position: absolute;
+    color: black;
+    display: inline-block;
+    text-align: center;
+    line-height: 25px;
+    font-size: 20px;
+    top: 3%;
+    left: 45%;
+    text-decoration: none;
+    &:hover {
+        color: #4361ee;
+    }
+`;
+
+export const ButtonDocumentation = styled(LinkR)`
+    position: absolute;
+    color: black;
+    display: inline-block;
+    text-align: center;
+    line-height: 25px;
+    font-size: 20px;
+    top: 3%;
+    left: 55%;
+    text-decoration: none;
+    &:hover {
+        color: #4361ee;
+    }
+`;
+
+export const NewAreas = styled.div`
   display: flex;
+  position: absolute;
+  text-align: center;
   justify-content: center;
   align-items: center;
-  font-size: 1rem;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-
-  @media screen and (max-width: 960px) {
-    transition: 0.8s all ease;
-  }
-`;
-
-export const NavbarContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  height: 80px;
-  z-index: 1;
-  width: 100%;
-  padding: 0 24px;
-  max-width: 1100px;
-`;
-
-export const NavLogo = styled(LinkR)`
-  color: #ebebeb;
-  justify-self: flex-start;
-  cursor: pointer;
-  font-size: 1.5rem;
-  display: flex;
-  align-items: center;
-  margin-left: 24px;
-  font-weight: bold;
-  text-decoration: none;
-`;
-
-export const MobileIcon = styled.div`
-  display: none;
-
-  @media screen and (max-width: 768px) {
-    display: block;
-    position: absolute;
-    top: 0;
-    right: 0;
-    transform: translate(-100%, 60%);
-    font-size: 1.8rem;
-    cursor: pointer;
-    color: #ebebeb;
-  }
-`;
-
-export const NavMenu = styled.ul`
-  display: flex;
-  align-items: center;
-  list-style: none;
-  text-align: center;
-  margin-right: -22px;
-
-  @media screen and (max-width: 768px) {
-    display: none;
-  }
-`;
-
-export const NavItem = styled.li`
-  height: 80px;
-`;
-
-export const NavLinks = styled(LinkS)`
-  color: #ebebeb;
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  padding: 0 1rem;
-  height: 100%;
-  cursor: pointer;
-
-  &.active {
-    border-bottom: 3px solid black;
-  }
-`;
-
-export const NavBtn = styled.nav`
-  display: flex;
-  align-items: center;
-
-  @media screen and (max-width: 768px) {
-    display: none;
-  }
-`;
-
-export const NavBtnLink = styled(LinkR)`
-  border-radius: 50px;
-  background: #ebebeb;
-  white-space: nowrap;
-  padding: 10px 22px;
-  color: black;
-  font-size: 16px;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  text-decoration: none;
-
-  &:hover {
-    transition: all 0.2s ease-in-out;
-    background: black;
-    color: #ebebeb;
-  }
+  width: 30px;
+  height: 30px;
+  left: 43%;
+  top: 2.9%;
+  background: green;
+  color: white;
+  border-radius: 50%;
 `;
