@@ -3,8 +3,9 @@ import { AreaName, AreaZone, ArrowArea, BgColor, ButtonDelete, ButtonEdit, Numbe
 import { Icon } from '@iconify/react';
 
 const EditAreas = () => {
-  const [areas, setAreas] = useState(Array.from({ length: 1 }, (_, index) => index + 1));
+  const [areas, setAreas] = useState(Array.from({ length: 2 }, (_, index) => index + 1));
   const [openArea, setOpenArea] = useState(-1);
+  const containerHeight = areas.length * 200 + 500 + 'px';
 
   const onArrowClick = (index) => {
     setOpenArea(openArea === index ? -1 : index);
@@ -13,7 +14,7 @@ const EditAreas = () => {
     <>
       <BgColor BgColor/>
         <NumberOfAreasText> You have exactly {areas.length} Area{areas.length !== 1 ? 's' : ''} running! </NumberOfAreasText>
-      <GlobalContainer> 
+      <GlobalContainer height={containerHeight}> 
         {areas.map((area, index) => (
           <AreaZone key={`Area${index}`}>
             {/* <AreaName> Area{area}</AreaName> */}

@@ -18,16 +18,17 @@ export const AreaZone = styled.div`
   margin-bottom: 75px;
   border: 2px solid black;
 `;
+
 export const GlobalContainer = styled.div`
   width: 90%;
-  height: 200%;
-  top: 40%;
+  height: ${props => props.height};
+  top: 35%;
   left: 5%;
   position: absolute;
   margin-bottom: 100px;
   display: flex;
   flex-direction: column;
-  /* background: red; */
+  background: red;
 `;
 
 export const NumberOfAreasText = styled.div`
@@ -44,9 +45,9 @@ export const BoxContent = styled.div`
   position: relative;
   display: flex;
   width: 100%;
-  height: 400%;
+  height: 400px;
   background: grey;
-  margin-top: 600px;
+  margin-top: 620px;
   margin-bottom: 100px;
   border: 2px solid black;
   color: white;
