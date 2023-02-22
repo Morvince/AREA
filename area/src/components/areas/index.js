@@ -3,9 +3,9 @@ import { AreaName, AreaZone, ArrowArea, BgColor, ButtonDelete, ButtonEdit, Numbe
 import { Icon } from '@iconify/react';
 
 const EditAreas = () => {
-  const [areas, setAreas] = useState(Array.from({ length: 1}, (_, index) => index + 1));
+  const [areas, setAreas] = useState(Array.from({ length: 5}, (_, index) => index + 1));
   const [openArea, setOpenArea] = useState(-1);
-  const containerHeight = areas.length * 200 + 500 + 'px';
+  const containerHeight = (areas.length * 175) + 'px';
 
   const onArrowClick = (index) => {
     setOpenArea(openArea === index ? -1 : index);
