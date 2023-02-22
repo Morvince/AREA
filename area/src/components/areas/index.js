@@ -3,7 +3,7 @@ import { AreaName, AreaZone, ArrowArea, BgColor, ButtonDelete, ButtonEdit, Numbe
 import { Icon } from '@iconify/react';
 
 const EditAreas = () => {
-  const [areas, setAreas] = useState(Array.from({ length: 20 }, (_, index) => index + 1));
+  const [areas, setAreas] = useState(Array.from({ length: 1}, (_, index) => index + 1));
   const [openArea, setOpenArea] = useState(-1);
   const containerHeight = areas.length * 200 + 500 + 'px';
 
@@ -21,7 +21,7 @@ const EditAreas = () => {
             <ArrowArea onClick={() => onArrowClick(index)}> 
               <Icon icon="material-symbols:arrow-drop-down-sharp" width="90" style={{ position: 'absolute', color: "white", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}} />
             </ArrowArea>
-            {openArea === index && <BoxContent>Container for Area{area}</BoxContent>}
+            {openArea === index && <BoxContent>Container for Area{area} <ButtonDelete> Delete</ButtonDelete> <ButtonEdit> Edit </ButtonEdit></BoxContent>}
           </AreaZone>
         ))}
         </GlobalContainer>

@@ -28,7 +28,6 @@ export const GlobalContainer = styled.div`
   margin-bottom: 100px;
   display: flex;
   flex-direction: column;
-  /* background: red; */
 `;
 
 export const NumberOfAreasText = styled.div`
@@ -71,8 +70,8 @@ export const ButtonEdit = styled.div`
   background-color: rgba(0, 0, 0, 0.6);
   height: 20%;
   width: 10%;
-  left : 79%;
-  top: 79%;
+  left : 80%;
+  top: 80%;
   
   /* text */
   color: white;
@@ -81,7 +80,7 @@ export const ButtonEdit = styled.div`
   font-weight: bold;
   display: inline-block;
   user-select: none;
-  padding: 10px;
+  padding: 20px;
 
   &:hover {
   background-color: rgba(0, 0, 0, 1);
@@ -94,8 +93,8 @@ export const ButtonDelete = styled.div`
   background-color: rgba(255, 12, 0, 0.5);
   height: 20%;
   width: 10%;
-  left : 89.5%;
-  top: 79%;
+  left : 90%;
+  top: 80%;
   
   /* text */
   color: white;
@@ -104,7 +103,7 @@ export const ButtonDelete = styled.div`
   font-weight: bold;
   display: inline-block;
   user-select: none;
-  padding: 10px;
+  padding: 20px;
 
   &:hover {
   background-color: rgba(255, 12, 0, 1);
