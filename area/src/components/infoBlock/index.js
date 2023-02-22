@@ -24,7 +24,6 @@ const TextSection = (props) => {
 }
 
 const InfoBlock = (props) => {
-  console.log(props.IsVisible)
   return (
     props.IsVisible !== null ? (
       <Draggable>

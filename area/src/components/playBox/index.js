@@ -8,6 +8,7 @@ import InfoBlock from '../infoBlock'
 import { useGetUserPlaylist } from '../../api/apiSpotify';
 import { useEditAutomation } from '../../api/apiServicesPage';
 import { Icon } from '@iconify/react';
+import { useGetAction } from '../../api/apiServicesPage';
 
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = useState([]);
@@ -20,6 +21,13 @@ const PlayBox = (props) => {
   const automationId = props.automationId;
   const userPlaylist = useGetUserPlaylist();
   const editAutomation = useEditAutomation();
+
+  const tmpServices = useGetAction();
+
+  //request to get all services
+  useEffect(() => {
+    tmpServices.mutate()
+  }, []);
 
   useEffect(() => {
     if (sharedData.length > 1) {
@@ -59,7 +67,7 @@ const PlayBox = (props) => {
         <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={sendAutomation} disabled={isLinkedListEmpty === true}>
           <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
         </ValidateButton>
-        <Servicesbar />
+        <Servicesbar tmpServices={tmpServices} />
         <MovableBox>
           {sharedData.map((info) => {
             return (

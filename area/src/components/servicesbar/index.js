@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { ServicesBarContainer, ServicesBarWrapper, IconBox, ButtonConnect, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
 import ButtonBox from '../buttonBlock';
-import { useGetAction } from '../../api/apiServicesPage';
 import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected, useGoogleConnect, useGoogleConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
 
-const Servicesbar = () => {
+const Servicesbar = (props) => {
   const [isOpen] = useState(true);
   const [isLeftBoxOpen, setisLeftBoxOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
   const [puzzleBlocktemps, setpuzzleBlocktemps] = useState([]);
-  const tmpServices = useGetAction();
   const handleSpotifyConnect = useSpotifyConnect();
   const isSpotifyConnected = useSpotifyConnected();
   const handleDiscordConnect = useDiscordConnect()
@@ -65,19 +63,6 @@ const Servicesbar = () => {
       }
     }
 
-  useEffect(() => {
-    tmpServices.mutate()
-  }, []);
-
-  const services = [
-    { nom: 'discord',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], nbrBox: [2,0]},
-    { nom: 'instagram', nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'google',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'github',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
-  ];
-
   function checkIfConnected() {
     switch (selectedService) {
       case "discord":
@@ -113,19 +98,28 @@ const Servicesbar = () => {
     }
   }
 
+  const services = [
+    { nom: 'discord',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], nbrBox: [2,0]},
+    { nom: 'instagram', nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'google',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'github',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
+  ];
+
   function fillservices(id, i) {
     services[id].nombre += 1;
-    services[id].name.push(tmpServices.data.data.actions[i].name);
-    if (tmpServices.data.data.actions[i].type === "reaction") {
+    services[id].name.push(props.tmpServices.data.data.actions[i].name);
+    if (props.tmpServices.data.data.actions[i].type === "reaction") {
       services[id].action.push(false);
     } else {
       services[id].action.push(true);
     }
   }
 
-  if (tmpServices.isSuccess) {
-    for (let i = 0; i < tmpServices.data.data.actions.length; i++) {
-      switch (tmpServices.data.data.actions[i].service) {
+  if (props.tmpServices.isSuccess) {
+    for (let i = 0; i < props.tmpServices.data.data.actions.length; i++) {
+      switch (props.tmpServices.data.data.actions[i].service) {
         case "discord":
           fillservices(0, i);
           break;
@@ -162,7 +156,7 @@ const Servicesbar = () => {
         action: services[i].action[x],
         name: services[i].name[x],
         nbrBox: services[i].nbrBox[x],
-        dbID: tmpServices.data.data.actions[x].id,
+        dbID: props.tmpServices.data.data.actions[x].id,
       });
       t++;
     }
