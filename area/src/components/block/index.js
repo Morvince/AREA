@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useffect } from 'react'
 import Draggable from 'react-draggable'
 import { RectangleBlock, RectangleWrapper, AutomationText, LogoWrapper, AutomationRectangle, ArrowRectangle, CircleArcBot, CircleArcTop } from './blockElements'
 import MyContext from '../Context'
@@ -7,18 +7,18 @@ import { Icon } from '@iconify/react';
 const Block = (props) => {
   const [backgroundColor, setbackgroundColor] = useState(props.color)
   const [pos, setPos] = useState({ x: props.top, y: props.left })
-  const { sharedData, setSharedData } = React.useContext(MyContext);
-  const { linkedList, setLinkedList } = React.useContext(MyContext);
-  const { playlist, setPlaylist } = React.useContext(MyContext);
-  const {open, setOpen} = React.useContext(MyContext);
+  const { sharedData, setSharedData } = useContext(MyContext);
+  const { linkedList, setLinkedList } = useContext(MyContext);
+  const { playlist, setPlaylist } = useContext(MyContext);
+  const {open, setOpen} = useContext(MyContext);
 
   const handleOpen = (e, data) => {
     if (open === null) {
-      setOpen("bite");
-      console.log("open1 : ", open)
+      setOpen(props.id);
+    } else if (open ==! props.id) {
+      setOpen(props.id);
     } else {
       setOpen(null);
-      console.log("open2 : ", open)
     }
   };
 

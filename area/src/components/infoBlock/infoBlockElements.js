@@ -4,8 +4,8 @@ export const InfoBlockContainer = styled.div`
   width: 250px;
   min-height: 125px;
   position: absolute;
-  top: 100px;
-  left: 100px;
+  top: ${(props) => props.top};
+  left: ${(props) => props.left};
   background: #5470d6;
   border-radius: 25px;
   box-shadow: 5px 5px 1px 0 #373b48;
@@ -17,7 +17,6 @@ export const InfoBlockContainer = styled.div`
 
 export const InfoWrapper = styled.div`
   width: 100%;
-  /* height: 100%; */
   position: relative;
   display: flex;
   flex-direction: column;

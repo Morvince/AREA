@@ -23,21 +23,24 @@ const TextSection = (props) => {
   )
 }
 
-const InfoBlock = () => {
+const InfoBlock = (props) => {
+  console.log(props.top, props.left)
   return (
+    props.IsVisible !== null ? (
     <Draggable>
-      <InfoBlockContainer>
-        <InfoWrapper>
-          <InfoTitle>Quel message veut-tu ecrire</InfoTitle>
-          <TextSection text="Message" />
-        </InfoWrapper>
-        <LittleBorder />
-        <InfoWrapper>
-          <InfoTitle>Dans quel channel veut tu écrire se message ?</InfoTitle>
-          <DropdownSection />
-        </InfoWrapper>
-      </InfoBlockContainer>
-    </Draggable>
+       <InfoBlockContainer top={props.top} left={props.left}>
+         <InfoWrapper>
+           <InfoTitle>Quel message veut-tu ecrire</InfoTitle>
+           <TextSection text="Message" />
+         </InfoWrapper>
+         <LittleBorder />
+         <InfoWrapper>
+           <InfoTitle>Dans quel channel veut tu écrire se message ?</InfoTitle>
+           <DropdownSection />
+         </InfoWrapper>
+       </InfoBlockContainer>
+     </Draggable>
+    ) : ( <></> )
   )
 }
 

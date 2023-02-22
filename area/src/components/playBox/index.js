@@ -1,4 +1,5 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
 import { RectangleArea, MovableBox, ValidateButton, BinLeft, BinRight, BinWhite } from './playBoxElements'
 import Servicesbar from '../servicesbar'
 import Block from '../block'
@@ -9,18 +10,18 @@ import { useEditAutomation } from '../../api/apiServicesPage';
 import { Icon } from '@iconify/react';
 
 const PlayBox = (props) => {
-  const [sharedData, setSharedData] = React.useState([]);
-  const [linkedList, setLinkedList] = React.useState([]);
-  const [playlist, setPlaylist] = React.useState([]);
-  const [open, setOpen] = React.useState(null);
-  const [ID, setID] = React.useState(0);
+  const [sharedData, setSharedData] = useState([]);
+  const [linkedList, setLinkedList] = useState([]);
+  const [playlist, setPlaylist] = useState([]);
+  const [open, setOpen] = useState(null);
+  const [ID, setID] = useState(0);
   const automationId = props.automationId;
   const userPlaylist = useGetUserPlaylist();
   const editAutomation = useEditAutomation();
   const iconColor = (sharedData).length > 1 ? 'green' : 'red';
   const { onValidate } = props;
 
-  React.useEffect(() => {
+  useEffect(() => {
     userPlaylist.mutate()
     if (userPlaylist.isSuccess) {
       setPlaylist(userPlaylist.data.data);
@@ -42,13 +43,28 @@ const PlayBox = (props) => {
     editAutomation.mutate({ id: automationId, actions: actions })
   }
 
+  function getTop(id) {
+    for (var i = 0; i < sharedData.length; i++) {
+      if (id === sharedData[i].index)
+        return ((sharedData[i].top-130)+"px")
+    }
+  }
+
+  function getLeft(id) {
+    for (var i = 0; i < sharedData.length; i++) {
+      if (id === sharedData[i].index)
+        console.log(sharedData[i])
+        return ((sharedData[i].left-100)+"px")
+    }
+  }
+
   return (
     <RectangleArea>
       <BinLeft />
       <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, playlist, setPlaylist, open, setOpen }}>
         <Servicesbar />
         <MovableBox>
-        <InfoBlock />
+        <InfoBlock IsVisible={open} top={getTop(open)} left={getLeft(open)} />
           {sharedData.map((info) => {
             return (
               <Block key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} />
