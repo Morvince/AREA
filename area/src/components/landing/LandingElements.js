@@ -34,15 +34,15 @@ export const FirstWave = ({ top, height, color }) => {
 };
 
 export const SecondWave = ({ top, height, color }) => {
-    return (
-      <StyledSvg viewBox="0 0 900 100" top={top} height={height}>
-        <StyledPath
-          d="M0,0V75c.5.5,94.5-25,250-25,144,0,254.3,49.5,400,50,137.5.5,250.5-24.5,250-25S899.5.5,900,0,92.5,0,0,0Z"
-          color={color}
-        />
-      </StyledSvg>
-    );
-  };
+  return (
+    <StyledSvg viewBox="0 0 900 100" top={top} height={height}>
+      <StyledPath
+        d="M0,0V75c.5.5,94.5-25,250-25,144,0,254.3,49.5,400,50,137.5.5,250.5-24.5,250-25S899.5.5,900,0,92.5,0,0,0Z"
+        color={color}
+      />
+    </StyledSvg>
+  );
+};
 
 export const Text = styled.div`
     position: absolute;
@@ -72,8 +72,9 @@ export const ButtonWithBg = styled(LinkR)`
     border-radius: 50px;
     transition: all 0.3s ease-in-out;
     &:hover {
-        background: #b5179e;
-        color: white;
+      background: #b5179e;
+      color: white;
+      cursor: pointer;
     }
 `;
 
@@ -96,6 +97,7 @@ export const ButtonTryIt = styled(LinkR)`
     &:hover {
         background: #b5179e;
         color: white;
+        cursor: pointer;
     }
 `;
 
@@ -115,6 +117,7 @@ export const ButtonWithoutBg = styled(LinkR)`
     border-radius: 50px;
     &:hover {
         color: #4361ee;
+        cursor: pointer;
     }
 `;
 
@@ -157,7 +160,7 @@ export const ButtonNewAccount = styled(LinkR)`
         color: white;
     }
 `;
-   
+
 export const ButtonLogin = styled(LinkR)`
     position: absolute;
     color: black;
