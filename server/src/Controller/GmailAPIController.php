@@ -226,7 +226,7 @@
             foreach ($new_mails as $new_mail) {
                 $found = false;
                 foreach ($old_mails as $old_mail) {
-                    if (strcmp($new_mail->id, $old_mail->id) === 0) {
+                    if (strcmp($new_mail->id, $old_mail->id) !== 0) {
                         $found = true;
                         break (1);
                     }
@@ -267,7 +267,80 @@
                 return new JsonResponse(array("message" => "Gmail: Playlist ID not found"), 404);
             }
             // Request to get the 10 last mails
-            $response = $this->sendRequest($access_token, "users/me/messages?maxResults=10");
+            $response = $this->sendRequest($access_token, "users/me/messages?maxResults=5");
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
+            }
+            return new JsonResponse($response, 200);
+        }
+        /**
+         * @Route("/gmail/action/check_mail_from_somebody", name="gmail_api_action_check_mail_from_somebody")
+         */
+        public function hasInboxNewMailFromSomebody(Request $request, AutomationActionRepository $automation_action_repository)
+        {
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->new) || empty($request_content->old) || empty($request_content->automation_action_id)) {
+                return new JsonResponse(array("message" => "Gmail: Missing field"), 400);
+            }
+            if (empty($automation_action_repository->find($request_content->automation_action_id))) {
+                return new JsonResponse(array("message" => "Gmail: Automation_action not found"), 404);
+            }
+            $automation_action = $automation_action_repository->find($request_content->automation_action_id);
+            $informations = $automation_action->getInformations();
+            $somebody = $informations->somebody;
+            $old_mails = $request_content->old;
+            $new_mails = $request_content->new;
+            // Check if a new mail is in the inbox
+            foreach ($new_mails as $new_mail) {
+                $found = false;
+                foreach ($old_mails as $old_mail) {
+                    if (strcmp($new_mail->id, $old_mail->id) !== 0) {
+                        foreach ($new_mail->payload->headers as $header) {
+                            if (strcmp($header->name, "From") === 0 && strcmp($header->value, $somebody) === 0) {
+                                $found = true;
+                            }
+                        }
+                        break (1);
+                    }
+                }
+                if ($found === false) {
+                    return new JsonResponse(array("message" => true), 200);
+                }
+            }
+            return new JsonResponse(array("message" => false), 200);
+        }
+        /**
+         * @Route("/gmail/action/check_mail_from_somebody/get_parameters", name="gmail_api_action_check_mail_from_somebody_parameters")
+         */
+        public function getHasInboxNewMailFromSomebodyParameters(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
+        {
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->automation_action_id)) {
+                return new JsonResponse(array("message" => "Gmail: Missing field"), 400);
+            }
+            $automation_action_id = $request_content->automation_action_id;
+            $automation_action = $automation_action_repository->find($automation_action_id);
+            if (empty($automation_action)) {
+                return new JsonResponse(array("message" => "Gmail: automation_action ID not found"), 404);
+            }
+            $service = $service_repository->findByName("gmail");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Gmail: Service not found"), 404);
+            }
+            $service = $service[0];
+            $automation = $automation_repository->find($automation_action->getAutomationId());
+            if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+                return new JsonResponse(array("message" => "Gmail: Access token not found"), 404);
+            }
+            $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
+            $informations = $automation_action->getInformations();
+            if (empty($informations->playlist_id)) {
+                return new JsonResponse(array("message" => "Gmail: Playlist ID not found"), 404);
+            }
+            // Request to get the 10 last mails
+            $response = $this->sendRequest($access_token, "users/me/messages?maxResults=5");
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
