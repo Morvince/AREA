@@ -270,7 +270,7 @@ export const DeleteRappel = styled.div`
   height: 40%;
   top: 40%;
   left: 36%;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.9);
   border: 2px solid white;
   border-radius: 30px;
 
@@ -289,7 +289,7 @@ export const DeleteButtonYes = styled.div`
   height: 30%;
   top: 70%;
   left: 0%;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 128, 0, 0.6);
   border-radius: 0px 0px 0px 30px;
   border: 2px solid white;
 
@@ -303,7 +303,7 @@ export const DeleteButtonYes = styled.div`
 
   &:hover {
     cursor: pointer;
-    background-color: black;
+    background-color: green;
   }
 `;
 

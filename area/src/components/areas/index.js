@@ -18,7 +18,6 @@ const EditAreas = () => {
   const containerHeight = (automationsWithActions.length * 175 + (openArea !== -1 ? 400 : 0)) + 'px';
   console.log(automationsWithActions);
 
-
   return (
     <>
       <BgColor BgColor />
