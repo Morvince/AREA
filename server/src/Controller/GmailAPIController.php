@@ -262,11 +262,7 @@
                 return new JsonResponse(array("message" => "Gmail: Access token not found"), 404);
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
-            $informations = $automation_action->getInformations();
-            if (empty($informations->playlist_id)) {
-                return new JsonResponse(array("message" => "Gmail: Playlist ID not found"), 404);
-            }
-            // Request to get the 10 last mails
+            // Request to get the 5 last mails
             $response = $this->sendRequest($access_token, "users/me/messages?maxResults=5");
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
@@ -288,16 +284,16 @@
             }
             $automation_action = $automation_action_repository->find($request_content->automation_action_id);
             $informations = $automation_action->getInformations();
-            $somebody = $informations->somebody;
+            $from = $informations->from;
             $old_mails = $request_content->old;
             $new_mails = $request_content->new;
-            // Check if a new mail is in the inbox
+            // Check if a new mail from somebody is in the inbox
             foreach ($new_mails as $new_mail) {
                 $found = false;
                 foreach ($old_mails as $old_mail) {
                     if (strcmp($new_mail->id, $old_mail->id) !== 0) {
                         foreach ($new_mail->payload->headers as $header) {
-                            if (strcmp($header->name, "From") === 0 && strcmp($header->value, $somebody) === 0) {
+                            if (strcmp($header->name, "From") === 0 && strcmp($header->value, $from) === 0) {
                                 $found = true;
                             }
                         }
@@ -335,16 +331,62 @@
                 return new JsonResponse(array("message" => "Gmail: Access token not found"), 404);
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
-            $informations = $automation_action->getInformations();
-            if (empty($informations->playlist_id)) {
-                return new JsonResponse(array("message" => "Gmail: Playlist ID not found"), 404);
-            }
-            // Request to get the 10 last mails
+            // Request to get the 5 last mails
             $response = $this->sendRequest($access_token, "users/me/messages?maxResults=5");
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
             return new JsonResponse($response, 200);
+        }
+
+        // Reaction
+        /**
+         * @Route("/gmail/reaction/send_mail", name="gmail_api_reaction_send_mail")
+         */
+        public function sendMail(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
+        {
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->automation_action_id)) {
+                return new JsonResponse(array("message" => "Gmail: Missing field"), 400);
+            }
+            $automation_action_id = $request_content->automation_action_id;
+            $automation_action = $automation_action_repository->find($automation_action_id);
+            if (empty($automation_action)) {
+                return new JsonResponse(array("message" => "Gmail: automation_action ID not found"), 404);
+            }
+            $service = $service_repository->findByName("gmail");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Gmail: Service not found"), 404);
+            }
+            $service = $service[0];
+            $automation = $automation_repository->find($automation_action->getAutomationId());
+            if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+                return new JsonResponse(array("message" => "Gmail: Access token not found"), 404);
+            }
+            $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
+            $informations = $automation_action->getInformations();
+            if (empty($informations->to)) {
+                return new JsonResponse(array("message" => "Gmail: Email not found"), 404);
+            }
+            $to = $informations->to;
+            if (empty($informations->subject)) {
+                return new JsonResponse(array("message" => "Gmail: Suject not found"), 404);
+            }
+            $subject = $informations->subject;
+            if (empty($informations->body)) {
+                return new JsonResponse(array("message" => "Gmail: Body not found"), 404);
+            }
+            $body = $informations->body;
+            $parameters = array(
+                "raw" => base64_encode("To: $to\r\nSubject: $subject\r\n\r\n$body")
+            );
+            // Request to change send the mail
+            $response = json_decode($this->sendRequest($access_token, "users/me/messages/send", "POST", $parameters));
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
+            }
+            return new JsonResponse(array("message" => "OK"), 200);
         }
         
         /**
