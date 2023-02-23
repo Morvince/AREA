@@ -135,6 +135,10 @@ automation_edit:
   path: /automation/edit
   controller: App\Controller\AutomationController::editAutomation
   methods: [POST]
+automation_delete:
+  path: /automation/delete
+  controller: App\Controller\AutomationController::deleteAutomation
+  methods: [POST]
 
 # ACTION
 action_get_all:
