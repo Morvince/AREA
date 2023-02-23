@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AreaName, AreaZone, ArrowArea, BgColor, ButtonDelete, ButtonEdit, NumberOfAreasText, GlobalContainer, BoxContent, CutBarre, AreasZoneAction, ServiceNameAction, NameAction } from './areasElements';
+import { AreaName, AreaZone, ArrowArea, BgColor, ButtonDelete, ButtonEdit, NumberOfAreasText, GlobalContainer, BoxContent, CutBarre, AreasZoneAction, ServiceNameAction, NameAction, AreasZoneReactions, ServiceNameReaction, NameReaction, ValuesReaction, AreasZoneReactionsMoovable } from './areasElements';
 import { Icon } from '@iconify/react';
 import { useGetInfosAreas } from '../../api/apiAreasPage';
 
@@ -19,7 +19,7 @@ const EditAreas = () => {
   return (
     <>
       <BgColor BgColor />
-      <NumberOfAreasText> You have exactly {automationsWithActions.length} Area{automationsWithActions.length !== 1 ? 's' : ''} running! </NumberOfAreasText>
+      <NumberOfAreasText> You have {automationsWithActions.length} Area{automationsWithActions.length !== 1 ? 's' : ''} running! </NumberOfAreasText>
       <GlobalContainer height={containerHeight}>
         {automationsWithActions.map((automation, index) => {
           const top = index * 175 + (index > openArea ? (openArea !== -1 ? 400 : 0) : 0);
@@ -37,6 +37,16 @@ const EditAreas = () => {
                     <ServiceNameAction> Service : {automationsWithActions[index]?.automation_actions[0]?.service}</ServiceNameAction>
                     <NameAction> Action : {automationsWithActions[index]?.automation_actions[0]?.name}</NameAction>
                   </AreasZoneAction>
+                  <AreasZoneReactions>
+                    <AreasZoneReactionsMoovable>
+                      <ServiceNameReaction> Service : {automationsWithActions[index]?.automation_actions[1]?.service}</ServiceNameReaction>
+                      <NameReaction> Action : {automationsWithActions[index]?.automation_actions[1]?.name}</NameReaction>
+                      <ValuesReaction> Values : {automationsWithActions[index]?.automation_actions[1]?.values}</ValuesReaction>
+                      {/* {automationsWithActions[index].automation_actions.length > 2 ?
+                        :
+                    } */}
+                    </AreasZoneReactionsMoovable>
+                  </AreasZoneReactions>
                   <CutBarre> </CutBarre>
                   <ButtonDelete> Delete </ButtonDelete>
                   <ButtonEdit> Edit </ButtonEdit>

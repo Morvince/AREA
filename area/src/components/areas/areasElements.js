@@ -30,6 +30,43 @@ export const AreasZoneAction = styled.div`
   top: 3%;
 `;
 
+export const AreasZoneReactions = styled.div`
+  display: flex;
+  align-items: center;
+  position: absolute;
+  border: 2px solid black;
+  height: 94%;
+  width: 50%;
+  left: 33%;
+  top: 3%;
+`
+
+export const AreasZoneReactionsMoovable = styled.div`
+  display: flex;
+  align-items: center;
+  position: absolute;
+  height: 90%;
+  width: 100%;
+  top: 0%;
+`
+
+export const ServiceNameReaction = styled.div`
+  display: flex;
+  position: absolute;
+  height: 20%;
+  width: 100%;
+  top: 5%;
+
+  /* text */
+  color: white;
+  text-align: center;
+  font-size: 200%;
+  font-weight: bold;
+  display: inline-block;
+  user-select: none;
+  padding: 20px;
+`;
+
 export const ServiceNameAction = styled.div`
   display: flex;
   position: absolute;
@@ -64,6 +101,41 @@ export const NameAction = styled.div`
   padding: 20px;
 `;
 
+export const ValuesReaction = styled.div`
+  display: flex;
+  position: absolute;
+  height: 50%;
+  width: 100%;
+  top: 50%;
+
+  /* text */
+  color: white;
+  text-align: center;
+  font-size: 200%;
+  font-weight: bold;
+  display: inline-block;
+  user-select: none;
+  padding: 20px;
+`;
+
+export const NameReaction = styled.div`
+  display: flex;
+  position: absolute;
+  height: 70%;
+  width: 100%;
+  top: 25%;
+
+  /* text */
+  color: white;
+  text-align: center;
+  font-size: 200%;
+  font-weight: bold;
+  display: inline-block;
+  user-select: none;
+  padding: 20px;
+`;
+
+
 
 export const GlobalContainer = styled.div`
   width: 90%;
@@ -80,7 +152,7 @@ export const NumberOfAreasText = styled.div`
   position: absolute;
   font-size: 30px;
   top: 20%;
-  left: 35%;
+  left: 42%;
   color: white;
   user-select: none;
   font-weight: bold;
