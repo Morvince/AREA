@@ -382,24 +382,11 @@
                 "raw" => base64_encode("To: $to\r\nSubject: $subject\r\n\r\n$body")
             );
             // Request to change send the mail
-            $response = json_decode($this->sendRequest($access_token, "users/me/messages/send", "POST", $parameters));
+            $response = $this->sendRequest($access_token, "users/me/messages/send", "POST", $parameters);
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
             return new JsonResponse(array("message" => "OK"), 200);
-        }
-        
-        /**
-         * @Route("/gmail/test", name="gmail_api_test")
-         */
-        public function test(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
-        {
-            $user_id = 1;
-            $service_id = $service_repository->findByName("gmail")[0]->getId();
-            $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service_id)[0]->getAccessToken();
-            // $response = $this->sendRequest($access_token, "users/me/messages?maxResults=10");a vérifier avec un vrai compte
-            $response = array();//pour le from c'est dans $mail->payload->headers[] if ->name == "From" l'email = ->value
-            return new JsonResponse(array("message" => $response));
         }
     }
 ?>
