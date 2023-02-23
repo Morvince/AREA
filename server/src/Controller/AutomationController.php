@@ -73,7 +73,7 @@
                     $service = $service_repository->find($action->getServiceId());
                     array_push($tmp_automation_actions, array("id" => $action->getId(), "name" => $action->getName(), "service" => $service->getName(), "type" => $action->getType(), "number" => $automation_action->getNumber(), "fields" => $action->getFields(), "values" => $automation_action->getInformations()));
                 }
-                $tmp_automation = array("name" => "Name en db", "id" => $automation->getId(), "automation_actions" => $tmp_automation_actions);
+                $tmp_automation = array("name" => "AreaName", "id" => $automation->getId(), "automation_actions" => $tmp_automation_actions);
                 array_push($formatted, $tmp_automation);
             }
             return new JsonResponse(array("automations" => $formatted), 200);

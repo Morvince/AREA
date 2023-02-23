@@ -34,10 +34,10 @@ export const AreasZoneReactions = styled.div`
   display: flex;
   align-items: center;
   position: absolute;
-  border: 2px solid black;
   height: 94%;
   width: 50%;
   left: 33%;
+  overflow-x: auto;
   top: 3%;
 `
 
@@ -47,6 +47,7 @@ export const AreasZoneReactionsMoovable = styled.div`
   position: absolute;
   height: 90%;
   width: 100%;
+  border: 3px solid red;
   top: 0%;
 `
 

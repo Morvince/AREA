@@ -33,20 +33,30 @@ const EditAreas = () => {
               </ArrowArea>
               {openArea === index &&
                 <BoxContent>
-                  <AreasZoneAction> 
+                  <AreasZoneAction>
                     <ServiceNameAction> Service : {automationsWithActions[index]?.automation_actions[0]?.service}</ServiceNameAction>
                     <NameAction> Action : {automationsWithActions[index]?.automation_actions[0]?.name}</NameAction>
                   </AreasZoneAction>
                   <AreasZoneReactions>
-                    <AreasZoneReactionsMoovable>
-                      <ServiceNameReaction> Service : {automationsWithActions[index]?.automation_actions[1]?.service}</ServiceNameReaction>
-                      <NameReaction> Action : {automationsWithActions[index]?.automation_actions[1]?.name}</NameReaction>
-                      <ValuesReaction> Values : {automationsWithActions[index]?.automation_actions[1]?.values}</ValuesReaction>
-                      {/* {automationsWithActions[index].automation_actions.length > 2 ?
-                        :
-                    } */}
-                    </AreasZoneReactionsMoovable>
+                    {automationsWithActions[index].automation_actions.length > 2 ?
+                      <AreasZoneReactionsMoovable>
+                        {automationsWithActions[index].automation_actions.slice(1).map((action, actionIndex) => (
+                          <div key={`reaction-${actionIndex}`} style={{ width: "calc(33.33% - 10px)", display: "inline-block", margin: "0px 5px" }}>
+                            <ServiceNameReaction> Service : {action.service}</ServiceNameReaction>
+                            <NameReaction> Action : {action.name}</NameReaction>
+                            <ValuesReaction> Values : {action.values}</ValuesReaction>
+                          </div>
+                        ))}
+                      </AreasZoneReactionsMoovable> :
+                      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                        <ServiceNameReaction> Service : {automationsWithActions[index]?.automation_actions[1]?.service}</ServiceNameReaction>
+                        <NameReaction> Action : {automationsWithActions[index]?.automation_actions[1]?.name}</NameReaction>
+                        <ValuesReaction> Values : {automationsWithActions[index]?.automation_actions[1]?.values}</ValuesReaction>
+                      </div>
+                    }
                   </AreasZoneReactions>
+
+
                   <CutBarre> </CutBarre>
                   <ButtonDelete> Delete </ButtonDelete>
                   <ButtonEdit> Edit </ButtonEdit>
