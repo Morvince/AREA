@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AreaName, AreaZone, ArrowArea, BgColor, ButtonDelete, ButtonEdit, NumberOfAreasText, GlobalContainer, BoxContent, CutBarre } from './areasElements';
+import { AreaName, AreaZone, ArrowArea, BgColor, ButtonDelete, ButtonEdit, NumberOfAreasText, GlobalContainer, BoxContent, CutBarre, AreasZoneAction, ServiceNameAction, NameAction } from './areasElements';
 import { Icon } from '@iconify/react';
 import { useGetInfosAreas } from '../../api/apiAreasPage';
 
@@ -32,7 +32,12 @@ const EditAreas = () => {
                 <Icon icon="material-symbols:arrow-drop-down-sharp" width="90" style={{ position: 'absolute', color: "white", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} />
               </ArrowArea>
               {openArea === index &&
-                <BoxContent>Conteneur pour l'area {name}
+                <BoxContent>
+                  <AreasZoneAction> 
+                    <ServiceNameAction> Service : {automationsWithActions[index]?.automation_actions[0]?.service}</ServiceNameAction>
+                    <NameAction> Action : {automationsWithActions[index]?.automation_actions[0]?.name}</NameAction>
+                  </AreasZoneAction>
+                  <CutBarre> </CutBarre>
                   <ButtonDelete> Delete </ButtonDelete>
                   <ButtonEdit> Edit </ButtonEdit>
                 </BoxContent>
