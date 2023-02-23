@@ -46,10 +46,12 @@ export const AreasZoneReactionsMoovable = styled.div`
   align-items: center;
   position: absolute;
   height: 90%;
-  width: 100%;
   border: 5px solid black;
   top: 0%;
-`
+  width: 850px;
+  left: ${props => props.left};
+  flex-grow: 1;
+`;
 
 export const ServiceNameReaction = styled.div`
   display: flex;

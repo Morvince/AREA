@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { AreaName, AreaZone, ArrowArea, BgColor, ButtonDelete, ButtonEdit, NumberOfAreasText, GlobalContainer, BoxContent, CutBarre, AreasZoneAction, ServiceNameAction, NameAction, AreasZoneReactions, ServiceNameReaction, NameReaction, ValuesReaction, AreasZoneReactionsMoovable } from './areasElements';
 import { Icon } from '@iconify/react';
 import { useGetInfosAreas } from '../../api/apiAreasPage';
@@ -15,6 +16,7 @@ const EditAreas = () => {
   const automationsWithActions = infosFromDb.data?.automations.filter((automation) => automation.automation_actions.length > 0) || [];
   const containerHeight = (automationsWithActions.length * 175 + (openArea !== -1 ? 400 : 0)) + 'px';
   console.log(automationsWithActions);
+
 
   return (
     <>
@@ -39,23 +41,23 @@ const EditAreas = () => {
                   </AreasZoneAction>
                   <AreasZoneReactions>
                     {automationsWithActions[index].automation_actions.length > 2 ?
-                      <AreasZoneReactionsMoovable>
-                        {automationsWithActions[index].automation_actions.slice(1).map((action, actionIndex) => (
-                          <div key={`reaction-${actionIndex}`} style={{ width: `calc(100% / ${automationsWithActions[index].automation_actions.length - 1} - 10px)`, display: "inline-block", marginRight: "900px" }}>
-                            <ServiceNameReaction> Reaction {actionIndex + 1} : {action.service}</ServiceNameReaction>
-                            <NameReaction> Action : {action.name}</NameReaction>
-                            <ValuesReaction> Values : {action.values}</ValuesReaction>
-                          </div>
-                        ))}
-                      </AreasZoneReactionsMoovable> :
+                      <div style={{ display: 'flex' }}>
+                      {automationsWithActions[index].automation_actions.slice(1).map((action, actionIndex) => (
+                        <AreasZoneReactionsMoovable
+                          key={`reaction-${actionIndex}`}
+                          style={{left: `${actionIndex * 110}%` }}>
+                          <ServiceNameReaction> Reaction {actionIndex + 1} : {action.service}</ServiceNameReaction>
+                          <NameReaction> Action : {action.name}</NameReaction>
+                          <ValuesReaction> Values : {action.values}</ValuesReaction>
+                        </AreasZoneReactionsMoovable>
+                      ))}
+                    </div> :
                       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                         <ServiceNameReaction> Service : {automationsWithActions[index]?.automation_actions[1]?.service}</ServiceNameReaction>
                         <NameReaction> Action : {automationsWithActions[index]?.automation_actions[1]?.name}</NameReaction>
                         <ValuesReaction> Values : {automationsWithActions[index]?.automation_actions[1]?.values}</ValuesReaction>
                       </div>
                     }
-
-
                   </AreasZoneReactions>
                   <CutBarre> </CutBarre>
                   <ButtonDelete> Delete </ButtonDelete>
