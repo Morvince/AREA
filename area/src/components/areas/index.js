@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { AreaName, AreaZone, ArrowArea, BgColor, ButtonDelete, ButtonEdit, NumberOfAreasText, GlobalContainer, BoxContent, CutBarre, AreasZoneAction, ServiceNameAction, NameAction, AreasZoneReactions, ServiceNameReaction, NameReaction, ValuesReaction, AreasZoneReactionsMoovable } from './areasElements';
+import { AreaName, AreaZone, ArrowArea, BgColor, ButtonDelete, ButtonEdit, NumberOfAreasText, GlobalContainer, BoxContent, CutBarre, AreasZoneAction, ServiceNameAction, NameAction, AreasZoneReactions, ServiceNameReaction, NameReaction, ValuesReaction, AreasZoneReactionsMoovable, DeleteRappel, DeleteButtonYes, DeleteButtonNo } from './areasElements';
 import { Icon } from '@iconify/react';
 import { useGetInfosAreas } from '../../api/apiAreasPage';
 
@@ -8,6 +8,7 @@ const EditAreas = () => {
   const [openArea, setOpenArea] = useState(-1);
   const [infosFromDb, setInfosFromDb] = useState([]);
   const getInfosFromDb = useGetInfosAreas();
+  const [showDeleteRappel, setShowDeleteRappel] = useState(false);
 
   useEffect(() => {
     getInfosFromDb.mutate(null, { onSuccess: (data) => { setInfosFromDb(data) } });
@@ -41,17 +42,17 @@ const EditAreas = () => {
                   </AreasZoneAction>
                   <AreasZoneReactions>
                     {automationsWithActions[index].automation_actions.length > 2 ?
-                      <div style={{ display: 'flex' }}>
-                      {automationsWithActions[index].automation_actions.slice(1).map((action, actionIndex) => (
-                        <AreasZoneReactionsMoovable
-                          key={`reaction-${actionIndex}`}
-                          style={{left: `${actionIndex * 110}%` }}>
-                          <ServiceNameReaction> Reaction {actionIndex + 1} : {action.service}</ServiceNameReaction>
-                          <NameReaction> Action : {action.name}</NameReaction>
-                          <ValuesReaction> Values : {action.values}</ValuesReaction>
-                        </AreasZoneReactionsMoovable>
-                      ))}
-                    </div> :
+                      <div >
+                        {automationsWithActions[index].automation_actions.slice(1).map((action, actionIndex) => (
+                          <AreasZoneReactionsMoovable
+                            key={`reaction-${actionIndex}`}
+                            style={{ left: `${actionIndex * 110}%` }}>
+                            <ServiceNameReaction> Reaction {actionIndex + 1} : {action.service}</ServiceNameReaction>
+                            <NameReaction> Action : {action.name}</NameReaction>
+                            <ValuesReaction> Values : {action.values}</ValuesReaction>
+                          </AreasZoneReactionsMoovable>
+                        ))}
+                      </div> :
                       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                         <ServiceNameReaction> Service : {automationsWithActions[index]?.automation_actions[1]?.service}</ServiceNameReaction>
                         <NameReaction> Action : {automationsWithActions[index]?.automation_actions[1]?.name}</NameReaction>
@@ -60,7 +61,14 @@ const EditAreas = () => {
                     }
                   </AreasZoneReactions>
                   <CutBarre> </CutBarre>
-                  <ButtonDelete> Delete </ButtonDelete>
+                  <ButtonDelete onClick={() => setShowDeleteRappel(true)}> Delete </ButtonDelete>
+                  {showDeleteRappel && (
+                    <DeleteRappel>
+                      Do you really want to DELETE this area ?
+                      <DeleteButtonYes onClick={() => setShowDeleteRappel(false)}> YES </DeleteButtonYes>
+                      <DeleteButtonNo onClick={() => setShowDeleteRappel(false)}> NO </DeleteButtonNo>
+                    </DeleteRappel>
+                  )}
                   <ButtonEdit> Edit </ButtonEdit>
                 </BoxContent>
               }

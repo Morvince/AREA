@@ -207,7 +207,7 @@ export const ButtonEdit = styled.div`
   padding: 20px;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 1);
+    background-color: black;
     cursor: pointer;
   }
 `;
@@ -233,7 +233,7 @@ user-select: none;
 padding: 20px;
 
 &:hover {
-  background-color: rgba(255, 12, 0, 1);
+  background-color: red;
   cursor: pointer;
 }
 `;
@@ -261,5 +261,72 @@ export const ArrowArea = styled.div`
   &:hover {
       opacity: 1;
       cursor: pointer;
+  }
+`;
+
+export const DeleteRappel = styled.div`
+  position: fixed;
+  width: 30%;
+  height: 40%;
+  top: 40%;
+  left: 36%;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 2px solid white;
+  border-radius: 30px;
+
+  /* text */
+  color: white;
+  text-align: center;
+  font-size: 200%;
+  font-weight: bold;
+  user-select: none;
+  padding: 100px;
+`;
+
+export const DeleteButtonYes = styled.div`
+  position: absolute;
+  width: 50%;
+  height: 30%;
+  top: 70%;
+  left: 0%;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 0px 0px 0px 30px;
+  border: 2px solid white;
+
+  /* text */
+  color: white;
+  text-align: center;
+  font-size: 100%;
+  font-weight: bold;
+  user-select: none;
+  padding: 40px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: black;
+  }
+`;
+
+export const DeleteButtonNo = styled.div`
+  position: absolute;
+  width: 50%;
+  height: 30%;
+  top: 70%;
+  left: 50%;
+  background-color: rgba(255, 12, 0, 0.5);
+  border: 2px solid white;
+  border-radius: 0px 0px 30px 0px;
+
+  /* text */
+  color: white;
+  text-align: center;
+  font-size: 100%;
+  font-weight: bold;
+  user-select: none;
+  padding: 40px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: red;
   }
 `;
