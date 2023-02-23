@@ -41,7 +41,7 @@ const EditAreas = () => {
                     {automationsWithActions[index].automation_actions.length > 2 ?
                       <AreasZoneReactionsMoovable>
                         {automationsWithActions[index].automation_actions.slice(1).map((action, actionIndex) => (
-                          <div key={`reaction-${actionIndex}`} style={{ width: "calc(33.33% - 10px)", display: "inline-block", margin: "0px 5px" }}>
+                          <div key={`reaction-${actionIndex}`} style={{ width: `calc(100% / ${automationsWithActions[index].automation_actions.length - 1} - 10px)`, display: "inline-block", marginRight: "1000px" }}>
                             <ServiceNameReaction> Service : {action.service}</ServiceNameReaction>
                             <NameReaction> Action : {action.name}</NameReaction>
                             <ValuesReaction> Values : {action.values}</ValuesReaction>
@@ -54,9 +54,9 @@ const EditAreas = () => {
                         <ValuesReaction> Values : {automationsWithActions[index]?.automation_actions[1]?.values}</ValuesReaction>
                       </div>
                     }
+
+
                   </AreasZoneReactions>
-
-
                   <CutBarre> </CutBarre>
                   <ButtonDelete> Delete </ButtonDelete>
                   <ButtonEdit> Edit </ButtonEdit>

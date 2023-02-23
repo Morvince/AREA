@@ -47,7 +47,7 @@ export const AreasZoneReactionsMoovable = styled.div`
   position: absolute;
   height: 90%;
   width: 100%;
-  border: 3px solid red;
+  border: 5px solid black;
   top: 0%;
 `
 
