@@ -268,19 +268,21 @@ export const DeleteRappel = styled.div`
   position: fixed;
   width: 30%;
   height: 40%;
-  top: 40%;
+  top: 30%;
   left: 36%;
   background-color: rgba(0, 0, 0, 0.9);
   border: 2px solid white;
   border-radius: 30px;
+  z-index: 100000;
 
   /* text */
   color: white;
   text-align: center;
+  line-height: 50px;
   font-size: 200%;
   font-weight: bold;
   user-select: none;
-  padding: 100px;
+  padding: 60px;
 `;
 
 export const DeleteButtonYes = styled.div`

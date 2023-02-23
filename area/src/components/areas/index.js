@@ -63,7 +63,7 @@ const EditAreas = () => {
                   <ButtonDelete onClick={() => setShowDeleteRappel(true)}> Delete </ButtonDelete>
                   {showDeleteRappel && (
                     <DeleteRappel>
-                      Do you really want to DELETE this area ?
+                      Do you really want to DELETE the <br></br> "{name}"" Area ?
                       <DeleteButtonYes onClick={() => setShowDeleteRappel(false)}> YES </DeleteButtonYes>
                       <DeleteButtonNo onClick={() => setShowDeleteRappel(false)}> NO </DeleteButtonNo>
                     </DeleteRappel>
