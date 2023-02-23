@@ -42,7 +42,7 @@ const EditAreas = () => {
                       <AreasZoneReactionsMoovable>
                         {automationsWithActions[index].automation_actions.slice(1).map((action, actionIndex) => (
                           <div key={`reaction-${actionIndex}`} style={{ width: `calc(100% / ${automationsWithActions[index].automation_actions.length - 1} - 10px)`, display: "inline-block", marginRight: "900px" }}>
-                            <ServiceNameReaction> Reaction {index} : {action.service}</ServiceNameReaction>
+                            <ServiceNameReaction> Reaction {actionIndex + 1} : {action.service}</ServiceNameReaction>
                             <NameReaction> Action : {action.name}</NameReaction>
                             <ValuesReaction> Values : {action.values}</ValuesReaction>
                           </div>
