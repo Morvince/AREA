@@ -122,6 +122,30 @@
             }
             return new JsonResponse(array("message" => "OK"), 200);
         }
+        /**
+         * @Route("/automation/delete", name="automation_delete")
+         */
+        public function deleteAutomation(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository)
+        {
+            header('Access-Control-Allow-Origin: *');
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->automation_id)) {
+                return new JsonResponse(array("message" => "Automation: Missing field"), 400);
+            }
+            $automation_id = $request_content->automation_id;
+            if (empty($automation_repository->findById($automation_id))) {
+                return new JsonResponse(array("message" => "Automation: Automation not found"), 404);
+            }
+            $automation_actions = $automation_action_repository->findByAutomationId($automation_id);
+            // Remove all actions from the automation in database
+            foreach ($automation_actions as $item) {
+                $automation_action_repository->remove($item);
+            }
+            $automation_repository->remove($automation_repository->find($automation_id));
+            return new JsonResponse(array("message" => "OK"), 200);
+        }
+
         private function sendRequest($url, $parameters)
         {
             if (empty($this->request_api)) {
