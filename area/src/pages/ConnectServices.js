@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { useSpotifyAccess, useDiscordAccess, useInstagramAccess, useGoogleAccess, useTwitterAccess, useGithubAccess} from '../api/apiSettingsPage'
+import { useSpotifyAccess, useDiscordAccess, useInstagramAccess, useGmailAccess, useTwitterAccess, useGithubAccess} from '../api/apiSettingsPage'
 import { useAddAutomation } from '../api/apiServicesPage';
 
 const ConnectServices = () => {
@@ -8,7 +8,7 @@ const ConnectServices = () => {
   const handleSpotifyAccess = useSpotifyAccess()
   const handleDiscordAccess = useDiscordAccess()
   const handleInstagramAccess = useInstagramAccess()
-  const handleGoogleAccess = useGoogleAccess()
+  const handleGmailAccess = useGmailAccess()
   const handleTwitterAccess = useTwitterAccess()
   const handleGithubAccess = useGithubAccess()
 
@@ -41,8 +41,8 @@ const ConnectServices = () => {
         redirect_uri: "http://localhost:8081/connectServices"
         }), {onSettled: () => { tmpAutomation.mutate(null, {onSuccess: (data) => { navigate("/home", {replace: true, state: {automationId: data.data}}) }}) }});
         break;
-      case "google":
-        handleGoogleAccess.mutate(JSON.stringify({
+      case "gmail":
+        handleGmailAccess.mutate(JSON.stringify({
         state: params.get("state"),
         token: sessionStorage.getItem("token"),
         code: params.get("code"),
