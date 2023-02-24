@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+import { Icon } from '@iconify/react';
 import { RectangleArea, MovableBox, ValidateButton, BinLeft, BinRight, BinWhite } from './playBoxElements'
 import Servicesbar from '../servicesbar'
 import Block from '../block'
@@ -7,7 +8,6 @@ import MyContext from '../Context'
 import InfoBlock from '../infoBlock'
 import { useGetUserPlaylist } from '../../api/apiSpotify';
 import { useEditAutomation } from '../../api/apiServicesPage';
-import { Icon } from '@iconify/react';
 import { useGetAction } from '../../api/apiServicesPage';
 
 const PlayBox = (props) => {
@@ -39,7 +39,6 @@ const PlayBox = (props) => {
     if (userPlaylist.isSuccess) {
       setPlaylist(userPlaylist.data.data);
     }
-
   }, [sharedData, linkedList]);
 
   function sendAutomation() {
@@ -76,7 +75,7 @@ const PlayBox = (props) => {
           })}
         </MovableBox>
       </MyContext.Provider>
-      <InfoBlock IsVisible={open} top={sharedData[open]?.top} left={sharedData[open]?.left} background={sharedData[open]?.color} />
+      <InfoBlock IsVisible={open} top={sharedData[open]?.top} left={sharedData[open]?.left} background={sharedData[open]?.color}  />
       <BinRight />
       <BinWhite />
     </RectangleArea >

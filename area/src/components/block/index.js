@@ -142,10 +142,10 @@ const Block = (props) => {
         return "uil:google";
       case "twitter":
         return "mdi:twitter";
-      case "openai":
-        return "simple-icons:openai";
+      case "github":
+        return "mdi:github";
       default:
-        return "simple-icons:openai";
+        return "mdi:github";
     }
   }
 
