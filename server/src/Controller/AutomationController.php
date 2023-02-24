@@ -3,6 +3,7 @@
 
     use App\Entity\Automation;
     use App\Entity\AutomationAction;
+    use App\Entity\RequestAPI;
     use App\Repository\AutomationRepository;
     use App\Repository\ActionRepository;
     use App\Repository\UserRepository;
@@ -15,6 +16,8 @@
 
     class AutomationController extends AbstractController
     {
+        private RequestAPI $request_api;
+
         /**
          * @Route("/automation/add", name="automation_add")
          */
@@ -36,7 +39,13 @@
             $automation = new Automation();
             $automation->setUserId($user_id);
             $automation_repository->add($automation, true);
-            return new JsonResponse(array("automation_id" => $automation->getId()), 200);
+            if (!empty($request_content->actions)) {
+                $response = $this->sendRequest("http://localhost/automation/edit", array("automation_id" => $automation->getId(), "actions" => $request_content->actions));
+                if (isset($response->code)) {
+                    return new JsonResponse(array("message" => $response->message), $response->code);
+                }
+            }
+            return new JsonResponse(array("message" => "OK"), 200);
         }
         /**
          * @Route("/automation/get", name="automation_get")
@@ -135,6 +144,15 @@
             }
             $automation_repository->remove($automation_repository->find($automation_id));
             return new JsonResponse(array("message" => "OK"), 200);
+        }
+
+        private function sendRequest($url, $parameters)
+        {
+            if (empty($this->request_api)) {
+                $this->request_api = new RequestAPI();
+            }
+            $response = $this->request_api->sendRoute($url, $parameters);
+            return json_decode($response);
         }
     }
 ?>

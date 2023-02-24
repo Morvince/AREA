@@ -94,35 +94,35 @@ export const useInstagramAccess = () => {
 
 
 
-// GOOGLE :
+// GMAIL :
 
 
-const googleConnected = async () => {
-  return await axios.post("/google/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
+const gmailConnected = async () => {
+  return await axios.post("/gmail/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
 }
 
-export const useGoogleConnected = () => {
-  return useMutation(googleConnected)
+export const useGmailConnected = () => {
+  return useMutation(gmailConnected)
 }
 
-const googleConnect = async (data) => {
-  return await axios.post("/google/connect", data)
+const gmailConnect = async (data) => {
+  return await axios.post("/gmail/connect", data)
 }
 
-export const useGoogleConnect = () => {
-  return useMutation(googleConnect, {
+export const useGmailConnect = () => {
+  return useMutation(gmailConnect, {
     onSuccess: (data) => {
       window.location.replace(data.data.authorization_url)
     }
   })
 }
 
-const googleAccess = async (data) => {
-  return await axios.post("/google/get_access_token", data)
+const gmailAccess = async (data) => {
+  return await axios.post("/gmail/get_access_token", data)
 }
 
-export const useGoogleAccess = () => {
-  return useMutation(googleAccess)
+export const useGmailAccess = () => {
+  return useMutation(gmailAccess)
 }
 
 
