@@ -6,21 +6,18 @@ import Servicesbar from '../servicesbar'
 import Block from '../block'
 import MyContext from '../Context'
 import InfoBlock from '../infoBlock'
-import { useGetUserPlaylist } from '../../api/apiSpotify';
 import { useEditAutomation } from '../../api/apiServicesPage';
 import { useGetAction } from '../../api/apiServicesPage';
 
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = useState([]);
   const [linkedList, setLinkedList] = useState([]);
-  const [playlist, setPlaylist] = useState([]);
   const [action, setaction] = useState([]);
   const [open, setOpen] = useState(null);
   const [ID, setID] = useState(0);
   const [isLinkedListEmpty, setIsLinkedListEmpty] = React.useState(true);
   const { onValidate } = props;
   const automationId = props.automationId;
-  const userPlaylist = useGetUserPlaylist();
   const editAutomation = useEditAutomation();
   const tmpServices = useGetAction();
 
@@ -37,10 +34,6 @@ const PlayBox = (props) => {
       setIsLinkedListEmpty(false);
     } else {
       setIsLinkedListEmpty(true);
-    }
-    userPlaylist.mutate()
-    if (userPlaylist.isSuccess) {
-      setPlaylist(userPlaylist.data.data);
     }
   }, [sharedData, linkedList]);
 
@@ -64,7 +57,7 @@ const PlayBox = (props) => {
   return (
     <RectangleArea>
       <BinLeft />
-      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, playlist, setPlaylist, open, setOpen}}>
+      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, open, setOpen}}>
         <Icon icon="mdi:delete-circle-outline" color="#373b48" width="40" style={{ position: 'absolute', top: '20%', left: '80.3%' }} />
         <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={sendAutomation} disabled={isLinkedListEmpty === true}>
           <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />

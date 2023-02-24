@@ -9,7 +9,6 @@ const Block = (props) => {
   const [pos, setPos] = useState({ x: props.top, y: props.left })
   const { sharedData, setSharedData } = useContext(MyContext);
   const { linkedList, setLinkedList } = useContext(MyContext);
-  const { playlist, setPlaylist } = useContext(MyContext);
   const { open, setOpen } = useContext(MyContext);
 
   const handleOpen = (e, data) => {
@@ -20,22 +19,6 @@ const Block = (props) => {
     } else {
       setOpen(null);
     }
-  };
-
-  const [name, setName] = useState('');
-  const [desc, setDesc] = useState('');
-
-  React.useEffect(() => {
-  }, [sharedData]);
-
-  const handleChangeDesc = (event) => {
-    setName(event.target.value);
-    sharedData[props.id].toSend = { name: event.target.value, desc: desc, playlist_id: playlist.playlists[0].id }
-  };
-
-  const handleChangeName = (event) => {
-    setDesc(event.target.value);
-    sharedData[props.id].toSend = { name: event.target.value, desc: desc, playlist_id: playlist.playlists[0].id }
   };
 
   const handleDrag = (e) => {
@@ -116,17 +99,6 @@ const Block = (props) => {
         });
         setSharedData([...sharedData]);
       }
-    }
-  }
-
-  function renderInput() {
-    if (props.nbrBox === 2) {
-      return (
-        <div>
-          <input id="name" type="text" placeholder="Name" onChange={handleChangeName} />
-          <input id="description" type="text" placeholder="Description" onChange={handleChangeDesc} />
-        </div>
-      )
     }
   }
 
