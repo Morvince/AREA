@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { InfoBlockContainer, InfoWrapper, InfoTitle, InfoAction, InputBox, LittleBorder } from './infoBlockElements'
 import Select from 'react-select'
 import Draggable from 'react-draggable'
@@ -24,7 +24,7 @@ const TextSection = (props) => {
 }
 
 const InfoBlock = (props) => {
-  console.log(props.service)
+console.log(props.action)
   return (
     props.IsVisible !== null ? (
       <Draggable>
