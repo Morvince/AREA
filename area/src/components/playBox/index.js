@@ -21,7 +21,6 @@ const PlayBox = (props) => {
   const automationId = props.automationId;
   const userPlaylist = useGetUserPlaylist();
   const editAutomation = useEditAutomation();
-
   const tmpServices = useGetAction();
 
   //request to get all services
@@ -58,6 +57,7 @@ const PlayBox = (props) => {
     setLinkedList([]);
   }
 
+
   return (
     <RectangleArea>
       <BinLeft />
@@ -75,7 +75,7 @@ const PlayBox = (props) => {
           })}
         </MovableBox>
       </MyContext.Provider>
-      <InfoBlock IsVisible={open} top={sharedData[open]?.top} left={sharedData[open]?.left} background={sharedData[open]?.color}  />
+      <InfoBlock IsVisible={open} top={sharedData[open]?.top} left={sharedData[open]?.left} background={sharedData[open]?.color} service={tmpServices} />
       <BinRight />
       <BinWhite />
     </RectangleArea >
