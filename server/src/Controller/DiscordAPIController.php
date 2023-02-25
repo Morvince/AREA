@@ -198,36 +198,9 @@
             if (empty($this->request_api)) {
                 $this->request_api = new RequestAPI();
             }
-            $response = $this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters);
-            if (isset(json_decode($response)->error)) {
-                switch (json_decode($response)->error->status) {
-                    case 400:
-                        $response = json_encode(array("message" => "Discord: Bad request", "code" => 400));
-                        break;
-                    case 401:
-                        $response = json_encode(array("message" => "Discord: Bad or expired token", "code" => 401));
-                        break;
-                    case 403:
-                        $response = json_encode(array("message" => "Discord: Forbidden", "code" => 403));
-                        break;
-                    case 404:
-                        $response = json_encode(array("message" => "Discord: Ressource not found", "code" => 404));
-                        break;
-                    case 429:
-                        $response = json_encode(array("message" => "Discord: Too many requests", "code" => 429));
-                        break;
-                    case 500:
-                        $response = json_encode(array("message" => "Discord: Internal server error", "code" => 500));
-                        break;
-                    case 502:
-                        $response = json_encode(array("message" => "Discord: Bad gateway", "code" => 502));
-                        break;
-                    case 503:
-                        $response = json_encode(array("message" => "Discord: Service unavailable", "code" => 503));
-                        break;
-                    default:
-                        break;
-                }
+            $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters));
+            if (isset($response->code)) {
+                $response = json_encode(array("message" => "Discord: $response->message with code $response->code", "code" => 400));
             }
             return $response;
         }
@@ -524,7 +497,6 @@
             curl_setopt($ch, CURLOPT_POST, true);
             $response = curl_exec($ch);
             curl_close($ch);
-
             return new JsonResponse(array("token" => json_decode($response)), 200);
         }
     }
