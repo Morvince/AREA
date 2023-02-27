@@ -12,12 +12,15 @@
         {
         }
 
-        public function send($access_token, $url, $method, $parameters, $added_header = null)
+        public function send($access_token, $url, $method, $parameters, $added_header = null, $authorization = "")
         {
+            if (empty($authorization)) {
+                $authorization = "Authorization: Bearer $access_token";
+            }
             $headers = array(
                 "Accept: application/json",
                 "Content-Type: application/json",
-                "Authorization: Bearer $access_token",
+                $authorization,
                 $added_header
             );
             $ch = curl_init();
