@@ -258,7 +258,8 @@
                     $allowed_channels[] = $channel["id"];
                 }
             }
-            return new JsonResponse(array("channels" => $allowed_channels), 200);
+            // formatter array dans items pour avoir juste name (GuildName - ChannelName) et id dedans
+            return new JsonResponse(array("items" => $allowed_channels), 200);
         }
 
         // Action
@@ -652,6 +653,12 @@
             }
             return new JsonResponse(array("message" => "OK"), 200);
         }
-    }
 
+        /**
+         * @Route("/discord/test", name="discord_api_test")
+         */
+        public function test(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
+        {
+        }
+    }
 ?>
