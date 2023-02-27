@@ -71,14 +71,6 @@ discord_api_check_username_parameters:
   path: /discord/action/check_username/get_parameters
   controller: App\Controller\DiscordAPIController::getIsUsernameChangedParameters
   methods: [POST]
-discord_api_check_user_join:
-  path: /discord/action/check_user_join
-  controller: App\Controller\DiscordAPIController::isUserJoined
-  methods: [POST]
-discord_api_check_user_join_parameters:
-  path: /discord/action/check_user_join/get_parameters
-  controller: App\Controller\DiscordAPIController::getIsUserJoinParameters
-  methods: [POST]
 discord_api_send_channel_message:
   path: /discord/reaction/send_channel_message
   controller: App\Controller\DiscordAPIController::sendChannelMessage
@@ -99,9 +91,6 @@ discord_api_create_thread:
   path: /discord/reaction/create_thread
   controller: App\Controller\DiscordAPIController::createThreadWithoutMessage
   methods: [POST]
-discord_api_test:
-  path: /discord/test
-  controller: App\Controller\DiscordAPIController::test
 
 # GITHUB
 github_api_connect:
