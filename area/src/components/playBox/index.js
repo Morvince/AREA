@@ -25,7 +25,7 @@ const PlayBox = (props) => {
     const name = contentEditableRef.current.textContent.trim();
     console.log("Name: ", name);
     setShowSaveNamePanel(false);
-    sendAutomation();
+    sendAutomation(name);
   };
 
   React.useEffect(() => {
@@ -40,7 +40,7 @@ const PlayBox = (props) => {
     }
   }, [sharedData, linkedList]);
 
-  function sendAutomation() {
+  function sendAutomation(name) {
     var actions = [];
     var i = { id: 0, number: 0, informations: {} };
 
@@ -52,7 +52,7 @@ const PlayBox = (props) => {
       actions.push(i);
       i = { id: 0, number: 0, informations: {} }
     }
-    editAutomation.mutate({ id: automationId, actions: actions })
+    editAutomation.mutate({ name: name, id: automationId, actions: actions })
     setSharedData([]);
     setLinkedList([]);
   }
@@ -82,7 +82,7 @@ const PlayBox = (props) => {
           <WrittingZone ref={contentEditableRef} contentEditable={true} suppressContentEditableWarning={true} />
           <CheckButton onClick={() => {
             setShowSaveNamePanel(false);
-            sendAutomation();
+            handleCheckButtonClick();
           }}>
             <Icon icon="material-symbols:check-small" width="85" color="white" style={{ position: "absolute", left: "0%", top: "-10%" }} />
           </CheckButton>
