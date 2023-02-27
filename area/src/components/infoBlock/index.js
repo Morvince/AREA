@@ -35,6 +35,7 @@ const TextSection = (props) => {
 const InfoBlock = (props) => {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
+  const [infoPrint, setInfoPrint] = useState([]);
 
   function renderInput() {
     if (props.nbrBox === 2) {
@@ -90,15 +91,13 @@ const InfoBlock = (props) => {
   function renderFields() {
     let infoBlock = []
     for (let i = 0; i < fields.length; i++) {
-      if (props.IsVisible === i) {
-        console.log("isVisible " + props.IsVisible)
-
-        for (let j = 0; j < fields[i].length; j++) {
-          if (fields[i][j][0] === "text") {
-            infoBlock.push(<TextSection title={fields[i][j][1]} text={fields[i][j][2]} />)
+      if (props.IsVisible === i+1) {
+        for (let j = 0; j < fields[i][1].length; j++) {
+          if (fields[i][1][j][0] === "text") {
+            infoBlock.push(<TextSection title={fields[i][1][j][1]} text={fields[i][1][j][2]} />)
           }
-          else if (fields[i][j][0] === "dropdown") {
-            infoBlock.push(<DropdownSection title={fields[i][j][1]} />)
+          else if (fields[i][1][j][0] === "dropdown") {
+            infoBlock.push(<DropdownSection title={fields[i][1][j][1]} />)
           }
           if (j !== fields[i].length - 1) {
             infoBlock.push(<LittleBorder />)
