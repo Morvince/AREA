@@ -4,7 +4,7 @@ import Servicesbar from '../servicesbar'
 import Block from '../block'
 import MyContext from '../Context'
 import { useGetUserPlaylist } from '../../api/apiSpotify';
-import { useEditAutomation } from '../../api/apiServicesPage';
+import { useEditAutomation, useAddAutomation } from '../../api/apiServicesPage';
 import { Icon } from '@iconify/react';
 import { useState, useRef } from 'react'
 
@@ -16,6 +16,7 @@ const PlayBox = (props) => {
   const automationId = props.automationId;
   const userPlaylist = useGetUserPlaylist();
   const editAutomation = useEditAutomation();
+  const addAutomation = useAddAutomation();
   const { onValidate } = props;
   const [isLinkedListEmpty, setIsLinkedListEmpty] = React.useState(true);
   const contentEditableRef = useRef();
@@ -24,7 +25,6 @@ const PlayBox = (props) => {
 
   const handleCheckButtonClick = () => {
     const name = contentEditableRef.current.textContent.trim();
-    console.log("Name: ", name);
     setShowSaveNamePanel(false);
     sendAutomation(name);
   };
@@ -62,7 +62,11 @@ const PlayBox = (props) => {
       actions.push(i);
       i = { id: 0, number: 0, informations: {} }
     }
-    editAutomation.mutate({ name: name, id: automationId, actions: actions })
+    if (automationId === undefined) {
+      addAutomation.mutate({name: name, actions: actions});
+    } else {
+      editAutomation.mutate({ name: name, id: automationId, actions: actions });
+    }
     setSharedData([]);
     setLinkedList([]);
   }
