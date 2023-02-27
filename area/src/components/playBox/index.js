@@ -57,11 +57,8 @@ const PlayBox = (props) => {
   return (
     <RectangleArea>
       <BinLeft />
-      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, open, setOpen}}>
+      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, open, setOpen }}>
         <Icon icon="mdi:delete-circle-outline" color="#373b48" width="40" style={{ position: 'absolute', top: '20%', left: '80.3%' }} />
-        <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={sendAutomation} disabled={isLinkedListEmpty === true}>
-          <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
-        </ValidateButton>
         <Servicesbar tmpServices={tmpServices} />
         <MovableBox>
           {sharedData.map((info) => {
@@ -70,10 +67,13 @@ const PlayBox = (props) => {
             )
           })}
         </MovableBox>
-        </MyContext.Provider>
-          {tmpServices.isSuccess &&
-            <InfoBlock IsVisible={open} top={sharedData[open]?.top} left={sharedData[open]?.left} background={sharedData[open]?.color} action={tmpServices.data.data.actions} />
-          }
+        <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={sendAutomation} disabled={isLinkedListEmpty === true}>
+          <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
+        </ValidateButton>
+        {tmpServices.isSuccess &&
+          <InfoBlock IsVisible={open} top={sharedData[open]?.top} left={sharedData[open]?.left} background={sharedData[open]?.color} action={tmpServices.data.data.actions} />
+        }
+      </MyContext.Provider>
       <BinRight />
       <BinWhite />
     </RectangleArea >

@@ -59,8 +59,8 @@ const InfoBlock = (props) => {
   };
 
   //request
-  const [playlist, setPlaylist] = useState([]);
-  const userPlaylist = useGetUserPlaylist();
+  // const [playlist, setPlaylist] = useState([]);
+  // const userPlaylist = useGetUserPlaylist();
 
   const [fields, setFields] = useState([])
 
@@ -80,10 +80,10 @@ const InfoBlock = (props) => {
   }
 
   useEffect(() => {
-    userPlaylist.mutate()
-    if (userPlaylist.isSuccess) {
-      setPlaylist(userPlaylist.data.data);
-    }
+    // userPlaylist.mutate()
+    // if (userPlaylist.isSuccess) {
+      // setPlaylist(userPlaylist.data.data);
+    // }
     getFields()
   }, [props.IsVisible])
 
