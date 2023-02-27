@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TwitterAPIController extends AbstractController
 {
-    private const API_URL = "https://api.twitter.com/api/2/";
+    private const API_URL = "https://api.twitter.com/2/";
     private RequestAPI $request_api;
 
     /**
@@ -44,13 +44,19 @@ class TwitterAPIController extends AbstractController
         $client_id = $identifiers[0];
         // Compose the authorization scope
         $scope = array(
-            "tweet.read", "tweet.write", "like.write", "follows.write"
+            "tweet.read", "users.read", "offline.access"
         );
         $scope = implode(" ", $scope);
         // Set the state when the request is good
         $state = "17";
+        // Set the code verifier useful for the code challenge
+        $code_verifier = base64_encode(random_bytes(32));
+        $code_verifier = strtr(rtrim($code_verifier, '='), '+/', '-_');
+        // Set the code challenge for the autorization url
+        $code_challenge = base64_encode(hash('sha256', $code_verifier, true));
+        $code_challenge = strtr(rtrim($code_challenge, '='), '+/', '-_');
         // Compose the authorization url
-        $authorization_url = "https://api.twitter.com/oauth/authorize?client_id=$client_id&redirect_uri=$redirect_uri&response_type=code&scope=$scope&state=state";
+        $authorization_url = "https://twitter.com/i/oauth2/authorize?client_id=$client_id&redirect_uri=$redirect_uri&response_type=code&scope=$scope&state=$state&code_challenge=$code_challenge&code_challenge_method=SHA-256";
         return new JsonResponse(array("authorization_url" => $authorization_url), 200);
     }
     /**
@@ -92,7 +98,7 @@ class TwitterAPIController extends AbstractController
         $client_secret = $identifiers[1];
         // Request for the access token
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://api.twitter.com/api/oauth2/token");
+        curl_setopt($ch, CURLOPT_URL, "https://api.twitter.com/oauth2/token");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=authorization_code&code=$code&redirect_uri=$redirect_uri");
         curl_setopt($ch, CURLOPT_POST, true);
@@ -147,7 +153,7 @@ class TwitterAPIController extends AbstractController
         $refresh_token = $user_service->getRefreshToken();
         // Request for the access token
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://twitter.com/api/oauth2/token");
+        curl_setopt($ch, CURLOPT_URL, "https://api.twitter.com/oauth2/token");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=refresh_token&refresh_token=$refresh_token&client_id=$client_id&client_secret=$client_secret");
         curl_setopt($ch, CURLOPT_POST, true);
