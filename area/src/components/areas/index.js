@@ -21,7 +21,7 @@ const EditAreas = () => {
   return (
     <>
       <BgColor BgColor />
-      <NumberOfAreasText> You have {automationsWithActions.length} Area{automationsWithActions.length !== 1 ? 's' : ''} running! </NumberOfAreasText>
+      <NumberOfAreasText> You have {automationsWithActions.length} Area{automationsWithActions.length >= 1 ? 's' : ''} running! </NumberOfAreasText>
       <GlobalContainer height={containerHeight}>
         {automationsWithActions.map((automation, index) => {
           const top = index * 175 + (index > openArea ? (openArea !== -1 ? 400 : 0) : 0);

@@ -155,7 +155,7 @@ export const NumberOfAreasText = styled.div`
   position: absolute;
   font-size: 30px;
   top: 20%;
-  left: 42%;
+  left: 40%;
   color: white;
   user-select: none;
   font-weight: bold;
