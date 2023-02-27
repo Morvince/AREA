@@ -20,12 +20,22 @@ const PlayBox = (props) => {
   const [isLinkedListEmpty, setIsLinkedListEmpty] = React.useState(true);
   const contentEditableRef = useRef();
   const [showSaveNamePanel, setShowSaveNamePanel] = React.useState(false);
+  const [inputValue, setInputValue] = useState('');
 
   const handleCheckButtonClick = () => {
     const name = contentEditableRef.current.textContent.trim();
     console.log("Name: ", name);
     setShowSaveNamePanel(false);
     sendAutomation(name);
+  };
+
+  const handleInput = (event) => {
+    const value = event.target.textContent.trim();
+    if (value.length <= 15) {
+      setInputValue(value);
+    } else {
+      contentEditableRef.current.textContent = inputValue;
+    }
   };
 
   React.useEffect(() => {
@@ -77,17 +87,14 @@ const PlayBox = (props) => {
       <BinRight></BinRight>
       <BinWhite></BinWhite>
       {showSaveNamePanel && (
-        <SaveNamePannel>
-          NAME :
-          <WrittingZone ref={contentEditableRef} contentEditable={true} suppressContentEditableWarning={true} />
-          <CheckButton onClick={() => {
-            setShowSaveNamePanel(false);
-            handleCheckButtonClick();
-          }}>
-            <Icon icon="material-symbols:check-small" width="85" color="white" style={{ position: "absolute", left: "0%", top: "-10%" }} />
-          </CheckButton>
-        </SaveNamePannel>
-      )}
+      <SaveNamePannel>
+        NAME :
+        <WrittingZone ref={contentEditableRef} contentEditable={true} suppressContentEditableWarning={true} onInput={handleInput} />
+        <CheckButton onClick={() => { setShowSaveNamePanel(false); handleCheckButtonClick(); }}>
+          <Icon icon="material-symbols:check-small" width="85" color="white" style={{ position: "absolute", left: "0%", top: "-10%" }} />
+        </CheckButton>
+      </SaveNamePannel>
+    )}
     </RectangleArea>
   )
 }

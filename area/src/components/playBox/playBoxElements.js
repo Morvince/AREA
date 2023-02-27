@@ -83,7 +83,7 @@ export const SaveNamePannel = styled.div`
   position: absolute;
   width: 25%;
   height: 7%;
-  top: 50%;
+  top: 45%;
   left: 33%;
   background-color: #D4D3DC;
   border: 3px solid black;
