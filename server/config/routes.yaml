@@ -160,6 +160,24 @@ gmail_api_reaction_send_mail:
   controller: App\Controller\GmailAPIController::sendMail
   methods: [POST]
 
+# TWITCH
+twitch_api_connect:
+  path: /twitch/connect
+  controller: App\Controller\TwitchAPIController::connect
+  methods: [POST]
+twitch_api_get_access_token:
+  path: /twitch/get_access_token
+  controller: App\Controller\TwitchAPIController::getAccessToken
+  methods: [POST]
+twitch_api_refresh_access_token:
+  path: /twitch/refresh_access_token
+  controller: App\Controller\TwitchAPIController::refreshAccessToken
+  methods: [POST]
+twitch_api_connected:
+  path: /twitch/connected
+  controller: App\Controller\TwitchAPIController::isConnected
+  methods: [POST]
+
 # AUTOMATION
 automation_add:
   path: /automation/add
