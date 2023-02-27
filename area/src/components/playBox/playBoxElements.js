@@ -78,3 +78,57 @@ export const BinWhite = styled.div`
   top: 25%;
   background: #ebebeb;
 `;
+
+export const SaveNamePannel = styled.div`
+  position: absolute;
+  width: 25%;
+  height: 7%;
+  top: 50%;
+  left: 33%;
+  background-color: #D4D3DC;
+  border: 3px solid black;
+
+  color: black;
+  font-size: 150%;
+  font-weight: bold;
+  display: flex; 
+  align-items: center; 
+  justify-content: left;
+  user-select: none;
+  padding: 10px;
+`
+
+export const CheckButton = styled.div`
+  position: absolute;
+  height: 100%;
+  width: 15%;
+  left: 85%;
+  background-color: rgba(0, 128, 0, 0.7);
+  border-left: 3px solid black;
+
+  &:hover {
+    cursor: pointer;
+    background-color: green;
+  }
+`
+
+export const WrittingZone  =styled.div`
+  /* Zone :*/
+  position: absolute;
+  height: 84%;
+  width: 63%;
+  top: 8%;
+  left: 20%;
+  background-color: white;
+
+  /* Text :  */
+  color: black;
+  text-align: left;
+  white-space: nowrap;
+  caret-color: black; /* Ajout */
+  font-size: 150%;
+  font-weight: bold;
+  display: flex; 
+  user-select: none;
+  padding: 10px;
+`;
