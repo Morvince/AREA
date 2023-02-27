@@ -38,6 +38,9 @@
             // Put a new automation in database
             $automation = new Automation();
             $automation->setUserId($user_id);
+            if (!empty($request_content->name)) {
+                $automation->setName($request_content->name);
+            }
             $automation_repository->add($automation, true);
             if (!empty($request_content->actions)) {
                 $response = $this->sendRequest("http://localhost/automation/edit", array("automation_id" => $automation->getId(), "actions" => $request_content->actions));
@@ -82,7 +85,7 @@
                     $service = $service_repository->find($action->getServiceId());
                     array_push($tmp_automation_actions, array("id" => $action->getId(), "name" => $action->getName(), "service" => $service->getName(), "type" => $action->getType(), "number" => $automation_action->getNumber(), "fields" => $action->getFields(), "values" => $automation_action->getInformations()));
                 }
-                $tmp_automation = array("name" => "Name en db", "id" => $automation->getId(), "automation_actions" => $tmp_automation_actions);
+                $tmp_automation = array("name" => $automation->getName(), "id" => $automation->getId(), "automation_actions" => $tmp_automation_actions);
                 array_push($formatted, $tmp_automation);
             }
             return new JsonResponse(array("automations" => $formatted), 200);
