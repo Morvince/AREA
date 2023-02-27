@@ -5,7 +5,6 @@ import { LoginMessage } from '../components/signMessage/index';
 import { black, white } from '../color';
 import { useLogin, useRegister } from '../api/apiSignPage';
 import { Navigate } from 'react-router-dom';
-import { useAddAutomation } from '../api/apiServicesPage';
 
 const SignPage = styled.div`
   display: flex;
@@ -29,13 +28,6 @@ const Sign = () => {
   const handleLogin = useLogin()
   const handleRegister = useRegister()
 
-  const tmpAutomation = useAddAutomation();
-
-    function redirect(event) {
-        event.preventDefault()
-        tmpAutomation.mutate();
-    }
-    
     const handleSlideForm = useCallback(function(event) {
     event.preventDefault()
     if (slideForm === 0)
@@ -46,16 +38,16 @@ const Sign = () => {
     setSlideForm(s => s - 1)
   }, [slideForm])
   
-  if (tmpAutomation.isSuccess) {
+  if (handleLogin.isSuccess || handleRegister.isSuccess) {
       return (
-          <Navigate to="/home" replace={true} state={{automationId: tmpAutomation.data.data}}/>
+          <Navigate to="/home" replace={true} />
       )
   }
 
   return (
     <SignPage bgColor={bgColor}>
       <LoginMessage slideForm={slideForm}/>
-      <LoginBoxComponent slideForm={slideForm} handleSlideForm={handleSlideForm} handleLogin={handleLogin} handleRegister={handleRegister} tmpAutomation={tmpAutomation}/>
+      <LoginBoxComponent slideForm={slideForm} handleSlideForm={handleSlideForm} handleLogin={handleLogin} handleRegister={handleRegister}/>
       <div style={{position: "absolute", width: "100%", alignSelf: "flex-end", textAlign: "center", marginBottom: "110px"}}>
         {(slideForm === 0 || slideForm === 2) && handleLogin.isError ? <ErrorMessage color={black}>{handleLogin.error.response.data.message}</ErrorMessage> :
           slideForm === 1 && handleRegister.isError ? <ErrorMessage color={white}>{handleRegister.error.response.data.message}</ErrorMessage> : null}
