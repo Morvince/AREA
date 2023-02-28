@@ -12,26 +12,22 @@ import { useEditAutomation, useAddAutomation } from '../../api/apiServicesPage';
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = useState([]);
   const [linkedList, setLinkedList] = useState([]);
-  const [action, setaction] = useState([]);
   const [open, setOpen] = useState(null);
   const [ID, setID] = useState(0);
-  const [isLinkedListEmpty, setIsLinkedListEmpty] = React.useState(true);
+  const [isLinkedListEmpty, setIsLinkedListEmpty] = useState(true);
   const { onValidate } = props;
   const automationId = props.automationId;
   const editAutomation = useEditAutomation();
   const tmpServices = useGetAction();
+  const addAutomation = useAddAutomation();
+  const contentEditableRef = useRef();
+  const [showSaveNamePanel, setShowSaveNamePanel] = useState(false);
+  const [inputValue, setInputValue] = useState('');
 
   //request to get all services
   useEffect(() => {
     tmpServices.mutate()
-    if (tmpServices.isSuccess) {
-      setaction(tmpServices.data.data);
-    }
   }, []);
-  const addAutomation = useAddAutomation();
-  const contentEditableRef = useRef();
-  const [showSaveNamePanel, setShowSaveNamePanel] = React.useState(false);
-  const [inputValue, setInputValue] = useState('');
 
   const handleCheckButtonClick = () => {
     const name = contentEditableRef.current.textContent.trim();
@@ -75,6 +71,7 @@ const PlayBox = (props) => {
     }
     setSharedData([]);
     setLinkedList([]);
+    setID(0);
   }
 
   return (
@@ -90,7 +87,7 @@ const PlayBox = (props) => {
             )
           })}
         </MovableBox>
-        <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={() => setShowSaveNamePanel(true)} disabled={isLinkedListEmpty === true}>
+        <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={() => {setOpen(null); setShowSaveNamePanel(true); } } disabled={isLinkedListEmpty === true}>
           <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
         </ValidateButton>
         {tmpServices.isSuccess &&
