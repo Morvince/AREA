@@ -23,10 +23,10 @@ const ButtonBox = (props) => {
         return "logos:google-gmail";
       case "twitter":
         return "mdi:twitter" ;
-      case "openai":
-        return "simple-icons:openai" ;
+      case "github":
+        return "mdi:github" ;
       default:
-        return "simple-icons:openai" ;
+        return "mdi:github" ;
     }
   }
 
@@ -42,10 +42,10 @@ const ButtonBox = (props) => {
         return "#EA4335";
       case "twitter":
         return "#1da1f2";
-      case "openai":
+      case "github":
         return "#434857";
       default:
-        return "#373B48";
+        return "#f9F9F9";
     }
   }
 

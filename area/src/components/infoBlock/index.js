@@ -39,16 +39,6 @@ const InfoBlock = (props) => {
   const [infoPrint, setInfoPrint] = useState([]);
   const { sharedData } = useContext(MyContext);
 
-  const handleChangeDesc = (event) => {
-    setName(event.target.value);
-    // sharedData[props.id].toSend = { name: event.target.value, desc: desc, playlist_id: playlist.playlists[0].id }
-  };
-
-  const handleChangeName = (event) => {
-    setDesc(event.target.value);
-    // sharedData[props.id].toSend = { name: event.target.value, desc: desc, playlist_id: playlist.playlists[0].id }
-  };
-
   //request
   // const [playlist, setPlaylist] = useState([]);
   // const userPlaylist = useGetUserPlaylist();
