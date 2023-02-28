@@ -154,7 +154,10 @@ const Block = (props) => {
               <Icon icon={getIcon(props.service)} width="35" height="35" color="white" />
             </AutomationRectangle>
             <ArrowRectangle onClick={() => { handleOpen() }}>
-              <Icon icon="material-symbols:arrow-forward-ios-rounded" color="white" width="55" height="55" />
+              {(open === props.id) ?
+                <Icon icon="material-symbols:arrow-back-ios-rounded" color="white" width="55" height="55" /> :
+                <Icon icon="material-symbols:arrow-forward-ios-rounded" color="white" width="55" height="55" />
+              }
             </ArrowRectangle>
           </LogoWrapper>
         </RectangleWrapper>

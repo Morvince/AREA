@@ -81,9 +81,8 @@ const InfoBlock = (props) => {
   //for each field return a TextSection or DropdownSection
   function renderFields() {
     let infoBlock = []
-    if (sharedData.length === 0 || props.IsVisible === null) {
+    if (sharedData.length === 0 || props.IsVisible === null)
       return
-    }
     for (let i = 0; i < fields.length; i++) {
       if (sharedData[props.IsVisible].dbId === fields[i][0]) {
         for (let j = 0; j < fields[i][1].length; j++) {
