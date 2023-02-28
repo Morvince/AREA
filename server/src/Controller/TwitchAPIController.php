@@ -207,12 +207,22 @@
             }
             return new JsonResponse(array("connected" => true), 200);
         }
-        private function sendRequest($access_token, $endpoint, $method = "GET", $parameters = array())
+        private function sendRequest(ServiceRepository $service_repository, $access_token, $endpoint, $method = "GET", $parameters = array())
         {
             if (empty($this->request_api)) {
                 $this->request_api = new RequestAPI();
             }
-            $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters, "Client-ID: 6gvbw3mh2mufa5uep9y49rjq1qjk9w"));
+            $service = $service_repository->findByName("twitch");
+            if (empty($service)) {
+                return array("message" => "Twitch: Service not found", "code" => 404);
+            }
+            $service = $service[0];
+            $identifiers = explode(";", $service->getIdentifiers());
+            if (count($identifiers) != 2) {
+                return array("message" => "Twitch: Identifiers error", "code" => 422);
+            }
+            $client_id = $identifiers[0];
+            $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters, "Client-ID: $client_id"));
             if (isset($response->error)) {
                 $response = array("message" => "Twitch: $response->error $response->message", "code" => $response->status);
             }
@@ -273,13 +283,13 @@
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
             // Request to get the user
-            $response = $this->sendRequest($access_token, "helix/users");
+            $response = $this->sendRequest($service_repository, $access_token, "helix/users");
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
             $user_id = $response->data[0]->id;
             // Request to get the 20 last followers
-            $response = $this->sendRequest($access_token, "helix/channels/followers?broadcaster_id=$user_id&first=20");
+            $response = $this->sendRequest($service_repository, $access_token, "helix/channels/followers?broadcaster_id=$user_id&first=20");
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
@@ -313,13 +323,13 @@
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
             // Request to get the user
-            $response = $this->sendRequest($access_token, "helix/users");
+            $response = $this->sendRequest($service_repository, $access_token, "helix/users");
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
             $user_id = $response->data[0]->id;
             // Request to delete all chat messages
-            $response = $this->sendRequest($access_token, "helix/moderation/chat?broadcaster_id=$user_id&moderator_id=$user_id", "DELETE");
+            $response = $this->sendRequest($service_repository, $access_token, "helix/moderation/chat?broadcaster_id=$user_id&moderator_id=$user_id", "DELETE");
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
