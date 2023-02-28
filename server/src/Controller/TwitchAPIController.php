@@ -272,10 +272,6 @@
                 return new JsonResponse(array("message" => "Twitch: Access token not found"), 404);
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
-            $informations = $automation_action->getInformations();
-            if (empty($informations->playlist_id)) {
-                return new JsonResponse(array("message" => "Twitch: Playlist ID not found"), 404);
-            }
             // Request to get the user
             $response = $this->sendRequest($access_token, "helix/users");
             if (isset($response->code)) {
