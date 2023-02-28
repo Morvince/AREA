@@ -18,7 +18,7 @@ const PlayBox = (props) => {
   const { onValidate } = props;
   const automationId = props.automationId;
   const isPropsFilled = props.automationId === undefined ? false : true;
-  console.log(isPropsFilled);
+  console.log(props.automationId);
   const editAutomation = useEditAutomation();
   const tmpServices = useGetAction();
   const addAutomation = useAddAutomation();
@@ -55,6 +55,7 @@ const PlayBox = (props) => {
   }, [sharedData, linkedList]);
 
   function sendAutomation(name) {
+    console.log(name);
     var actions = [];
     var i = { id: 0, number: 0, informations: {} };
 
@@ -89,7 +90,13 @@ const PlayBox = (props) => {
             )
           })}
         </MovableBox>
-        <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={() => { setOpen(null); setShowSaveNamePanel(true); }} disabled={isLinkedListEmpty === true}>
+        <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={() => {
+            if (isPropsFilled === false) {
+              setOpen(null);
+              setShowSaveNamePanel(true);
+            } else {
+              sendAutomation(automationId.automation_action[0]?.name);
+            } }} disabled={isLinkedListEmpty === true} >
           <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
         </ValidateButton>
         {tmpServices.isSuccess &&
