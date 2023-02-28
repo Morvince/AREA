@@ -1,32 +1,13 @@
 import React from 'react'
 import { Rect, FirstWave, SecondWave, Text, ButtonWithBg, ButtonTryIt, Shape, IconWrapper, ButtonNewAccount, ButtonLogin, YoutubeScreen } from './LandingElements';
 import { Icon } from '@iconify/react';
-import { useAddAutomation } from '../../api/apiServicesPage';
-import { Navigate } from 'react-router-dom';
+
 import landing from '../../assets/landing.png'
 import android from '../../assets/android.png'
 import windows from '../../assets/windows.png'
 import YouTube from 'react-youtube';
 
 const Landing = () => {
-
-    const tmpAutomation = useAddAutomation();
-
-    function redirect(event) {
-        event.preventDefault()
-        tmpAutomation.mutate();
-    }
-
-    if (tmpAutomation.isSuccess) {
-        return (
-            <Navigate to="/home" state={{automationId: tmpAutomation.data.data}}/>
-        )
-    } else if (tmpAutomation.isError) {
-        return (
-            <Navigate to="/login"/>
-        )
-    }
-
     const YoutubeOptions = {
       height: '650',
       width: '1024',
@@ -48,7 +29,7 @@ const Landing = () => {
                 color="white" fontweight="bold" > Make everything works <br></br> Together </Text>
             <Text lineheight="1.2" fontsize="30px" top="52%" left="30%"
                 color="white" fontweight="" > Link all your application in order to make your life easier ! </Text>
-            <ButtonWithBg top="85%" left="42%" height="50px" width="300px" onClick={redirect}>Start Now</ButtonWithBg>
+            <ButtonWithBg top="85%" left="42%" height="50px" width="300px" to="/home">Start Now</ButtonWithBg>
 
             {/* Disponible on windows and android */}
             <FirstWave top="900px" height="1000px" color="#D4D3DC" FirstWave/>
@@ -109,7 +90,7 @@ const Landing = () => {
             <YoutubeScreen>
               <YouTube videoId="WFw_Whjj51k" opts={YoutubeOptions} />
             </YoutubeScreen>
-            <ButtonTryIt top="490%" left="42%" height="100px" width="300px" onClick={redirect}>Try it !!</ButtonTryIt>
+            <ButtonTryIt top="490%" left="42%" height="100px" width="300px" to="/home">Try it !!</ButtonTryIt>
         </>
     )
 };

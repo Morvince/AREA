@@ -1,13 +1,13 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react';
-import { RectangleArea, MovableBox, ValidateButton, BinLeft, BinRight, BinWhite } from './playBoxElements'
 import Servicesbar from '../servicesbar'
 import Block from '../block'
 import MyContext from '../Context'
 import InfoBlock from '../infoBlock'
-import { useEditAutomation } from '../../api/apiServicesPage';
 import { useGetAction } from '../../api/apiServicesPage';
+import { RectangleArea, MovableBox, ValidateButton, BinLeft, BinRight, BinWhite, SaveNamePannel, CheckButton, WrittingZone } from './playBoxElements'
+import { useEditAutomation, useAddAutomation } from '../../api/apiServicesPage';
 
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = useState([]);
@@ -28,6 +28,25 @@ const PlayBox = (props) => {
       setaction(tmpServices.data.data);
     }
   }, []);
+  const addAutomation = useAddAutomation();
+  const contentEditableRef = useRef();
+  const [showSaveNamePanel, setShowSaveNamePanel] = React.useState(false);
+  const [inputValue, setInputValue] = useState('');
+
+  const handleCheckButtonClick = () => {
+    const name = contentEditableRef.current.textContent.trim();
+    setShowSaveNamePanel(false);
+    sendAutomation(name);
+  };
+
+  const handleInput = (event) => {
+    const value = event.target.textContent.trim();
+    if (value.length <= 15) {
+      setInputValue(value);
+    } else {
+      contentEditableRef.current.textContent = inputValue;
+    }
+  };
 
   useEffect(() => {
     if (sharedData.length > 1) {
@@ -37,7 +56,7 @@ const PlayBox = (props) => {
     }
   }, [sharedData, linkedList]);
 
-  function sendAutomation() {
+  function sendAutomation(name) {
     var actions = [];
     var i = { id: 0, number: 0, informations: {} };
 
@@ -49,7 +68,11 @@ const PlayBox = (props) => {
       actions.push(i);
       i = { id: 0, number: 0, informations: {} }
     }
-    editAutomation.mutate({ id: automationId, actions: actions })
+    if (automationId === undefined) {
+      addAutomation.mutate({ name: name, actions: actions });
+    } else {
+      editAutomation.mutate({ name: name, id: automationId, actions: actions });
+    }
     setSharedData([]);
     setLinkedList([]);
   }
@@ -67,7 +90,7 @@ const PlayBox = (props) => {
             )
           })}
         </MovableBox>
-        <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={sendAutomation} disabled={isLinkedListEmpty === true}>
+        <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={() => setShowSaveNamePanel(true)} disabled={isLinkedListEmpty === true}>
           <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
         </ValidateButton>
         {tmpServices.isSuccess &&
@@ -76,6 +99,15 @@ const PlayBox = (props) => {
       </MyContext.Provider>
       <BinRight />
       <BinWhite />
+      {showSaveNamePanel && (
+        <SaveNamePannel>
+          NAME :
+          <WrittingZone ref={contentEditableRef} contentEditable={true} suppressContentEditableWarning={true} onInput={handleInput} />
+          <CheckButton onClick={() => { setShowSaveNamePanel(false); handleCheckButtonClick(); }}>
+            <Icon icon="material-symbols:check-small" width="85" color="white" style={{ position: "absolute", left: "0%", top: "-10%" }} />
+          </CheckButton>
+        </SaveNamePannel>
+      )}
     </RectangleArea >
   )
 }

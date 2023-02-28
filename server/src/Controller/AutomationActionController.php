@@ -53,7 +53,7 @@
                         continue;
                     }
                     // Request to check if the action is validate
-                    $response = $this->sendRequest($url, array("new" => $parameters, "old" => $old_parameters[$automation_action_id]));
+                    $response = $this->sendRequest($url, array("automation_action_id" => $automation_action_id, "new" => $parameters, "old" => $old_parameters[$automation_action_id]));
                     if (isset($response->code)) {
                         if (str_contains($response->message, "Bad token or expired")) {
                             $this->refreshAccessToken($automation_action, $service, $automation_repository, $user_service_repository);
