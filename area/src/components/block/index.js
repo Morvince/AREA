@@ -23,6 +23,7 @@ const Block = (props) => {
 
   const handleDrag = (e) => {
     var rect = e.target.getBoundingClientRect();
+    setOpen(null)
 
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id !== sharedData[i].index) {
