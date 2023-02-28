@@ -23,7 +23,7 @@ const CheckboxSignField = ({label, children, onClick=null}) => {
   )
 }
 
-export const SignBoxComponent = ({slideForm, handleSlideForm, handleLogin, handleRegister, tempAutomation}) => {
+export const SignBoxComponent = ({slideForm, handleSlideForm, handleLogin, handleRegister}) => {
 
   const formSignIn = useRef(null)
   const formSignUp = useRef(null)
@@ -84,8 +84,6 @@ export const SignBoxComponent = ({slideForm, handleSlideForm, handleLogin, handl
   const handleSignIn = (event) => {
     event.preventDefault()
     handleLogin.mutate(JSON.stringify(Object.fromEntries(new FormData(event.currentTarget).entries())))
-    tempAutomation.mutate();
-
   }
 
   const handleSignUp = (event) => {
@@ -95,7 +93,6 @@ export const SignBoxComponent = ({slideForm, handleSlideForm, handleLogin, handl
       return
     }
     handleRegister.mutate(JSON.stringify(Object.fromEntries(new FormData(event.currentTarget).entries())))
-    tempAutomation.mutate();
   }
 
   return (
@@ -176,7 +173,7 @@ export const SignBoxComponent = ({slideForm, handleSlideForm, handleLogin, handl
   )
 };
 
-export const LoginBoxComponent = ({slideForm, handleSlideForm, handleLogin, handleRegister, tmpAutomation}) => {
+export const LoginBoxComponent = ({slideForm, handleSlideForm, handleLogin, handleRegister}) => {
 
   const formSignIn = useRef(null)
   const formSignUp = useRef(null)
@@ -237,7 +234,6 @@ export const LoginBoxComponent = ({slideForm, handleSlideForm, handleLogin, hand
   const handleSignIn = (event) => {
     event.preventDefault()
     handleLogin.mutate(JSON.stringify(Object.fromEntries(new FormData(event.currentTarget).entries())))
-    tmpAutomation.mutate();
   }
 
   const handleSignUp = (event) => {
@@ -247,7 +243,6 @@ export const LoginBoxComponent = ({slideForm, handleSlideForm, handleLogin, hand
       return
     }
     handleRegister.mutate(JSON.stringify(Object.fromEntries(new FormData(event.currentTarget).entries())))
-    tmpAutomation.mutate();
   }
 
   return (

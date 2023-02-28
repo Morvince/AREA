@@ -45,7 +45,7 @@
             $this->user_id = $user_id;
             return $this;
         }
-        public function setName(int $name)
+        public function setName(string $name)
         {
             $this->name = $name;
             return $this;
