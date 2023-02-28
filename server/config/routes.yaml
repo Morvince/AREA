@@ -91,6 +91,10 @@ discord_api_create_thread:
   path: /discord/reaction/create_thread
   controller: App\Controller\DiscordAPIController::createThreadWithoutMessage
   methods: [POST]
+discord_api_get_thread_type:
+  path: /discord/get_thread_type
+  controller: App\Controller\DiscordAPIController::getThreadType
+  methods: [POST]
 
 # GITHUB
 github_api_connect:

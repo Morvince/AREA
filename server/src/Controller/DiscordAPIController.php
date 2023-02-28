@@ -261,6 +261,13 @@
             // formatter array dans items pour avoir juste name (GuildName - ChannelName) et id dedans
             return new JsonResponse(array("items" => $allowed_channels), 200);
         }
+        /**
+         * @Route("/discord/get_thread_type", name="discord_api_get_thread_type")
+         */
+        public function getThreadType()
+        {
+            return new JsonResponse(array("items" => array("name" => "public", "id" => "public"), array("name" => "private", "id" => "private"), array("name" => "news", "id" => "news")), 200);
+        }
 
         // Action
         /**
