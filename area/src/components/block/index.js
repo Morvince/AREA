@@ -121,25 +121,6 @@ const Block = (props) => {
     }
   }
 
-  function getColor(selectedService) {
-    switch (selectedService) {
-      case "discord":
-        return "#7289da";
-      case "spotify":
-        return "#1db954";
-      case "instagram":
-        return "#e1306c";
-      case "google":
-        return "#EA4335";
-      case "twitter":
-        return "#1da1f2";
-      case "openai":
-        return "#434857";
-      default:
-        return "#373B48";
-    }
-  }
-
   return (
     <Draggable bounds='parent' onDrag={handleDrag} onStop={handleDragStop} >
       <RectangleBlock color={backgroundColor} top={pos.x} left={pos.y}>
