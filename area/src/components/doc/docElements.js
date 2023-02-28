@@ -167,3 +167,40 @@ export const GithubBox = styled.div`
         opacity: 1;
     }
 `;
+
+export const ActionContainer = styled.div`
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    top: 0%;
+    left: 0%;
+    border-right: 5px solid black;
+    /* background-color: red; */
+
+    color: awhitection;
+    text-align: center;
+    line-height: ${props => props.line};
+    font-size: ${props => props.size};
+    font-weight: bold;
+    display: inline-block;
+    user-select: none;
+    padding: 20px;    
+`;
+
+export const ReactionContainer = styled.div`
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    top: 0%;
+    left: 50%;
+    /* background-color: red; */
+
+    color: white;
+    text-align: center;
+    line-height: ${props => props.line};
+    font-size: ${props => props.size};
+    font-weight: bold;
+    display: inline-block;
+    user-select: none;
+    padding: 20px;    
+`;
