@@ -17,6 +17,8 @@ const PlayBox = (props) => {
   const [isLinkedListEmpty, setIsLinkedListEmpty] = useState(true);
   const { onValidate } = props;
   const automationId = props.automationId;
+  const isPropsFilled = props.automationId === undefined ? false : true;
+  console.log(isPropsFilled);
   const editAutomation = useEditAutomation();
   const tmpServices = useGetAction();
   const addAutomation = useAddAutomation();
