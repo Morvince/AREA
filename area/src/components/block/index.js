@@ -110,8 +110,8 @@ const Block = (props) => {
         return "mdi:spotify";
       case "instagram":
         return "uil:instagram-alt";
-      case "google":
-        return "uil:google";
+      case "gmail":
+        return "logos:google-gmail";
       case "twitter":
         return "mdi:twitter";
       case "github":
