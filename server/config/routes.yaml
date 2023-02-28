@@ -177,6 +177,18 @@ twitch_api_connected:
   path: /twitch/connected
   controller: App\Controller\TwitchAPIController::isConnected
   methods: [POST]
+twitch_api_action_check_follower:
+  path: /twitch/action/check_follower
+  controller: App\Controller\TwitchAPIController::isNewUserFollowed
+  methods: [POST]
+twitch_api_action_check_follower_parameters:
+  path: /twitch/action/check_follower/get_parameters
+  controller: App\Controller\TwitchAPIController::getIsNewUserFollowedParameters
+  methods: [POST]
+twitch_api_reaction_clean_stream_chat:
+  path: /twitch/reaction/clean_stream_chat
+  controller: App\Controller\TwitchAPIController::cleanStreamChat
+  methods: [POST]
 
 # AUTOMATION
 automation_add:
