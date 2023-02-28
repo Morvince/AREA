@@ -16,7 +16,6 @@ const EditAreas = () => {
 
   const automationsWithActions = infosFromDb.data?.automations.filter((automation) => automation.automation_actions.length > 0) || [];
   const containerHeight = (automationsWithActions.length * 175 + (openArea !== -1 ? 400 : 0)) + 'px';
-  console.log(automationsWithActions);
 
   return (
     <>

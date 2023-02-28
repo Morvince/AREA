@@ -94,8 +94,6 @@ const InfoBlock = (props) => {
   }
 
   const fieldInfo = renderFields()
-  console.log(fields)
-  console.log(props.action)
   return (
     props.IsVisible !== null ? (
       <Draggable>
