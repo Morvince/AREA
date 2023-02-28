@@ -1,9 +1,10 @@
 import React from 'react'
 import { Rect, FirstWave, SecondWave, Text, ButtonWithBg, ButtonTryIt, Shape, IconWrapper, ButtonNewAccount, ButtonLogin, YoutubeScreen } from './LandingElements';
 import { Icon } from '@iconify/react';
-import landing from './landing.png'
-import android from './android.png'
-import windows from './windows.png'
+
+import landing from '../../assets/landing.png'
+import android from '../../assets/android.png'
+import windows from '../../assets/windows.png'
 import YouTube from 'react-youtube';
 
 const Landing = () => {

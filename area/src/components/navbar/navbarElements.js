@@ -7,6 +7,7 @@ export const NavRectBg = styled.div`
     top: 0%;
     position: absolute;
     background: #D4D3DC;
+    user-select: none;
 `;
 
 export const ButtonHapilink = styled(LinkR)`
@@ -19,6 +20,7 @@ export const ButtonHapilink = styled(LinkR)`
     color: black;
     font-weight: bold;
     text-decoration: none;
+    user-select: none;
     &:hover {
         color: #4361ee;
     }
