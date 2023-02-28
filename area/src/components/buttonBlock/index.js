@@ -94,7 +94,7 @@ const ButtonBox = (props) => {
             <AutomationRectangle>
               <Icon icon={getIcon(props.service)} width="35" height="35" color="white" />
             </AutomationRectangle>
-            <ArrowRectangle onClick={() => { console.log("click") }}>
+            <ArrowRectangle onClick={() => {}}>
               <Icon icon="material-symbols:arrow-forward-ios-rounded" color="white" width="55" height="55" />
             </ArrowRectangle>
           </LogoWrapper>

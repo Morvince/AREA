@@ -10,7 +10,7 @@ const Home = () => {
   const [isOpen, setIsOpen] = useState(false)
   const location = useLocation()
 
-  const automationId = location.state ? location.state.automationId.automation_id : undefined;
+  const automationId = location.state ? location.state.automationId : undefined;
   const [navbarKey, setNavbarKey] = useState(0)
 
   const toggle = () => {

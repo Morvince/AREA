@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AreaName, AreaZone, ArrowArea, BgColor, ButtonDelete, ButtonEdit, NumberOfAreasText, GlobalContainer, BoxContent, CutBarre, AreasZoneAction, ServiceNameAction, NameAction, AreasZoneReactions, ServiceNameReaction, NameReaction, ValuesReaction, AreasZoneReactionsMoovable, DeleteRappel, DeleteButtonYes, DeleteButtonNo } from './areasElements';
 import { Icon } from '@iconify/react';
 import { useGetInfosAreas, useDeleteInfosAreas } from '../../api/apiAreasPage';
+import { useNavigate } from 'react-router-dom';
 
 const EditAreas = () => {
   const [openArea, setOpenArea] = useState(-1);
@@ -9,15 +10,20 @@ const EditAreas = () => {
   const getInfosFromDb = useGetInfosAreas();
   const deleteInfosFromDb = useDeleteInfosAreas();
   const [showDeleteRappel, setShowDeleteRappel] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getInfosFromDb.mutate(null, { onSuccess: (data) => { setInfosFromDb(data) } });
   }, [infosFromDb]);
 
-  function deleteAreas (automation_id) {
+  const handleEdit = (automation_id) => {
+    navigate('/home', {state: {automationId: automation_id}});
+  };
+
+  function deleteAreas(automation_id) {
     setShowDeleteRappel(false)
-    deleteInfosFromDb.mutate({id: automation_id});
-    getInfosFromDb.mutate(null, { onSuccess: (data) => { setInfosFromDb(data) }});
+    deleteInfosFromDb.mutate({ id: automation_id });
+    getInfosFromDb.mutate(null, { onSuccess: (data) => { setInfosFromDb(data) } });
   };
 
   const automationsWithActions = infosFromDb.data?.automations.filter((automation) => automation.automation_actions.length > 0) || [];
@@ -69,11 +75,11 @@ const EditAreas = () => {
                   {showDeleteRappel && (
                     <DeleteRappel>
                       Do you really want to DELETE the <br></br> "{name}"" Area ?
-                      <DeleteButtonYes onClick={() => deleteAreas(automationsWithActions[index].id) }> YES </DeleteButtonYes>
+                      <DeleteButtonYes onClick={() => deleteAreas(automationsWithActions[index].id)}> YES </DeleteButtonYes>
                       <DeleteButtonNo onClick={() => setShowDeleteRappel(false)}> NO </DeleteButtonNo>
                     </DeleteRappel>
                   )}
-                  <ButtonEdit> Edit </ButtonEdit>
+                  <ButtonEdit onClick={() => handleEdit(automationsWithActions[index].id)}> Edit </ButtonEdit>
                 </BoxContent>
               }
             </AreaZone>
