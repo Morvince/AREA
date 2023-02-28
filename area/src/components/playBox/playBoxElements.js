@@ -118,9 +118,9 @@ export const CheckButton = styled.div`
 export const WrittingZone  =styled.div`
   /* Zone :*/
   position: absolute;
-  height: 84%;
+  height: 90%;
   width: 63%;
-  top: 8%;
+  top: 5%;
   left: 20%;
   background-color: white;
 
