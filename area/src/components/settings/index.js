@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { Rect, SettingsRect, Connect, Connected } from './settingsElements'
 import { Icon } from '@iconify/react';
-import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
+import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useTwitchConnect, useTwitchConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
 
 const Settings = () => {
   const handleSpotifyConnect = useSpotifyConnect();
   const isSpotifyConnected = useSpotifyConnected();
   const handleDiscordConnect = useDiscordConnect();
   const isDiscordConnected = useDiscordConnected();
-  const handleInstagramConnect = useInstagramConnect();
-  const isInstagramConnected = useInstagramConnected();
+  const handleTwitchConnect = useTwitchConnect();
+  const isTwitchConnected = useTwitchConnected();
   const handleGithubConnect = useGithubConnect();
   const isGithubConnected = useGithubConnected();
 
     useEffect(() => {
       isSpotifyConnected.mutate();
       isDiscordConnected.mutate();
-      isInstagramConnected.mutate();
+      isTwitchConnected.mutate();
     }, []);
 
     const handleConnectServices = (event) => {
@@ -43,7 +43,7 @@ const Settings = () => {
         <SettingsRect top="200px" height="600px" color="#D4D3DC" width="25%" left="15%" SettingsRect/>
         <Icon icon="skill-icons:discord" width="100" style={{ position: 'absolute', left: '18%', top: "250px" }}/>
         <Icon icon="logos:spotify-icon" width="100" style={{ position: 'absolute', left: '18%', top: "450px" }}/>
-        <Icon icon="skill-icons:instagram" width="100" style={{ position: 'absolute', left: '18%', top: "650px" }}/>
+        <Icon icon="skill-icons:twitch" width="100" style={{ position: 'absolute', left: '18%', top: "650px" }}/>
         {isDiscordConnected.isSuccess && isDiscordConnected.data.data.connected ?
           <Connected top="265px" left="25.5%" >Connected</Connected> :
           <Connect to="/" top="265px" left="26.5%" data-value="discord" onClick={handleConnectServices} >Connect</Connect>

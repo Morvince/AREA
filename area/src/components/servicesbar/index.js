@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import { ServicesBarContainer, ServicesBarWrapper, IconBox, ButtonConnect, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
 import ButtonBox from '../buttonBlock';
 import { useGetAction } from '../../api/apiServicesPage';
-import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected, useGmailConnect, useGmailConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
+import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useTwitchConnect, useTwitchConnected, useGmailConnect, useGmailConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
 
 const Servicesbar = () => {
   const [isOpen] = useState(true);
@@ -15,8 +15,8 @@ const Servicesbar = () => {
   const isSpotifyConnected = useSpotifyConnected();
   const handleDiscordConnect = useDiscordConnect()
   const isDiscordConnected = useDiscordConnected()
-  const handleInstagramConnect = useInstagramConnect();
-  const isInstagramConnected = useInstagramConnected();
+  const handleTwitchConnect = useTwitchConnect();
+  const isTwitchConnected = useTwitchConnected();
   const handleGmailConnect = useGmailConnect();
   const isGmailConnected = useGmailConnected();
   const handleTwitterConnect = useTwitterConnect();
@@ -27,7 +27,7 @@ const Servicesbar = () => {
     useEffect(() => {
       isSpotifyConnected.mutate();
       isDiscordConnected.mutate();
-      isInstagramConnected.mutate();
+      isTwitchConnected.mutate();
       isGmailConnected.mutate();
       isTwitterConnected.mutate();
       isGithubConnected.mutate();
@@ -44,9 +44,9 @@ const Servicesbar = () => {
           sessionStorage.setItem("serviceToConnect", "discord")
           handleDiscordConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
           break;
-        case "instagram":
-          sessionStorage.setItem("serviceToConnect", "instagram")
-          handleInstagramConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+        case "twitch":
+          sessionStorage.setItem("serviceToConnect", "twitch")
+          handleTwitchConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
         break;
         case "gmail":
           sessionStorage.setItem("serviceToConnect", "gmail")
@@ -72,7 +72,7 @@ const Servicesbar = () => {
   const services = [
     { nom: 'discord',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
     { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], nbrBox: [2,0]},
-    { nom: 'instagram', nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'twitch', nombre: 0, info: [], action: [], name: [], nbrBox: []},
     { nom: 'gmail',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
     { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
     { nom: 'github',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
@@ -90,8 +90,8 @@ const Servicesbar = () => {
           return true;
         else
           return false;
-      case "instagram":
-        if (isInstagramConnected.isSuccess && isInstagramConnected.data.data.connected)
+      case "twitch":
+        if (isTwitchConnected.isSuccess && isTwitchConnected.data.data.connected)
           return true;
         else
           return false;
@@ -132,7 +132,7 @@ const Servicesbar = () => {
         case "spotify":
           fillservices(1, i);
           break;
-        case "instagram":
+        case "twitch":
           fillservices(2, i);
           break;
         case "gmail":
@@ -187,7 +187,7 @@ const Servicesbar = () => {
         return "#7289da";
       case "spotify":
         return "#1db954";
-      case "instagram":
+      case "twitch":
         return "#e1306c";
       case "gmail":
         return "#EA4335";
@@ -206,7 +206,7 @@ const Servicesbar = () => {
         return "#5470d6";
       case "spotify":
         return "#10a143";
-      case "instagram":
+      case "twitch":
         return "#c2134f";
       case "gmail":
         return "#d92516";
@@ -236,10 +236,10 @@ const Servicesbar = () => {
               <Icon icon="logos:spotify-icon" width="75" height="75" opacity="0.5"> </Icon> 
             }
           </IconBox>
-          <IconBox onClick={() => handleClick("instagram")}>
-            {isInstagramConnected.isSuccess && isInstagramConnected.data.data.connected ?
-              <Icon icon="skill-icons:instagram" width="75" height="75" > </Icon> :
-              <Icon icon="skill-icons:instagram" width="75" height="75" opacity="0.5" > </Icon> 
+          <IconBox onClick={() => handleClick("twitch")}>
+            {isTwitchConnected.isSuccess && isTwitchConnected.data.data.connected ?
+              <Icon icon="logos:twitch" width="75" height="75" > </Icon> :
+              <Icon icon="logos:twitch" width="75" height="75" opacity="0.5" > </Icon> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("gmail")}>

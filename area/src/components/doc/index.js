@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { BgColor, ContainerLeft, DiscordBox, InstagramBox, IntroText, SpotifyBox, BoxContentLeft, ContainerRight, BoxContentRight, GoogleBox, TwitterBox, GithubBox } from './docElements'
+import { BgColor, ContainerLeft, DiscordBox, TwitchBox, IntroText, SpotifyBox, BoxContentLeft, ContainerRight, BoxContentRight, GoogleBox, TwitterBox, GithubBox } from './docElements'
 import { Icon } from '@iconify/react';
 
 const Doc = () => {
   const [discordOpen, setDiscordOpen] = useState(false);
   const [spotifyOpen, setSpotifyOpen] = useState(false);
-  const [instagramOpen, setInstagramOpen] = useState(false);
+  const [twitchOpen, setTwitchOpen] = useState(false);
   const [googleOpen, setGoogleOpen] = useState(false);
   const [twitterOpen, setTwitterOpen] = useState(false);
   const [githubOpen, setGithubOpen] = useState(false);
@@ -13,17 +13,17 @@ const Doc = () => {
   const toggleDiscordOpen = () => {
     setDiscordOpen(!discordOpen);
     setSpotifyOpen(false);
-    setInstagramOpen(false);
+    setTwitchOpen(false);
   };
   
   const toggleSpotifyOpen = () => {
     setSpotifyOpen(!spotifyOpen);
     setDiscordOpen(false);
-    setInstagramOpen(false);
+    setTwitchOpen(false);
   };
   
-  const toggleInstagramOpen = () => {
-    setInstagramOpen(!instagramOpen);
+  const toggleTwitchOpen = () => {
+    setTwitchOpen(!twitchOpen);
     setDiscordOpen(false);
     setSpotifyOpen(false);
   };
@@ -59,10 +59,10 @@ const Doc = () => {
           <Icon icon="logos:spotify-icon" width="100" height="100" />
         </SpotifyBox>
         {spotifyOpen && <BoxContentLeft background="#10a143">Spotify content here</BoxContentLeft>}
-        <InstagramBox onClick={toggleInstagramOpen}>
-          <Icon icon="skill-icons:instagram" width="100" height="100" />
-        </InstagramBox>
-        {instagramOpen && <BoxContentLeft background="#c2134f">Instragram content here</BoxContentLeft>}
+        <TwitchBox onClick={toggleTwitchOpen}>
+          <Icon icon="mdi:twitch" width="130" height="130" />
+        </TwitchBox>
+        {twitchOpen && <BoxContentLeft background="#c2134f">Twitch content here</BoxContentLeft>}
       </ContainerLeft>
       <ContainerRight>
         <GoogleBox onClick={toggleGoogleOpen}> 
