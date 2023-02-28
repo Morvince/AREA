@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { AreaName, AreaZone, ArrowArea, BgColor, ButtonDelete, ButtonEdit, NumberOfAreasText, GlobalContainer, BoxContent, CutBarre, AreasZoneAction, ServiceNameAction, NameAction, AreasZoneReactions, ServiceNameReaction, NameReaction, ValuesReaction, AreasZoneReactionsMoovable, DeleteRappel, DeleteButtonYes, DeleteButtonNo } from './areasElements';
 import { Icon } from '@iconify/react';
-import { useGetInfosAreas } from '../../api/apiAreasPage';
+import { useGetInfosAreas, useDeleteInfosAreas } from '../../api/apiAreasPage';
 
 const EditAreas = () => {
   const [openArea, setOpenArea] = useState(-1);
   const [infosFromDb, setInfosFromDb] = useState([]);
   const getInfosFromDb = useGetInfosAreas();
+  const deleteInfosFromDb = useDeleteInfosAreas();
   const [showDeleteRappel, setShowDeleteRappel] = useState(false);
 
   useEffect(() => {
     getInfosFromDb.mutate(null, { onSuccess: (data) => { setInfosFromDb(data) } });
-  }, []);
+  }, [infosFromDb]);
+
+  function deleteAreas (automation_id) {
+    setShowDeleteRappel(false)
+    deleteInfosFromDb.mutate({id: automation_id});
+    getInfosFromDb.mutate(null, { onSuccess: (data) => { setInfosFromDb(data) }});
+  };
 
   const automationsWithActions = infosFromDb.data?.automations.filter((automation) => automation.automation_actions.length > 0) || [];
   const containerHeight = (automationsWithActions.length * 175 + (openArea !== -1 ? 400 : 0)) + 'px';
-  console.log(automationsWithActions);
 
   return (
     <>
@@ -64,7 +69,7 @@ const EditAreas = () => {
                   {showDeleteRappel && (
                     <DeleteRappel>
                       Do you really want to DELETE the <br></br> "{name}"" Area ?
-                      <DeleteButtonYes onClick={() => setShowDeleteRappel(false)}> YES </DeleteButtonYes>
+                      <DeleteButtonYes onClick={() => deleteAreas(automationsWithActions[index].id) }> YES </DeleteButtonYes>
                       <DeleteButtonNo onClick={() => setShowDeleteRappel(false)}> NO </DeleteButtonNo>
                     </DeleteRappel>
                   )}

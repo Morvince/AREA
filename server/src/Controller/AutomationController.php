@@ -143,9 +143,9 @@
             $automation_actions = $automation_action_repository->findByAutomationId($automation_id);
             // Remove all actions from the automation in database
             foreach ($automation_actions as $item) {
-                $automation_action_repository->remove($item);
+                $automation_action_repository->remove($item, true);
             }
-            $automation_repository->remove($automation_repository->find($automation_id));
+            $automation_repository->remove($automation_repository->find($automation_id), true);
             return new JsonResponse(array("message" => "OK"), 200);
         }
 
