@@ -84,4 +84,5 @@ export const NewAreas = styled.div`
   background: green;
   color: white;
   border-radius: 50%;
+  user-select: none;
 `;
