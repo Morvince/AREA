@@ -66,7 +66,7 @@ const Doc = () => {
       </ContainerLeft>
       <ContainerRight>
         <GoogleBox onClick={toggleGoogleOpen}> 
-          <Icon icon="logos:google-icon" width="100" height="100" />
+          <Icon icon="logos:google-gmail" width="100" height="100" />
         </GoogleBox>
         {googleOpen && <BoxContentRight background="#d92516">Google content here</BoxContentRight>}
         <TwitterBox onClick={toggleTwitterOpen}> 

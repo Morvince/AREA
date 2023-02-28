@@ -60,12 +60,12 @@ const Landing = () => {
             </IconWrapper>
             <IconWrapper>
                 <a href="https://www.twitch.tv/p/fr-fr/about/" >
-                    <Icon icon="logos:twitch" width="100" style={{ position: 'absolute', left: '43%', top: "320%" }} />
+                    <Icon icon="logos:twitch" width="95" style={{ position: 'absolute', left: '43%', top: "320.5%" }} />
                 </a>
             </IconWrapper>
             <IconWrapper>
-                <a href="https://about.google/" >
-                    <Icon icon="logos:google-icon" width="100" style={{ position: 'absolute', left: '53%', top: "320%" }} />
+                <a href="https://www.google.com/intl/fr/gmail/about/" >
+                    <Icon icon="logos:google-gmail" width="110" style={{ position: 'absolute', left: '52.5%', top: "321%" }} />
                 </a>
             </IconWrapper>
             <IconWrapper>
