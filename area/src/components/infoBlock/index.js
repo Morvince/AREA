@@ -52,8 +52,9 @@ const InfoBlock = (props) => {
       if (props.action[i].fields !== null) {
         for (let j = 0; j < props.action[i].fields.length; j++) {
           fields[i][1].push([])
-          fields[i][1][j].push(props.action[i].fields[j].type)
-          fields[i][1][j].push("")
+          fields[i][1][j].push(props.action[i].fields[j].type) // text, dropdown, search
+          fields[i][1][j].push(props.action[i].fields[j].title) // TODO
+          fields[i][1][j].push(props.action[i].fields[j].name) // in case of text
         }
       }
     }
@@ -63,7 +64,7 @@ const InfoBlock = (props) => {
   useEffect(() => {
     // userPlaylist.mutate()
     // if (userPlaylist.isSuccess) {
-      // setPlaylist(userPlaylist.data.data);
+    // setPlaylist(userPlaylist.data.data);
     // }
     getFields()
   }, [props.IsVisible])
@@ -93,6 +94,8 @@ const InfoBlock = (props) => {
   }
 
   const fieldInfo = renderFields()
+  console.log(fields)
+  console.log(props.action)
   return (
     props.IsVisible !== null ? (
       <Draggable>
