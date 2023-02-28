@@ -63,7 +63,7 @@ const PlayBox = (props) => {
         <MovableBox>
           {sharedData.map((info) => {
             return (
-              <Block key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} />
+              <Block key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} />
             )
           })}
         </MovableBox>

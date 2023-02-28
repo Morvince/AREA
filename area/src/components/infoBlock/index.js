@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import { InfoBlockContainer, InfoWrapper, InfoTitle, InfoAction, InputBox, LittleBorder } from './infoBlockElements'
 import Select from 'react-select'
 import Draggable from 'react-draggable'
+import MyContext from '../Context'
 
 //import request
 import { useGetUserPlaylist } from '../../api/apiSpotify';
@@ -36,17 +37,7 @@ const InfoBlock = (props) => {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
   const [infoPrint, setInfoPrint] = useState([]);
-
-  function renderInput() {
-    if (props.nbrBox === 2) {
-      return (
-        <div>
-          <input id="name" type="text" placeholder="Name" onChange={handleChangeName} />
-          <input id="description" type="text" placeholder="Description" onChange={handleChangeDesc} />
-        </div>
-      )
-    }
-  }
+  const { sharedData } = useContext(MyContext);
 
   const handleChangeDesc = (event) => {
     setName(event.target.value);
@@ -90,16 +81,20 @@ const InfoBlock = (props) => {
   //for each field return a TextSection or DropdownSection
   function renderFields() {
     let infoBlock = []
+    if (sharedData.length === 0 || props.IsVisible === null) {
+      return
+    }
     for (let i = 0; i < fields.length; i++) {
-      if (props.IsVisible === i+1) {
+      if (sharedData[props.IsVisible].dbId === fields[i][0]) {
         for (let j = 0; j < fields[i][1].length; j++) {
           if (fields[i][1][j][0] === "text") {
             infoBlock.push(<TextSection title={fields[i][1][j][1]} text={fields[i][1][j][2]} />)
-          }
-          else if (fields[i][1][j][0] === "dropdown") {
+          } else if (fields[i][1][j][0] === "dropdown") {
+            infoBlock.push(<DropdownSection title={fields[i][1][j][1]} />)
+          } else if (fields[i][1][j][0] === "search") {
             infoBlock.push(<DropdownSection title={fields[i][1][j][1]} />)
           }
-          if (j !== fields[i].length - 1) {
+          if (j !== fields[i][1].length - 1) {
             infoBlock.push(<LittleBorder />)
           }
         }
