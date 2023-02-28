@@ -42,8 +42,23 @@
             $client_id = $identifiers[0];
             // Compose the authorization scope
             $scope = array(
-                "user:edit", "chat:read", "chat:edit", "user:read:subscriptions",
-                "whispers:read", "whispers:edit", "user:read:follows", "channel:read:subscriptions"
+                "analytics:read:extensions", "analytics:read:games", "bits:read",
+                "channel:edit:commercial", "channel:manage:broadcast", "channel:read:charity",
+                "channel:manage:extensions", "channel:manage:moderators", "channel:manage:polls",
+                "channel:manage:predictions", "channel:manage:raids", "channel:manage:redemptions",
+                "channel:manage:schedule", "channel:manage:videos", "channel:read:editors",
+                "channel:read:goals", "channel:read:hype_train", "channel:read:polls",
+                "channel:read:predictions", "channel:read:redemptions", "channel:read:stream_key",
+                "channel:read:subscriptions", "channel:read:vips", "channel:manage:vips",
+                "clips:edit", "moderation:read", "moderator:manage:announcements", "moderator:manage:automod",
+                "moderator:read:automod_settings", "moderator:manage:automod_settings", "moderator:manage:banned_users",
+                "moderator:read:blocked_terms", "moderator:manage:blocked_terms", "moderator:manage:chat_messages",
+                "moderator:read:chat_settings", "moderator:manage:chat_settings", "moderator:read:chatters",
+                "moderator:read:followers", "moderator:read:shield_mode", "moderator:manage:shield_mode",
+                "moderator:read:shoutouts", "user:edit", "user:manage:blocked_users", "user:read:blocked_users",
+                "user:read:broadcast", "user:manage:chat_color", "user:read:email", "user:read:follows",
+                "user:read:subscriptions", "user:manage:whispers", "chat:edit", "channel:moderate",
+                "whispers:read", "whispers:edit"
             );
             $scope = implode(" ", $scope);
             // Set the state when the request is good
@@ -93,9 +108,8 @@
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, "https://id.twitch.tv/oauth2/token");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=authorization_code&code=$code&redirect_uri=$redirect_uri");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, "client_id=$client_id&client_secret=$client_secret&grant_type=authorization_code&code=$code&redirect_uri=$redirect_uri");
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_USERPWD, "$client_id:$client_secret");
             $headers = array();
             $headers[] = "Content-Type: application/x-www-form-urlencoded";
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -198,11 +212,122 @@
             if (empty($this->request_api)) {
                 $this->request_api = new RequestAPI();
             }
-            $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters));
+            $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters, "Client-ID: 6gvbw3mh2mufa5uep9y49rjq1qjk9w"));
             if (isset($response->error)) {
-                $response = array("message" => "Twitch: $response->message", "code" => $response->status);
+                $response = array("message" => "Twitch: $response->error $response->message", "code" => $response->status);
             }
             return $response;
+        }
+
+        // Action
+        /**
+         * @Route("/twitch/action/check_follower", name="twitch_api_action_check_follower")
+         */
+        public function isNewUserFollowed(Request $request)
+        {
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->new) || empty($request_content->old)) {
+                return new JsonResponse(array("message" => "Twitch: Missing field"), 400);
+            }
+            $old_followers = $request_content->old;
+            $new_followers = $request_content->new;
+            // Check if a new user is following
+            foreach ($new_followers as $new_follower) {
+                $found = false;
+                foreach ($old_followers as $old_follower) {
+                    if (strcmp($new_follower->user_id, $old_follower->user_id) === 0) {
+                        $found = true;
+                        break (1);
+                    }
+                }
+                if ($found === false) {
+                    return new JsonResponse(array("message" => true), 200);
+                }
+            }
+            return new JsonResponse(array("message" => false), 200);
+        }
+        /**
+         * @Route("/twitch/action/check_follower/get_parameters", name="twitch_api_action_check_follower_parameters")
+         */
+        public function getIsNewUserFollowedParameters(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
+        {
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->automation_action_id)) {
+                return new JsonResponse(array("message" => "Twitch: Missing field"), 400);
+            }
+            $automation_action_id = $request_content->automation_action_id;
+            $automation_action = $automation_action_repository->find($automation_action_id);
+            if (empty($automation_action)) {
+                return new JsonResponse(array("message" => "Twitch: automation_action ID not found"), 404);
+            }
+            $service = $service_repository->findByName("spotify");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Twitch: Service not found"), 404);
+            }
+            $service = $service[0];
+            $automation = $automation_repository->find($automation_action->getAutomationId());
+            if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+                return new JsonResponse(array("message" => "Twitch: Access token not found"), 404);
+            }
+            $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
+            $informations = $automation_action->getInformations();
+            if (empty($informations->playlist_id)) {
+                return new JsonResponse(array("message" => "Twitch: Playlist ID not found"), 404);
+            }
+            // Request to get the user
+            $response = $this->sendRequest($access_token, "helix/users");
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
+            }
+            $user_id = $response->data[0]->id;
+            // Request to get the 20 last followers
+            $response = $this->sendRequest($access_token, "helix/channels/followers?broadcaster_id=$user_id&first=20");
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
+            }
+            return new JsonResponse($response->data, 200);
+        }
+
+        // Reaction
+        /**
+         * @Route("/twitch/reaction/clean_stream_chat", name="twitch_api_reaction_clean_stream_chat")
+         */
+        public function cleanStreamChat(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
+        {
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->automation_action_id)) {
+                return new JsonResponse(array("message" => "Twitch: Missing field"), 400);
+            }
+            $automation_action_id = $request_content->automation_action_id;
+            $automation_action = $automation_action_repository->find($automation_action_id);
+            if (empty($automation_action)) {
+                return new JsonResponse(array("message" => "Twitch: automation_action ID not found"), 404);
+            }
+            $service = $service_repository->findByName("twitch");
+            if (empty($service)) {
+                return new JsonResponse(array("message" => "Twitch: Service not found"), 404);
+            }
+            $service = $service[0];
+            $automation = $automation_repository->find($automation_action->getAutomationId());
+            if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
+                return new JsonResponse(array("message" => "Twitch: Access token not found"), 404);
+            }
+            $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
+            // Request to get the user
+            $response = $this->sendRequest($access_token, "helix/users");
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
+            }
+            $user_id = $response->data[0]->id;
+            // Request to delete all chat messages
+            $response = $this->sendRequest($access_token, "helix/moderation/chat?broadcaster_id=$user_id&moderator_id=$user_id", "DELETE");
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
+            }
+            return new JsonResponse(array("message" => "OK"), 200);
         }
     }
 ?>
