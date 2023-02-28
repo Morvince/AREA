@@ -60,9 +60,11 @@ const Block = (props) => {
     }
     return;
   }
-
+  
   const handleDragStop = (e, data) => {
     var rect = e.target.getBoundingClientRect();
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
 
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id === sharedData[i].index) {
@@ -94,6 +96,17 @@ const Block = (props) => {
     for (var i = 0; i < linkedList.length; i++) {
       if (linkedList[i] === sharedData[props.id].above) {
         linkedList.splice(i + 1, 0, props.id)
+      }
+    }
+
+    if (rect.left >= screenWidth * 0.85 && rect.top >= screenHeight * 0.25 && rect.top <= screenHeight * 0.61) {
+      const indexToRemove = sharedData.findIndex((item) => item.index === props.id);
+      if (indexToRemove !== -1) {
+        sharedData.splice(indexToRemove, 1);
+        sharedData.forEach((item, i) => {
+        item.index = i;
+        });
+        setSharedData([...sharedData]);
       }
     }
   }

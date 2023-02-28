@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { Rect, SettingsRect, Connect, Connected } from './settingsElements'
 import { Icon } from '@iconify/react';
-import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
+import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
 
 const Settings = () => {
-  // SPOTIFY
-  const handleSpotifyConnect = useSpotifyConnect()
-  const isSpotifyConnected = useSpotifyConnected()
-  // DISCORD
-  const handleDiscordConnect = useDiscordConnect()
-  const isDiscordConnected = useDiscordConnected()
-  // GITHUB
-  const handleGithubConnect = useGithubConnect()
-  const isGithubConnected = useGithubConnected()
+  const handleSpotifyConnect = useSpotifyConnect();
+  const isSpotifyConnected = useSpotifyConnected();
+  const handleDiscordConnect = useDiscordConnect();
+  const isDiscordConnected = useDiscordConnected();
+  const handleInstagramConnect = useInstagramConnect();
+  const isInstagramConnected = useInstagramConnected();
+  const handleGithubConnect = useGithubConnect();
+  const isGithubConnected = useGithubConnected();
 
     useEffect(() => {
-      isSpotifyConnected.mutate()
-      isDiscordConnected.mutate()
-      isGithubConnected.mutate()
+      isSpotifyConnected.mutate();
+      isDiscordConnected.mutate();
+      isInstagramConnected.mutate();
     }, []);
 
     const handleConnectServices = (event) => {

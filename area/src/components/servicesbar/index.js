@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import { ServicesBarContainer, ServicesBarWrapper, IconBox, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
+import { ServicesBarContainer, ServicesBarWrapper, IconBox, ButtonConnect, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
 import ButtonBox from '../buttonBlock';
 import { useGetAction } from '../../api/apiServicesPage';
+import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected, useGmailConnect, useGmailConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
 
 const Servicesbar = () => {
   const [isOpen] = useState(true);
@@ -10,6 +11,59 @@ const Servicesbar = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [puzzleBlocktemps, setpuzzleBlocktemps] = useState([]);
   const tmpServices = useGetAction();
+  const handleSpotifyConnect = useSpotifyConnect();
+  const isSpotifyConnected = useSpotifyConnected();
+  const handleDiscordConnect = useDiscordConnect()
+  const isDiscordConnected = useDiscordConnected()
+  const handleInstagramConnect = useInstagramConnect();
+  const isInstagramConnected = useInstagramConnected();
+  const handleGmailConnect = useGmailConnect();
+  const isGmailConnected = useGmailConnected();
+  const handleTwitterConnect = useTwitterConnect();
+  const isTwitterConnected = useTwitterConnected();
+  const handleGithubConnect = useGithubConnect();
+  const isGithubConnected = useGithubConnected();
+
+    useEffect(() => {
+      isSpotifyConnected.mutate();
+      isDiscordConnected.mutate();
+      isInstagramConnected.mutate();
+      isGmailConnected.mutate();
+      isTwitterConnected.mutate();
+      isGithubConnected.mutate();
+    }, []);
+
+    const handleConnectServices = (event) => {
+      event.preventDefault()
+      switch (selectedService) {
+        case "spotify":
+          sessionStorage.setItem("serviceToConnect", "spotify")
+          handleSpotifyConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+          break;
+        case "discord":
+          sessionStorage.setItem("serviceToConnect", "discord")
+          handleDiscordConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+          break;
+        case "instagram":
+          sessionStorage.setItem("serviceToConnect", "instagram")
+          handleInstagramConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+        break;
+        case "gmail":
+          sessionStorage.setItem("serviceToConnect", "gmail")
+          handleGmailConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+        break;
+        case "twitter":
+          sessionStorage.setItem("serviceToConnect", "twitter")
+          handleTwitterConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+        break;
+        case "github":
+          sessionStorage.setItem("serviceToConnect", "github")
+          handleGithubConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+        break;
+        default:
+          break;
+      }
+    }
 
   useEffect(() => {
     tmpServices.mutate()
@@ -19,10 +73,45 @@ const Servicesbar = () => {
     { nom: 'discord',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
     { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], nbrBox: [2,0]},
     { nom: 'instagram', nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'google',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'gmail',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
     { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'openai',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
+    { nom: 'github',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
   ];
+
+  function checkIfConnected() {
+    switch (selectedService) {
+      case "discord":
+        if (isDiscordConnected.isSuccess && isDiscordConnected.data.data.connected)
+          return true;
+        else
+          return false;
+      case "spotify":
+        if (isSpotifyConnected.isSuccess && isSpotifyConnected.data.data.connected)
+          return true;
+        else
+          return false;
+      case "instagram":
+        if (isInstagramConnected.isSuccess && isInstagramConnected.data.data.connected)
+          return true;
+        else
+          return false;
+      case "gmail":
+        if (isGmailConnected.isSuccess && isGmailConnected.data.data.connected)
+          return true;
+        else
+          return false;
+      case "twitter":
+        if (isTwitterConnected.isSuccess && isTwitterConnected.data.data.connected)
+          return true;
+        else
+          return false;
+      case "github":
+        if (isGithubConnected.isSuccess && isGithubConnected.data.data.connected)
+          return true;
+        else
+          return false;
+    }
+  }
 
   function fillservices(id, i) {
     services[id].nombre += 1;
@@ -46,13 +135,13 @@ const Servicesbar = () => {
         case "instagram":
           fillservices(2, i);
           break;
-        case "google":
+        case "gmail":
           fillservices(3, i);
           break;
         case "twitter":
           fillservices(4, i);
           break;
-        case "openai":
+        case "github":
           fillservices(5, i);
           break;
         default:
@@ -100,11 +189,11 @@ const Servicesbar = () => {
         return "#1db954";
       case "instagram":
         return "#e1306c";
-      case "google":
+      case "gmail":
         return "#EA4335";
       case "twitter":
         return "#1da1f2";
-      case "openai":
+      case "github":
         return "#434857";
       default:
         return "#373B48";
@@ -119,11 +208,11 @@ const Servicesbar = () => {
         return "#10a143";
       case "instagram":
         return "#c2134f";
-      case "google":
+      case "gmail":
         return "#d92516";
       case "twitter":
         return "#1486cc";
-      case "openai":
+      case "github":
         return "#686f84";
       default:
         return "#454b5e";
@@ -136,31 +225,52 @@ const Servicesbar = () => {
         <ServicesName>Services</ServicesName>
         <ServicesBarWrapper>
           <IconBox onClick={() => handleClick("discord")}>
-            <Icon icon="skill-icons:discord" width="75" height="75" />
+            {isDiscordConnected.isSuccess && isDiscordConnected.data.data.connected ?
+              <Icon icon="skill-icons:discord" width="75" height="75" > </Icon> :
+              <Icon icon="skill-icons:discord" width="75" height="75" opacity="0.5" > </Icon> 
+            }
           </IconBox>
           <IconBox onClick={() => handleClick("spotify")}>
-            <Icon icon="logos:spotify-icon" width="75" height="75" />
+            {isSpotifyConnected.isSuccess && isSpotifyConnected.data.data.connected ?
+              <Icon icon="logos:spotify-icon" width="75" height="75" > </Icon> :
+              <Icon icon="logos:spotify-icon" width="75" height="75" opacity="0.5"> </Icon> 
+            }
           </IconBox>
           <IconBox onClick={() => handleClick("instagram")}>
-            <Icon icon="skill-icons:instagram" width="75" height="75" />
+            {isInstagramConnected.isSuccess && isInstagramConnected.data.data.connected ?
+              <Icon icon="skill-icons:instagram" width="75" height="75" > </Icon> :
+              <Icon icon="skill-icons:instagram" width="75" height="75" opacity="0.5" > </Icon> 
+            }
           </IconBox>
-          <IconBox onClick={() => handleClick("google")}>
-            <Icon icon="logos:google-icon" width="75" height="75" />
+          <IconBox onClick={() => handleClick("gmail")}>
+            {isGmailConnected.isSuccess && isGmailConnected.data.data.connected ?
+              <Icon icon="logos:google-gmail" width="75" height="75" > </Icon> :
+              <Icon icon="logos:google-gmail" width="75" height="75" opacity="0.5" > </Icon> 
+            }
           </IconBox>
           <IconBox onClick={() => handleClick("twitter")}>
-            <Icon icon="skill-icons:twitter" width="75" height="75" />
+            {isTwitterConnected.isSuccess && isTwitterConnected.data.data.connected ?
+              <Icon icon="skill-icons:twitter" width="75" height="75" > </Icon> :
+              <Icon icon="skill-icons:twitter" width="75" height="75" opacity="0.5" > </Icon> 
+            }
           </IconBox>
-          <IconBox onClick={() => handleClick("openai")}>
-            <Icon icon="mdi:github" width="75" height="75" />
+          <IconBox onClick={() => handleClick("github")}>
+            {isGithubConnected.isSuccess && isGithubConnected.data.data.connected ?
+              <Icon icon="mdi:github" width="75" height="75" > </Icon> :
+              <Icon icon="mdi:github" width="75" height="75" opacity="0.5"> </Icon> 
+            }
           </IconBox>
         </ServicesBarWrapper>
       </ServicesBarContainer>
       <RectangleContener className={isLeftBoxOpen ? 'open' : 'closed'} color={getColor()}>
-        {puzzleBlocktemps.map((info, index) => {
-          return (
-            <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} dbID={info.dbID}/>
-          )
-        })}
+        {checkIfConnected() == false ?
+          <ButtonConnect onClick={handleConnectServices}> Connect </ButtonConnect> :
+          puzzleBlocktemps.map((info, index) => {
+            return (
+              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} dbID={info.dbID}/>
+            )
+          })
+        }
       </RectangleContener>
     </LeftColumn>
   );

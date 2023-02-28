@@ -9,8 +9,8 @@ export const useGetAction = () => {
   return useMutation(getAction)
 }
 
-const addAutomation = async () => {
-  return await axios.post("/automation/add", JSON.stringify({ token: sessionStorage.getItem("token") }))
+const addAutomation = async (data) => {
+  return await axios.post("/automation/add", JSON.stringify({ token: sessionStorage.getItem("token"), name: data.name, actions: data.actions }))
 }
 
 export const useAddAutomation = () => {
@@ -18,7 +18,7 @@ export const useAddAutomation = () => {
 }
 
 const editAutomation = async (data) => {
-  return await axios.post("/automation/edit", JSON.stringify({automation_id: data.id, actions: data.actions}))
+  return await axios.post("/automation/edit", JSON.stringify({automation_id: data.id, actions: data.actions, name: data.name}))
 }
 
 export const useEditAutomation = () => {

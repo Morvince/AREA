@@ -228,10 +228,14 @@
             $search = str_replace(" ", "%20", $search);
             // Request for the search
             $response = $this->sendRequest($access_token, "search?type=$type&q=$search");
-            if (isset(json_decode($response)->code)) {
-                return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
             }
-            return new JsonResponse($response, 200);
+            $formatted = array();
+            foreach ($response[$type."s"]->items as $item) {
+                array_push($formatted, array("name" => $item->name, "id" => $item->id));
+            }
+            return new JsonResponse(array("items" => $formatted), 200);
         }
         /**
          * @Route("/spotify/get_user_playlists", name="spotify_api_get_user_playlists")
@@ -261,13 +265,12 @@
             $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
             // Request for the user playlists
             $response = $this->sendRequest($access_token, "me/playlists"); // changer pour voir seulement celles modifiables
-            if (isset(json_decode($response)->code)) {
-                return new JsonResponse(array("message" => json_decode($response)->message), json_decode($response)->code);
+            if (isset($response->code)) {
+                return new JsonResponse(array("message" => $response->message), $response->code);
             }
-            if (empty(json_decode($response)->items)) {
+            if (empty($response->items)) {
                 return new JsonResponse(array("message" => $response), 500);
             }
-            $response = json_decode($response);
             $formatted = array();
             foreach ($response->items as $item) {
                 array_push($formatted, array("name" => $item->name, "id" => $item->id));
@@ -279,36 +282,9 @@
             if (empty($this->request_api)) {
                 $this->request_api = new RequestAPI();
             }
-            $response = $this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters);
-            if (isset(json_decode($response)->error)) {
-                switch (json_decode($response)->error->status) {
-                    case 400:
-                        $response = json_encode(array("message" => "Spotify: Bad request", "code" => 400));
-                        break;
-                    case 401:
-                        $response = json_encode(array("message" => "Spotify: Bad or expired token", "code" => 401));
-                        break;
-                    case 403:
-                        $response = json_encode(array("message" => "Spotify: Forbidden", "code" => 403));
-                        break;
-                    case 404:
-                        $response = json_encode(array("message" => "Spotify: Ressource not found", "code" => 404));
-                        break;
-                    case 429:
-                        $response = json_encode(array("message" => "Spotify: Too many requests", "code" => 429));
-                        break;
-                    case 500:
-                        $response = json_encode(array("message" => "Spotify: Internal server error", "code" => 500));
-                        break;
-                    case 502:
-                        $response = json_encode(array("message" => "Spotify: Bad gateway", "code" => 502));
-                        break;
-                    case 503:
-                        $response = json_encode(array("message" => "Spotify: Service unavailable", "code" => 503));
-                        break;
-                    default:
-                        break;
-                }
+            $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters));
+            if (isset($response->error)) {
+                $response = array("message" => "Spotify: ".$response->error->message, "code" => $response->error->status);
             }
             return $response;
         }
@@ -371,7 +347,7 @@
                 return new JsonResponse(array("message" => "Spotify: Playlist ID not found"), 404);
             }
             // Request to get the wished playlist
-            $playlist = json_decode($this->getPlaylistById($access_token, $informations->playlist_id));
+            $playlist = $this->getPlaylistById($access_token, $informations->playlist_id);
             if (isset($playlist->code)) {
                 return new JsonResponse(array("message" => $playlist->message), $playlist->code);
             }
@@ -408,7 +384,7 @@
             if (empty($informations->playlist_id)) {
                 return new JsonResponse(array("message" => "Spotify: Playlist ID not found"), 404);
             }
-            $playlist = json_decode($this->getPlaylistById($access_token, $informations->playlist_id));
+            $playlist = $this->getPlaylistById($access_token, $informations->playlist_id);
             if (isset($playlist->code)) {
                 return new JsonResponse(array("message" => $playlist->message), $playlist->code);
             }
@@ -425,7 +401,7 @@
                 "description" => $description
             );
             // Request to change playlist details
-            $response = json_decode($this->sendRequest($access_token, "playlists/$playlist->id?name=&public=&description=", "PUT", $parameters));
+            $response = $this->sendRequest($access_token, "playlists/$playlist->id?name=&public=&description=", "PUT", $parameters);
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
@@ -463,7 +439,7 @@
             }
             $artist_name = "";
             if (!empty($informations->artist_id)) {
-                $response = json_decode($this->getArtistById($access_token, $informations->artist_id));
+                $response = $this->getArtistById($access_token, $informations->artist_id);
                 if (!empty($response->name)) {
                     $artist_name = $response->name;
                 }
@@ -480,7 +456,7 @@
                 return new JsonResponse(array("message" => $music_uri->message), $music_uri->code);
             }
             // Request to add a song to a playlist
-            $response = json_decode($this->sendRequest($access_token, "playlists/$playlist_id/tracks?uris=$music_uri", "POST"));
+            $response = $this->sendRequest($access_token, "playlists/$playlist_id/tracks?uris=$music_uri", "POST");
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
@@ -498,7 +474,7 @@
         {
             srand(time());
             $alphabet = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
-            $response = json_decode($this->privateSearch($access_token, "track", $artist_name . " " . $alphabet[rand(0, count($alphabet) - 1)]));
+            $response = $this->privateSearch($access_token, "track", $artist_name . " " . $alphabet[rand(0, count($alphabet) - 1)]);
             if (isset($response->code)) {
                 return array("message" => $response->message, "code" => $response->code);
             }

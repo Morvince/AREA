@@ -1,26 +1,12 @@
 import React from 'react'
 import { Rect, FirstWave, SecondWave, Text, ButtonWithBg, ButtonTryIt, Shape, IconWrapper, ButtonNewAccount, ButtonLogin, YoutubeScreen } from './LandingElements';
 import { Icon } from '@iconify/react';
-import { useAddAutomation } from '../../api/apiServicesPage';
-import { useNavigate } from 'react-router-dom';
 import landing from './landing.png'
 import android from './android.png'
 import windows from './windows.png'
 import YouTube from 'react-youtube';
 
 const Landing = () => {
-    const navigate = useNavigate();
-
-    const tmpAutomation = useAddAutomation();
-
-    function redirect() {
-        tmpAutomation.mutate();
-    }
-
-    if (tmpAutomation.isSuccess) {
-        navigate("/home", { replace: true, state: { automationId: tmpAutomation.data.data } })
-    }
-
     const YoutubeOptions = {
       height: '650',
       width: '1024',
@@ -42,7 +28,7 @@ const Landing = () => {
                 color="white" fontweight="bold" > Make everything works <br></br> Together </Text>
             <Text lineheight="1.2" fontsize="30px" top="52%" left="30%"
                 color="white" fontweight="" > Link all your application in order to make your life easier ! </Text>
-            <ButtonWithBg top="85%" left="42%" height="50px" width="300px" onClick={redirect}>Start Now</ButtonWithBg>
+            <ButtonWithBg top="85%" left="42%" height="50px" width="300px" to="/home">Start Now</ButtonWithBg>
 
             {/* Disponible on windows and android */}
             <FirstWave top="900px" height="1000px" color="#D4D3DC" FirstWave/>
@@ -56,39 +42,39 @@ const Landing = () => {
             <SecondWave top="2190px" height="1000px" color="#D4D3DC" SecondWave />
             <img src={windows} alt="image" style={{ position: 'absolute', top: '200%', left: '8%', width: "1150px", height: "600px"}} />
             <img src={android} alt="image" style={{ position: 'absolute', top: '200%', left: '76%', width: "320px", height: "600px"}} />
-        
+
             {/* Six applications  */}
             <Text lineheight="1.2" fontsize="50px" top="290%" left="15%"
                 color="white" fontweight="bold" > <em> Link EVERYTHING your want between our SIX applications </em> </Text>
             <Rect top="320%" height="100px" color="black" Rect />
             <Shape top="315%" left="18%" height="20%" width="65%" color="white" Shape />
             <IconWrapper>
-                <a href="https://discord.com/company" > 
+                <a href="https://discord.com/company" >
                     <Icon icon="skill-icons:discord" width="100" style={{ position: 'absolute', left: '23%', top: "320%" }} />
                 </a>
             </IconWrapper>
             <IconWrapper>
-                <a href="https://newsroom.spotify.com/company-info/" > 
+                <a href="https://newsroom.spotify.com/company-info/" >
                     <Icon icon="logos:spotify-icon" width="100" style={{ position: 'absolute', left: '33%', top: "320%" }} />
                 </a>
             </IconWrapper>
             <IconWrapper>
-                <a href="https://about.instagram.com/fr-fr" > 
+                <a href="https://about.instagram.com/fr-fr" >
                     <Icon icon="skill-icons:instagram" width="100" style={{ position: 'absolute', left: '43%', top: "320%" }} />
                 </a>
             </IconWrapper>
             <IconWrapper>
-                <a href="https://about.google/" > 
+                <a href="https://about.google/" >
                     <Icon icon="logos:google-icon" width="100" style={{ position: 'absolute', left: '53%', top: "320%" }} />
                 </a>
             </IconWrapper>
             <IconWrapper>
-                <a href="https://about.twitter.com/fr" > 
+                <a href="https://about.twitter.com/fr" >
                     <Icon icon="skill-icons:twitter" width="100" style={{ position: 'absolute', left: '63%', top: "320%" }} />
                 </a>
             </IconWrapper>
             <IconWrapper>
-                <a href="https://openai.com/" > 
+                <a href="https://github.com/about" >
                     <Icon icon="mdi:github" width="130" style={{ position: 'absolute', left: '73%', top: "318.5%" }} />
                 </a>
             </IconWrapper>
@@ -103,7 +89,7 @@ const Landing = () => {
             <YoutubeScreen>
               <YouTube videoId="WFw_Whjj51k" opts={YoutubeOptions} />
             </YoutubeScreen>
-            <ButtonTryIt top="490%" left="42%" height="100px" width="300px" onClick={redirect}>Try it !!</ButtonTryIt>
+            <ButtonTryIt top="490%" left="42%" height="100px" width="300px" to="/home">Try it !!</ButtonTryIt>
         </>
     )
 };

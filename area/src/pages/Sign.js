@@ -28,6 +28,7 @@ const Sign = () => {
   const handleLogin = useLogin()
   const handleRegister = useRegister()
 
+
   const handleSlideForm = useCallback(function(event) {
     event.preventDefault()
     if (slideForm === 0)
@@ -38,16 +39,20 @@ const Sign = () => {
       setSlideForm(s => s - 1)
   }, [slideForm])
 
+  if (handleLogin.isSuccess || handleRegister.isSuccess) {
+    return (
+        <Navigate to="/home" replace={true} />
+    )
+  }
+
   return (
     <SignPage bgColor={bgColor}>
       <SignMessage slideForm={slideForm}/>
-      <SignBoxComponent slideForm={slideForm} handleSlideForm={handleSlideForm} handleLogin={handleLogin} handleRegister={handleRegister}/>
+      <SignBoxComponent slideForm={slideForm} handleSlideForm={handleSlideForm} handleLogin={handleLogin} handleRegister={handleRegister} />
       <div style={{position: "absolute", width: "100%", alignSelf: "flex-end", textAlign: "center", marginBottom: "110px"}}>
         {(slideForm === 0 || slideForm === 2) && handleLogin.isError ? <ErrorMessage color={black}>{handleLogin.error.response.data.message}</ErrorMessage> :
           slideForm === 1 && handleRegister.isError ? <ErrorMessage color={white}>{handleRegister.error.response.data.message}</ErrorMessage> : null}
       </div>
-      {handleLogin.isSuccess && <Navigate to="/" replace={true}/>}
-      {handleRegister.isSuccess && <Navigate to="/" replace={true}/>}
     </SignPage>
   )
 }

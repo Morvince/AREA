@@ -16,7 +16,7 @@
         {
             header('Access-Control-Allow-Origin: *');
             // Get needed values
-            $actions = $action_repository->findAll();
+            $actions = $action_repository->findAllOrderByType();
             if (empty($actions)) {
                 return new JsonResponse(array("message" => "Action: No action found"), 404);
             }
@@ -27,7 +27,7 @@
                 if (empty($service)) {
                     continue;
                 }
-                array_push($formatted, array("id" => $action->getId(), "name" => $action->getName(), "service" => $service->getName(), "type" => $action->getType(), "fields" => array()));
+                array_push($formatted, array("id" => $action->getId(), "name" => $action->getName(), "service" => $service->getName(), "type" => $action->getType(), "fields" => $action->getFields()));
             }
             return new JsonResponse(array("actions" => $formatted), 200);
         }

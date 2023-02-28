@@ -182,36 +182,9 @@
             if (empty($this->request_api)) {
                 $this->request_api = new RequestAPI();
             }
-            $response = $this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters, "User-Agent: Area");
-            if (isset(json_decode($response)->error)) {
-                switch (json_decode($response)->error->status) {
-                    case 400:
-                        $response = json_encode(array("message" => "Github: Bad request", "code" => 400));
-                        break;
-                    case 401:
-                        $response = json_encode(array("message" => "Github: Bad or expired token", "code" => 401));
-                        break;
-                    case 403:
-                        $response = json_encode(array("message" => "Github: Forbidden", "code" => 403));
-                        break;
-                    case 404:
-                        $response = json_encode(array("message" => "Github: Ressource not found", "code" => 404));
-                        break;
-                    case 429:
-                        $response = json_encode(array("message" => "Github: Too many requests", "code" => 429));
-                        break;
-                    case 500:
-                        $response = json_encode(array("message" => "Github: Internal server error", "code" => 500));
-                        break;
-                    case 502:
-                        $response = json_encode(array("message" => "Github: Bad gateway", "code" => 502));
-                        break;
-                    case 503:
-                        $response = json_encode(array("message" => "Github: Service unavailable", "code" => 503));
-                        break;
-                    default:
-                        break;
-                }
+            $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters, "User-Agent: Area"));
+            if (isset($response->message) && isset($response->documentation_url)) {
+                $response = array("message" => "Github: Help on $response->documentation_url", "code" => 400);
             }
             return $response;
         }
@@ -280,7 +253,7 @@
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
             if (empty($request_content->repo)) {
-                return new JsonResponse(array("message" => array()), 200);
+                return new JsonResponse(array("items" => array()), 200);
             }
             $repo = $request_content->repo;
             // Request for the branches of the repo

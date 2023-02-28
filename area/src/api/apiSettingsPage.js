@@ -1,6 +1,8 @@
 import axios from "axios"
 import { useMutation } from "react-query"
 
+// SPOTIFY :
+
 const spotifyConnected = async () => {
   return await axios.post("/spotify/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
 }
@@ -56,6 +58,108 @@ const discordAccess = async (data) => {
 export const useDiscordAccess = () => {
   return useMutation(discordAccess)
 }
+
+
+
+// INSTAGRAM :
+
+
+const instagramConnected = async () => {
+  return await axios.post("/instagram/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
+}
+
+export const useInstagramConnected = () => {
+  return useMutation(instagramConnected)
+}
+
+const instagramConnect = async (data) => {
+  return await axios.post("/instagram/connect", data)
+}
+
+export const useInstagramConnect = () => {
+  return useMutation(instagramConnect, {
+    onSuccess: (data) => {
+      window.location.replace(data.data.authorization_url)
+    }
+  })
+}
+
+const instagramAccess = async (data) => {
+  return await axios.post("/instagram/get_access_token", data)
+}
+
+export const useInstagramAccess = () => {
+  return useMutation(instagramAccess)
+}
+
+
+
+// GMAIL :
+
+
+const gmailConnected = async () => {
+  return await axios.post("/gmail/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
+}
+
+export const useGmailConnected = () => {
+  return useMutation(gmailConnected)
+}
+
+const gmailConnect = async (data) => {
+  return await axios.post("/gmail/connect", data)
+}
+
+export const useGmailConnect = () => {
+  return useMutation(gmailConnect, {
+    onSuccess: (data) => {
+      window.location.replace(data.data.authorization_url)
+    }
+  })
+}
+
+const gmailAccess = async (data) => {
+  return await axios.post("/gmail/get_access_token", data)
+}
+
+export const useGmailAccess = () => {
+  return useMutation(gmailAccess)
+}
+
+
+// TWITTER :
+
+
+const twitterConnected = async () => {
+  return await axios.post("/twitter/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
+}
+
+export const useTwitterConnected = () => {
+  return useMutation(twitterConnected)
+}
+
+const twitterConnect = async (data) => {
+  return await axios.post("/twitter/connect", data)
+}
+
+export const useTwitterConnect = () => {
+  return useMutation(twitterConnect, {
+    onSuccess: (data) => {
+      window.location.replace(data.data.authorization_url)
+    }
+  })
+}
+
+const twitterAccess = async (data) => {
+  return await axios.post("/twitter/get_access_token", data)
+}
+
+export const useTwitterAccess = () => {
+  return useMutation(twitterAccess)
+}
+
+
+// GITHUB :
+
 
 const githubConnected = async () => {
   return await axios.post("/github/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
