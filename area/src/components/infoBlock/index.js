@@ -32,11 +32,7 @@ const TextSection = (props) => {
 }
 
 const InfoBlock = (props) => {
-  const [name, setName] = useState('');
-  const [desc, setDesc] = useState('');
-  const [infoPrint, setInfoPrint] = useState([]);
   const { sharedData } = useContext(MyContext);
-
   const [fields, setFields] = useState([])
 
   function getFields() {
