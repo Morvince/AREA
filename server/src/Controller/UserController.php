@@ -1,6 +1,8 @@
 <?php
     namespace App\Controller;
     
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
     use App\Entity\User;
     use App\Repository\UserRepository;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -63,13 +65,12 @@
                 }
                 $password = hash("haval256,5", $password);
                 $password = hash("md5", $password);
-                $token = $this->generateToken();
                 // Put datas in database
                 $user = new User();
                 $user->setUsername($username);
                 $user->setEmail($email);
                 $user->setPassword($password);
-                $user->setToken($token);
+                $user->setToken($this->generateToken());
                 $user->setValidate(false);
                 $user_repository->add($user, true);
                 return new JsonResponse(array("token" => $user->getToken()), 200);
@@ -99,7 +100,39 @@
          */
         public function sendConfirmationMail(Request $request, UserRepository $user_repository)
         {
-            // utiliser PHPMAILER
+            header('Access-Control-Allow-Origin: *');
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->token)) {
+                return new JsonResponse(array("message" => "User: Missing field"), 400);
+            }
+            $token = $request_content->token;
+            if (empty($user_repository->findByToken($token))) {
+                return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
+            }
+            $user = $user_repository->findByToken($token)[0];
+            $mail = new PHPMailer(true);
+            try {
+                // Server SMTP configuration
+                $mail->isSMTP();
+                $mail->Host = "smtp.office365.com";
+                $mail->SMTPAuth = true;
+                $mail->Username = "area.mspr@outlook.fr";
+                $mail->Password = "mdp";
+                $mail->SMTPSecure = "tls";
+                $mail->Port = 587;
+                // Set mail informations
+                $mail->setFrom("area.mspr@outlook.fr");
+                $mail->addAddress("noa.leclaire@epitech.eu");
+                $mail->Subject = "Confirmation email test";
+                $mail->Body = "Ceci est un putain de test noa";
+                $mail->Timeout = 30;
+                // Send mail
+                $mail->send();
+            } catch (Exception $e) {
+                return new JsonResponse(array("message" => "KO"), 400);
+            }
+            return new JsonResponse(array("message" => "OK"), 200);
         }
 
         /**
@@ -108,7 +141,20 @@
         public function validate(Request $request, UserRepository $user_repository)
         {
             header('Access-Control-Allow-Origin: *');
-            ;
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->token)) {
+                return new JsonResponse(array("message" => "User: Missing field"), 400);
+            }
+            $token = $request_content->token;
+            if (empty($user_repository->findByToken($token))) {
+                return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
+            }
+            $user = $user_repository->findByToken($token)[0];
+            $user->setValidate(true);
+            $user->setToken($this->generateToken());
+            $user_repository->add($user, true);
+            return new JsonResponse(array("token" => $user->getToken()), 200);
         }
         /**
          * @Route("/validated", name="user_validated")
