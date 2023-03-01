@@ -4,7 +4,7 @@ import { Text, View, TouchableOpacity } from 'react-native';
 import { useForm } from "react-hook-form";
 import { useLogin } from "../api/apiSignPage";
 import InputFieldsSignIn from "../components/SignIn/inputFields/index";
-import { black, darkPurple, lightPurple, white } from "../color";
+import { darkPurple, lightPurple, white } from "../color";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SignIn({ navigation }) {
