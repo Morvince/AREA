@@ -4,11 +4,17 @@ import Select from 'react-select'
 import MyContext from '../Context'
 
 
-
 const DropdownSection = (props) => {
-  const options = [
-    { value: 'générazdadazdazdadl', label: 'géazdazdazdazdanéral' },
-  ]
+  const { playlist } = useContext(MyContext);
+  const { repository } = useContext(MyContext);
+  console.log(repository.items)
+
+  const options = useState([])
+
+  for (let i = 0; i < repository.items.length; i++) {
+    options.push({ value: repository.items[i].id, label: repository.items[i].name })
+  }
+
 
   return (
     <InfoWrapper>

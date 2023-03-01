@@ -30,7 +30,9 @@ const PlayBox = (props) => {
   const [inputValue, setInputValue] = useState('');
 
   //request for infoblock
-  const [playlist, setPlaylist, repository, setRepository, thread, setThread] = useState([]);
+  const [playlist, setPlaylist] = useState([]);
+  const [repository, setRepository] = useState([]);
+  // const [threadType, setThreadType] = useState([]); //TODO AFTER DISCORD
   const userPlaylist = useGetUserPlaylist();
   const userRepos = useGetUserRepos();
   // const threadType = useGetThreadType(); //TODO AFTER DISCORD
@@ -43,12 +45,19 @@ const PlayBox = (props) => {
     // threadType.mutate() //TODO AFTER DISCORD
   }, []);
 
-  if (userPlaylist.isSuccess)
-    console.log("spotify")
-  if (userRepos.isSuccess)
-    console.log("github")
-  // if (threadType.isSuccess) //TODO AFTER DISCORD
-    // console.log(threadType.data.data) //TODO AFTER DISCORD
+  useEffect(() => {
+    if (userPlaylist.isSuccess) {
+      setPlaylist(userPlaylist.data.data)
+    }
+    if (userRepos.isSuccess) {
+      setRepository(userRepos.data.data)
+    }
+    // console.log(playlist)
+    // console.log(repository)
+    // if (threadType.isSuccess) //TODO AFTER DISCORD
+  }, [userPlaylist, userRepos]);
+
+  // console.log(threadType.data.data) //TODO AFTER DISCORD
 
   const handleCheckButtonClick = () => {
     const name = contentEditableRef.current.textContent.trim();
@@ -98,7 +107,7 @@ const PlayBox = (props) => {
   return (
     <RectangleArea>
       <BinLeft />
-      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, open, setOpen }}>
+      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, open, setOpen, playlist, repository }}>
         <Icon icon="mdi:delete-circle-outline" color="#373b48" width="40" style={{ position: 'absolute', top: '20%', left: '80.3%' }} />
         <Servicesbar tmpServices={tmpServices} />
         <MovableBox>
