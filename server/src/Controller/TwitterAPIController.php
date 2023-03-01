@@ -20,6 +20,25 @@ class TwitterAPIController extends AbstractController
     private const API_URL = "https://api.twitter.com/2/";
     private RequestAPI $request_api;
 
+
+    /**
+     * @Route("/twitter/test", name="twitter_api_test")
+     */
+    public function test(Request $request, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository)
+    {
+        // $parameters = array("automation_action_id" => 2);
+        $url = "http://localhost/twitter/connect";
+        if (empty($this->request_api)) {
+            $this->request_api = new RequestAPI();
+        }
+        $response = $this->request_api->sendRoute($url, "");
+        $response = json_decode($response);
+        if (isset($response->code)) {
+            return new JsonResponse(array("message" => $response->message), $response->code);
+        }
+        return new JsonResponse(array("response" => $response), 200);
+    }
+
     /**
      * @Route("/twitter/connect", name="twitter_api_connect")
      */
@@ -44,7 +63,7 @@ class TwitterAPIController extends AbstractController
         $client_id = $identifiers[0];
         // Compose the authorization scope
         $scope = array(
-            "tweet.read", "users.read", "offline.access"
+            "read:user"
         );
         $scope = implode(" ", $scope);
         // Set the state when the request is good
@@ -56,7 +75,7 @@ class TwitterAPIController extends AbstractController
         $code_challenge = base64_encode(hash('sha256', $code_verifier, true));
         $code_challenge = strtr(rtrim($code_challenge, '='), '+/', '-_');
         // Compose the authorization url
-        $authorization_url = "https://twitter.com/i/oauth2/authorize?client_id=$client_id&redirect_uri=$redirect_uri&response_type=code&scope=$scope&state=$state&code_challenge=$code_challenge&code_challenge_method=SHA-256";
+        $authorization_url = "https://twitter.com/i/oauth2/authorize?client_id=$client_id&redirect_uri=$redirect_uri&response_type=code&scope=like.write%20tweet.write%20tweet.read%20users.read%20follows.read%20follows.write%20offline.access&state=$state&code_challenge=$code_challenge&code_challenge_method=plain";
         return new JsonResponse(array("authorization_url" => $authorization_url), 200);
     }
     /**
@@ -91,7 +110,7 @@ class TwitterAPIController extends AbstractController
         }
         $service = $service[0];
         $identifiers = explode(";", $service->getIdentifiers());
-        if (count($identifiers) != 3) {
+        if (count($identifiers) != 2) {
             return new JsonResponse(array("message" => "Twitter: Identifiers error"), 422);
         }
         $client_id = $identifiers[0];
@@ -108,6 +127,9 @@ class TwitterAPIController extends AbstractController
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         $result = curl_exec($ch);
         curl_close($ch);
+
+        return new JsonResponse(json_decode($result), 400);
+
         if (!isset(json_decode($result)->access_token)) {
             return new JsonResponse(array("message" => "Twitter: Bad code to get access token"), 400);
         }
@@ -120,7 +142,6 @@ class TwitterAPIController extends AbstractController
             $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
         }
         $user_service->setAccessToken(json_decode($result)->access_token);
-        $user_service->setRefreshToken(json_decode($result)->refresh_token);
         $user_service_repository->add($user_service, true);
         return new JsonResponse(array("message" => "OK", 200));
     }
@@ -128,7 +149,7 @@ class TwitterAPIController extends AbstractController
      * @Route("/twitter/refresh_access_token", name="twitter_api_refresh_access_token")
      */
     public function refreshAccessToken(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
-    { // a changer pour lutiliser que via le server
+    {
         // Get needed values
         $request_content = json_decode($request->getContent());
         if (empty($request_content->user_id)) {
@@ -141,35 +162,16 @@ class TwitterAPIController extends AbstractController
         }
         $service = $service[0];
         $identifiers = explode(";", $service->getIdentifiers());
-        if (count($identifiers) != 3) {
+        if (count($identifiers) != 2) {
             return new JsonResponse(array("message" => "Twitter: Identifiers error"), 422);
         }
         if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
             return new JsonResponse(array("message" => "Twitter: Refresh token not found"), 404);
         }
-        $client_id = $identifiers[0];
-        $client_secret = $identifiers[1];
         $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
-        $refresh_token = $user_service->getRefreshToken();
-        // Request for the access token
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://api.twitter.com/oauth2/token");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=refresh_token&refresh_token=$refresh_token&client_id=$client_id&client_secret=$client_secret");
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_USERPWD, "$client_id:$client_secret");
-        $headers = array();
-        $headers[] = "Content-Type: application/x-www-form-urlencoded";
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        $result = curl_exec($ch);
-        curl_close($ch);
-        if (!isset(json_decode($result)->access_token)) {
+        if (!empty($user_service)) {
             $user_service_repository->remove($user_service);
-            return new JsonResponse(array("message" => "Twitter: Expired refresh token"), 400);
         }
-        // Edit datas in database
-        $user_service->setAccessToken(json_decode($result)->access_token);
-        $user_service_repository->add($user_service, true);
         return new JsonResponse(array("message" => "OK"), 200);
     }
 

@@ -144,6 +144,9 @@ twitter_api_connected:
   path: /twitter/connected
   controller: App\Controller\TwitterAPIController::isConnected
   methods: [POST]
+twitter_api_test:
+  path: /twitter/test
+  controller: App\Controller\TwitterAPIController::test
 
 # GMAIL
 gmail_api_connect:
