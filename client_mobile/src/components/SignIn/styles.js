@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { lightPurple, white } from "../../color";
+import { black, lightPurple, white } from "../../color";
 
 export default styles = StyleSheet.create({
   container: {
@@ -26,5 +26,12 @@ export default styles = StyleSheet.create({
     borderRadius: 72,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  ErrorMessage: {
+    fontSize: 18,
+    fontStyle: 'italic',
+    fontWeight: 'bold',
+    color: black,
+    bottom: 70
   }
 });

@@ -26,6 +26,13 @@ export default styles = StyleSheet.create({
     borderColor: lightPurple,
     borderRadius: 72,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    top: 10
+  },
+  ErrorMessage: {
+    fontSize: 18,
+    fontStyle: 'italic',
+    fontWeight: 'bold',
+    color: white
   }
 });
