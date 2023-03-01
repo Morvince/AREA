@@ -9,9 +9,12 @@ import { useGetAction } from '../../api/apiServicesPage';
 import { RectangleArea, MovableBox, ValidateButton, BinLeft, BinRight, BinWhite, SaveNamePannel, CheckButton, WrittingZone } from './playBoxElements'
 import { useEditAutomation, useAddAutomation } from '../../api/apiServicesPage';
 
+//import request for infoBlock
+import { useGetUserPlaylist } from '../../api/apiSpotify';
+import { useGetUserRepos } from '../../api/apiGithub';
+
 const PlayBox = (props) => {
-  const [sharedData, setSharedData] = useState([]);
-  const [linkedList, setLinkedList] = useState([]);
+  const [sharedData, setSharedData, linkedList, setLinkedList] = useState([]);
   const [open, setOpen] = useState(null);
   const [ID, setID] = useState(0);
   const [isLinkedListEmpty, setIsLinkedListEmpty] = useState(true);
@@ -24,10 +27,24 @@ const PlayBox = (props) => {
   const [showSaveNamePanel, setShowSaveNamePanel] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
+
+  //request for infoblock
+  const [playlist, setPlaylist, repository, setRepository] = useState([]);
+  // const userPlaylist = useGetUserPlaylist();
+  const userRepos = useGetUserRepos();
+
   //request to get all services
   useEffect(() => {
     tmpServices.mutate()
+    // userPlaylist.mutate()
+    userRepos.mutate()
   }, []);
+  // if (userPlaylist.isSuccess) {
+    // console.log(userPlaylist.data.data)
+  // }
+  if (userRepos.isSuccess) {
+    console.log(userRepos.data.data)
+  }
 
   const handleCheckButtonClick = () => {
     const name = contentEditableRef.current.textContent.trim();
@@ -87,7 +104,7 @@ const PlayBox = (props) => {
             )
           })}
         </MovableBox>
-        <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={() => {setOpen(null); setShowSaveNamePanel(true); } } disabled={isLinkedListEmpty === true}>
+        <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={() => { setOpen(null); setShowSaveNamePanel(true); }} disabled={isLinkedListEmpty === true}>
           <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
         </ValidateButton>
         {tmpServices.isSuccess &&

@@ -3,8 +3,7 @@ import { InfoBlockContainer, InfoWrapper, InfoTitle, InfoAction, InputBox, Littl
 import Select from 'react-select'
 import MyContext from '../Context'
 
-//import request
-import { useGetUserPlaylist } from '../../api/apiSpotify';
+
 
 const DropdownSection = (props) => {
   const options = [
@@ -38,10 +37,6 @@ const InfoBlock = (props) => {
   const [infoPrint, setInfoPrint] = useState([]);
   const { sharedData } = useContext(MyContext);
 
-  //request
-  // const [playlist, setPlaylist] = useState([]);
-  // const userPlaylist = useGetUserPlaylist();
-
   const [fields, setFields] = useState([])
 
   function getFields() {
@@ -61,10 +56,6 @@ const InfoBlock = (props) => {
   }
 
   useEffect(() => {
-    // userPlaylist.mutate()
-    // if (userPlaylist.isSuccess) {
-    // setPlaylist(userPlaylist.data.data);
-    // }
     getFields()
   }, [props.IsVisible])
 
