@@ -47,6 +47,9 @@
                 // Get needed values
                 $username = $request_content->username;
                 $email = $request_content->email;
+                if ($this->checkEmail($email) === false) {
+                    return new JsonResponse(array("message" => "User: Invalid email"), 400);
+                }
                 $password = $request_content->password;
                 $users = $user_repository->findAll();
                 // Check values in database
@@ -60,17 +63,70 @@
                 }
                 $password = hash("haval256,5", $password);
                 $password = hash("md5", $password);
-                $token = hash("haval256,5", time());
+                $token = $this->generateToken();
                 // Put datas in database
                 $user = new User();
                 $user->setUsername($username);
                 $user->setEmail($email);
                 $user->setPassword($password);
                 $user->setToken($token);
+                $user->setValidate(false);
                 $user_repository->add($user, true);
                 return new JsonResponse(array("token" => $user->getToken()), 200);
             }
             return new JsonResponse(array("message" => "User: Missing field"), 400);
+        }
+        private function generateToken()
+        {
+            return hash("haval256,5", time());
+        }
+        private function checkEmail($email)
+        {
+            // Check email pattern
+            if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+                return false;
+            }
+            // Check email domain
+            list($user, $domain) = explode("@", $email);
+            if (!checkdnsrr($domain, "MX")) {
+                return false;
+            }
+            return true;
+        }
+
+        /**
+         * @Route("/send_confirmation", name="user_send_confirmation")
+         */
+        public function sendConfirmationMail(Request $request, UserRepository $user_repository)
+        {
+            ;
+        }
+
+        /**
+         * @Route("/validate", name="user_validate")
+         */
+        public function validate(Request $request, UserRepository $user_repository)
+        {
+            header('Access-Control-Allow-Origin: *');
+            ;
+        }
+        /**
+         * @Route("/validated", name="user_validated")
+         */
+        public function isUserValidated(Request $request, UserRepository $user_repository)
+        {
+            header('Access-Control-Allow-Origin: *');
+            // Get needed values
+            $request_content = json_decode($request->getContent());
+            if (empty($request_content->token)) {
+                return new JsonResponse(array("message" => "User: Missing field"), 400);
+            }
+            $token = $request_content->token;
+            if (empty($user_repository->findByToken($token))) {
+                return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
+            }
+            $user = $user_repository->findByToken($token)[0];
+            return new JsonResponse(array("validated" => $user->getValidate()), 200);
         }
     }
 ?>

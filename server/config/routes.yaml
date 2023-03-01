@@ -7,6 +7,14 @@ user_login:
   path: /login
   controller: App\Controller\UserController::login
   methods: [POST]
+user_validated:
+  path: /validated
+  controller: App\Controller\UserController::isUserValidated
+  methods: [POST]
+user_validate:
+  path: /validate
+  controller: App\Controller\UserController::validate
+  methods: [GET]
 
 # SPOTIFY
 spotify_api_connect:
