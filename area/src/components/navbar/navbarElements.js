@@ -52,6 +52,7 @@ export const ButtonAreas = styled(LinkR)`
     top: 3%;
     left: 45%;
     text-decoration: none;
+    user-select: none;
     &:hover {
         color: #4361ee;
     }
@@ -67,6 +68,7 @@ export const ButtonDocumentation = styled(LinkR)`
     top: 3%;
     left: 55%;
     text-decoration: none;
+    user-select: none;
     &:hover {
         color: #4361ee;
     }

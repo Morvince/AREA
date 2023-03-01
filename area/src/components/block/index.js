@@ -10,8 +10,6 @@ const Block = (props) => {
   const { sharedData, setSharedData } = useContext(MyContext);
   const { linkedList, setLinkedList } = useContext(MyContext);
   const { open, setOpen } = useContext(MyContext);
-  console.log("sharedata : ");
-  console.log(sharedData);
 
   const handleOpen = (e, data) => {
     if (open === null) {

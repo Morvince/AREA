@@ -50,13 +50,13 @@ const PlayBox = (props) => {
     for (let i = 0; i !== dataTab.automation_actions.length; i++) {
       const newAction = {
         top: 150 + (170 * i),
-        left: 500,
+        left: 600,
         color: getColorPuzzleBlock(dataTab.automation_actions[i].service),
         service: dataTab.automation_actions[i].service,
         index: i,
         action: dataTab.automation_actions[i].type === "action" ? true : false,
         name: dataTab.automation_actions[i].name,
-        dbID: 0,
+        dbID: dataTab.automation_actions[i].id,
       };
       sharedData.push(newAction);
     };
@@ -64,6 +64,7 @@ const PlayBox = (props) => {
     incrementIsLoad();
     console.log("sharedata : ");
     console.log(sharedData);
+    console.log("passed");
   }
 
   useEffect(() => {
@@ -94,7 +95,7 @@ const PlayBox = (props) => {
   }, [sharedData, linkedList]);
 
   function sendAutomation(name) {
-    console.log(name);
+    console.log("click on button");
     var actions = [];
     var i = { id: 0, number: 0, informations: {} };
 
@@ -111,10 +112,10 @@ const PlayBox = (props) => {
     } else {
       editAutomation.mutate({ name: name, id: automationId, actions: actions });
     }
+    resetIsLoad();
     setSharedData([]);
     setLinkedList([]);
     setID(0);
-    resetIsLoad();
   }
 
   return (
