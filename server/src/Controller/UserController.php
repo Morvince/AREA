@@ -5,6 +5,7 @@
     use PHPMailer\PHPMailer\Exception;
     use App\Entity\User;
     use App\Repository\UserRepository;
+    use App\Repository\ServerRepository;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\HttpFoundation\JsonResponse;
@@ -98,7 +99,7 @@
         /**
          * @Route("/send_confirmation", name="user_send_confirmation")
          */
-        public function sendConfirmationMail(Request $request, UserRepository $user_repository)
+        public function sendConfirmationMail(Request $request, UserRepository $user_repository, ServerRepository $server_repository)
         {
             header('Access-Control-Allow-Origin: *');
             // Get needed values
@@ -108,24 +109,28 @@
             }
             $token = $request_content->token;
             if (empty($user_repository->findByToken($token))) {
-                return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
+                return new JsonResponse(array("message" => "User: Bad auth token"), 400);
             }
             $user = $user_repository->findByToken($token)[0];
+            if (empty($server_repository->findAll())) {
+                return new JsonResponse(array("message" => "User: No server informations"), 400);
+            }
+            $server = $server_repository->findAll()[0];
             $mail = new PHPMailer(true);
             try {
                 // Server SMTP configuration
                 $mail->isSMTP();
-                $mail->Host = "smtp.office365.com";
+                $mail->Host = $server->getHost();
                 $mail->SMTPAuth = true;
-                $mail->Username = "area.mspr@outlook.fr";
-                $mail->Password = "mdp";
-                $mail->SMTPSecure = "tls";
-                $mail->Port = 587;
+                $mail->Username = $server->getEmail();
+                $mail->Password = base64_decode($server->getPassword());
+                $mail->SMTPSecure = $server->getSMTPSecure();
+                $mail->Port = $server->getPort();
                 // Set mail informations
-                $mail->setFrom("area.mspr@outlook.fr");
-                $mail->addAddress("noa.leclaire@epitech.eu");
-                $mail->Subject = "Confirmation email test";
-                $mail->Body = "Ceci est un putain de test noa";
+                $mail->setFrom($server->getEmail());
+                $mail->addAddress($user->getEmail(), $user->getUsername());
+                $mail->Subject = "Hapilink - Register confirmation";
+                $mail->Body = "";
                 $mail->Timeout = 30;
                 // Send mail
                 $mail->send();
