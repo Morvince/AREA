@@ -99,7 +99,7 @@
          */
         public function sendConfirmationMail(Request $request, UserRepository $user_repository)
         {
-            ;
+            // utiliser PHPMAILER
         }
 
         /**

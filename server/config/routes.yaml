@@ -14,7 +14,11 @@ user_validated:
 user_validate:
   path: /validate
   controller: App\Controller\UserController::validate
-  methods: [GET]
+  # methods: [GET]
+user_send_confirmation:
+  path: /send_confirmation
+  controller: App\Controller\UserController::sendConfirmationMail
+  # methods: [POST]
 
 # SPOTIFY
 spotify_api_connect:
