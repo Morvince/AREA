@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { ServicesBarContainer, ServicesBarWrapper, IconBox, ButtonConnect, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
 import ButtonBox from '../buttonBlock';
-import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useTwitchConnect, useTwitchConnected, useGmailConnect, useGmailConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
+import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected, useGmailConnect, useGmailConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
 
 const Servicesbar = (props) => {
   const [isOpen] = useState(true);
@@ -102,7 +102,7 @@ const Servicesbar = (props) => {
     { nom: 'discord',   nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'instagram', nombre: 0, info: [], action: [], name: [], dbID: [] },
-    { nom: 'google',    nombre: 0, info: [], action: [], name: [], dbID: [] },
+    { nom: 'gmail',    nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'github',    nombre: 0, info: [], action: [], name: [], dbID: [] },
   ];
@@ -221,7 +221,7 @@ const Servicesbar = (props) => {
         return "logos:spotify-icon";
       case "instagram":
         return "skill-icons:instagram";
-      case "google":
+      case "gmail":
         return "logos:google-gmail";
       case "twitter":
         return "skill-icons:twitter";
@@ -257,8 +257,8 @@ const Servicesbar = (props) => {
           </IconBox>
           <IconBox onClick={() => handleClick("gmail")}>
             {isGmailConnected.isSuccess && isGmailConnected.data.data.connected ?
-              <Icon icon="logos:google-gmail" width="75" height="75" > </Icon> :
-              <Icon icon="logos:google-gmail" width="75" height="75" opacity="0.5" > </Icon> 
+              <Icon icon={getIcon("gmail")} width="75" height="75" > </Icon> :
+              <Icon icon={getIcon("gmail")} width="75" height="75" opacity="0.5" > </Icon> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("twitter")}>

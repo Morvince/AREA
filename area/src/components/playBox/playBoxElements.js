@@ -18,6 +18,7 @@ export const MovableBox = styled.div`
   height: 100%;
   width: 120%;
   left: 150px;
+  border-radius: 25px;
   box-shadow: 5px 5px 1px 0 #373b48;
 `;
 

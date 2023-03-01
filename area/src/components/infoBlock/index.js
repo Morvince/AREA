@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { InfoBlockContainer, InfoWrapper, InfoTitle, InfoAction, InputBox, LittleBorder } from './infoBlockElements'
 import Select from 'react-select'
-import Draggable from 'react-draggable'
 import MyContext from '../Context'
 
 //import request
@@ -96,11 +95,9 @@ const InfoBlock = (props) => {
   const fieldInfo = renderFields()
   return (
     props.IsVisible !== null ? (
-      <Draggable>
-        <InfoBlockContainer top={(Math.trunc(props.top) - 130) + "px"} left={(Math.trunc(props.left) + 50) + "px"} background={props.background}>
-          {fieldInfo}
-        </InfoBlockContainer>
-      </Draggable>
+      <InfoBlockContainer top={(Math.trunc(props.top) - 130) + "px"} left={(Math.trunc(props.left) + 50) + "px"} background={props.background}>
+        {fieldInfo}
+      </InfoBlockContainer>
     ) : (<></>)
   )
 }

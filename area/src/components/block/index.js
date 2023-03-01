@@ -23,6 +23,7 @@ const Block = (props) => {
 
   const handleDrag = (e) => {
     var rect = e.target.getBoundingClientRect();
+    setOpen(null)
 
     for (var i = 0; i < sharedData.length; i++) {
       if (props.id !== sharedData[i].index) {
@@ -110,8 +111,8 @@ const Block = (props) => {
         return "mdi:spotify";
       case "instagram":
         return "uil:instagram-alt";
-      case "google":
-        return "uil:google";
+      case "gmail":
+        return "logos:google-gmail";
       case "twitter":
         return "mdi:twitter";
       case "github":

@@ -19,7 +19,7 @@ const ButtonBox = (props) => {
         return "mdi:spotify";
       case "instagram":
         return "uil:instagram-alt" ;
-      case "google":
+      case "gmail":
         return "logos:google-gmail";
       case "twitter":
         return "mdi:twitter" ;
@@ -38,7 +38,7 @@ const ButtonBox = (props) => {
         return "#1db954";
       case "instagram":
         return "#e1306c";
-      case "google":
+      case "gmail":
         return "#EA4335";
       case "twitter":
         return "#1da1f2";
