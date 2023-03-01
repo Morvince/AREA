@@ -11,6 +11,7 @@ const Home = () => {
   const location = useLocation()
 
   const automationId = location.state ? location.state.automationId : undefined;
+  const automationActions = location.state ? location.state.automationActions: undefined;
   const [navbarKey, setNavbarKey] = useState(0)
 
   const toggle = () => {
@@ -25,7 +26,7 @@ const Home = () => {
   return (
     <div>
       <Sidebar isOpen={isOpen} toggle={toggle} />
-      <PlayBox automationId={automationId} onValidate={onValidate} />
+      <PlayBox automationId={automationId} onValidate={onValidate} automationActions={automationActions}/>
       <Navebar toggle={toggle} changeY={720} defaultState={false} key={navbarKey} />
     </div>
   )

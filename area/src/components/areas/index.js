@@ -16,8 +16,8 @@ const EditAreas = () => {
     getInfosFromDb.mutate(null, { onSuccess: (data) => { setInfosFromDb(data) } });
   }, [infosFromDb]);
 
-  const handleEdit = (automation_id) => {
-    navigate('/home', {state: {automationId: automation_id}});
+  const handleEdit = (automation_id, automation_tab) => {
+    navigate('/home', {state: {automationId: automation_id, automationActions: automation_tab}});
   };
 
   function deleteAreas(automation_id) {
@@ -79,7 +79,7 @@ const EditAreas = () => {
                       <DeleteButtonNo onClick={() => setShowDeleteRappel(false)}> NO </DeleteButtonNo>
                     </DeleteRappel>
                   )}
-                  <ButtonEdit onClick={() => handleEdit(automationsWithActions[index].id)}> Edit </ButtonEdit>
+                  <ButtonEdit onClick={() => handleEdit(automationsWithActions[index].id, automationsWithActions[index])}> Edit </ButtonEdit>
                 </BoxContent>
               }
             </AreaZone>

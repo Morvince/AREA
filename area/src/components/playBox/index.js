@@ -12,12 +12,15 @@ import { useEditAutomation, useAddAutomation } from '../../api/apiServicesPage';
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = useState([]);
   const [linkedList, setLinkedList] = useState([]);
+  const dataTab = useState(props.automationActions);
+  const { onValidate } = props;
+  const automationId = props.automationId;
   const [open, setOpen] = useState(null);
   const [ID, setID] = useState(0);
   const [isLinkedListEmpty, setIsLinkedListEmpty] = useState(true);
-  const { onValidate } = props;
-  const automationId = props.automationId;
-  const isPropsFilled = props.automationId === undefined ? false : true;
+  const isComingFromEdit = automationId === undefined ? false : true;
+  console.log(dataTab);
+
   const editAutomation = useEditAutomation();
   const tmpServices = useGetAction();
   const addAutomation = useAddAutomation();
@@ -90,7 +93,7 @@ const PlayBox = (props) => {
           })}
         </MovableBox>
         <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={() => {
-            if (isPropsFilled === false) {
+            if (isComingFromEdit === false) {
               setOpen(null);
               setShowSaveNamePanel(true);
             } else {
