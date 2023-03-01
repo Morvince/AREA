@@ -12,9 +12,11 @@ import { useEditAutomation, useAddAutomation } from '../../api/apiServicesPage';
 //import request for infoBlock
 import { useGetUserPlaylist } from '../../api/apiSpotify';
 import { useGetUserRepos } from '../../api/apiGithub';
+// import { useGetThreadType } from '../../api/apiDiscord'; //TODO AFTER DISCORD
 
 const PlayBox = (props) => {
-  const [sharedData, setSharedData, linkedList, setLinkedList] = useState([]);
+  const [sharedData, setSharedData] = useState([]);
+  const [linkedList, setLinkedList] = useState([]);
   const [open, setOpen] = useState(null);
   const [ID, setID] = useState(0);
   const [isLinkedListEmpty, setIsLinkedListEmpty] = useState(true);
@@ -27,24 +29,26 @@ const PlayBox = (props) => {
   const [showSaveNamePanel, setShowSaveNamePanel] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
-
   //request for infoblock
-  const [playlist, setPlaylist, repository, setRepository] = useState([]);
-  // const userPlaylist = useGetUserPlaylist();
+  const [playlist, setPlaylist, repository, setRepository, thread, setThread] = useState([]);
+  const userPlaylist = useGetUserPlaylist();
   const userRepos = useGetUserRepos();
+  // const threadType = useGetThreadType(); //TODO AFTER DISCORD
 
   //request to get all services
   useEffect(() => {
     tmpServices.mutate()
-    // userPlaylist.mutate()
+    userPlaylist.mutate()
     userRepos.mutate()
+    // threadType.mutate() //TODO AFTER DISCORD
   }, []);
-  // if (userPlaylist.isSuccess) {
-    // console.log(userPlaylist.data.data)
-  // }
-  if (userRepos.isSuccess) {
-    console.log(userRepos.data.data)
-  }
+
+  if (userPlaylist.isSuccess)
+    console.log("spotify")
+  if (userRepos.isSuccess)
+    console.log("github")
+  // if (threadType.isSuccess) //TODO AFTER DISCORD
+    // console.log(threadType.data.data) //TODO AFTER DISCORD
 
   const handleCheckButtonClick = () => {
     const name = contentEditableRef.current.textContent.trim();
