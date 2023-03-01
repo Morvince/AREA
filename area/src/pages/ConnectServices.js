@@ -1,18 +1,15 @@
 import React, { useEffect } from 'react'
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { useSpotifyAccess, useDiscordAccess, useInstagramAccess, useGoogleAccess, useTwitterAccess, useGithubAccess} from '../api/apiSettingsPage'
-import { useAddAutomation } from '../api/apiServicesPage';
+import { useSpotifyAccess, useDiscordAccess, useInstagramAccess, useGmailAccess, useTwitterAccess, useGithubAccess} from '../api/apiSettingsPage'
 
 const ConnectServices = () => {
   const [params] = useSearchParams()
   const handleSpotifyAccess = useSpotifyAccess()
   const handleDiscordAccess = useDiscordAccess()
   const handleInstagramAccess = useInstagramAccess()
-  const handleGoogleAccess = useGoogleAccess()
+  const handleGmailAccess = useGmailAccess()
   const handleTwitterAccess = useTwitterAccess()
   const handleGithubAccess = useGithubAccess()
-
-  const tmpAutomation = useAddAutomation();
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -23,7 +20,7 @@ const ConnectServices = () => {
           token: sessionStorage.getItem("token"),
           code: params.get("code"),
           redirect_uri: "http://localhost:8081/connectServices"
-        }), {onSettled: () => { tmpAutomation.mutate(null, {onSuccess: (data) => { navigate("/home", {replace: true, state: {automationId: data.data}}) }}) }});
+        }), {onSettled: () => {navigate("/home", {replace: true})}});
         break;
       case "discord":
         handleDiscordAccess.mutate(JSON.stringify({
@@ -31,7 +28,7 @@ const ConnectServices = () => {
         token: sessionStorage.getItem("token"),
         code: params.get("code"),
         redirect_uri: "http://localhost:8081/connectServices"
-        }), {onSettled: () => { tmpAutomation.mutate(null, {onSuccess: (data) => { navigate("/home", {replace: true, state: {automationId: data.data}}) }}) }});
+        }), {onSettled: () => {navigate("/home", {replace: true})}});
         break;
       case "instagram":
         handleInstagramAccess.mutate(JSON.stringify({
@@ -39,15 +36,15 @@ const ConnectServices = () => {
         token: sessionStorage.getItem("token"),
         code: params.get("code"),
         redirect_uri: "http://localhost:8081/connectServices"
-        }), {onSettled: () => { tmpAutomation.mutate(null, {onSuccess: (data) => { navigate("/home", {replace: true, state: {automationId: data.data}}) }}) }});
+        }), {onSettled: () => {navigate("/home", {replace: true})}});
         break;
-      case "google":
-        handleGoogleAccess.mutate(JSON.stringify({
+      case "gmail":
+        handleGmailAccess.mutate(JSON.stringify({
         state: params.get("state"),
         token: sessionStorage.getItem("token"),
         code: params.get("code"),
         redirect_uri: "http://localhost:8081/connectServices"
-        }), {onSettled: () => { tmpAutomation.mutate(null, {onSuccess: (data) => { navigate("/home", {replace: true, state: {automationId: data.data}}) }}) }});
+        }), {onSettled: () => {navigate("/home", {replace: true})}});
         break;
       case "twitter":
         handleTwitterAccess.mutate(JSON.stringify({
@@ -55,7 +52,7 @@ const ConnectServices = () => {
         token: sessionStorage.getItem("token"),
         code: params.get("code"),
         redirect_uri: "http://localhost:8081/connectServices"
-        }), {onSettled: () => { tmpAutomation.mutate(null, {onSuccess: (data) => { navigate("/home", {replace: true, state: {automationId: data.data}}) }}) }});
+        }), {onSettled: () => {navigate("/home", {replace: true})}});
         break;
       case "github":
         handleGithubAccess.mutate(JSON.stringify({
@@ -63,7 +60,7 @@ const ConnectServices = () => {
         token: sessionStorage.getItem("token"),
         code: params.get("code"),
         redirect_uri: "http://localhost:8081/connectServices"
-        }), {onSettled: () => { tmpAutomation.mutate(null, {onSuccess: (data) => { navigate("/home", {replace: true, state: {automationId: data.data}}) }}) }});
+        }), {onSettled: () => {navigate("/home", {replace: true})}});
         break;
     }
   }, [])

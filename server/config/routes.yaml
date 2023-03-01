@@ -145,6 +145,44 @@ twitter_api_connected:
   controller: App\Controller\TwitterAPIController::isConnected
   methods: [POST]
 
+# GMAIL
+gmail_api_connect:
+  path: /gmail/connect
+  controller: App\Controller\GmailAPIController::connect
+  methods: [POST]
+gmail_api_get_access_token:
+  path: /gmail/get_access_token
+  controller: App\Controller\GmailAPIController::getAccessToken
+  methods: [POST]
+gmail_api_refresh_access_token:
+  path: /gmail/refresh_access_token
+  controller: App\Controller\GmailAPIController::refreshAccessToken
+  methods: [POST]
+gmail_api_connected:
+  path: /gmail/connected
+  controller: App\Controller\GmailAPIController::isConnected
+  methods: [POST]
+gmail_api_action_check_mail:
+  path: /gmail/action/check_mail
+  controller: App\Controller\GmailAPIController::hasInboxNewMail
+  methods: [POST]
+gmail_api_action_check_mail_parameters:
+  path: /gmail/action/check_mail/get_parameters
+  controller: App\Controller\GmailAPIController::getHasInboxNewMailParameters
+  methods: [POST]
+gmail_api_action_check_mail_from_somebody:
+  path: /gmail/action/check_mail_from_somebody
+  controller: App\Controller\GmailAPIController::hasInboxNewMailFromSomebody
+  methods: [POST]
+gmail_api_action_check_mail_from_somebody_parameters:
+  path: /gmail/action/check_mail_from_somebody/get_parameters
+  controller: App\Controller\GmailAPIController::getHasInboxNewMailFromSomebodyParameters
+  methods: [POST]
+gmail_api_reaction_send_mail:
+  path: /gmail/reaction/send_mail
+  controller: App\Controller\GmailAPIController::sendMail
+  methods: [POST]
+
 # AUTOMATION
 automation_add:
   path: /automation/add
@@ -157,6 +195,10 @@ automation_get:
 automation_edit:
   path: /automation/edit
   controller: App\Controller\AutomationController::editAutomation
+  methods: [POST]
+automation_delete:
+  path: /automation/delete
+  controller: App\Controller\AutomationController::deleteAutomation
   methods: [POST]
 
 # ACTION
