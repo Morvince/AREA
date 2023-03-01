@@ -7,7 +7,7 @@ import ActionsBar from '../components/Home/actionsBar/index';
 import ActionsList from '../components/Home/actionsList/index';
 import { black } from '../color';
 
-{/* <Button
+{/* <ButtStyleSheet, on
         title="Go to Details"
         onPress={() => navigation.navigate('Details')}
       /> */}
