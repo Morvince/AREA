@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { ServicesBarContainer, ServicesBarWrapper, IconBox, ButtonConnect, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
 import ButtonBox from '../buttonBlock';
-import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected, useGmailConnect, useGmailConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
+import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useTwitchConnect, useTwitchConnected, useGmailConnect, useGmailConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
 
 const Servicesbar = (props) => {
   const [isOpen] = useState(true);
