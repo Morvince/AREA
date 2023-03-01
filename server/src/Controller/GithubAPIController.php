@@ -216,12 +216,12 @@
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0]->getAccessToken();
             // Request for the user playlists
-            $response = json_decode($this->sendRequest($access_token, "user/repos"));
+            $response = $this->sendRequest($access_token, "user/repos");
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
             $formatted = array();
-            foreach ($response->items as $item) {
+            foreach ($response as $item) {
                 array_push($formatted, array("name" => $item->full_name, "id" => $item->id));
             }
             return new JsonResponse(array("items" => $formatted), 200);
@@ -257,12 +257,12 @@
             }
             $repo = $request_content->repo;
             // Request for the branches of the repo
-            $response = json_decode($this->sendRequest($access_token, "repos/$repo/branches"));
+            $response = $this->sendRequest($access_token, "repos/$repo/branches");
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
             $formatted = array();
-            foreach ($response->items as $item) {
+            foreach ($response as $item) {
                 array_push($formatted, array("name" => $item->name, "id" => $item->commit->sha));
             }
             return new JsonResponse(array("items" => $formatted), 200);
@@ -318,7 +318,7 @@
             }
             // Request to get the last commit
             // $response = json_decode($this->sendRequest($access_token, "repos/Morvince/AREA/commits/102-implement-github-service")); pour specifier une branche
-            $response = json_decode($this->sendRequest($access_token, "repos/$informations->repo/commits"));
+            $response = $this->sendRequest($access_token, "repos/$informations->repo/commits");
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
@@ -368,7 +368,7 @@
                 "body" => $informations->body
             );
             // Request to create an issue
-            $response = json_decode($this->sendRequest($access_token, "repos/$informations->repo/issues", "POST", $parameters));
+            $response = $this->sendRequest($access_token, "repos/$informations->repo/issues", "POST", $parameters);
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
@@ -403,7 +403,7 @@
             if (explode("/", $informations->repo) !== 2) {
                 return new JsonResponse(array("message" => "Github: Bad repository URL"), 404);
             }
-            $response = json_decode($this->sendRequest($access_token, "repos/$informations->repo/contents"));
+            $response = $this->sendRequest($access_token, "repos/$informations->repo/contents");
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
@@ -432,7 +432,7 @@
                     "content" => base64_encode($informations->content)
                 );
             }
-            $response = json_decode($this->sendRequest($access_token, "repos/$informations->repo/contents/$path", "PUT", $data));
+            $response = $this->sendRequest($access_token, "repos/$informations->repo/contents/$path", "PUT", $data);
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
