@@ -8,19 +8,18 @@ import InfoBlock from '../infoBlock'
 import { useGetAction } from '../../api/apiServicesPage';
 import { RectangleArea, MovableBox, ValidateButton, BinLeft, BinRight, BinWhite, SaveNamePannel, CheckButton, WrittingZone } from './playBoxElements'
 import { useEditAutomation, useAddAutomation } from '../../api/apiServicesPage';
+import { getIsLoad, incrementIsLoad, isLoadSharedData, resetIsLoad } from '../../utils/AreasCounter';
 
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = useState([]);
   const [linkedList, setLinkedList] = useState([]);
-  const dataTab = useState(props.automationActions);
+  const [dataTab, setDataTab] = useState(props.automationActions);
   const { onValidate } = props;
   const automationId = props.automationId;
   const [open, setOpen] = useState(null);
   const [ID, setID] = useState(0);
   const [isLinkedListEmpty, setIsLinkedListEmpty] = useState(true);
   const isComingFromEdit = automationId === undefined ? false : true;
-  console.log(dataTab);
-
   const editAutomation = useEditAutomation();
   const tmpServices = useGetAction();
   const addAutomation = useAddAutomation();
@@ -28,7 +27,45 @@ const PlayBox = (props) => {
   const [showSaveNamePanel, setShowSaveNamePanel] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
-  //request to get all services
+  function getColorPuzzleBlock(string) {
+    switch (string) {
+      case "discord":
+        return "#5470d6";
+      case "spotify":
+        return "#10a143";
+      case "twitch":
+        return "#c2134f";
+      case "gmail":
+        return "#d92516";
+      case "twitter":
+        return "#1486cc";
+      case "github":
+        return "#686f84";
+      default:
+        return "#454b5e";
+    }
+  }
+
+  if (isComingFromEdit === true) {
+    for (let i = 0; i !== dataTab.automation_actions.length; i++) {
+      const newAction = {
+        top: 150 + (170 * i),
+        left: 500,
+        color: getColorPuzzleBlock(dataTab.automation_actions[i].service),
+        service: dataTab.automation_actions[i].service,
+        index: i,
+        action: dataTab.automation_actions[i].type === "action" ? true : false,
+        name: dataTab.automation_actions[i].name,
+        dbID: 0,
+      };
+      sharedData.push(newAction);
+    };
+
+    incrementIsLoad();
+    console.log("sharedata : ");
+    console.log(sharedData);
+  }
+
   useEffect(() => {
     tmpServices.mutate()
   }, []);
@@ -77,6 +114,7 @@ const PlayBox = (props) => {
     setSharedData([]);
     setLinkedList([]);
     setID(0);
+    resetIsLoad();
   }
 
   return (
@@ -93,12 +131,13 @@ const PlayBox = (props) => {
           })}
         </MovableBox>
         <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={() => {
-            if (isComingFromEdit === false) {
-              setOpen(null);
-              setShowSaveNamePanel(true);
-            } else {
-              sendAutomation(automationId.automation_action[0]?.name);
-            } }} disabled={isLinkedListEmpty === true} >
+          if (isComingFromEdit === false) {
+            setOpen(null);
+            setShowSaveNamePanel(true);
+          } else {
+            sendAutomation(dataTab.name);
+          }
+        }} disabled={isLinkedListEmpty === true} >
           <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
         </ValidateButton>
         {tmpServices.isSuccess &&

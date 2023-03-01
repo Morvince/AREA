@@ -36,6 +36,7 @@ export const ButtonCreate = styled(LinkR)`
     color: black;
     display: inline-block;
     text-decoration: none;
+    user-select: none;
     &:hover {
         color: #4361ee;
     }
