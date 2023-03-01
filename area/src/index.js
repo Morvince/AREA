@@ -11,10 +11,10 @@ const queryClient = new QueryClient()
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  <>
     <QueryClientProvider client={queryClient}>
       <App />
       <ReactQueryDevtools initialIsOpen={false}/> {/* enlever lors de la mise en prod */}
     </QueryClientProvider>
-  </React.StrictMode>
+  </>
 );
