@@ -2,10 +2,11 @@ import styled from "styled-components";
 
 export const RectangleArea = styled.div`
   position: fixed;
-  display:flex;
+  display: flex;
   flex-direction: column;
   width: 120%;
-  height: 100%;
+  top : 80px;
+  height: calc(100% - 80px);
   z-index: 0;
   background-color: #ebebeb;
 `;
@@ -13,7 +14,9 @@ export const RectangleArea = styled.div`
 export const MovableBox = styled.div`
   position: relative;
   display: flex;
-  flex-grow: 2;
+  height: 100%;
+  width: 120%;
+  left: 150px;
   border-radius: 25px;
   box-shadow: 5px 5px 1px 0 #373b48;
 `;

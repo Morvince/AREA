@@ -6,7 +6,7 @@ const Navbar = ({ toggle, changeY, defaultState }) => {
 
   return (
     <>
-      <NavRectBg> </NavRectBg>
+      <NavRectBg></NavRectBg>
       {getAreasCounter() > 0 ? <NewAreas> {getAreasCounter()} </NewAreas> : null}
       <ButtonHapilink to="/" > Hapilink </ButtonHapilink>
       <ButtonCreate to="/home" > Create </ButtonCreate>

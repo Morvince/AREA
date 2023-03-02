@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { ServicesBarContainer, ServicesBarWrapper, IconBox, ButtonConnect, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
 import ButtonBox from '../buttonBlock';
-import { useGetAction } from '../../api/apiServicesPage';
 import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useTwitchConnect, useTwitchConnected, useGmailConnect, useGmailConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
 
-const Servicesbar = () => {
+const Servicesbar = (props) => {
   const [isOpen] = useState(true);
   const [isLeftBoxOpen, setisLeftBoxOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
   const [puzzleBlocktemps, setpuzzleBlocktemps] = useState([]);
-  const tmpServices = useGetAction();
   const handleSpotifyConnect = useSpotifyConnect();
   const isSpotifyConnected = useSpotifyConnected();
   const handleDiscordConnect = useDiscordConnect()
@@ -65,19 +63,6 @@ const Servicesbar = () => {
       }
     }
 
-  useEffect(() => {
-    tmpServices.mutate()
-  }, []);
-
-  const services = [
-    { nom: 'discord',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], nbrBox: [2,0]},
-    { nom: 'twitch', nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'gmail',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], nbrBox: []},
-    { nom: 'github',    nombre: 0, info: [], action: [], name: [], nbrBox: []},
-  ];
-
   function checkIfConnected() {
     switch (selectedService) {
       case "discord":
@@ -113,19 +98,29 @@ const Servicesbar = () => {
     }
   }
 
+  const services = [
+    { nom: 'discord',   nombre: 0, info: [], action: [], name: [], dbID: [] },
+    { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], dbID: [] },
+    { nom: 'instagram', nombre: 0, info: [], action: [], name: [], dbID: [] },
+    { nom: 'gmail',    nombre: 0, info: [], action: [], name: [], dbID: [] },
+    { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], dbID: [] },
+    { nom: 'github',    nombre: 0, info: [], action: [], name: [], dbID: [] },
+  ];
+
   function fillservices(id, i) {
     services[id].nombre += 1;
-    services[id].name.push(tmpServices.data.data.actions[i].name);
-    if (tmpServices.data.data.actions[i].type === "reaction") {
+    services[id].name.push(props.tmpServices.data.data.actions[i].name);
+    if (props.tmpServices.data.data.actions[i].type === "reaction") {
       services[id].action.push(false);
     } else {
       services[id].action.push(true);
     }
+    services[id].dbID.push(props.tmpServices.data.data.actions[i].id);
   }
 
-  if (tmpServices.isSuccess) {
-    for (let i = 0; i < tmpServices.data.data.actions.length; i++) {
-      switch (tmpServices.data.data.actions[i].service) {
+  if (props.tmpServices.isSuccess) {
+    for (let i = 0; i < props.tmpServices.data.data.actions.length; i++) {
+      switch (props.tmpServices.data.data.actions[i].service) {
         case "discord":
           fillservices(0, i);
           break;
@@ -154,15 +149,14 @@ const Servicesbar = () => {
   for (let i = 0; i < services.length; i++) {
     for (let x = 0; x < services[i].nombre; x++) {
       services[i].info.push({
-        top: (x * 140) + 10,
+        top: (x * 165) + 10,
         left: 50,
         color: getColorPuzzleBlock(services[i].nom),
         service: services[i].nom,
         index: t,
         action: services[i].action[x],
         name: services[i].name[x],
-        nbrBox: services[i].nbrBox[x],
-        dbID: tmpServices.data.data.actions[x].id,
+        dbID: services[i].dbID[x],
       });
       t++;
     }
@@ -219,6 +213,25 @@ const Servicesbar = () => {
     }
   }
 
+  function getIcon(string) {
+    switch (string) {
+      case "discord":
+        return "skill-icons:discord";
+      case "spotify":
+        return "logos:spotify-icon";
+      case "twitch":
+        return "mdi:twitch";
+      case "gmail":
+        return "logos:google-gmail";
+      case "twitter":
+        return "skill-icons:twitter";
+      case "github":
+        return "mdi:github";
+      default:
+        return "mdi:github";
+    }
+  }
+
   return (
     <LeftColumn>
       <ServicesBarContainer className={isOpen ? 'open' : 'closed'} color={getColor()}>
@@ -226,38 +239,38 @@ const Servicesbar = () => {
         <ServicesBarWrapper>
           <IconBox onClick={() => handleClick("discord")}>
             {isDiscordConnected.isSuccess && isDiscordConnected.data.data.connected ?
-              <Icon icon="skill-icons:discord" width="75" height="75" > </Icon> :
-              <Icon icon="skill-icons:discord" width="75" height="75" opacity="0.5" > </Icon> 
+              <Icon icon={getIcon("discord")} width="75" height="75" /> :
+              <Icon icon={getIcon("discord")} width="75" height="75" opacity="0.5" />
             }
           </IconBox>
           <IconBox onClick={() => handleClick("spotify")}>
             {isSpotifyConnected.isSuccess && isSpotifyConnected.data.data.connected ?
-              <Icon icon="logos:spotify-icon" width="75" height="75" > </Icon> :
-              <Icon icon="logos:spotify-icon" width="75" height="75" opacity="0.5"> </Icon> 
+              <Icon icon={getIcon("spotify")} width="75" height="75" > </Icon> :
+              <Icon icon={getIcon("spotify")} width="75" height="75" opacity="0.5"/> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("twitch")}>
             {isTwitchConnected.isSuccess && isTwitchConnected.data.data.connected ?
-              <Icon icon="mdi:twitch" width="75" height="75" > </Icon> :
-              <Icon icon="mdi:twitch" width="75" height="75" opacity="0.5" > </Icon> 
+              <Icon icon={getIcon("twitch")} width="75" height="75" > </Icon> :
+              <Icon icon={getIcon("twitch")} width="75" height="75" opacity="0.5" > </Icon> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("gmail")}>
             {isGmailConnected.isSuccess && isGmailConnected.data.data.connected ?
-              <Icon icon="logos:google-gmail" width="75" height="75" > </Icon> :
-              <Icon icon="logos:google-gmail" width="75" height="75" opacity="0.5" > </Icon> 
+              <Icon icon={getIcon("gmail")} width="75" height="75" > </Icon> :
+              <Icon icon={getIcon("gmail")} width="75" height="75" opacity="0.5" > </Icon> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("twitter")}>
             {isTwitterConnected.isSuccess && isTwitterConnected.data.data.connected ?
-              <Icon icon="skill-icons:twitter" width="75" height="75" > </Icon> :
-              <Icon icon="skill-icons:twitter" width="75" height="75" opacity="0.5" > </Icon> 
+              <Icon icon={getIcon("twitter")} width="75" height="75" />:
+              <Icon icon={getIcon("twitter")} width="75" height="75" opacity="0.5" > </Icon>
             }
           </IconBox>
           <IconBox onClick={() => handleClick("github")}>
             {isGithubConnected.isSuccess && isGithubConnected.data.data.connected ?
-              <Icon icon="mdi:github" width="75" height="75" > </Icon> :
-              <Icon icon="mdi:github" width="75" height="75" opacity="0.5"> </Icon> 
+              <Icon icon={getIcon("github")} width="75" height="75" /> :
+              <Icon icon={getIcon("github")} width="75" height="75" opacity="0.5"/>
             }
           </IconBox>
         </ServicesBarWrapper>
@@ -267,12 +280,12 @@ const Servicesbar = () => {
           <ButtonConnect onClick={handleConnectServices}> Connect </ButtonConnect> :
           puzzleBlocktemps.map((info, index) => {
             return (
-              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} dbID={info.dbID}/>
+              <ButtonBox key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} dbID={info.dbID}  icon={getIcon(info.service)}/>
             )
           })
         }
       </RectangleContener>
-    </LeftColumn>
+    </LeftColumn >
   );
 }
 
