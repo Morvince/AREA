@@ -109,8 +109,8 @@ const Block = (props) => {
         return "ic:baseline-discord";
       case "spotify":
         return "mdi:spotify";
-      case "instagram":
-        return "uil:instagram-alt";
+      case "twitch":
+        return "mdi:twitch";
       case "gmail":
         return "logos:google-gmail";
       case "twitter":

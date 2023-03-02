@@ -101,7 +101,7 @@ const Servicesbar = (props) => {
   const services = [
     { nom: 'discord',   nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], dbID: [] },
-    { nom: 'instagram', nombre: 0, info: [], action: [], name: [], dbID: [] },
+    { nom: 'twitch', nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'gmail',    nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'github',    nombre: 0, info: [], action: [], name: [], dbID: [] },
@@ -219,8 +219,8 @@ const Servicesbar = (props) => {
         return "skill-icons:discord";
       case "spotify":
         return "logos:spotify-icon";
-      case "instagram":
-        return "skill-icons:instagram";
+      case "twitch":
+        return "mdi:twitch";
       case "gmail":
         return "logos:google-gmail";
       case "twitter":
@@ -251,8 +251,8 @@ const Servicesbar = (props) => {
           </IconBox>
           <IconBox onClick={() => handleClick("twitch")}>
             {isTwitchConnected.isSuccess && isTwitchConnected.data.data.connected ?
-              <Icon icon="logos:twitch" width="75" height="75" > </Icon> :
-              <Icon icon="logos:twitch" width="75" height="75" opacity="0.5" > </Icon> 
+              <Icon icon={getIcon("twitch")} color="purple" width="100" height="100" > </Icon> :
+              <Icon icon={getIcon("twitch")} width="100" color="purple" height="100" opacity="0.5" > </Icon> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("gmail")}>
