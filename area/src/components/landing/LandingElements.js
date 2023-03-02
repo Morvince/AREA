@@ -176,6 +176,21 @@ export const ButtonLogin = styled(LinkR)`
     }
 `;
 
+export const ButtonLogout = styled(LinkR)`
+    position: absolute;
+    color: black;
+    display: inline-block;
+    text-align: center;
+    line-height: 25px;
+    font-size: 20px;
+    top: 3%;
+    left: 80%;
+    text-decoration: none;
+    &:hover {
+        color: #4361ee;
+    }
+`;
+
 export const YoutubeScreen = styled.div`
   position: absolute;
   top: 415%;
