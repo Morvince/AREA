@@ -17,8 +17,27 @@ const EditAreas = () => {
   }, [infosFromDb]);
 
   const handleEdit = (automation_id, automation_tab) => {
-    navigate('/home', {state: {automationId: automation_id, automationActions: automation_tab}});
+    navigate('/home', { state: { automationId: automation_id, automationActions: automation_tab } });
   };
+
+  function getIcon(string) {
+    switch (string) {
+      case "discord":
+        return "skill-icons:discord";
+      case "spotify":
+        return "logos:spotify-icon";
+      case "instagram":
+        return "skill-icons:instagram";
+      case "gmail":
+        return "logos:google-gmail";
+      case "twitter":
+        return "skill-icons:twitter";
+      case "github":
+        return "mdi:github";
+      default:
+        return "mdi:github";
+    }
+  }
 
   function deleteAreas(automation_id) {
     setShowDeleteRappel(false)
@@ -38,9 +57,11 @@ const EditAreas = () => {
           const top = index * 175 + (index > openArea ? (openArea !== -1 ? 400 : 0) : 0);
           const name = automation.name;
           return (
-            <AreaZone top={top + "px"} key={`area${automation.id}`}>
-              <CutBarre> </CutBarre>
+            <AreaZone top={top + "px"} key={`area${automation.id}`} >
               <AreaName> {name}</AreaName>
+              {automationsWithActions[index]?.automation_actions.map((action, i) => (
+                <Icon icon={getIcon(action.service)} width="70" height="70" style={{ position: 'absolute', left: `${(i+1)*150 + 500}px` }} />
+              ))}
               <ArrowArea onClick={() => setOpenArea(openArea === index ? -1 : index)}>
                 <Icon icon="material-symbols:arrow-drop-down-sharp" width="90" style={{ position: 'absolute', color: "white", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} />
               </ArrowArea>
