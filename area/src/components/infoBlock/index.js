@@ -3,7 +3,6 @@ import { InfoBlockContainer, InfoWrapper, InfoTitle, InfoAction, InputBox, Littl
 import Select from 'react-select'
 import MyContext from '../Context'
 
-
 const DropdownSection = (props) => {
   const { playlist } = useContext(MyContext);
   const { repository } = useContext(MyContext);
@@ -11,16 +10,23 @@ const DropdownSection = (props) => {
 
   const options = useState([])
 
-  for (let i = 0; i < repository.items.length; i++) {
-    options.push({ value: repository.items[i].id, label: repository.items[i].name })
-  }
+  console.log(props.service)
 
+  if (props.service === "spotify") {
+    for (let i = 0; i < playlist.items.length; i++)
+      options.push({ value: playlist.items[i].id, label: playlist.items[i].name })
+  } else if (props.service === "github") {
+    for (let i = 0; i < repository.items.length; i++)
+      options.push({ value: repository.items[i].id, label: repository.items[i].name })
+  } //TODO ELSE IF FOR DISCORD
+
+//on select, save the value in the context
 
   return (
     <InfoWrapper>
       <InfoTitle>{props.title}</InfoTitle>
       <InfoAction>
-        <Select options={options} />
+        <Select options={options} onChange={console.log("test")} />
       </InfoAction>
     </InfoWrapper>
   )
@@ -31,7 +37,7 @@ const TextSection = (props) => {
     <InfoWrapper>
       <InfoTitle>{props.title}</InfoTitle>
       <InfoAction>
-        <InputBox id="mail" type="text" placeholder={props.text} />
+        <InputBox type="text" placeholder={props.text} />
       </InfoAction>
     </InfoWrapper>
   )
@@ -72,7 +78,7 @@ const InfoBlock = (props) => {
           if (fields[i][1][j][0] === "text") {
             infoBlock.push(<TextSection title={fields[i][1][j][1]} text={fields[i][1][j][2]} />)
           } else if (fields[i][1][j][0] === "dropdown") {
-            infoBlock.push(<DropdownSection title={fields[i][1][j][1]} />)
+            infoBlock.push(<DropdownSection title={fields[i][1][j][1]} service={props.service} />)
           } else if (fields[i][1][j][0] === "search") {
             infoBlock.push(<DropdownSection title={fields[i][1][j][1]} />)
           }
