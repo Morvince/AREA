@@ -101,7 +101,7 @@ const Servicesbar = (props) => {
   const services = [
     { nom: 'discord',   nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], dbID: [] },
-    { nom: 'instagram', nombre: 0, info: [], action: [], name: [], dbID: [] },
+    { nom: 'twitch', nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'gmail',    nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'github',    nombre: 0, info: [], action: [], name: [], dbID: [] },
