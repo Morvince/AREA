@@ -63,9 +63,7 @@
           };
           sharedData[i] = newAction;
         };
-        console.log(sharedData.length);
         setID(sharedData.length);
-        console.log("ID : " + ID);
         linkedList[0] = sharedData[0].index;
       }
     }, []);
@@ -106,12 +104,8 @@
         i = { id: 0, number: 0, informations: {} }
       }
       if (automationId === undefined) {
-        console.log("actions dans if :");
-        console.log(actions);
         addAutomation.mutate({ name: name, actions: actions });
       } else {
-        console.log("actions dans else :");
-        console.log(actions);
         editAutomation.mutate({ name: name, id: automationId, actions: actions });
       }
       setSharedData([]);
