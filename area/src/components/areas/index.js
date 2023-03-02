@@ -34,8 +34,8 @@ const EditAreas = () => {
         return "skill-icons:twitter";
       case "github":
         return "mdi:github";
-        case "twitch":
-          return "logos:twitch";
+      case "twitch":
+        return "logos:twitch";
       default:
         return "mdi:github";
     }
@@ -62,7 +62,7 @@ const EditAreas = () => {
             <AreaZone top={top + "px"} key={`area${automation.id}`} >
               <AreaName> {name}</AreaName>
               {automationsWithActions[index]?.automation_actions.map((action, i) => (
-                <Icon icon={getIcon(action.service)} width="70" height="70" style={{ position: 'absolute', left: `${(i+1)*150 + 500}px` }} />
+                <Icon icon={getIcon(action.service)} width="70" height="70" style={{ position: 'absolute', left: `${(i + 1) * 150 + 500}px` }} />
               ))}
               <ArrowArea onClick={() => setOpenArea(openArea === index ? -1 : index)}>
                 <Icon icon="material-symbols:arrow-drop-down-sharp" width="90" style={{ position: 'absolute', color: "white", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} />
@@ -98,7 +98,7 @@ const EditAreas = () => {
                   {showDeleteRappel && (
                     <DeleteRappel>
                       Do you really want to DELETE the <br></br> "{name}"" Area ?
-                      <DeleteButtonYes onClick={() => deleteAreas(automationsWithActions[index].id)}> YES </DeleteButtonYes>
+                      <DeleteButtonYes onClick={() => { deleteAreas(automationsWithActions[index].id); setOpenArea(-1); }}> YES </DeleteButtonYes>
                       <DeleteButtonNo onClick={() => setShowDeleteRappel(false)}> NO </DeleteButtonNo>
                     </DeleteRappel>
                   )}
