@@ -60,8 +60,8 @@ const Landing = () => {
                 </a>
             </IconWrapper>
             <IconWrapper>
-                <a href="https://about.instagram.com/fr-fr" >
-                    <Icon icon="skill-icons:instagram" width="100" style={{ position: 'absolute', left: '43%', top: "320%" }} />
+                <a href="https://www.twitch.tv/p/fr-fr/about/" >
+                    <Icon icon="mdi:twitch" width="100" style={{ position: 'absolute', left: '43%', top: "320%" }} />
                 </a>
             </IconWrapper>
             <IconWrapper>

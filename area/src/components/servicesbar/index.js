@@ -182,7 +182,7 @@ const Servicesbar = (props) => {
       case "spotify":
         return "#1db954";
       case "twitch":
-        return "#e1306c";
+        return "#6713e2";
       case "gmail":
         return "#EA4335";
       case "twitter":
@@ -201,7 +201,7 @@ const Servicesbar = (props) => {
       case "spotify":
         return "#10a143";
       case "twitch":
-        return "#c2134f";
+        return "#9146ff";
       case "gmail":
         return "#d92516";
       case "twitter":
