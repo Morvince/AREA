@@ -58,12 +58,15 @@
             index: i,
             action: dataTab.automation_actions[i].type === "action" ? true : false,
             name: dataTab.automation_actions[i].name,
-            dbID: dataTab.automation_actions[i].id,
+            dbId: dataTab.automation_actions[i].id,
+            toSend: [],
           };
           sharedData[i] = newAction;
-          setID(ID => ID + 1);
         };
-        setID(ID => ID - 1);
+        console.log(sharedData.length);
+        setID(sharedData.length);
+        console.log("ID : " + ID);
+        linkedList[0] = sharedData[0].index;
       }
     }, []);
 
@@ -95,9 +98,7 @@
       var i = { id: 0, number: 0, informations: {} };
 
       onValidate();
-      console.log(linkedList.length);
       for (var j = 0; j < linkedList.length; j++) {
-        console.log(j);
         i.id = sharedData[j].dbId;
         i.number = j + 1;
         i.informations = sharedData[j].toSend;
@@ -105,9 +106,11 @@
         i = { id: 0, number: 0, informations: {} }
       }
       if (automationId === undefined) {
+        console.log("actions dans if :");
+        console.log(actions);
         addAutomation.mutate({ name: name, actions: actions });
       } else {
-        console.log("actions :");
+        console.log("actions dans else :");
         console.log(actions);
         editAutomation.mutate({ name: name, id: automationId, actions: actions });
       }

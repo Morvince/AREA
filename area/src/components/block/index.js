@@ -122,6 +122,7 @@ const Block = (props) => {
     }
   }
 
+  console.log(sharedData);
   return (
     <Draggable bounds='parent' onDrag={handleDrag} onStop={handleDragStop} >
       <RectangleBlock color={backgroundColor} top={pos.x} left={pos.y}>
