@@ -11,6 +11,8 @@ services:
     volumes:
         - ./vhosts:/etc/apache2/sites-enabled
     restart: unless-stopped
+    tty: true
+    stdin_open: true
     ports:
       - 8080:80
     environment:
@@ -27,7 +29,7 @@ services:
       dockerfile: Dockerfile-reactjs
     image: area_reactjs:latest
     container_name: ${CONTAINER_NAME_PREFIX}client_web
-    restart: unless-stopped
+    # restart: unless-stopped
     volumes:
       - ./area/src:/app/client_web/src/:ro
     ports:
@@ -42,7 +44,7 @@ services:
   areadb:
     image: mariadb
     container_name: ${CONTAINER_NAME_PREFIX}db
-    restart: unless-stopped
+    # restart: unless-stopped
     volumes:
       - db_data:/var/lib/mysql/
     environment:
@@ -54,7 +56,7 @@ services:
   phpmyadmin:
     image: phpmyadmin
     container_name: ${CONTAINER_NAME_PREFIX}db_admin
-    restart: unless-stopped
+    # restart: unless-stopped
     ports:
       - 8082:80
     environment:

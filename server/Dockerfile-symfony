@@ -20,3 +20,4 @@ RUN composer require symfony/orm-pack && composer require --dev symfony/maker-bu
 WORKDIR /var/www/server/
 COPY . .
 RUN composer install
+ENTRYPOINT [ "php", "bin/console", "app:server" ]
