@@ -160,9 +160,6 @@ twitter_api_action_check_user_tweets_parameters:
   path: /twitter/action/check_tweet/get_parameters
   controller: App\Controller\TwitterAPIController::getIsNewTweetOnUserParameters
   methods: [POST]
-twitter_api_test:
-  path: /twitter/test
-  controller: App\Controller\TwitterAPIController::test
 
 # GMAIL
 gmail_api_connect:
