@@ -60,9 +60,9 @@ const Doc = () => {
         </SpotifyBox>
         {spotifyOpen && <BoxContentLeft background="#10a143"> <ActionContainer size="200%" line="50px"> Action : <br></br> - When a song is added to a playlist (name & Description) </ActionContainer> <ReactionContainer size="190%" line="40px"> Reactions : <br></br> - Change playlist details <br></br> - Add a random song from an artist to a playlist </ReactionContainer> </BoxContentLeft>}
         <TwitchBox onClick={toggleTwitchOpen}>
-          <Icon icon="mdi:twitch" width="130" height="130" />
+          <Icon icon="mdi:twitch" color="white" width="130" height="130" />
         </TwitchBox>
-        {twitchOpen && <BoxContentLeft background="#c2134f"> <ActionContainer size="200%" line="50px"> Action : <br></br> -  </ActionContainer> <ReactionContainer size="200%" line="50px"> Reactions : <br></br> -</ReactionContainer> </BoxContentLeft>}
+        {twitchOpen && <BoxContentLeft background="#6713e2"> <ActionContainer size="200%" line="50px"> Action : <br></br> -  </ActionContainer> <ReactionContainer size="200%" line="50px"> Reactions : <br></br> -</ReactionContainer> </BoxContentLeft>}
       </ContainerLeft>
       <ContainerRight>
         <GoogleBox onClick={toggleGoogleOpen}> 
@@ -74,7 +74,7 @@ const Doc = () => {
         </TwitterBox>
         {twitterOpen && <BoxContentRight background="#1486cc"> <ActionContainer size="200%" line="50px"> Action : <br></br> - </ActionContainer> <ReactionContainer size="200%" line="50px"> Reactions : <br></br> -</ReactionContainer> </BoxContentRight>}
         <GithubBox onClick={toggleGithubOpen}>
-          <Icon icon="mdi:github" width="130" height="130" />
+          <Icon icon="mdi:github" color="white" width="130" height="130" />
         </GithubBox>
         {githubOpen && <BoxContentRight background="#686f84"> <ActionContainer size="200%" line="50px"> Action : <br></br> - When a new commit is done to default branch </ActionContainer> <ReactionContainer size="190%" line="40px"> Reactions : <br></br> - Create an issue <br></br> - Create/Edit the README.md </ReactionContainer> </BoxContentRight>}
       </ContainerRight>

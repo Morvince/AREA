@@ -81,7 +81,7 @@ export const TwitchBox = styled.div`
     justify-content: center;
     align-items: center;
     position: relative;
-    background: #c2134f;
+    background: #6713e2;
     height: 30%;
     border-radius: 15px;
     opacity: 0.7;
