@@ -144,6 +144,22 @@ twitter_api_connected:
   path: /twitter/connected
   controller: App\Controller\TwitterAPIController::isConnected
   methods: [POST]
+twitter_api_send_tweet:
+  path: /twitter/reaction/send_tweet
+  controller: App\Controller\TwitterAPIController::sendTweet
+  methods: [POST]
+twitter_api_like_tweet:
+  path: /twitter/reaction/like_tweet
+  controller: App\Controller\TwitterAPIController::likeRandomTweet
+  methods: [POST]
+twitter_api_check_pinned_tweet:
+  path: /twitter/action/check_tweet
+  controller: App\Controller\TwitterAPIController::checkNewPinnedTweetOnUser
+  methods: [POST]
+twitter_api_action_check_user_tweets_parameters:
+  path: /twitter/action/check_tweet/get_parameters
+  controller: App\Controller\TwitterAPIController::getIsNewTweetOnUserParameters
+  methods: [POST]
 twitter_api_test:
   path: /twitter/test
   controller: App\Controller\TwitterAPIController::test
