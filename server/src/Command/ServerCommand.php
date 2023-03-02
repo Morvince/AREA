@@ -7,6 +7,7 @@
     use App\Repository\AutomationActionRepository;
     use App\Repository\ServiceRepository;
     use App\Repository\UserServiceRepository;
+    use Symfony\Component\Form\Test\FormIntegrationTestCase;
     use Symfony\Component\Process\Process;
     use Symfony\Component\Console\Command\Command;
     use Symfony\Component\Console\Input\InputArgument;
@@ -33,6 +34,10 @@
         {
             $io = new SymfonyStyle($input, $output);
             while (true) {
+                foreach ($this->a->findAll() as $a) {
+                    $a->setName("test".rand());
+                    $this->a->add($a, true);
+                }
                 $io->success("test");
                 sleep(10);
             }
