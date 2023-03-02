@@ -6,11 +6,9 @@ import MyContext from '../Context'
 const DropdownSection = (props) => {
   const { playlist } = useContext(MyContext);
   const { repository } = useContext(MyContext);
-  console.log(repository.items)
+  const { sharedData } = useContext(MyContext);
 
   const options = useState([])
-
-  console.log(props.service)
 
   if (props.service === "spotify") {
     for (let i = 0; i < playlist.items.length; i++)
@@ -20,24 +18,52 @@ const DropdownSection = (props) => {
       options.push({ value: repository.items[i].id, label: repository.items[i].name })
   } //TODO ELSE IF FOR DISCORD
 
-//on select, save the value in the context
+  function onChange(e) {
+    //if name already exists, update it
+    if (sharedData[props.IsVisible].toSend[props.name] !== undefined) {
+      sharedData[props.IsVisible].toSend[props.name] = e.value
+    }
+    //else create it
+    else {
+      sharedData[props.IsVisible].toSend[props.name] = e.value
+    }
+    console.log(sharedData)
+  }
 
   return (
     <InfoWrapper>
       <InfoTitle>{props.title}</InfoTitle>
       <InfoAction>
-        <Select options={options} onChange={console.log("test")} />
+        <Select options={options} onChange={onChange} />
       </InfoAction>
     </InfoWrapper>
   )
 }
 
 const TextSection = (props) => {
+  const { sharedData } = useContext(MyContext);
+  const [text, setText] = useState(props.text)
+  function onChange(e) {
+    if (sharedData[props.IsVisible].toSend[props.name] !== undefined) {
+      sharedData[props.IsVisible].toSend[props.name] = e.target.value
+    }
+    else {
+      sharedData[props.IsVisible].toSend[props.name] = e.target.value
+    }
+    console.log(sharedData)
+  }
+
+  useEffect(() => {
+    if (sharedData[props.IsVisible].toSend[props.name] !== undefined) {
+      setText(sharedData[props.IsVisible].toSend[props.name])
+    }
+  }, [sharedData])
+
   return (
     <InfoWrapper>
       <InfoTitle>{props.title}</InfoTitle>
       <InfoAction>
-        <InputBox type="text" placeholder={props.text} />
+        <InputBox type="text" placeholder={text} onChange={onChange} />
       </InfoAction>
     </InfoWrapper>
   )
@@ -62,7 +88,6 @@ const InfoBlock = (props) => {
     }
     setFields(fields)
   }
-
   useEffect(() => {
     getFields()
   }, [props.IsVisible])
@@ -76,11 +101,11 @@ const InfoBlock = (props) => {
       if (sharedData[props.IsVisible].dbId === fields[i][0]) {
         for (let j = 0; j < fields[i][1].length; j++) {
           if (fields[i][1][j][0] === "text") {
-            infoBlock.push(<TextSection title={fields[i][1][j][1]} text={fields[i][1][j][2]} />)
+            infoBlock.push(<TextSection title={fields[i][1][j][1]} text={fields[i][1][j][2]} service={props.service} IsVisible={props.IsVisible} name={fields[i][1][j][2]} />)
           } else if (fields[i][1][j][0] === "dropdown") {
-            infoBlock.push(<DropdownSection title={fields[i][1][j][1]} service={props.service} />)
+            infoBlock.push(<DropdownSection title={fields[i][1][j][1]} service={props.service} IsVisible={props.IsVisible} name={fields[i][1][j][2]} />)
           } else if (fields[i][1][j][0] === "search") {
-            infoBlock.push(<DropdownSection title={fields[i][1][j][1]} />)
+            infoBlock.push(<DropdownSection title={fields[i][1][j][1]} service={props.service} IsVisible={props.IsVisible} name={fields[i][1][j][2]} />)
           }
           if (j !== fields[i][1].length - 1) {
             infoBlock.push(<LittleBorder />)
