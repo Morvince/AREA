@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { useSpotifyAccess, useDiscordAccess, useInstagramAccess, useGmailAccess, useTwitterAccess, useGithubAccess} from '../api/apiSettingsPage'
+import { useSpotifyAccess, useDiscordAccess, useTwitchAccess, useGmailAccess, useTwitterAccess, useGithubAccess} from '../api/apiSettingsPage'
 
 const ConnectServices = () => {
   const [params] = useSearchParams()
   const handleSpotifyAccess = useSpotifyAccess()
   const handleDiscordAccess = useDiscordAccess()
-  const handleInstagramAccess = useInstagramAccess()
+  const handleTwitchAccess = useTwitchAccess()
   const handleGmailAccess = useGmailAccess()
   const handleTwitterAccess = useTwitterAccess()
   const handleGithubAccess = useGithubAccess()
@@ -30,8 +30,8 @@ const ConnectServices = () => {
         redirect_uri: "http://localhost:8081/connectServices"
         }), {onSettled: () => {navigate("/home", {replace: true})}});
         break;
-      case "instagram":
-        handleInstagramAccess.mutate(JSON.stringify({
+      case "twitch":
+        handleTwitchAccess.mutate(JSON.stringify({
         state: params.get("state"),
         token: sessionStorage.getItem("token"),
         code: params.get("code"),
