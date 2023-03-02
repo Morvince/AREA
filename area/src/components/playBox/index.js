@@ -8,7 +8,6 @@ import InfoBlock from '../infoBlock'
 import { useGetAction } from '../../api/apiServicesPage';
 import { RectangleArea, MovableBox, ValidateButton, BinLeft, BinRight, BinWhite, SaveNamePannel, CheckButton, WrittingZone } from './playBoxElements'
 import { useEditAutomation, useAddAutomation } from '../../api/apiServicesPage';
-import { getIsLoad, incrementIsLoad, isLoadSharedData, resetIsLoad } from '../../utils/AreasCounter';
 
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = useState([]);
@@ -46,29 +45,28 @@ const PlayBox = (props) => {
     }
   }
 
-  if (isComingFromEdit === true) {
-    for (let i = 0; i !== dataTab.automation_actions.length; i++) {
-      const newAction = {
-        top: 150 + (170 * i),
-        left: 600,
-        color: getColorPuzzleBlock(dataTab.automation_actions[i].service),
-        service: dataTab.automation_actions[i].service,
-        index: i,
-        action: dataTab.automation_actions[i].type === "action" ? true : false,
-        name: dataTab.automation_actions[i].name,
-        dbID: dataTab.automation_actions[i].id,
-      };
-      sharedData.push(newAction);
-    };
-
-    incrementIsLoad();
-    console.log("sharedata : ");
-    console.log(sharedData);
-    console.log("passed");
-  }
-
   useEffect(() => {
     tmpServices.mutate()
+
+    if (isComingFromEdit === true) {
+      console.log("passed in the if ");
+      for (let i = 0; i !== dataTab.automation_actions.length; i++) {
+        const newAction = {
+          top: 150 + (170 * i),
+          left: 600,
+          color: getColorPuzzleBlock(dataTab.automation_actions[i].service),
+          service: dataTab.automation_actions[i].service,
+          index: i,
+          action: dataTab.automation_actions[i].type === "action" ? true : false,
+          name: dataTab.automation_actions[i].name,
+          dbID: dataTab.automation_actions[i].id,
+        };
+        sharedData[i] = newAction;
+      };
+  
+      console.log("sharedata : ");
+      console.log(sharedData);
+    }
   }, []);
 
   const handleCheckButtonClick = () => {
@@ -112,7 +110,6 @@ const PlayBox = (props) => {
     } else {
       editAutomation.mutate({ name: name, id: automationId, actions: actions });
     }
-    resetIsLoad();
     setSharedData([]);
     setLinkedList([]);
     setID(0);

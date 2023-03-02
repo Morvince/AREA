@@ -3,7 +3,6 @@ import { AreaName, AreaZone, ArrowArea, BgColor, ButtonDelete, ButtonEdit, Numbe
 import { Icon } from '@iconify/react';
 import { useGetInfosAreas, useDeleteInfosAreas } from '../../api/apiAreasPage';
 import { useNavigate } from 'react-router-dom';
-import { resetIsLoad } from '../../utils/AreasCounter';
 
 const EditAreas = () => {
   const [openArea, setOpenArea] = useState(-1);
@@ -12,7 +11,6 @@ const EditAreas = () => {
   const deleteInfosFromDb = useDeleteInfosAreas();
   const [showDeleteRappel, setShowDeleteRappel] = useState(false);
   const navigate = useNavigate();
-  resetIsLoad();
 
   useEffect(() => {
     getInfosFromDb.mutate(null, { onSuccess: (data) => { setInfosFromDb(data) } });
