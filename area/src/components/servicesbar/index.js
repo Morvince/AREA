@@ -220,7 +220,7 @@ const Servicesbar = (props) => {
       case "spotify":
         return "logos:spotify-icon";
       case "twitch":
-        return "mdi:twitch";
+        return "logos:twitch";
       case "gmail":
         return "logos:google-gmail";
       case "twitter":
@@ -251,7 +251,7 @@ const Servicesbar = (props) => {
           </IconBox>
           <IconBox onClick={() => handleClick("twitch")}>
             {isTwitchConnected.isSuccess && isTwitchConnected.data.data.connected ?
-              <Icon icon={getIcon("twitch")} color="purple" width="100" height="100" > </Icon> :
+              <Icon icon={getIcon("twitch")} color="purple" width="75" height="75" > </Icon> :
               <Icon icon={getIcon("twitch")} width="100" color="purple" height="100" opacity="0.5" > </Icon> 
             }
           </IconBox>

@@ -34,6 +34,8 @@ const EditAreas = () => {
         return "skill-icons:twitter";
       case "github":
         return "mdi:github";
+        case "twitch":
+          return "logos:twitch";
       default:
         return "mdi:github";
     }
