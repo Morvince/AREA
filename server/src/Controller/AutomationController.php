@@ -27,11 +27,11 @@
             // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->token)) {
-                return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
+                return new JsonResponse(array("message" => "Automation: Missing field"), 400);
             }
             $token = $request_content->token;
             if (empty($user_repository->findByToken($token))) {
-                return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
+                return new JsonResponse(array("message" => "Automation: Bad auth token"), 400);
             }
             $user = $user_repository->findByToken($token)[0];
             $user_id = $user->getId();
