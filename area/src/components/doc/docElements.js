@@ -175,7 +175,6 @@ export const ActionContainer = styled.div`
     top: 0%;
     left: 0%;
     border-right: 5px solid black;
-    /* background-color: red; */
 
     color: awhitection;
     text-align: center;
@@ -193,7 +192,6 @@ export const ReactionContainer = styled.div`
     width: 50%;
     top: 0%;
     left: 50%;
-    /* background-color: red; */
 
     color: white;
     text-align: center;

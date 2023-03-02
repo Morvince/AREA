@@ -29,7 +29,7 @@ const Block = (props) => {
       if (props.id !== sharedData[i].index) {
         if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130 && rect.left > sharedData[i].left - 10 && rect.left < sharedData[i].left + 10) {
           if (props.action === false) {
-            setbackgroundColor('red')
+            setbackgroundColor('black')
             break;
           }
         } else
@@ -78,7 +78,7 @@ const Block = (props) => {
       if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130 && rect.left > sharedData[i].left - 10 && rect.left < sharedData[i].left + 10) {
         // If the block is not an action block
         if (props.action === false) {
-          setbackgroundColor('red')
+          setbackgroundColor('black')
           sharedData[props.id].above = getIdAboveMe(props.id)
           break;
         }
