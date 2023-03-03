@@ -11,8 +11,6 @@ services:
     volumes:
         - ./vhosts:/etc/apache2/sites-enabled
     restart: unless-stopped
-    tty: true
-    stdin_open: true
     ports:
       - 8080:80
     environment:
@@ -22,6 +20,7 @@ services:
       - web_network
     depends_on:
       - areadb
+    # command: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf && tail -f /dev/null
 
   client_web:
     build:
