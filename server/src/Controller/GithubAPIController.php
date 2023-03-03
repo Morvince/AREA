@@ -186,7 +186,7 @@
             if (isset($response->message) && isset($response->documentation_url)) {
                 $response = array("message" => "Github: Help on $response->documentation_url", "code" => 400);
             }
-            return $response;
+            return json_decode(json_encode($response));
         }
 
         /**

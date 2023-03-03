@@ -206,7 +206,7 @@
             if (isset($response->error)) {
                 $response = array("message" => "Gmail: ".$response->error->status, "code" => $response->error->code);
             }
-            return $response;
+            return json_decode(json_encode($response));
         }
 
         // Action

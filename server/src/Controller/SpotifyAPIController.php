@@ -286,7 +286,7 @@
             if (isset($response->error)) {
                 $response = array("message" => "Spotify: ".$response->error->message, "code" => $response->error->status);
             }
-            return $response;
+            return json_decode(json_encode($response));
         }
 
         // Action
@@ -348,7 +348,7 @@
             }
             // Request to get the wished playlist
             $playlist = $this->getPlaylistById($access_token, $informations->playlist_id);
-            if (isset($playlist->code)) {
+            if (!empty($playlist->code)) {
                 return new JsonResponse(array("message" => $playlist->message), $playlist->code);
             }
             return new JsonResponse($playlist->tracks->items, 200);
@@ -402,7 +402,7 @@
             );
             // Request to change playlist details
             $response = $this->sendRequest($access_token, "playlists/$playlist->id?name=&public=&description=", "PUT", $parameters);
-            if (isset($response->code)) {
+            if (!empty($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
             return new JsonResponse(array("message" => "OK"), 200);
