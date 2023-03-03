@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 import { useGetInfosAreas, useDeleteInfosAreas } from '../../api/apiAreasPage';
 import { useNavigate } from 'react-router-dom';
 
+// pricipal function for the Areas page
 const EditAreas = () => {
   const [openArea, setOpenArea] = useState(-1);
   const [infosFromDb, setInfosFromDb] = useState([]);
@@ -20,6 +21,7 @@ const EditAreas = () => {
     navigate('/home', { state: { automationId: automation_id, automationActions: automation_tab } });
   };
 
+  // fucntion to get the corresponding icon compare to the service
   function getIcon(string) {
     switch (string) {
       case "discord":
@@ -41,6 +43,7 @@ const EditAreas = () => {
     }
   }
 
+  // function to delete an area
   function deleteAreas(automation_id) {
     setShowDeleteRappel(false)
     deleteInfosFromDb.mutate({ id: automation_id });
