@@ -10,6 +10,7 @@ const Block = (props) => {
   const { sharedData, setSharedData } = useContext(MyContext);
   const { linkedList, setLinkedList } = useContext(MyContext);
   const { open, setOpen } = useContext(MyContext);
+  const {ID, setID} = useContext(MyContext);
 
   const handleOpen = (e, data) => {
     if (open === null) {
@@ -91,6 +92,9 @@ const Block = (props) => {
         linkedList.splice(i + 1, 0, props.id)
     }
 
+    // check if the Block is in the bin 
+    console.log("before : ");
+    console.log(sharedData);
     if (rect.left >= screenWidth * 0.85 && rect.top >= screenHeight * 0.25 && rect.top <= screenHeight * 0.61) {
       const indexToRemove = sharedData.findIndex((item) => item.index === props.id);
       if (indexToRemove !== -1) {
@@ -99,8 +103,11 @@ const Block = (props) => {
           item.index = i;
         });
         setSharedData([...sharedData]);
+        setID(sharedData.length);
       }
     }
+    console.log("after : ");
+    console.log(sharedData);
   }
 
   function getIcon(string) {
