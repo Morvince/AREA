@@ -21,5 +21,3 @@ WORKDIR /var/www/server/
 COPY . .
 COPY symfony-worker.conf /etc/supervisor/conf.d/
 RUN composer install
-# ENTRYPOINT [ "/usr/bin/supervisord", "-n", "-c" , "/etc/supervisor/supervisord.conf" ]
-ENTRYPOINT [ "bash", "server.sh" ]

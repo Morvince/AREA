@@ -20,7 +20,24 @@ services:
       - web_network
     depends_on:
       - areadb
-    # command: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf && tail -f /dev/null
+
+  sync-db:
+    build:
+      context: ./server
+      dockerfile: Dockerfile-symfony
+    image: area_symfony:latest
+    container_name: ${CONTAINER_NAME_PREFIX}sync-db
+    volumes:
+        - ./vhosts:/etc/apache2/sites-enabled
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: mysql://root:${MARIADB_ROOT_PASSWORD}@areadb:3306/${MARIADB_DATABASE}
+    networks:
+      - areadb_network
+      - web_network
+    depends_on:
+      - areadb
+    command: php bin/console app:server
 
   client_web:
     build:
