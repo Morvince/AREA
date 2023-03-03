@@ -58,11 +58,11 @@ const Doc = () => {
         <SpotifyBox onClick={toggleSpotifyOpen}> 
           <Icon icon="logos:spotify-icon" width="100" height="100" />
         </SpotifyBox>
-        {spotifyOpen && <BoxContentLeft background="#10a143"> <ActionContainer size="200%" line="50px"> Action : <br></br> - When a song is added to a playlist (name & Description) </ActionContainer> <ReactionContainer size="190%" line="40px"> Reactions : <br></br> - Change playlist details <br></br> - Add a random song from an artist to a playlist </ReactionContainer> </BoxContentLeft>}
+        {spotifyOpen && <BoxContentLeft background="#10a143"> <ActionContainer size="200%" line="50px"> Action : <br></br> - When a song is added to a playlist </ActionContainer> <ReactionContainer size="190%" line="40px"> Reactions : <br></br> - Change playlist details <br></br> - Add a random song from an artist to a playlist </ReactionContainer> </BoxContentLeft>}
         <TwitchBox onClick={toggleTwitchOpen}>
           <Icon icon="mdi:twitch" color="white" width="130" height="130" />
         </TwitchBox>
-        {twitchOpen && <BoxContentLeft background="#6713e2"> <ActionContainer size="200%" line="50px"> Action : <br></br> -  </ActionContainer> <ReactionContainer size="200%" line="50px"> Reactions : <br></br> -</ReactionContainer> </BoxContentLeft>}
+        {twitchOpen && <BoxContentLeft background="#6713e2"> <ActionContainer size="200%" line="50px"> Action : <br></br> - When a new user followed your channel </ActionContainer> <ReactionContainer size="200%" line="50px"> Reaction : <br></br> - Clean your stream chat</ReactionContainer> </BoxContentLeft>}
       </ContainerLeft>
       <ContainerRight>
         <GoogleBox onClick={toggleGoogleOpen}> 
@@ -72,7 +72,7 @@ const Doc = () => {
         <TwitterBox onClick={toggleTwitterOpen}> 
           <Icon icon="skill-icons:twitter" width="100" height="100" />
         </TwitterBox>
-        {twitterOpen && <BoxContentRight background="#1486cc"> <ActionContainer size="200%" line="50px"> Action : <br></br> - </ActionContainer> <ReactionContainer size="200%" line="50px"> Reactions : <br></br> -</ReactionContainer> </BoxContentRight>}
+        {twitterOpen && <BoxContentRight background="#1486cc"> <ActionContainer size="200%" line="50px"> Action : <br></br> - When a new tweet is posted </ActionContainer> <ReactionContainer size="200%" line="50px"> Reactions : <br></br> - Post a tweet with the message <br></br> - Like a tweet related to a given word</ReactionContainer> </BoxContentRight>}
         <GithubBox onClick={toggleGithubOpen}>
           <Icon icon="mdi:github" color="white" width="130" height="130" />
         </GithubBox>
