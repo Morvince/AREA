@@ -48,11 +48,6 @@
             );
             $scope = implode(" ", $scope);
             // Set the code verifier useful for the code challenge
-            // $code_verifier = base64_encode(random_bytes(32));
-            // $code_verifier = strtr(rtrim($code_verifier, '='), '+/', '-_');
-            // // Set the code challenge for the autorization url
-            // $code_challenge = base64_encode(hash('sha256', $code_verifier, true));
-            // $code_challenge = strtr(rtrim($code_challenge, '='), '+/', '-_');
             $code_challenge = "TUHk8FoWnFaNw2xMcM6Nm/MUOE+y+n0pMkksPyctkSA=";
             // Set the state when the request is good
             $state = "17";
@@ -130,7 +125,7 @@
          * @Route("/twitter/refresh_access_token", name="twitter_api_refresh_access_token")
          */
         public function refreshAccessToken(Request $request, ServiceRepository $service_repository, UserRepository $user_repository, UserServiceRepository $user_service_repository)
-        { // a changer pour lutiliser que via le server
+        {
             // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->user_id)) {
@@ -180,7 +175,7 @@
          * @Route("/twitter/connected", name="twitter_api_connected")
          */
         public function isConnected(Request $request, ServiceRepository $sevice_repository, UserRepository $user_repository, UserServiceRepository $user_sevice_repository)
-        { // a changer pour lutiliser que via le server
+        {
             header('Access-Control-Allow-Origin: *');
             // Get needed values
             $request_content = json_decode($request->getContent());
@@ -205,7 +200,7 @@
         }
 
         private function sendRequest($access_token, $endpoint, $method = "GET", $parameters = array())
-        {
+        {// CHANGE
             if (empty($this->request_api)) {
                 $this->request_api = new RequestAPI();
             }
@@ -242,9 +237,10 @@
             }
             return $response;
         }
+
         // ACTION
         /**
-         * @Route("/twitter/action/check_tweet", name="twitter_api_check_pinned_tweet")
+         * @Route("/twitter/action/check_tweet", name="twitter_api_check_tweet")
          */
         public function checkNewPinnedTweetOnUser(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
         {
@@ -260,9 +256,8 @@
             }
             return new JsonResponse(array("message" => true), 200);
         }
-
         /**
-         * @Route("/twitter/action/check_tweet/get_parameters", name="twitter_api_action_check_user_tweets_parameters")
+         * @Route("/twitter/action/check_tweet/get_parameters", name="twitter_api_action_check_tweet_parameters")
          */
         public function getIsNewTweetOnUserParameters(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
         {
@@ -337,20 +332,17 @@
             }
             // Set the API endpoint
             $url = "https://api.twitter.com/2/tweets";
-
             // Set the request headers
             $headers = array(
                 "Authorization: Bearer $access_token",
                 "Content-Type: application/json"
             );
-
             $tweet = $informations->tweet;
             // Set the request body
             $body = array(
                 "text" => $tweet
             );
             $json_body = json_encode($body);
-
             // Send the request using cURL
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -360,10 +352,8 @@
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             $result = curl_exec($ch);
             curl_close($ch);
-
             // Parse the response JSON
             $response = json_decode($result, true);
-
             return new JsonResponse($response, 200);
         }
 
@@ -409,30 +399,24 @@
             $user = json_decode($response);
             $user_id = $user->data->id;
             curl_close($ch);
-
             // Set the API endpoint
             $search_query = $informations->search;
             $url = "https://api.twitter.com/2/tweets/search/recent?query=" . urlencode($search_query . " lang:fr") . "&max_results=25&tweet.fields=author_id,id";
-
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . $access_token));
             $response = curl_exec($ch);
             curl_close($ch);
-
             // Analyse de la réponse
             $tweets = json_decode($response)->data;
-
             // Choix d'un tweet au hasard
             $random_tweet = $tweets[array_rand($tweets)];
-
             // Ajout d'un like au tweet choisi
             $like_url = "https://api.twitter.com/2/users/$user_id/likes"; // change l'id de l'utilisateur en dur par celui de l'utilisateur courant
             $like_data = array(
                 "tweet_id" => $random_tweet->id
             );
-
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $like_url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -444,7 +428,6 @@
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($like_data));
             $response = curl_exec($ch);
             curl_close($ch);
-
             return new JsonResponse($response, 200);
         }
     }

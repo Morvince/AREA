@@ -152,11 +152,11 @@ twitter_api_like_tweet:
   path: /twitter/reaction/like_tweet
   controller: App\Controller\TwitterAPIController::likeRandomTweet
   methods: [POST]
-twitter_api_check_pinned_tweet:
+twitter_api_check_tweet:
   path: /twitter/action/check_tweet
   controller: App\Controller\TwitterAPIController::checkNewPinnedTweetOnUser
   methods: [POST]
-twitter_api_action_check_user_tweets_parameters:
+twitter_api_action_check_tweet_parameters:
   path: /twitter/action/check_tweet/get_parameters
   controller: App\Controller\TwitterAPIController::getIsNewTweetOnUserParameters
   methods: [POST]
