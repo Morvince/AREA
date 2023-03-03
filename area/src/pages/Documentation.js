@@ -3,6 +3,7 @@ import Sidebar from '../components/sidebar'
 import Navebar from '../components/navbar'
 import Doc from '../components/doc'
 
+// page Documentation
 const Documentation = () => {
 
   const [isOpen, setIsOpen] = useState(false)

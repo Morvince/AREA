@@ -3,6 +3,7 @@ import Sidebar from '../components/sidebar'
 import Navebar from '../components/navbar'
 import Landing from '../components/landing'
 
+// page landing
 const LandingPage = () => {
     const [isOpen, setIsOpen] = useState(false)
 

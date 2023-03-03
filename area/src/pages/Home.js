@@ -5,6 +5,7 @@ import PlayBox from '../components/playBox'
 import { useLocation } from 'react-router-dom'
 import { incrementAreasCounter } from '../utils/AreasCounter'
 
+// page home
 const Home = () => {
 
   const [isOpen, setIsOpen] = useState(false)
