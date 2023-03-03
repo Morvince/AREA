@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const LeftColumn = styled.div`
   display: flex;
   width: 150px;
+  user-select: none;
 `;
 
 export const ServicesBarContainer = styled.div`
@@ -11,12 +12,13 @@ export const ServicesBarContainer = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: ${props => props.color};
-  top: 4%;
   width: 150px;
   height: 100%;
   left: 0;
+  top: 0;
   z-index: 999;
   transition: transform .2s ease-in-out;
+  user-select: none;
 
   &.open {
     transform: translateX(0);
@@ -41,16 +43,18 @@ export const ServicesBarWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 60%;
-  height: 65%;
+  height: 70%;
   background-color: #ebebeb;
   border-radius: 10px;
   padding: 5px;
+  user-select: none;
 `;
 
 export const IconBox = styled.div`
   margin: 12px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  user-select: none;
 
   &:hover {
     transition: all 0.2s ease-in-out;
@@ -71,9 +75,10 @@ export const RectangleContener = styled.div`
   z-index: 1;
   transition: all 0.3s ease-in-out;
   background-color: ${props => props.color};
+  user-select: none;
 
   &.open {
-    transform: translateX(200px);
+    transform: translateX(175px);
   }
 
   &.closed {

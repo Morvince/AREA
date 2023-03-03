@@ -76,12 +76,12 @@ export const SpotifyBox = styled.div`
     }
 `;
 
-export const InstagramBox = styled.div`
+export const TwitchBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    background: #c2134f;
+    background: #6713e2;
     height: 30%;
     border-radius: 15px;
     opacity: 0.7;
@@ -166,4 +166,39 @@ export const GithubBox = styled.div`
     &:hover {
         opacity: 1;
     }
+`;
+
+export const ActionContainer = styled.div`
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    top: 0%;
+    left: 0%;
+    border-right: 5px solid black;
+
+    color: awhitection;
+    text-align: center;
+    line-height: ${props => props.line};
+    font-size: ${props => props.size};
+    font-weight: bold;
+    display: inline-block;
+    user-select: none;
+    padding: 20px;    
+`;
+
+export const ReactionContainer = styled.div`
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    top: 0%;
+    left: 50%;
+
+    color: white;
+    text-align: center;
+    line-height: ${props => props.line};
+    font-size: ${props => props.size};
+    font-weight: bold;
+    display: inline-block;
+    user-select: none;
+    padding: 20px;    
 `;
