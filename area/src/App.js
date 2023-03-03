@@ -9,12 +9,14 @@ import Login from './pages/Login';
 import Areas from './pages/Areas'
 import Documentation from './pages/Documentation'
 
+// function that display Page Not Found if the page isn't found
 const PageNotFound = () => {
   return (
     <h1>404: Page Not Found</h1>
   )
 }
 
+// function with all the route of the website
 function App() {
   return (
     <BrowserRouter>
