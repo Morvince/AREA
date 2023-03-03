@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
 import Sidebar from '../components/sidebar'
 import Navebar from '../components/navbar'
-import { useLocation } from 'react-router-dom'
 import Doc from '../components/doc'
 
 const Documentation = () => {
 
   const [isOpen, setIsOpen] = useState(false)
-  const location = useLocation()
 
   const toggle = () => {
     setIsOpen(!isOpen)
