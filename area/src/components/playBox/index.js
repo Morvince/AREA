@@ -59,7 +59,7 @@
             action: dataTab.automation_actions[i].type === "action" ? true : false,
             name: dataTab.automation_actions[i].name,
             dbId: dataTab.automation_actions[i].id,
-            toSend: [],
+            toSend: dataTab.automation_actions[i].fields
           };
           sharedData[i] = newAction;
         };

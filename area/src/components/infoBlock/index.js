@@ -61,10 +61,6 @@ const InfoBlock = (props) => {
   }
 
   useEffect(() => {
-    // userPlaylist.mutate()
-    // if (userPlaylist.isSuccess) {
-    // setPlaylist(userPlaylist.data.data);
-    // }
     getFields()
   }, [props.IsVisible])
 
