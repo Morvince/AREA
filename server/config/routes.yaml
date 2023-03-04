@@ -122,6 +122,45 @@ github_api_reaction_create_issue:
   controller: App\Controller\GithubAPIController::createIssue
   methods: [POST]
 
+#TWITTER
+
+twitter_api_connect:
+  path: /twitter/connect
+  controller: App\Controller\TwitterAPIController::connect
+  methods: [POST]
+twitter_api_get_access_token:
+  path: /twitter/get_access_token
+  controller: App\Controller\TwitterAPIController::getAccessToken
+  methods: [POST]
+twitter_api_refresh_access_token:
+  path: /twitter/refresh_access_token
+  controller: App\Controller\TwitterAPIController::refreshAccessToken
+  methods: [POST]
+twitter_api_twitter_change_status:
+  path: /twitter/reaction/change_status
+  controller: App\Controller\TwitterAPIController::changeStatus
+  methods: [POST]
+twitter_api_connected:
+  path: /twitter/connected
+  controller: App\Controller\TwitterAPIController::isConnected
+  methods: [POST]
+twitter_api_send_tweet:
+  path: /twitter/reaction/send_tweet
+  controller: App\Controller\TwitterAPIController::sendTweet
+  methods: [POST]
+twitter_api_like_tweet:
+  path: /twitter/reaction/like_tweet
+  controller: App\Controller\TwitterAPIController::likeRandomTweet
+  methods: [POST]
+twitter_api_check_tweet:
+  path: /twitter/action/check_tweet
+  controller: App\Controller\TwitterAPIController::checkNewPinnedTweetOnUser
+  methods: [POST]
+twitter_api_action_check_tweet_parameters:
+  path: /twitter/action/check_tweet/get_parameters
+  controller: App\Controller\TwitterAPIController::getIsNewTweetOnUserParameters
+  methods: [POST]
+
 # GMAIL
 gmail_api_connect:
   path: /gmail/connect
