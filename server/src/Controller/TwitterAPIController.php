@@ -161,7 +161,7 @@
             $result = curl_exec($ch);
             curl_close($ch);
             if (!isset(json_decode($result)->access_token)) {
-                $user_service_repository->remove($user_service);
+                $user_service_repository->remove($user_service, true);
                 return new JsonResponse(array("message" => "Twitter: Expired refresh token"), 400);
             }
             // Edit datas in database
@@ -222,7 +222,7 @@
             }
             $old_pinned = $request_content->old;
             $new_pinned = $request_content->new;
-            // Check if pinned have been added to playlist
+            // Check if pinned tweet has changed
             if (strcmp($old_pinned, $new_pinned) === 0) {
                 return new JsonResponse(array("message" => false), 200);
             }

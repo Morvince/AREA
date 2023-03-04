@@ -162,7 +162,7 @@
             $result = curl_exec($ch);
             curl_close($ch);
             if (empty(json_decode($result)->access_token)) {
-                $user_service_repository->remove($user_service);
+                $user_service_repository->remove($user_service, true);
                 return new JsonResponse(array("message" => "Gmail: Expired refresh token"), 400);
             }
             // Edit datas in database

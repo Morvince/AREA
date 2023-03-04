@@ -150,7 +150,6 @@ github_api_reaction_create_issue:
   methods: [POST]
 
 #TWITTER
-
 twitter_api_connect:
   path: /twitter/connect
   controller: App\Controller\TwitterAPIController::connect
@@ -289,9 +288,6 @@ automation_reaction_do:
   path: /automation/reaction/do
   controller: App\Controller\AutomationActionController::doReaction
   methods: [POST]
-automation_action_check:
-  path: /automation/action/check
-  controller: App\Controller\AutomationActionController::check
 
 # SERVER
 server_about_json:

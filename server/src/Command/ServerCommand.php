@@ -101,6 +101,7 @@
                             $io->warning("Trigger error for the automation_action.id=$automation_action_id with message=$response->message");
                             continue;
                         }
+                        $io->success("Triggered succes for the automation.id=".$automation_action->getAutomationId());
                     }
                 }
                 sleep(10);
@@ -116,12 +117,7 @@
             }
             $response = $this->sendRequest("server/" . $service->getName() . "/refresh_access_token", array("user_id" => $automation->getUserId()));
             if (isset($response->code)) {
-                if (empty($user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId()))) {
-                    return (array("refreshed" => false, "message" => "Access token not refreshed for the user.id=".$automation->getUserId()." with the service.id=".$service->getId()." with message:$response->message"));
-                }
-                $user_service = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId());
-                $user_service_repository->remove($user_service);
-                return (array("refreshed" => false, "message" => "Access token not refreshed: Refresh token expired for the user.id=".$automation->getUserId()." with the service.id=".$service->getId()));
+                return (array("refreshed" => false, "message" => "Access token not refreshed for the user.id=".$automation->getUserId()." with the service.id=".$service->getId()." with message:$response->message"));
             }
             return (array("refreshed" => true, "message" => "Access token refreshed for the user.id=".$automation->getUserId()." with the service.id=".$service->getId()));
         }

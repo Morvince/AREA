@@ -24,7 +24,7 @@
             // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->automation_action_id)) {
-                return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
+                return new JsonResponse(array("message" => "AutomationAction: Missing field"), 400);
             }
             $automation_action_id = $request_content->automation_action_id;
             if (empty($automation_action_repository->find($automation_action_id))) {
@@ -40,7 +40,6 @@
                 $url = "http://localhost/automation/reaction/do";
                 $parameters = array("automation_action_id" => $automation_reaction->getId());
                 $response = $this->sendRequest($url, $parameters);
-                return new JsonResponse($response);
                 if (isset($response->code)) {
                     return new JsonResponse(array("message" => $response->message), $response->code);
                 }
@@ -55,14 +54,14 @@
             // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->automation_action_id)) {
-                return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
+                return new JsonResponse(array("message" => "AutomationAction: Missing field"), 400);
             }
             $automation_action_id = $request_content->automation_action_id;
             if (empty($automation_action_repository->find($automation_action_id))) {
                 return new JsonResponse(array("message" => "AutomationAction: automation_action not found"), 404);
             }
             $automation_action = $automation_action_repository->find($automation_action_id);
-            $action_id = $automation_action->getId();
+            $action_id = $automation_action->getActionId();
             if (empty($action_repository->find($action_id))) {
                 return new JsonResponse(array("message" => "AutomationAction: Action not found"), 404);
             }

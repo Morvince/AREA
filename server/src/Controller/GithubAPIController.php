@@ -146,7 +146,7 @@
             }
             $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
             if (!empty($user_service)) {
-                $user_service_repository->remove($user_service);
+                $user_service_repository->remove($user_service, true);
             }
             return new JsonResponse(array("message" => "OK"), 200);
         }
