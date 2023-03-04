@@ -177,11 +177,14 @@ export const BoxContent = styled.div`
 export const AreaName = styled.div`
   position: absolute;
   background-color: black;
+  width : 30%;
   color: white;
   font-size: 200%;
   font-weight: bold;
-  display: inline-block;
   user-select: none;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
   padding: 30px;
   left: -0.1%;
   border-radius: 30px 0px 0px 30px;
@@ -243,7 +246,7 @@ export const CutBarre = styled.div`
   background-color: black;
   height: 100%;
   width: 0.2%;
-  left : 30%;
+  left : 29.7%;
   top: 0%;
   user-select: none;
 `;

@@ -7,6 +7,7 @@ export const NavRectBg = styled.div`
     top: 0%;
     position: absolute;
     background: #D4D3DC;
+    user-select: none;
 `;
 
 export const ButtonHapilink = styled(LinkR)`
@@ -19,6 +20,7 @@ export const ButtonHapilink = styled(LinkR)`
     color: black;
     font-weight: bold;
     text-decoration: none;
+    user-select: none;
     &:hover {
         color: #4361ee;
     }
@@ -34,6 +36,7 @@ export const ButtonCreate = styled(LinkR)`
     color: black;
     display: inline-block;
     text-decoration: none;
+    user-select: none;
     &:hover {
         color: #4361ee;
     }
@@ -49,6 +52,7 @@ export const ButtonAreas = styled(LinkR)`
     top: 3%;
     left: 45%;
     text-decoration: none;
+    user-select: none;
     &:hover {
         color: #4361ee;
     }
@@ -64,6 +68,7 @@ export const ButtonDocumentation = styled(LinkR)`
     top: 3%;
     left: 55%;
     text-decoration: none;
+    user-select: none;
     &:hover {
         color: #4361ee;
     }
@@ -82,4 +87,5 @@ export const NewAreas = styled.div`
   background: green;
   color: white;
   border-radius: 50%;
+  user-select: none;
 `;
