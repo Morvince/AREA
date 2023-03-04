@@ -66,13 +66,11 @@
                     $parameters = $this->sendRequest($url . "/get_parameters", array("automation_action_id" => $automation_action_id));
                     if (isset($parameters->code)) {
                         $io->warning("Parameters error with message=$parameters->message");
-                        if (str_contains($parameters->message, "token")) {
-                            $response_refresh_token = $this->refreshAccessToken($automation_action, $service, $this->automation_repository, $this->user_service_repository);
-                            if ($response_refresh_token["refreshed"]) {
-                                $io->success($response_refresh_token["message"]);
-                            } else {
-                                $io->warning($response_refresh_token["message"]);
-                            }
+                        $response_refresh_token = $this->refreshAccessToken($automation_action, $service, $this->automation_repository, $this->user_service_repository);
+                        if ($response_refresh_token["refreshed"]) {
+                            $io->success($response_refresh_token["message"]);
+                        } else {
+                            $io->warning($response_refresh_token["message"]);
                         }
                         continue;
                     }
@@ -86,13 +84,11 @@
                     $response = $this->sendRequest($url, array("automation_action_id" => $automation_action_id, "new" => $parameters, "old" => $old_parameters[$automation_action_id]));
                     if (isset($response->code)) {
                         $io->warning("Parameters error with message=$parameters->message");
-                        if (str_contains($response->message, "Bad token or expired")) {
-                            $this->refreshAccessToken($automation_action, $service, $this->automation_repository, $this->user_service_repository);
-                            if ($response_refresh_token["refreshed"]) {
-                                $io->success($response_refresh_token["message"]);
-                            } else {
-                                $io->warning($response_refresh_token["message"]);
-                            }
+                        $this->refreshAccessToken($automation_action, $service, $this->automation_repository, $this->user_service_repository);
+                        if ($response_refresh_token["refreshed"]) {
+                            $io->success($response_refresh_token["message"]);
+                        } else {
+                            $io->warning($response_refresh_token["message"]);
                         }
                         continue;
                     }
