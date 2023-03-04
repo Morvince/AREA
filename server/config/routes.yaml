@@ -134,6 +134,113 @@ github_api_reaction_create_issue:
   controller: App\Controller\GithubAPIController::createIssue
   methods: [POST]
 
+#TWITTER
+
+twitter_api_connect:
+  path: /twitter/connect
+  controller: App\Controller\TwitterAPIController::connect
+  methods: [POST]
+twitter_api_get_access_token:
+  path: /twitter/get_access_token
+  controller: App\Controller\TwitterAPIController::getAccessToken
+  methods: [POST]
+twitter_api_refresh_access_token:
+  path: /twitter/refresh_access_token
+  controller: App\Controller\TwitterAPIController::refreshAccessToken
+  methods: [POST]
+twitter_api_twitter_change_status:
+  path: /twitter/reaction/change_status
+  controller: App\Controller\TwitterAPIController::changeStatus
+  methods: [POST]
+twitter_api_connected:
+  path: /twitter/connected
+  controller: App\Controller\TwitterAPIController::isConnected
+  methods: [POST]
+twitter_api_send_tweet:
+  path: /twitter/reaction/send_tweet
+  controller: App\Controller\TwitterAPIController::sendTweet
+  methods: [POST]
+twitter_api_like_tweet:
+  path: /twitter/reaction/like_tweet
+  controller: App\Controller\TwitterAPIController::likeRandomTweet
+  methods: [POST]
+twitter_api_check_pinned_tweet:
+  path: /twitter/action/check_tweet
+  controller: App\Controller\TwitterAPIController::checkNewPinnedTweetOnUser
+  methods: [POST]
+twitter_api_action_check_user_tweets_parameters:
+  path: /twitter/action/check_tweet/get_parameters
+  controller: App\Controller\TwitterAPIController::getIsNewTweetOnUserParameters
+  methods: [POST]
+
+# GMAIL
+gmail_api_connect:
+  path: /gmail/connect
+  controller: App\Controller\GmailAPIController::connect
+  methods: [POST]
+gmail_api_get_access_token:
+  path: /gmail/get_access_token
+  controller: App\Controller\GmailAPIController::getAccessToken
+  methods: [POST]
+gmail_api_refresh_access_token:
+  path: /gmail/refresh_access_token
+  controller: App\Controller\GmailAPIController::refreshAccessToken
+  methods: [POST]
+gmail_api_connected:
+  path: /gmail/connected
+  controller: App\Controller\GmailAPIController::isConnected
+  methods: [POST]
+gmail_api_action_check_mail:
+  path: /gmail/action/check_mail
+  controller: App\Controller\GmailAPIController::hasInboxNewMail
+  methods: [POST]
+gmail_api_action_check_mail_parameters:
+  path: /gmail/action/check_mail/get_parameters
+  controller: App\Controller\GmailAPIController::getHasInboxNewMailParameters
+  methods: [POST]
+gmail_api_action_check_mail_from_somebody:
+  path: /gmail/action/check_mail_from_somebody
+  controller: App\Controller\GmailAPIController::hasInboxNewMailFromSomebody
+  methods: [POST]
+gmail_api_action_check_mail_from_somebody_parameters:
+  path: /gmail/action/check_mail_from_somebody/get_parameters
+  controller: App\Controller\GmailAPIController::getHasInboxNewMailFromSomebodyParameters
+  methods: [POST]
+gmail_api_reaction_send_mail:
+  path: /gmail/reaction/send_mail
+  controller: App\Controller\GmailAPIController::sendMail
+  methods: [POST]
+
+# TWITCH
+twitch_api_connect:
+  path: /twitch/connect
+  controller: App\Controller\TwitchAPIController::connect
+  methods: [POST]
+twitch_api_get_access_token:
+  path: /twitch/get_access_token
+  controller: App\Controller\TwitchAPIController::getAccessToken
+  methods: [POST]
+twitch_api_refresh_access_token:
+  path: /twitch/refresh_access_token
+  controller: App\Controller\TwitchAPIController::refreshAccessToken
+  methods: [POST]
+twitch_api_connected:
+  path: /twitch/connected
+  controller: App\Controller\TwitchAPIController::isConnected
+  methods: [POST]
+twitch_api_action_check_follower:
+  path: /twitch/action/check_follower
+  controller: App\Controller\TwitchAPIController::isNewUserFollowed
+  methods: [POST]
+twitch_api_action_check_follower_parameters:
+  path: /twitch/action/check_follower/get_parameters
+  controller: App\Controller\TwitchAPIController::getIsNewUserFollowedParameters
+  methods: [POST]
+twitch_api_reaction_clean_stream_chat:
+  path: /twitch/reaction/clean_stream_chat
+  controller: App\Controller\TwitchAPIController::cleanStreamChat
+  methods: [POST]
+
 # AUTOMATION
 automation_add:
   path: /automation/add
@@ -146,6 +253,10 @@ automation_get:
 automation_edit:
   path: /automation/edit
   controller: App\Controller\AutomationController::editAutomation
+  methods: [POST]
+automation_delete:
+  path: /automation/delete
+  controller: App\Controller\AutomationController::deleteAutomation
   methods: [POST]
 
 # ACTION

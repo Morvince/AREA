@@ -28,15 +28,21 @@ const Sign = () => {
   const handleLogin = useLogin()
   const handleRegister = useRegister()
 
-  const handleSlideForm = useCallback(function(event) {
+    const handleSlideForm = useCallback(function(event) {
     event.preventDefault()
     if (slideForm === 0)
-      setSlideForm(s => s + 1)
+    setSlideForm(s => s + 1)
     else if (slideForm === 1)
-      setSlideForm(s => s + 1)
+    setSlideForm(s => s + 1)
     else if (slideForm === 2)
-      setSlideForm(s => s - 1)
+    setSlideForm(s => s - 1)
   }, [slideForm])
+  
+  if (handleLogin.isSuccess || handleRegister.isSuccess) {
+      return (
+          <Navigate to="/home" replace={true} />
+      )
+  }
 
   return (
     <SignPage bgColor={bgColor}>
@@ -46,8 +52,6 @@ const Sign = () => {
         {(slideForm === 0 || slideForm === 2) && handleLogin.isError ? <ErrorMessage color={black}>{handleLogin.error.response.data.message}</ErrorMessage> :
           slideForm === 1 && handleRegister.isError ? <ErrorMessage color={white}>{handleRegister.error.response.data.message}</ErrorMessage> : null}
       </div>
-      {handleLogin.isSuccess && <Navigate to="/" replace={true}/>}
-      {handleRegister.isSuccess && <Navigate to="/" replace={true}/>}
     </SignPage>
   )
 }

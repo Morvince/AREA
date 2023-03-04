@@ -46,6 +46,16 @@
             ;
         }
 
+        public function findByUserId($user_id)
+        {
+            return $this->createQueryBuilder("automation")
+                ->where("automation.user_id = :user_id")
+                ->setParameter("user_id", $user_id)
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+
     //    /**
     //     * @return Automation[] Returns an array of Automation objects
     //     */

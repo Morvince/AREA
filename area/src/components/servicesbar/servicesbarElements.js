@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const LeftColumn = styled.div`
-  /* position: absolute; */
   display: flex;
   width: 150px;
 `;
@@ -12,10 +11,10 @@ export const ServicesBarContainer = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: ${props => props.color};
-  top: 4%;
   width: 150px;
   height: 100%;
   left: 0;
+  top: 0;
   z-index: 999;
   transition: transform .2s ease-in-out;
 
@@ -42,7 +41,7 @@ export const ServicesBarWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 60%;
-  height: 65%;
+  height: 70%;
   background-color: #ebebeb;
   border-radius: 10px;
   padding: 5px;
@@ -74,7 +73,7 @@ export const RectangleContener = styled.div`
   background-color: ${props => props.color};
 
   &.open {
-    transform: translateX(200px);
+    transform: translateX(175px);
   }
 
   &.closed {

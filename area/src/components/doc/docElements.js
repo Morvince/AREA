@@ -76,7 +76,7 @@ export const SpotifyBox = styled.div`
     }
 `;
 
-export const InstagramBox = styled.div`
+export const TwitchBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;

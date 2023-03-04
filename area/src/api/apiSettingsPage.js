@@ -61,68 +61,68 @@ export const useDiscordAccess = () => {
 
 
 
-// INSTAGRAM :
+// TWITCH :
 
 
-const instagramConnected = async () => {
-  return await axios.post("/instagram/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
+const twitchConnected = async () => {
+  return await axios.post("/twitch/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
 }
 
-export const useInstagramConnected = () => {
-  return useMutation(instagramConnected)
+export const useTwitchConnected = () => {
+  return useMutation(twitchConnected)
 }
 
-const instagramConnect = async (data) => {
-  return await axios.post("/instagram/connect", data)
+const twitchConnect = async (data) => {
+  return await axios.post("/twitch/connect", data)
 }
 
-export const useInstagramConnect = () => {
-  return useMutation(instagramConnect, {
+export const useTwitchConnect = () => {
+  return useMutation(twitchConnect, {
     onSuccess: (data) => {
       window.location.replace(data.data.authorization_url)
     }
   })
 }
 
-const instagramAccess = async (data) => {
-  return await axios.post("/instagram/get_access_token", data)
+const twitchAccess = async (data) => {
+  return await axios.post("/twitch/get_access_token", data)
 }
 
-export const useInstagramAccess = () => {
-  return useMutation(instagramAccess)
+export const useTwitchAccess = () => {
+  return useMutation(twitchAccess)
 }
 
 
 
-// GOOGLE :
+// GMAIL :
 
 
-const googleConnected = async () => {
-  return await axios.post("/google/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
+const gmailConnected = async () => {
+  return await axios.post("/gmail/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
 }
 
-export const useGoogleConnected = () => {
-  return useMutation(googleConnected)
+export const useGmailConnected = () => {
+  return useMutation(gmailConnected)
 }
 
-const googleConnect = async (data) => {
-  return await axios.post("/google/connect", data)
+const gmailConnect = async (data) => {
+  return await axios.post("/gmail/connect", data)
 }
 
-export const useGoogleConnect = () => {
-  return useMutation(googleConnect, {
+export const useGmailConnect = () => {
+  return useMutation(gmailConnect, {
     onSuccess: (data) => {
       window.location.replace(data.data.authorization_url)
     }
   })
 }
 
-const googleAccess = async (data) => {
-  return await axios.post("/google/get_access_token", data)
+const gmailAccess = async (data) => {
+  return await axios.post("/gmail/get_access_token", data)
 }
 
-export const useGoogleAccess = () => {
-  return useMutation(googleAccess)
+export const useGmailAccess = () => {
+  return useMutation(gmailAccess)
 }
 
 
