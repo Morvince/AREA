@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, Button } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Button, Alert } from 'react-native';
 import { useCallback, useEffect, useState } from 'react';
 import styles from '../components/Create/styles';
 import ServicesBar from '../components/Create/servicesBar/index';
@@ -89,7 +89,7 @@ export default function Create({ navigation }) {
   const submitArea = useCallback(function() {
     if (enterName === null || enterName === "") {
       setEnterName(null)
-      alert("You must enter a name for your Area")
+      Alert.alert("Enter a Name", "You must enter a name for your Area")
       return
     }
     if (dataActionPuzzleBlock.fields !== null && dataActionPuzzleBlock.fields.length !== 0) {
@@ -98,13 +98,13 @@ export default function Create({ navigation }) {
           if (dataActionPuzzleBlock.data.hasOwnProperty(dataActionPuzzleBlock.fields[i].name) === false) {
             setEnterName(null)
             setDisplayEnterName(false)
-            alert("You must fill the fields for your Action")
+            Alert.alert("Empty field(s)", "You must fill the fields for your Action")
             return
           }
         } else {
           setEnterName(null)
           setDisplayEnterName(false)
-          alert("You must fill the fields for your Action")
+          Alert.alert("Empty field(s)", "You must fill the fields for your Action")
           return
         }
       }
@@ -116,13 +116,13 @@ export default function Create({ navigation }) {
             if (puzzleBlocksList[i].data.hasOwnProperty(puzzleBlocksList[i].fields[j].name) === false) {
               setEnterName(null)
               setDisplayEnterName(false)
-              alert("You must fill the fields for your Reactions")
+              Alert.alert("Empty field(s)", "You must fill the fields for your Reactions")
               return
             }
           } else {
             setEnterName(null)
             setDisplayEnterName(false)
-            alert("You must fill the fields for your Reactions")
+            Alert.alert("Empty field(s)", "You must fill the fields for your Reactions")
             return
           }
         }
@@ -133,17 +133,24 @@ export default function Create({ navigation }) {
 
   const resetCreatePage = useCallback(function() {
     const actionsTmp = []
-    // dataActionPuzzleBlock.data ? actionsTmp.push(dataActionPuzzleBlock.data) : null
-
+    dataActionPuzzleBlock.data ?
+      actionsTmp.push({id: dataActionPuzzleBlock.id, number: 0, informations: dataActionPuzzleBlock.data})
+      : null
+    for(let i = 0; i < puzzleBlocksList.length; i++) {
+      puzzleBlocksList[i].data ?
+        actionsTmp.push({id: puzzleBlocksList[i].id, number: (puzzleBlocksList[i].key + 1), informations: puzzleBlocksList[i].data})
+        : null
+    }
     AsyncStorage.getItem("token")
     .then((res) => {
       addAutomation.mutate(JSON.stringify({
         token: res,
         name: enterName,
-        actions: []
-      }), {
+        actions: actionsTmp
+      }),
+      {
         onSuccess: () => {
-          alert("Success")
+          Alert.alert("Success", "Your Area was successfully created!")
           setSlideServicesBar(true)
           setSlideActionsBar(null)
           setActionPuzzleBlock(null)
@@ -152,10 +159,13 @@ export default function Create({ navigation }) {
           setStateSideBar([false, null])
           setDisplayEnterName(false)
           setEnterName(null)
+        },
+        onError: () => {
+          Alert.alert("Error", "Sorry, it seems an error occured")
         }
       })
     })
-  }, [enterName])
+  }, [dataActionPuzzleBlock, puzzleBlocksList, enterName])
 
   useEffect(() => {
     getAllActions.mutate(null, {
@@ -164,8 +174,6 @@ export default function Create({ navigation }) {
       }
     })
   }, [])
-
-  console.log("puzzleBlocksList -> ", puzzleBlocksList)
 
   return (
     <View style={styles.container}>
@@ -199,7 +207,7 @@ export default function Create({ navigation }) {
         setDataActionPuzzleBlock={setDataActionPuzzleBlock}
         puzzleBlocksList={puzzleBlocksList} setPuzzleBlocksList={setPuzzleBlocksList}/>
       {actionPuzzleBlock !== null && puzzleBlocksList.length !== 0 ?
-        <TouchableOpacity activeOpacity={0.6} onPressOut={() => setDisplayEnterName(true)} style={{position: 'absolute', left: 5, top: '47%'}}>
+        <TouchableOpacity activeOpacity={0.6} onPressOut={() => {setDisplayEnterName(en => !en); setEnterName(null);}} style={{position: 'absolute', left: 5, top: '47%'}}>
           <MaterialIcons name="library-add-check" size={60} color="#31e53f"/>
         </TouchableOpacity>
         : null

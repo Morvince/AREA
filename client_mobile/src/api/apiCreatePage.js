@@ -16,7 +16,7 @@ const dropdownlistGetData = async (uri) => {
 }
 
 export const useDropdownlistGetData = () => {
-  return useMutation(dropdownlistGetData)
+  return useMutation(dropdownlistGetData, {retry: 3})
 }
 
 const addAutomation = async (data) => {
@@ -24,7 +24,7 @@ const addAutomation = async (data) => {
 }
 
 export const useAddAutomation = () => {
-  return useMutation(addAutomation)
+  return useMutation(addAutomation, {retry: 3})
 }
 
 

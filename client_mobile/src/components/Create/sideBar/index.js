@@ -7,7 +7,6 @@ import { useCallback } from 'react';
 
 export default function SideBar({stateSideBar, handleSlideSideBar, setActionPuzzleBlock, dataActionPuzzleBlock, setDataActionPuzzleBlock, puzzleBlocksList, setPuzzleBlocksList}) {
   let key = 0
-  console.log(stateSideBar[1])
 
   const saveDataTextInputCurrentAction = useCallback(
     name => text => {

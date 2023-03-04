@@ -175,7 +175,7 @@ export default function ActionsBar({slideServicesBar, slideActionsBar, handleSty
       <TouchableOpacity activeOpacity={0.8}>
         <View onTouchEnd={() => addPuzzleBlocksToList(item)} style={[styles.actionBlocks, styles.elevation, slideActionsBar !== null ? {backgroundColor: handleStyleActionsBar[slideActionsBar][1]} : null, actionPuzzleBlock === null && item.type === "reaction" ? {opacity: 0.5} : actionPuzzleBlock !== null && item.type === "action" ? {opacity: 0.5} : null]}>
           <Text style={styles.textActionBlocks}>{item.name}</Text>
-            <MaterialIcons name="keyboard-arrow-right" size={48} color={white} style={styles.arrowActionBlocks}/>
+          <MaterialIcons name="keyboard-arrow-right" size={48} color={white} style={styles.arrowActionBlocks}/>
         </View>
       </TouchableOpacity>
     )

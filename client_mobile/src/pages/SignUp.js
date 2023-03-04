@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import styles from '../components/SignUp/styles';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, Alert } from 'react-native';
 import { useForm } from "react-hook-form";
 import { useRegister } from "../api/apiSignPage";
 import InputFieldsSignUp from "../components/SignUp/inputFields";
@@ -13,18 +13,18 @@ export default function SignUp({ navigation }) {
   const onSubmit = useCallback(formData => {
     for (const data in formData) {
       if (formData[data] === undefined || formData[data] === "") {
-        alert("Please complete all the fields")
+        Alert.alert("Empty field(s)", "Please complete all the fields")
         return
       }
     }
     if (formData.password !== formData.confirmpassword) {
-      alert("The 2 passwords differed")
+      Alert.alert("Oops!", "The 2 passwords differed")
       return
     }
     if (!formData.email.includes("@") ||
         formData.email[0] === "@" ||
         formData.email[formData.email.length - 1] === "@") {
-      alert("There is no valid Email Address")
+      Alert.alert("Wrong Email Address", "There is no valid Email Address")
       return
     }
     handleRegister.mutate(
