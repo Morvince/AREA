@@ -78,7 +78,7 @@ const Landing = () => {
 			</IconWrapper>
 			<IconWrapper>
 				<a href="https://www.twitch.tv/p/fr-fr/about/" >
-					<Icon icon="mdi:twitch" width="100" style={{ position: 'absolute', left: '43%', top: "320%" }} />
+					<Icon icon="logos:twitch" width="100" style={{ position: 'absolute', left: '43%', top: "320%" }} />
 				</a>
 			</IconWrapper>
 			<IconWrapper>

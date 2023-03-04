@@ -13,6 +13,10 @@ export const RectangleBlock = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    &:hover {
+        cursor: grab;
+    }
 `;
 
 export const RectangleWrapper = styled.div`
