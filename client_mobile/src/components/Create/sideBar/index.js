@@ -14,11 +14,14 @@ export default function SideBar({stateSideBar, handleSlideSideBar, setActionPuzz
       if (stateSideBar[1].isActionPuzzleBlock)
         setDataActionPuzzleBlock(a => ({
           ...a,
-          [name]: text
+          data: {
+            ...a.data,
+            [name]: text
+          }
         }))
       else {
         let puzzleBlocksListTmp = puzzleBlocksList
-        puzzleBlocksListTmp[stateSideBar[1].key][name] = text
+        puzzleBlocksListTmp[stateSideBar[1].key]["data"] = {...puzzleBlocksListTmp[stateSideBar[1].key].data, [name]: text}
         setPuzzleBlocksList(puzzleBlocksListTmp)
       }
     }, [stateSideBar, puzzleBlocksList])
@@ -27,11 +30,14 @@ export default function SideBar({stateSideBar, handleSlideSideBar, setActionPuzz
     if (stateSideBar[1].isActionPuzzleBlock)
       setDataActionPuzzleBlock(a => ({
         ...a,
-        [name]: value
+        data: {
+          ...a.data,
+          [name]: value
+        }
       }))
     else {
       let puzzleBlocksListTmp = puzzleBlocksList
-      puzzleBlocksListTmp[stateSideBar[1].key][name] = value
+      puzzleBlocksListTmp[stateSideBar[1].key]["data"] = {...puzzleBlocksListTmp[stateSideBar[1].key].data, [name]: value}
       setPuzzleBlocksList(puzzleBlocksListTmp)
     }
   }, [stateSideBar, puzzleBlocksList])
@@ -42,15 +48,14 @@ export default function SideBar({stateSideBar, handleSlideSideBar, setActionPuzz
       setDataActionPuzzleBlock(null)
     } else {
       let puzzleBlocksListTmp = [];
-      for(i = 0; i < puzzleBlocksList.length; i++) {
+      for(let i = 0; i < puzzleBlocksList.length; i++) {
         if (i === stateSideBar[1].key)
           continue
         puzzleBlocksListTmp.push(puzzleBlocksList[i])
       }
-      for(i = 0; i < puzzleBlocksList.length; i++)
-        puzzleBlocksListTmp[i].key = i
-      // setPuzzleBlocksList(puzzleBlocksListTmp)
-      console.log("tmp -> ", puzzleBlocksListTmp)
+      for(let i = 0; i < puzzleBlocksListTmp.length; i++)
+        puzzleBlocksListTmp[i]["key"] = i
+      setPuzzleBlocksList(puzzleBlocksListTmp)
     }
     handleSlideSideBar(null)
   }, [stateSideBar, puzzleBlocksList])
@@ -58,7 +63,7 @@ export default function SideBar({stateSideBar, handleSlideSideBar, setActionPuzz
   return (
     <View style={[styles.sideBar, styles.elevation, stateSideBar[0] ? {width: '75%', backgroundColor: stateSideBar[1].bgColor} : null]}>
       <View style={{flex: 0.5, justifyContent: 'center', alignItems: 'center', paddingLeft: '10%'}}>
-        <TouchableOpacity activeOpacity={0.6} onPressOut={() => handleSlideSideBar(null)} style={{position: 'absolute', left: 0}}>
+        <TouchableOpacity activeOpacity={0.6} onPressOut={() => handleSlideSideBar(null)} style={{position: 'absolute', left: 0, top: '47%'}}>
           <MaterialIcons name="keyboard-arrow-left" size={60} color={white}/>
         </TouchableOpacity>
         {stateSideBar[1] ? stateSideBar[1].fields !== null && stateSideBar[1].fields.length !== 0 ?
@@ -70,14 +75,14 @@ export default function SideBar({stateSideBar, handleSlideSideBar, setActionPuzz
               case "text":
                 typeElement = <TextInput placeholder={element.name} placeholderTextColor={white} multiline={true}
                                 onChangeText={saveDataTextInputCurrentAction(element.name)}
-                                defaultValue={stateSideBar[1].isActionPuzzleBlock ? dataActionPuzzleBlock[nameField] ? dataActionPuzzleBlock[nameField] : null
-                                  : puzzleBlocksList[stateSideBar[1].key][nameField] ? puzzleBlocksList[stateSideBar[1].key][nameField] : null}
+                                defaultValue={stateSideBar[1].isActionPuzzleBlock ? dataActionPuzzleBlock["data"] ? dataActionPuzzleBlock["data"][nameField] : null
+                                  : puzzleBlocksList[stateSideBar[1].key]["data"] ? puzzleBlocksList[stateSideBar[1].key]["data"][nameField] : null}
                                 style={styles.sideBarInputText}/>
                 break;
               case "dropdown":
                 typeElement = <DropDownList name={element.name} uri={element.uri}
-                                defaultValue={stateSideBar[1].isActionPuzzleBlock ? dataActionPuzzleBlock[nameField] ? dataActionPuzzleBlock[nameField] : null
-                                  : puzzleBlocksList[stateSideBar[1].key][nameField] ? puzzleBlocksList[stateSideBar[1].key][nameField] : null}
+                                defaultValue={stateSideBar[1].isActionPuzzleBlock ? dataActionPuzzleBlock["data"] ? dataActionPuzzleBlock["data"][nameField] : null
+                                  : puzzleBlocksList[stateSideBar[1].key]["data"] ? puzzleBlocksList[stateSideBar[1].key]["data"][nameField] : null}
                                 saveDataDropdownlistCurrentAction={saveDataDropdownlistCurrentAction}/>
                 break;
               default:
@@ -90,7 +95,7 @@ export default function SideBar({stateSideBar, handleSlideSideBar, setActionPuzz
               </View>
             )
           })
-          : <Text style={{color: white, fontSize: 17, fontStyle: 'italic'}}>No need to filling fields</Text> : null
+          : <Text style={{color: white, fontSize: 16, fontStyle: 'italic'}}>No need to filling some fields</Text> : null
         }
         <TouchableOpacity activeOpacity={0.6} onPressOut={deletePuzzleBlock} style={stateSideBar[0] ? {position: 'absolute', bottom: 0, right: 25} : null}>
           <Ionicons name="md-trash-sharp" size={60} color={white}/>

@@ -183,7 +183,7 @@ export default function ActionsBar({slideServicesBar, slideActionsBar, handleSty
 
   return (
     <>
-      {checkIfConnected() === true ? //change this to false after
+      {checkIfConnected() === false ? //change this to false after
         <View style={[styles.actionsBar, {height: 125, width: '100%', alignItems: 'center', justifyContent: 'center'}, slideActionsBar === null ? {bottom: -160} : {bottom: 75, backgroundColor: handleStyleActionsBar[slideActionsBar][0]}, !slideServicesBar && {bottom: -160}]}>
           <TouchableOpacity activeOpacity={0.8} onPressOut={handleConnectServices} style={[styles.connectButton, {borderColor: handleStyleActionsBar[slideActionsBar][0]}]}>
             <Text style={{fontSize: 19, fontWeight: 'bold', color: handleStyleActionsBar[slideActionsBar][0]}}>Connect</Text>

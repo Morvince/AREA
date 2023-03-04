@@ -8,6 +8,17 @@ export default styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: '15%'
   },
+  enterName: {
+    backgroundColor: white,
+    position: 'absolute',
+    top: '43%',
+    left: '20%',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: black,
+    padding: 20,
+    zIndex: 99
+  },
   servicesBar: {
     position: 'absolute',
     bottom: -80,

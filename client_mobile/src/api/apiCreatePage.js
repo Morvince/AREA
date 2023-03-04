@@ -19,6 +19,14 @@ export const useDropdownlistGetData = () => {
   return useMutation(dropdownlistGetData)
 }
 
+const addAutomation = async (data) => {
+  return await axios.post("/automation/add", data)
+}
+
+export const useAddAutomation = () => {
+  return useMutation(addAutomation)
+}
+
 
 // SPOTIFY :
 
