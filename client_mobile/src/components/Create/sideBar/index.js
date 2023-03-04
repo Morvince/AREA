@@ -40,9 +40,20 @@ export default function SideBar({stateSideBar, handleSlideSideBar, setActionPuzz
     if (stateSideBar[1].isActionPuzzleBlock) {
       setActionPuzzleBlock(null)
       setDataActionPuzzleBlock(null)
+    } else {
+      let puzzleBlocksListTmp = [];
+      for(i = 0; i < puzzleBlocksList.length; i++) {
+        if (i === stateSideBar[1].key)
+          continue
+        puzzleBlocksListTmp.push(puzzleBlocksList[i])
+      }
+      for(i = 0; i < puzzleBlocksList.length; i++)
+        puzzleBlocksListTmp[i].key = i
+      // setPuzzleBlocksList(puzzleBlocksListTmp)
+      console.log("tmp -> ", puzzleBlocksListTmp)
     }
     handleSlideSideBar(null)
-  }, [stateSideBar])
+  }, [stateSideBar, puzzleBlocksList])
 
   return (
     <View style={[styles.sideBar, styles.elevation, stateSideBar[0] ? {width: '75%', backgroundColor: stateSideBar[1].bgColor} : null]}>
@@ -79,7 +90,7 @@ export default function SideBar({stateSideBar, handleSlideSideBar, setActionPuzz
               </View>
             )
           })
-          : <Text>No need to filling fields</Text> : null
+          : <Text style={{color: white, fontSize: 17, fontStyle: 'italic'}}>No need to filling fields</Text> : null
         }
         <TouchableOpacity activeOpacity={0.6} onPressOut={deletePuzzleBlock} style={stateSideBar[0] ? {position: 'absolute', bottom: 0, right: 25} : null}>
           <Ionicons name="md-trash-sharp" size={60} color={white}/>
