@@ -15,6 +15,7 @@ export default function Create({ navigation }) {
   const [slideActionsBar, setSlideActionsBar] = useState(null)
   const [puzzleBlocksList, setPuzzleBlocksList] = useState([])
   const [actionPuzzleBlock, setActionPuzzleBlock] = useState(null)
+  const [dataActionPuzzleBlock, setDataActionPuzzleBlock] = useState(null)
   const [stateSideBar, setStateSideBar] = useState([false, null])
   const handleStyleActionsBar = {discord: ["#7289da", "#5470d6"], spotify: ["#1db954", "#10a143"],
                                 twitch: ["#6713e2", "#9146ff"], gmail: ["#d92516", "#EA4335"],
@@ -30,6 +31,8 @@ export default function Create({ navigation }) {
   }, [slideServicesBar])
 
   const handleSlideActionsBar = useCallback(function(service) {
+    if (allActions === null || allActions === undefined)
+      return
     if (slideActionsBar === service) {
       setSlideActionsBar(null)
       return
@@ -56,7 +59,7 @@ export default function Create({ navigation }) {
       default:
         break;
     }
-  }, [slideActionsBar])
+  }, [slideActionsBar, allActions])
 
   const handleSlideSideBar = useCallback (function(item) {
     setStateSideBar(s => [!s[0], item])
@@ -66,19 +69,18 @@ export default function Create({ navigation }) {
     if ((actionPuzzleBlock === null && item.type === "reaction") ||
       (actionPuzzleBlock !== null && item.type === "action"))
       return
+    if (actionPuzzleBlock === null)
+      setDataActionPuzzleBlock({bgColor: handleStyleActionsBar[slideActionsBar][1], isActionPuzzleBlock: true, ...item})
     actionPuzzleBlock === null ?
       setActionPuzzleBlock(
         <View style={[styles.actionBlocks, styles.elevation, {backgroundColor: handleStyleActionsBar[slideActionsBar][1]}]}>
           <Text style={styles.textActionBlocks}>{item.name}</Text>
-          {item.fields !== null && item.fields.length !== 0 ?
-            <TouchableOpacity activeOpacity={0.6} onPressOut={() => handleSlideSideBar(item)} style={styles.arrowActionBlocks}>
-              <MaterialIcons name="keyboard-arrow-right" size={48} color={white}/>
-            </TouchableOpacity>
-            : null
-          }
+          <TouchableOpacity activeOpacity={0.6} onPressOut={() => handleSlideSideBar({bgColor: handleStyleActionsBar[slideActionsBar][1], isActionPuzzleBlock: true, ...item})} style={styles.arrowActionBlocks}>
+            <MaterialIcons name="keyboard-arrow-right" size={48} color={white}/>
+          </TouchableOpacity>
         </View>
       )
-      : setPuzzleBlocksList([...puzzleBlocksList, {key: puzzleBlocksList.length, bgColor: handleStyleActionsBar[slideActionsBar][1], ...item}])
+      : setPuzzleBlocksList([...puzzleBlocksList, {key: puzzleBlocksList.length, bgColor: handleStyleActionsBar[slideActionsBar][1], isActionPuzzleBlock: false, ...item}])
   }, [actionPuzzleBlock, puzzleBlocksList, slideActionsBar])
 
   useEffect(() => {
@@ -88,6 +90,8 @@ export default function Create({ navigation }) {
       }
     })
   }, [])
+
+  console.log("puzzleBlocksList -> ", puzzleBlocksList)
 
   return (
     <View style={styles.container}>
@@ -99,13 +103,19 @@ export default function Create({ navigation }) {
         : null
       }
       {actionPuzzleBlock}
-      {
-        actionPuzzleBlock === null ? null :
-        <ActionsList puzzleBlocksList={puzzleBlocksList} setPuzzleBlocksList={setPuzzleBlocksList} slideServicesBar={slideServicesBar} slideActionsBar={slideActionsBar} handleSlideSideBar={handleSlideSideBar}/>
-      }
-      <ActionsBar slideServicesBar={slideServicesBar} slideActionsBar={slideActionsBar} handleStyleActionsBar={handleStyleActionsBar} addPuzzleBlocksToList={addPuzzleBlocksToList} allActions={allActions} actionPuzzleBlock={actionPuzzleBlock}/>
+      <ActionsList puzzleBlocksList={puzzleBlocksList} setPuzzleBlocksList={setPuzzleBlocksList}
+        slideServicesBar={slideServicesBar} slideActionsBar={slideActionsBar}
+        handleSlideSideBar={handleSlideSideBar}
+      />
+      <ActionsBar slideServicesBar={slideServicesBar} slideActionsBar={slideActionsBar}
+        handleStyleActionsBar={handleStyleActionsBar} addPuzzleBlocksToList={addPuzzleBlocksToList}
+        allActions={allActions} actionPuzzleBlock={actionPuzzleBlock}
+      />
       <ServicesBar slideServicesBar={slideServicesBar} handleSlideActionsBar={handleSlideActionsBar}/>
-      <SideBar stateSideBar={stateSideBar} handleSlideSideBar={handleSlideSideBar}/>
+      <SideBar stateSideBar={stateSideBar} handleSlideSideBar={handleSlideSideBar}
+        setActionPuzzleBlock={setActionPuzzleBlock} dataActionPuzzleBlock={dataActionPuzzleBlock}
+        setDataActionPuzzleBlock={setDataActionPuzzleBlock}
+        puzzleBlocksList={puzzleBlocksList} setPuzzleBlocksList={setPuzzleBlocksList}/>
     </View>
   );
 }

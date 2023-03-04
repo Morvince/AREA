@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { black, darkGray, lightGray, white } from "../../color";
+import { black, lightGray, white } from "../../color";
 
 export default styles = StyleSheet.create({
   container: {
@@ -48,6 +48,17 @@ export default styles = StyleSheet.create({
     bottom: 2,
     right: 3
   },
+  connectButton: {
+    borderWidth: 4,
+    borderRadius: 50,
+    width: 180,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: white,
+    elevation: 22,
+    shadowColor: black
+  },
   sideBar: {
     position: 'absolute',
     right: 0,
@@ -58,14 +69,23 @@ export default styles = StyleSheet.create({
     backgroundColor: white,
     zIndex: 100
   },
-  inputText: {
+  sideBarInputText: {
     height: 80,
     width: 200,
     borderWidth: 1,
-    borderColor: darkGray,
+    borderColor: white,
     borderRadius: 10,
     fontSize: 16,
     paddingHorizontal: 10,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: white
   },
+  sideBarDropdownlist: {
+    height: 50,
+    width: 200,
+    borderColor: white,
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10
+  }
 });
