@@ -67,7 +67,7 @@ discord_api_check_username:
   path: /discord/action/check_username
   controller: App\Controller\DiscordAPIController::isUsernameChanged
   methods: [POST]
-discord_api_check_username_parameters:
+discord_api_check_username_get_parameters:
   path: /discord/action/check_username/get_parameters
   controller: App\Controller\DiscordAPIController::getIsUsernameChangedParameters
   methods: [POST]
@@ -80,7 +80,7 @@ discord_api_send_private:
   controller: App\Controller\DiscordAPIController::sendPrivateMessage
   methods: [POST]
 discord_api_get_user_channels:
-  path: /discord/reaction/get_user_channels
+  path: /discord/get_user_channels
   controller: App\Controller\DiscordAPIController::getUserChannels
   methods: [POST]
 discord_api_react_message:
@@ -95,6 +95,9 @@ discord_api_get_thread_type:
   path: /discord/get_thread_type
   controller: App\Controller\DiscordAPIController::getThreadType
   methods: [POST]
+discord_api_test:
+  path: /discord/test
+  controller: App\Controller\DiscordAPIController::test
 
 # GITHUB
 github_api_connect:
