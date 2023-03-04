@@ -16,6 +16,7 @@
         public function about(Request $request, ActionRepository $action_repository, ServiceRepository $service_repository)
         {
             header('Access-Control-Allow-Origin: *');
+            $project = array("name" => "Hapilink", "subject" => "Create your own automation by linking an action to all reactions you want.");
             $client = array("host" => $request->getClientIp());
             $services = array();
             foreach ($service_repository->findAll() as $service) {
@@ -33,7 +34,7 @@
                 array_push($services, $tmp_services);
             }
             $server = array("current_time" => time(), "services" => $services);
-            $about = array("client" => $client, "server" => $server);
+            $about = array("project" => $project, "client" => $client, "server" => $server);
             echo "<pre>";
             return new Response(json_encode($about, JSON_PRETTY_PRINT), 200);
         }
