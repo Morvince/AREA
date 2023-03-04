@@ -303,6 +303,7 @@
          */
         public function likeRandomTweet(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
         {
+            srand(time());
             // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->automation_action_id)) {
