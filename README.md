@@ -21,12 +21,25 @@ AREA is a project that aims to be able to connect different services in order to
 
 ====
 
-## Groups
+## **Groups**
 
-| Group |
-|--------------------------------------------------|
-| Noa Leclaire <noa.leclaire@epitech.eu> |
-| Nassim Alaimi   <nassim.alaimi@epitech.eu>   |
-| Enzo Laurent <enzo.laurent@epitech.eu>  |
-| Enzo Bonato <enzo.bonato@epitech.eu> |
-| Marvin Verain  <marvin.verain@epitech.eu>    |
+<table>
+  <tr>
+    <th>Group</th>
+  </tr>
+  <tr>
+    <td><img src="https://github.com//noaleclaire.png" width="50px" height="50px"><br>Noa Leclaire</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/NassimAlaimi.png" width="50px" height="50px"><br>Nassim Alaimi</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/Nzoooo.png" width="50px" height="50px"><br>Enzo Laurent</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/EnzoBonato.png" width="50px" height="50px"><br>Enzo Bonato</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/Morvince.png" width="50px" height="50px"><br>Marvin Verain</td>
+  </tr>
+</table>
