@@ -168,6 +168,19 @@ export default function Create({ navigation }) {
   }, [dataActionPuzzleBlock, puzzleBlocksList, enterName])
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', () => {
+      if (!navigation.isFocused()) {
+        getAllActions.mutate(null, {
+          onSuccess: (data) => {
+            setAllActions(data.data.actions)
+          }
+        })
+      }
+    })
+    return unsubscribe
+  }, [navigation])
+
+  useEffect(() => {
     getAllActions.mutate(null, {
       onSuccess: (data) => {
         setAllActions(data.data.actions)

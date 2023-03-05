@@ -1,15 +1,19 @@
 import { View, Text, FlatList, TouchableOpacity, Image, Alert } from 'react-native';
-import { lightPurple, white } from '../color';
-import { MaterialIcons, Fontisto, FontAwesome5 } from '@expo/vector-icons';
+import { darkPurple, lightPurple, white } from '../color';
+import { MaterialIcons, Fontisto, FontAwesome5, Feather } from '@expo/vector-icons';
 import { useCallback, useEffect, useState } from 'react';
 import { useGetAutomation, useDeleteAutomation } from '../api/apiMyAreasPage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import styles from '../components/MyAreas/styles';
 import styles2 from '../components/Create/styles'
 import SideBar from '../components/MyAreas/sideBar';
+import MenuBar from '../components/MyAreas/menuBar';
 
 export default function MyAreas({navigation}) {
   const [data, setData] = useState([])
   const [stateSideBar, setStateSideBar] = useState([false, null])
+  const [stateMenuBar, setStateMenuBar] = useState(false)
   const getAutomation = useGetAutomation()
   const deleteAutomation = useDeleteAutomation()
 
@@ -38,6 +42,10 @@ export default function MyAreas({navigation}) {
     setStateSideBar(s => [!s[0], item])
   }, [])
 
+  const handleSlideMenuBar = useCallback(function() {
+    setStateMenuBar(m => !m)
+  }, [])
+
   const deleteArea = useCallback(function(automation_id) {
     deleteAutomation.mutate(JSON.stringify({automation_id: automation_id}), {
       onSuccess: () => {
@@ -50,6 +58,29 @@ export default function MyAreas({navigation}) {
         handleSlideSideBar(null)
       }
     })
+  }, [])
+
+  const handleLogOut = useCallback(function() {
+    AsyncStorage.removeItem("token")
+    .then((res) => {
+      navigation.replace('SignIn')
+    })
+  }, [])
+
+  const handleChangeServerIp = useCallback(function(event) {
+    if (event.nativeEvent.text !== null && event.nativeEvent.text !== "") {
+      axios.defaults.baseURL = event.nativeEvent.text
+      AsyncStorage.setItem("serverIp", axios.defaults.baseURL)
+      .then((res) => {
+        Alert.alert("Success", "Server IP Address successfully updated!")
+        getAutomation.mutate(null, {
+          onSuccess: (data) => {
+            setData(data.data.automations)
+          }
+        })
+      })
+    } else
+      Alert.alert("Missing Server IP", "Please enter the server IP Address")
   }, [])
 
   const renderItem = ({item, index}) => {
@@ -106,8 +137,12 @@ export default function MyAreas({navigation}) {
       </View>
     )
   }
+
   return (
     <View style={styles.container}>
+      <TouchableOpacity activeOpacity={0.6} onPressOut={handleSlideMenuBar} style={{position: 'absolute', left: 5, top: '8.5%'}}>
+        <Feather name="menu" size={48} color={darkPurple}/>
+      </TouchableOpacity>
       <Text style={{fontSize: 34, fontWeight: 'bold', color: lightPurple}}>My AREAS</Text>
       <View style={styles.containerAreas}>
       {getAutomation.isSuccess ?
@@ -122,6 +157,9 @@ export default function MyAreas({navigation}) {
       }
       </View>
       <SideBar stateSideBar={stateSideBar} handleSlideSideBar={handleSlideSideBar} deleteArea={deleteArea}/>
+      <MenuBar stateMenuBar={stateMenuBar} handleSlideMenuBar={handleSlideMenuBar}
+        handleLogOut={handleLogOut} handleChangeServerIp={handleChangeServerIp}
+      />
     </View>
   )
 }

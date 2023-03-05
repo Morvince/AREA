@@ -102,7 +102,7 @@ export default function ActionsBar({slideServicesBar, slideActionsBar, handleSty
     isGmailConnected.mutate()
     isTwitterConnected.mutate()
     isGithubConnected.mutate()
-  }, [])
+  }, [allActions])
 
   const checkIfConnected = () => {
     switch (slideActionsBar) {

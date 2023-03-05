@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons';
+import EnterIpAddress from './src/pages/EnterIpAddress';
 import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
 import Create from './src/pages/Create';
@@ -44,7 +45,8 @@ function Home() {
 export default function Navigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SignIn" screenOptions={{headerShown: false}}>
+      <Stack.Navigator initialRouteName="EnterIpAddress" screenOptions={{headerShown: false}}>
+        <Stack.Screen name="EnterIpAddress" component={EnterIpAddress}/>
         <Stack.Screen name="SignIn" component={SignIn}/>
         <Stack.Screen name="SignUp" component={SignUp}/>
         <Stack.Screen name="Home" component={Home}/>
