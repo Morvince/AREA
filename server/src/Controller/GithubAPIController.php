@@ -128,10 +128,10 @@
         {
             // Get needed values
             $request_content = json_decode($request->getContent());
-            if (empty($request_content->user_id)) {
+            if (empty($request_content->access_token)) {
                 return new JsonResponse(array("message" => "Github: Missing field"), 400);
             }
-            $user_id = $request_content->user_id;
+            $access_token = $request_content->access_token;
             $service = $service_repository->findByName("github");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Github: Service not found"), 404);
@@ -141,12 +141,12 @@
             if (count($identifiers) != 2) {
                 return new JsonResponse(array("message" => "Github: Identifiers error"), 422);
             }
-            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            if (empty($user_service_repository->findBy(array("access_token" => $access_token)))) {
                 return new JsonResponse(array("message" => "Github: Refresh token not found"), 404);
             }
-            $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
+            $user_service = $user_service_repository->findBy(array("access_token" => $access_token))[0];
             if (!empty($user_service)) {
-                $user_service_repository->remove($user_service);
+                $user_service_repository->remove($user_service, true);
             }
             return new JsonResponse(array("message" => "OK"), 200);
         }
@@ -184,9 +184,10 @@
             }
             $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters, "User-Agent: Area"));
             if (isset($response->message) && isset($response->documentation_url)) {
+                $this->request_api->sendRoute("http://localhost/github/refresh_access_token", array("access_token" => $access_token));
                 $response = array("message" => "Github: Help on $response->documentation_url", "code" => 400);
             }
-            return $response;
+            return json_decode(json_encode($response));
         }
 
         /**
@@ -317,7 +318,6 @@
                 return new JsonResponse(array("message" => "Github: No repository URL"), 404);
             }
             // Request to get the last commit
-            // $response = json_decode($this->sendRequest($access_token, "repos/Morvince/AREA/commits/102-implement-github-service")); pour specifier une branche
             $response = $this->sendRequest($access_token, "repos/$informations->repo/commits");
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
@@ -355,7 +355,7 @@
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
             $informations = $automation_action->getInformations();
-            if (explode("/", $informations->repo) !== 2) {
+            if (count(explode("/", $informations->repo)) !== 2) {
                 return new JsonResponse(array("message" => "Github: Bad repository URL"), 404);
             }
             if (empty($informations->title)) {
@@ -400,7 +400,7 @@
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
             $informations = $automation_action->getInformations();
-            if (explode("/", $informations->repo) !== 2) {
+            if (count(explode("/", $informations->repo)) !== 2) {
                 return new JsonResponse(array("message" => "Github: Bad repository URL"), 404);
             }
             $response = $this->sendRequest($access_token, "repos/$informations->repo/contents");

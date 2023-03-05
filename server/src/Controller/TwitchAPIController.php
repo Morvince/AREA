@@ -138,10 +138,10 @@
         {
             // Get needed values
             $request_content = json_decode($request->getContent());
-            if (empty($request_content->user_id)) {
+            if (empty($request_content->access_token)) {
                 return new JsonResponse(array("message" => "Twitch: Missing field"), 400);
             }
-            $user_id = $request_content->user_id;
+            $access_token = $request_content->access_token;
             $service = $service_repository->findByName("twitch");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Twitch: Service not found"), 404);
@@ -151,12 +151,12 @@
             if (count($identifiers) != 2) {
                 return new JsonResponse(array("message" => "Twitch: Identifiers error"), 422);
             }
-            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            if (empty($user_service_repository->findBy(array("access_token" => $access_token)))) {
                 return new JsonResponse(array("message" => "Twitch: Refresh token not found"), 404);
             }
             $client_id = $identifiers[0];
             $client_secret = $identifiers[1];
-            $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
+            $user_service = $user_service_repository->findBy(array("access_token" => $access_token))[0];
             $refresh_token = $user_service->getRefreshToken();
             // Request for the access token
             $ch = curl_init();
@@ -171,7 +171,7 @@
             $result = curl_exec($ch);
             curl_close($ch);
             if (empty(json_decode($result)->access_token)) {
-                $user_service_repository->remove($user_service);
+                $user_service_repository->remove($user_service, true);
                 return new JsonResponse(array("message" => "Twitch: Expired refresh token"), 400);
             }
             // Edit datas in database
@@ -224,9 +224,18 @@
             $client_id = $identifiers[0];
             $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters, "Client-ID: $client_id"));
             if (isset($response->error)) {
-                $response = array("message" => "Twitch: $response->error $response->message", "code" => $response->status);
+                if ($response->status === 401) {
+                    $response = json_decode($this->request_api->sendRoute("http://localhost/twitch/refresh_access_token", array("access_token" => $access_token)));
+                    if (isset($response->code)) {
+                        $response = array("message" => "Twitch: Refresh token error", "code" => $response->code);
+                    } else {
+                        return $this->sendRequest($service_repository, $access_token, $endpoint, $method, $parameters);
+                    }
+                } else {
+                    $response = array("message" => "Twitch: $response->error $response->message", "code" => $response->status);
+                }
             }
-            return $response;
+            return json_decode(json_encode($response));
         }
 
         // Action
@@ -272,7 +281,7 @@
             if (empty($automation_action)) {
                 return new JsonResponse(array("message" => "Twitch: automation_action ID not found"), 404);
             }
-            $service = $service_repository->findByName("spotify");
+            $service = $service_repository->findByName("twitch");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Twitch: Service not found"), 404);
             }
