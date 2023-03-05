@@ -128,12 +128,9 @@ const PlayBox = (props) => {
       actions.push(i);
       i = { id: 0, number: 0, informations: [] }
     }
-    console.log(actions);
     if (automationId === undefined) {
-      console.log("add");
       addAutomation.mutate({ name: name, actions: actions });
     } else {
-      console.log("edit");
       editAutomation.mutate({ name: name, id: automationId, actions: actions });
     }
     setSharedData([]);
