@@ -129,10 +129,10 @@
         {
             // Get needed values
             $request_content = json_decode($request->getContent());
-            if (empty($request_content->user_id)) {
+            if (empty($request_content->access_token)) {
                 return new JsonResponse(array("message" => "Spotify: Missing field"), 400);
             }
-            $user_id = $request_content->user_id;
+            $access_token = $request_content->access_token;
             $service = $service_repository->findByName("spotify");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Spotify: Service not found"), 404);
@@ -142,12 +142,12 @@
             if (count($identifiers) != 2) {
                 return new JsonResponse(array("message" => "Spotify: Identifiers error"), 422);
             }
-            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            if (empty($user_service_repository->findBy(array("access_token" => $access_token)))) {
                 return new JsonResponse(array("message" => "Spotify: Refresh token not found"), 404);
             }
             $client_id = $identifiers[0];
             $client_secret = $identifiers[1];
-            $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
+            $user_service = $user_service_repository->findBy(array("access_token" => $access_token))[0];
             $refresh_token = $user_service->getRefreshToken();
             // Request for the access token
             $ch = curl_init();
@@ -284,7 +284,16 @@
             }
             $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters));
             if (isset($response->error)) {
-                $response = array("message" => "Spotify: ".$response->error->message, "code" => $response->error->status);
+                if ($response->error->status === 403) {
+                    $response = json_decode($this->request_api->sendRoute("http://localhost/spotify/refresh_access_token", array("access_token" => $access_token)));
+                    if (isset($response->code)) {
+                        $response = array("message" => "Spotify: $response->message", "code" => $response->code);
+                    } else {
+                        return $this->sendRequest($access_token, $endpoint, $method, $parameters);
+                    }
+                } else {
+                    $response = array("message" => "Spotify: ".$response->error->message, "code" => $response->error->status);
+                }
             }
             return json_decode(json_encode($response));
         }
