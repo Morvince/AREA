@@ -204,7 +204,7 @@
             }
             $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters));
             if (isset($response->error)) {
-                if ($response->error->status === 401) {
+                if ($response->error->code === 401) {
                     $response = json_decode($this->request_api->sendRoute("http://localhost/gmail/refresh_access_token", array("access_token" => $access_token)));
                     if (isset($response->code)) {
                         $response = array("message" => "Gmail: Refresh token error", "code" => $response->code);
