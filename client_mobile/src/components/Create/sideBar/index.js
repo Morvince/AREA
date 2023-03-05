@@ -94,7 +94,7 @@ export default function SideBar({stateSideBar, handleSlideSideBar, setActionPuzz
             }
             return (
               <View key={key}>
-                <Text>{element.title}</Text>
+                <Text style={{marginVertical: 12, textAlign: 'center', fontSize: 17, fontWeight: 'bold', color: white, fontStyle: 'italic'}}>{element.title}</Text>
                 {typeElement}
               </View>
             )
