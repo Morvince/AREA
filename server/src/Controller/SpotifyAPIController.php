@@ -287,7 +287,7 @@
                 if ($response->error->status === 403) {
                     $response = json_decode($this->request_api->sendRoute("http://localhost/spotify/refresh_access_token", array("access_token" => $access_token)));
                     if (isset($response->code)) {
-                        $response = array("message" => "Spotify: $response->message", "code" => $response->code);
+                        $response = array("message" => "Spotify: Refresh token error", "code" => $response->code);
                     } else {
                         return $this->sendRequest($access_token, $endpoint, $method, $parameters);
                     }

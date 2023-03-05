@@ -43,85 +43,73 @@
             $io = new SymfonyStyle($input, $output);
             $io->success("Server started");
             $old_parameters = array();
-            // while (true) {
-            //     foreach ($this->automation_action_repository->findAll() as $automation_action) {
-            //         // Get needed values
-            //         $automation_action_id = $automation_action->getId();
-            //         $action_id = $automation_action->getActionId();
-            //         $action = $this->action_repository->find($action_id);
-            //         if (empty($action)) {
-            //             $io->warning("Action not found with action.id=$action_id in automation_action.id=$automation_action_id");
-            //             continue;
-            //         }
-            //         if (strcmp($action->getType(), "action") !== 0) {
-            //             continue;
-            //         }
-            //         $service_id = $action->getServiceId();
-            //         $service = $this->service_repository->find($service_id);
-            //         if (empty($service)) {
-            //             $io->warning("Service not found with service.id=$service_id in action.id=$action_id");
-            //             continue;
-            //         }
-            //         $url = "server/" . $service->getName() . "/" . $action->getType() . "/" . $action->getIdentifier();
-            //         // Request to get parameters of the action
-            //         $parameters = $this->sendRequest($url . "/get_parameters", array("automation_action_id" => $automation_action_id));
-            //         if (isset($parameters->code)) {
-            //             try {
-            //                 $io->warning("Parameters error with message=$parameters->message");
-            //             } catch (\Throwable $th) {
-            //                 $io->warning("Parameters error with message=");
-            //                 print_r($parameters->message);
-            //             }
-            //             // $response_refresh_token = $this->refreshAccessToken($automation_action, $service, $this->automation_repository);
-            //             // if ($response_refresh_token["refreshed"]) {
-            //             //     $io->success($response_refresh_token["message"]);
-            //             // } else {
-            //             //     $io->warning($response_refresh_token["message"]);
-            //             // }
-            //             continue;
-            //         }
-            //         // Stock the old parameters of the action
-            //         if (empty($old_parameters[$automation_action_id])) {
-            //             $old_parameters[$automation_action_id] = $parameters;
-            //             $io->success("Fill old_parameters for automation_action.id=$automation_action_id");
-            //             continue;
-            //         }
-            //         // Request to check if the action is validate
-            //         $response = $this->sendRequest($url, array("automation_action_id" => $automation_action_id, "new" => $parameters, "old" => $old_parameters[$automation_action_id]));
-            //         if (isset($response->code)) {
-            //             try {
-            //                 $io->warning("Parameters error with message=$parameters->message");
-            //             } catch (\Throwable $th) {
-            //                 $io->warning("Parameters error with message=");
-            //                 print_r($parameters->message);
-            //             }
-            //             // $this->refreshAccessToken($automation_action, $service, $this->automation_repository);
-            //             // if ($response_refresh_token["refreshed"]) {
-            //             //     $io->success($response_refresh_token["message"]);
-            //             // } else {
-            //             //     $io->warning($response_refresh_token["message"]);
-            //             // }
-            //             continue;
-            //         }
-            //         $old_parameters[$automation_action_id] = $parameters;
-            //         // Trigger all linked reactions
-            //         if ($response->message === true) {
-            //             $parameters = array("automation_action_id" => $automation_action_id);
-            //             $response = $this->sendRequest("server/automation/reaction/trigger", $parameters);
-            //             if (isset($response->code)) {
-            //                 try {
-            //                     $io->warning("Trigger error for the automation_action.id=$automation_action_id with message=$response->message");
-            //                 } catch (\Throwable $th) {
-            //                     $io->warning("Trigger error for the automation_action.id=$automation_action_id with message=");
-            //                     print_r($response->message);
-            //                 }
-            //                 continue;
-            //             }
-            //             $io->success("Triggered succes for the automation.id=".$automation_action->getAutomationId());
-            //         }
-            //     }
-            //     sleep(10);
-            // }
+            while (true) {
+                foreach ($this->automation_action_repository->findAll() as $automation_action) {
+                    // Get needed values
+                    $automation_action_id = $automation_action->getId();
+                    $action_id = $automation_action->getActionId();
+                    $action = $this->action_repository->find($action_id);
+                    if (empty($action)) {
+                        $io->warning("Action not found with action.id=$action_id in automation_action.id=$automation_action_id");
+                        continue;
+                    }
+                    if (strcmp($action->getType(), "action") !== 0) {
+                        continue;
+                    }
+                    $service_id = $action->getServiceId();
+                    $service = $this->service_repository->find($service_id);
+                    if (empty($service)) {
+                        $io->warning("Service not found with service.id=$service_id in action.id=$action_id");
+                        continue;
+                    }
+                    $url = "server/" . $service->getName() . "/" . $action->getType() . "/" . $action->getIdentifier();
+                    // Request to get parameters of the action
+                    $parameters = $this->sendRequest($url . "/get_parameters", array("automation_action_id" => $automation_action_id));
+                    if (isset($parameters->code)) {
+                        try {
+                            $io->warning("Parameters error with message=$parameters->message");
+                        } catch (\Throwable $th) {
+                            $io->warning("Parameters error with message=");
+                            print_r($parameters->message);
+                        }
+                        continue;
+                    }
+                    // Stock the old parameters of the action
+                    if (empty($old_parameters[$automation_action_id])) {
+                        $old_parameters[$automation_action_id] = $parameters;
+                        $io->success("Fill old_parameters for automation_action.id=$automation_action_id");
+                        continue;
+                    }
+                    // Request to check if the action is validate
+                    $response = $this->sendRequest($url, array("automation_action_id" => $automation_action_id, "new" => $parameters, "old" => $old_parameters[$automation_action_id]));
+                    if (isset($response->code)) {
+                        try {
+                            $io->warning("Parameters error with message=$parameters->message");
+                        } catch (\Throwable $th) {
+                            $io->warning("Parameters error with message=");
+                            print_r($parameters->message);
+                        }
+                        continue;
+                    }
+                    $old_parameters[$automation_action_id] = $parameters;
+                    // Trigger all linked reactions
+                    if ($response->message === true) {
+                        $parameters = array("automation_action_id" => $automation_action_id);
+                        $response = $this->sendRequest("server/automation/reaction/trigger", $parameters);
+                        if (isset($response->code)) {
+                            try {
+                                $io->warning("Trigger error for the automation_action.id=$automation_action_id with message=$response->message");
+                            } catch (\Throwable $th) {
+                                $io->warning("Trigger error for the automation_action.id=$automation_action_id with message=");
+                                print_r($response->message);
+                            }
+                            continue;
+                        }
+                        $io->success("Triggered succes for the automation.id=".$automation_action->getAutomationId());
+                    }
+                }
+                sleep(10);
+            }
             return Command::SUCCESS;
         }
         private function refreshAccessToken($automation_action, $service, $automation_repository)

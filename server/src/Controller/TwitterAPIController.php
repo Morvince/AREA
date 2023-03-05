@@ -127,10 +127,10 @@
         {
             // Get needed values
             $request_content = json_decode($request->getContent());
-            if (empty($request_content->user_id)) {
+            if (empty($request_content->access_token)) {
                 return new JsonResponse(array("message" => "Twitter: Missing field"), 400);
             }
-            $user_id = $request_content->user_id;
+            $access_token = $request_content->access_token;
             $service = $service_repository->findByName("twitter");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Twitter: Service not found"), 404);
@@ -140,13 +140,13 @@
             if (count($identifiers) != 2) {
                 return new JsonResponse(array("message" => "Twitter: Identifiers error"), 422);
             }
-            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            if (empty($user_service_repository->findBy(array("access_token" => $access_token)))) {
                 return new JsonResponse(array("message" => "Twitter: Refresh token not found"), 404);
             }
             $client_id = $identifiers[0];
             $client_secret = $identifiers[1];
             $code_challenge = "TUHk8FoWnFaNw2xMcM6Nm/MUOE+y+n0pMkksPyctkSA=";
-            $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
+            $user_service = $user_service_repository->findBy(array("access_token" => $access_token))[0];
             $refresh_token = $user_service->getRefreshToken();
             // Request for the access token
             $ch = curl_init();
@@ -204,6 +204,7 @@
             }
             $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters));
             if (isset($response->errors) || isset($response->title) || isset($response->detail) || isset($response->status)) {
+                $this->request_api->sendRoute("http://localhost/twitter/refresh_access_token", array("access_token" => $access_token));
                 $response = array("message" => "Twitter: error for the endpoint ".self::API_URL.$endpoint, "code" => 400);
             }
             return json_decode(json_encode($response));
