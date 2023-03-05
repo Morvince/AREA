@@ -354,7 +354,7 @@
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
             $informations = $automation_action->getInformations();
-            if (explode("/", $informations->repo) !== 2) {
+            if (count(explode("/", $informations->repo)) !== 2) {
                 return new JsonResponse(array("message" => "Github: Bad repository URL"), 404);
             }
             if (empty($informations->title)) {
@@ -399,7 +399,7 @@
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
             $informations = $automation_action->getInformations();
-            if (explode("/", $informations->repo) !== 2) {
+            if (count(explode("/", $informations->repo)) !== 2) {
                 return new JsonResponse(array("message" => "Github: Bad repository URL"), 404);
             }
             $response = $this->sendRequest($access_token, "repos/$informations->repo/contents");

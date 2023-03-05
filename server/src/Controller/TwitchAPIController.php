@@ -272,7 +272,7 @@
             if (empty($automation_action)) {
                 return new JsonResponse(array("message" => "Twitch: automation_action ID not found"), 404);
             }
-            $service = $service_repository->findByName("spotify");
+            $service = $service_repository->findByName("twitch");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Twitch: Service not found"), 404);
             }

@@ -66,7 +66,12 @@
                     // Request to get parameters of the action
                     $parameters = $this->sendRequest($url . "/get_parameters", array("automation_action_id" => $automation_action_id));
                     if (isset($parameters->code)) {
-                        $io->warning("Parameters error with message=$parameters->message");
+                        try {
+                            $io->warning("Parameters error with message=$parameters->message");
+                        } catch (\Throwable $th) {
+                            $io->warning("Parameters error with message=");
+                            print_r($parameters->message);
+                        }
                         $response_refresh_token = $this->refreshAccessToken($automation_action, $service, $this->automation_repository, $this->user_service_repository);
                         if ($response_refresh_token["refreshed"]) {
                             $io->success($response_refresh_token["message"]);
@@ -84,7 +89,12 @@
                     // Request to check if the action is validate
                     $response = $this->sendRequest($url, array("automation_action_id" => $automation_action_id, "new" => $parameters, "old" => $old_parameters[$automation_action_id]));
                     if (isset($response->code)) {
-                        $io->warning("Parameters error with message=$parameters->message");
+                        try {
+                            $io->warning("Parameters error with message=$parameters->message");
+                        } catch (\Throwable $th) {
+                            $io->warning("Parameters error with message=");
+                            print_r($parameters->message);
+                        }
                         $this->refreshAccessToken($automation_action, $service, $this->automation_repository, $this->user_service_repository);
                         if ($response_refresh_token["refreshed"]) {
                             $io->success($response_refresh_token["message"]);
@@ -99,7 +109,12 @@
                         $parameters = array("automation_action_id" => $automation_action_id);
                         $response = $this->sendRequest("server/automation/reaction/trigger", $parameters);
                         if (isset($response->code)) {
-                            $io->warning("Trigger error for the automation_action.id=$automation_action_id with message=$response->message");
+                            try {
+                                $io->warning("Trigger error for the automation_action.id=$automation_action_id with message=$response->message");
+                            } catch (\Throwable $th) {
+                                $io->warning("Trigger error for the automation_action.id=$automation_action_id with message=");
+                                print_r($response->message);
+                            }
                             continue;
                         }
                         $io->success("Triggered succes for the automation.id=".$automation_action->getAutomationId());

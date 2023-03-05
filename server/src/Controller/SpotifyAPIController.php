@@ -434,24 +434,14 @@
             }
             $access_token = $user_service_repository->findByUserIdAndServiceId($automation->getUserId(), $service->getId())[0]->getAccessToken();
             $informations = $automation_action->getInformations();
-            if (empty($informations->artists_id)) {
+            if (empty($informations->artist)) {
                 return new JsonResponse(array("message" => "Spotify: Artists ID not found"), 404);
-            }
-            $artist_name = "";
-            if (!empty($informations->artist_id)) {
-                $response = $this->getArtistById($access_token, $informations->artist_id);
-                if (!empty($response->name)) {
-                    $artist_name = $response->name;
-                }
-            }
-            if (empty($artists_name)) {
-                return new JsonResponse(array("message" => "Spotify: Artist ID not found"), 404);
             }
             if (empty($informations->playlist_id)) {
                 return new JsonResponse(array("message" => "Spotify: Playlist ID not found"), 404);
             }
             $playlist_id = $informations->playlist_id;
-            $music_uri = $this->getRandomMusicFromArtist($access_token, $artist_name);
+            $music_uri = $this->getRandomMusicFromArtist($access_token, $informations->artist);
             if (isset($music_uri->code)) {
                 return new JsonResponse(array("message" => $music_uri->message), $music_uri->code);
             }

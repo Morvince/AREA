@@ -63,7 +63,7 @@ spotify_api_reaction_change_playlist_details:
   methods: [POST]
 spotify_api_reaction_add_artist_music_to_playlist:
   path: /spotify/reaction/add_artist_music_to_playlist
-  controller: App\Controller\SpotifyAPIController::addMusicFromArtistListToPlaylist
+  controller: App\Controller\SpotifyAPIController::addMusicFromArtistToPlaylist
   methods: [POST]
 
 # DISCORD
