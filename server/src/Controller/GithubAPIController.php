@@ -222,7 +222,7 @@
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
             $formatted = array();
-            foreach ($response->items as $item) {
+            foreach ($response as $item) {
                 array_push($formatted, array("name" => $item->full_name, "id" => $item->id));
             }
             return new JsonResponse(array("items" => $formatted), 200);
@@ -263,7 +263,7 @@
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
             $formatted = array();
-            foreach ($response->items as $item) {
+            foreach ($response as $item) {
                 array_push($formatted, array("name" => $item->name, "id" => $item->commit->sha));
             }
             return new JsonResponse(array("items" => $formatted), 200);

@@ -71,7 +71,7 @@ const ButtonBox = (props) => {
         }
         linkedList.push(ID)
       }
-      setSharedData(sharedData => [...sharedData, { service: props.service, index: ID, color: props.color, top: rect.top - 80, left: rect.left - 150, action: props.action, above: null, name: props.name, dbId: props.dbID, toSend: [] }])
+      setSharedData(sharedData => [...sharedData, { service: props.service, index: ID, color: props.color, top: rect.top - 80, left: rect.left - 150, action: props.action, above: null, name: props.name, dbId: props.dbID, toSend: {} }])
       setID(ID + 1);
     }
     setbackgroundColor(props.color)
