@@ -104,7 +104,9 @@ const Landing = () => {
 			<YoutubeScreen>
 				<YouTube videoId="WFw_Whjj51k" opts={YoutubeOptions} />
 			</YoutubeScreen>
-			<ButtonTryIt top="490%" left="42%" height="100px" width="300px" to="/home">Try it !!</ButtonTryIt>
+			<a href="../../download/app-realease.apk" download>
+				<ButtonTryIt top="490%" left="42%" height="100px" width="300px">Download APK</ButtonTryIt>
+			</a>
 		</>
 	)
 };
