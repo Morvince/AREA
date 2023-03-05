@@ -8,3 +8,11 @@ const getInfosAreas = async () => {
 export const useGetInfosAreas = () => {
     return useMutation(getInfosAreas)
 };
+
+const deleteInfosAreas = async (data) => {
+    return await axios.post("/automation/delete", JSON.stringify({automation_id: data.id}))
+};
+
+export const useDeleteInfosAreas = () => {
+    return useMutation(deleteInfosAreas)
+};

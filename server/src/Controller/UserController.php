@@ -154,7 +154,7 @@
             }
             $token = $request_content->token;
             if (empty($user_repository->findByToken($token))) {
-                return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
+                return new JsonResponse(array("message" => "User: Bad auth token"), 400);
             }
             $user = $user_repository->findByToken($token)[0];
             $user->setValidate(true);
@@ -174,7 +174,7 @@
             }
             $token = $request_content->token;
             if (empty($user_repository->findByToken($token))) {
-                return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
+                return new JsonResponse(array("message" => "User: Bad auth token"), 400);
             }
             $user = $user_repository->findByToken($token)[0];
             return new JsonResponse(array("validated" => $user->getValidate()), 200);

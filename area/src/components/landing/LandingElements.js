@@ -78,7 +78,7 @@ export const ButtonWithBg = styled(LinkR)`
     }
 `;
 
-export const ButtonTryIt = styled(LinkR)`
+export const ButtonTryIt = styled.button`
     position: absolute;
     display: inline-block;
     text-align: center;
@@ -162,6 +162,21 @@ export const ButtonNewAccount = styled(LinkR)`
 `;
 
 export const ButtonLogin = styled(LinkR)`
+    position: absolute;
+    color: black;
+    display: inline-block;
+    text-align: center;
+    line-height: 25px;
+    font-size: 20px;
+    top: 3%;
+    left: 80%;
+    text-decoration: none;
+    &:hover {
+        color: #4361ee;
+    }
+`;
+
+export const ButtonLogout = styled(LinkR)`
     position: absolute;
     color: black;
     display: inline-block;

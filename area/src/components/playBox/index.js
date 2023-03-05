@@ -1,27 +1,98 @@
 import React from 'react'
-import { RectangleArea, MovableBox, ValidateButton, BinLeft, BinRight, BinWhite, SaveNamePannel, CheckButton, WrittingZone } from './playBoxElements'
+import { useState, useEffect, useRef } from 'react'
+import { Icon } from '@iconify/react';
 import Servicesbar from '../servicesbar'
 import Block from '../block'
 import MyContext from '../Context'
-import { useGetUserPlaylist } from '../../api/apiSpotify';
+import InfoBlock from '../infoBlock'
+import { useGetAction } from '../../api/apiServicesPage';
+import { RectangleArea, MovableBox, ValidateButton, BinLeft, BinRight, BinWhite, SaveNamePannel, CheckButton, WrittingZone } from './playBoxElements'
 import { useEditAutomation, useAddAutomation } from '../../api/apiServicesPage';
-import { Icon } from '@iconify/react';
-import { useState, useRef } from 'react'
+
+//import request for infoBlock
+import { useGetUserPlaylist } from '../../api/apiSpotify';
+import { useGetUserRepos } from '../../api/apiGithub';
+import { useGetUserChannels } from '../../api/apiDiscord';
 
 const PlayBox = (props) => {
-  const [sharedData, setSharedData] = React.useState([]);
-  const [ID, setID] = React.useState(0);
-  const [linkedList, setLinkedList] = React.useState([]);
-  const [playlist, setPlaylist] = React.useState([]);
-  const automationId = props.automationId;
-  const userPlaylist = useGetUserPlaylist();
-  const editAutomation = useEditAutomation();
-  const addAutomation = useAddAutomation();
+  const [sharedData, setSharedData] = useState([]);
+  const [linkedList, setLinkedList] = useState([]);
+  const [dataTab, setDataTab] = useState(props.automationActions);
   const { onValidate } = props;
-  const [isLinkedListEmpty, setIsLinkedListEmpty] = React.useState(true);
+  const automationId = props.automationId;
+  const [open, setOpen] = useState(null);
+  const [ID, setID] = useState(0);
+  const [isLinkedListEmpty, setIsLinkedListEmpty] = useState(true);
+  const isComingFromEdit = automationId === undefined ? false : true;
+  const editAutomation = useEditAutomation();
+  const tmpServices = useGetAction();
+  const addAutomation = useAddAutomation();
   const contentEditableRef = useRef();
-  const [showSaveNamePanel, setShowSaveNamePanel] = React.useState(false);
+  const [showSaveNamePanel, setShowSaveNamePanel] = useState(false);
   const [inputValue, setInputValue] = useState('');
+
+  //request for infoblock
+  const [playlist, setPlaylist] = useState([]);
+  const [repository, setRepository] = useState([]);
+  const [getUserChannels, setgetUserChannels] = useState([]);
+  const userPlaylist = useGetUserPlaylist();
+  const userRepos = useGetUserRepos();
+  const usegetUserChannels = useGetUserChannels();
+
+  //request to get all services
+  useEffect(() => {
+    tmpServices.mutate()
+    userPlaylist.mutate()
+    userRepos.mutate()
+    usegetUserChannels.mutate()
+
+    if (isComingFromEdit === true) {
+      for (let i = 0; i !== dataTab.automation_actions.length; i++) {
+        const newAction = {
+          top: 50 + (170 * i),
+          left: 600,
+          color: getColorPuzzleBlock(dataTab.automation_actions[i].service),
+          service: dataTab.automation_actions[i].service,
+          index: i,
+          action: dataTab.automation_actions[i].type === "action" ? true : false,
+          name: dataTab.automation_actions[i].name,
+          dbId: dataTab.automation_actions[i].id,
+          toSend: dataTab.automation_actions[i].fields
+        };
+        sharedData[i] = newAction;
+      };
+      setID(sharedData.length);
+      linkedList[0] = sharedData[0].index;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userPlaylist.isSuccess)
+      setPlaylist(userPlaylist.data.data)
+    if (userRepos.isSuccess)
+      setRepository(userRepos.data.data)
+    if (usegetUserChannels.isSuccess)
+      setgetUserChannels(usegetUserChannels.data.data)
+  }, [userPlaylist, userRepos, usegetUserChannels]);
+
+  function getColorPuzzleBlock(string) {
+    switch (string) {
+      case "discord":
+        return "#5470d6";
+      case "spotify":
+        return "#10a143";
+      case "twitch":
+        return "#c2134f";
+      case "gmail":
+        return "#d92516";
+      case "twitter":
+        return "#1486cc";
+      case "github":
+        return "#686f84";
+      default:
+        return "#454b5e";
+    }
+  }
 
   const handleCheckButtonClick = () => {
     const name = contentEditableRef.current.textContent.trim();
@@ -38,68 +109,74 @@ const PlayBox = (props) => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (sharedData.length > 1) {
       setIsLinkedListEmpty(false);
     } else {
       setIsLinkedListEmpty(true);
     }
-    userPlaylist.mutate()
-    if (userPlaylist.isSuccess) {
-      setPlaylist(userPlaylist.data.data);
-    }
   }, [sharedData, linkedList]);
 
   function sendAutomation(name) {
     var actions = [];
-    var i = { id: 0, number: 0, informations: {} };
-
+    var i = { id: 0, number: 0, informations: {}};
     onValidate();
     for (var j = 0; j < linkedList.length; j++) {
       i.id = sharedData[j].dbId;
       i.number = j + 1;
       i.informations = sharedData[j].toSend;
       actions.push(i);
-      i = { id: 0, number: 0, informations: {} }
+      i = { id: 0, number: 0, informations: [] }
     }
     if (automationId === undefined) {
-      addAutomation.mutate({name: name, actions: actions});
+      addAutomation.mutate({ name: name, actions: actions });
     } else {
       editAutomation.mutate({ name: name, id: automationId, actions: actions });
     }
     setSharedData([]);
     setLinkedList([]);
+    setID(0);
   }
 
   return (
     <RectangleArea>
-      <BinLeft> </BinLeft>
-      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, playlist, setPlaylist }}>
-        <Servicesbar />
+      <BinLeft />
+      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, setLinkedList, open, setOpen, playlist, repository, getUserChannels }}>
+        <Icon icon="mdi:delete-circle-outline" color="#373b48" width="40" style={{ position: 'absolute', top: '20%', left: '80.3%' }} />
+        <Servicesbar tmpServices={tmpServices} />
         <MovableBox>
           {sharedData.map((info) => {
             return (
-              <Block key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} nbrBox={info.nbrBox} />
+              <Block key={info.index} id={info.index} top={info.top} left={info.left} color={info.color} service={info.service} action={info.action} name={info.name} />
             )
           })}
         </MovableBox>
-        <Icon icon="mdi:delete-circle-outline" color="#373b48" width="40" style={{ position: 'absolute', top: '20%', left: '80.3%' }} />
-        <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={() => setShowSaveNamePanel(true)} disabled={isLinkedListEmpty === true}>
+        <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={() => {
+          if (isComingFromEdit === false) {
+            setOpen(null);
+            setShowSaveNamePanel(true);
+          } else {
+            sendAutomation(dataTab.name);
+          }
+        }} disabled={isLinkedListEmpty === true} >
           <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
         </ValidateButton>
+        {tmpServices.isSuccess &&
+          <InfoBlock IsVisible={open} top={sharedData[open]?.top} left={sharedData[open]?.left} background={sharedData[open]?.color} action={tmpServices.data.data.actions} service={sharedData[open]?.service} />
+        }
       </MyContext.Provider>
-      <BinRight></BinRight>
-      <BinWhite></BinWhite>
+      <BinRight />
+      <BinWhite />
       {showSaveNamePanel && (
-      <SaveNamePannel>
-        NAME :
-        <WrittingZone ref={contentEditableRef} contentEditable={true} suppressContentEditableWarning={true} onInput={handleInput} />
-        <CheckButton onClick={() => { setShowSaveNamePanel(false); handleCheckButtonClick(); }}>
-          <Icon icon="material-symbols:check-small" width="85" color="white" style={{ position: "absolute", left: "0%", top: "-10%" }} />
-        </CheckButton>
-      </SaveNamePannel>
-    )}
-    </RectangleArea>
+        <SaveNamePannel>
+          NAME :
+          <WrittingZone ref={contentEditableRef} contentEditable={true} suppressContentEditableWarning={true} onInput={handleInput} />
+          <CheckButton onClick={() => { setShowSaveNamePanel(false); handleCheckButtonClick(); }}>
+            <Icon icon="material-symbols:check-small" width="85" color="white" style={{ position: "absolute", left: "0%", top: "-10%" }} />
+          </CheckButton>
+        </SaveNamePannel>
+      )}
+    </RectangleArea >
   )
 }
 

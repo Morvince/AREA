@@ -3,7 +3,7 @@ FROM php:7.4-apache
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends locales apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev;
+    && apt-get install -y supervisor && apt-get install -y --no-install-recommends locales apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev;
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen && \
@@ -19,4 +19,5 @@ RUN composer require symfony/orm-pack && composer require --dev symfony/maker-bu
 
 WORKDIR /var/www/server/
 COPY . .
+COPY symfony-worker.conf /etc/supervisor/conf.d/
 RUN composer install
