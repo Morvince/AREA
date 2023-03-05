@@ -7,6 +7,22 @@ user_login:
   path: /login
   controller: App\Controller\UserController::login
   methods: [POST]
+user_validated:
+  path: /validated
+  controller: App\Controller\UserController::isUserValidated
+  methods: [POST]
+user_validate:
+  path: /validate
+  controller: App\Controller\UserController::validate
+  methods: [POST]
+user_send_confirmation:
+  path: /send_confirmation
+  controller: App\Controller\UserController::sendConfirmationMail
+  methods: [POST]
+user_to_send:
+  path: /to_send
+  controller: App\Controller\UserController::toSendConfirmation
+  methods: [POST]
 
 # SPOTIFY
 spotify_api_connect:
@@ -47,7 +63,7 @@ spotify_api_reaction_change_playlist_details:
   methods: [POST]
 spotify_api_reaction_add_artist_music_to_playlist:
   path: /spotify/reaction/add_artist_music_to_playlist
-  controller: App\Controller\SpotifyAPIController::addMusicFromArtistListToPlaylist
+  controller: App\Controller\SpotifyAPIController::addMusicFromArtistToPlaylist
   methods: [POST]
 
 # DISCORD
@@ -138,7 +154,6 @@ github_api_reaction_create_issue:
   methods: [POST]
 
 #TWITTER
-
 twitter_api_connect:
   path: /twitter/connect
   controller: App\Controller\TwitterAPIController::connect
@@ -277,9 +292,6 @@ automation_reaction_do:
   path: /automation/reaction/do
   controller: App\Controller\AutomationActionController::doReaction
   methods: [POST]
-automation_action_check:
-  path: /automation/action/check
-  controller: App\Controller\AutomationActionController::check
 
 # SERVER
 server_about_json:

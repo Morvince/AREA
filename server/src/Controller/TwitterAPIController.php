@@ -127,10 +127,10 @@
         {
             // Get needed values
             $request_content = json_decode($request->getContent());
-            if (empty($request_content->user_id)) {
+            if (empty($request_content->access_token)) {
                 return new JsonResponse(array("message" => "Twitter: Missing field"), 400);
             }
-            $user_id = $request_content->user_id;
+            $access_token = $request_content->access_token;
             $service = $service_repository->findByName("twitter");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Twitter: Service not found"), 404);
@@ -140,13 +140,13 @@
             if (count($identifiers) != 2) {
                 return new JsonResponse(array("message" => "Twitter: Identifiers error"), 422);
             }
-            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            if (empty($user_service_repository->findBy(array("access_token" => $access_token)))) {
                 return new JsonResponse(array("message" => "Twitter: Refresh token not found"), 404);
             }
             $client_id = $identifiers[0];
             $client_secret = $identifiers[1];
             $code_challenge = "TUHk8FoWnFaNw2xMcM6Nm/MUOE+y+n0pMkksPyctkSA=";
-            $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
+            $user_service = $user_service_repository->findBy(array("access_token" => $access_token))[0];
             $refresh_token = $user_service->getRefreshToken();
             // Request for the access token
             $ch = curl_init();
@@ -161,7 +161,7 @@
             $result = curl_exec($ch);
             curl_close($ch);
             if (!isset(json_decode($result)->access_token)) {
-                $user_service_repository->remove($user_service);
+                $user_service_repository->remove($user_service, true);
                 return new JsonResponse(array("message" => "Twitter: Expired refresh token"), 400);
             }
             // Edit datas in database
@@ -204,6 +204,7 @@
             }
             $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters));
             if (isset($response->errors) || isset($response->title) || isset($response->detail) || isset($response->status)) {
+                $this->request_api->sendRoute("http://localhost/twitter/refresh_access_token", array("access_token" => $access_token));
                 $response = array("message" => "Twitter: error for the endpoint ".self::API_URL.$endpoint, "code" => 400);
             }
             return json_decode(json_encode($response));
@@ -222,7 +223,7 @@
             }
             $old_pinned = $request_content->old;
             $new_pinned = $request_content->new;
-            // Check if pinned have been added to playlist
+            // Check if pinned tweet has changed
             if (strcmp($old_pinned, $new_pinned) === 0) {
                 return new JsonResponse(array("message" => false), 200);
             }
@@ -303,6 +304,7 @@
          */
         public function likeRandomTweet(Request $request, AutomationRepository $automation_repository, AutomationActionRepository $automation_action_repository, ServiceRepository $service_repository, UserServiceRepository $user_service_repository)
         {
+            srand(time());
             // Get needed values
             $request_content = json_decode($request->getContent());
             if (empty($request_content->automation_action_id)) {

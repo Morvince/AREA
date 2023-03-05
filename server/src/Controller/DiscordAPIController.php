@@ -125,10 +125,10 @@
         {
             // Get needed values
             $request_content = json_decode($request->getContent());
-            if (empty($request_content->user_id)) {
+            if (empty($request_content->access_token)) {
                 return new JsonResponse(array("message" => "Discord: Missing field"), 400);
             }
-            $user_id = $request_content->user_id;
+            $access_token = $request_content->access_token;
             $service = $service_repository->findByName("discord");
             if (empty($service)) {
                 return new JsonResponse(array("message" => "Discord: Service not found"), 404);
@@ -138,12 +138,12 @@
             if (count($identifiers) != 3) {
                 return new JsonResponse(array("message" => "Discord: Identifiers error"), 422);
             }
-            if (empty($user_service_repository->findByUserIdAndServiceId($user_id, $service->getId()))) {
+            if (empty($user_service_repository->findBy(array("access_token" => $access_token)))) {
                 return new JsonResponse(array("message" => "Discord: Refresh token not found"), 404);
             }
             $client_id = $identifiers[0];
             $client_secret = $identifiers[1];
-            $user_service = $user_service_repository->findByUserIdAndServiceId($user_id, $service->getId())[0];
+            $user_service = $user_service_repository->findBy(array("access_token" => $access_token))[0];
             $refresh_token = $user_service->getRefreshToken();
             // Request for the access token
             $ch = curl_init();
@@ -158,7 +158,7 @@
             $result = curl_exec($ch);
             curl_close($ch);
             if (!isset(json_decode($result)->access_token)) {
-                $user_service_repository->remove($user_service);
+                $user_service_repository->remove($user_service, true);
                 return new JsonResponse(array("message" => "Discord: Expired refresh token"), 400);
             }
             // Edit datas in database
@@ -200,6 +200,9 @@
             }
             $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters, $added_header, $authorization));
             if (isset($response->code)) {
+                if ($access_token === "") {
+                    $this->request_api->sendRoute("http://localhost/discord/refresh_access_token", array("access_token" => $access_token));
+                }
                 $response = array("message" => "Discord: $response->message with code $response->code", "code" => 400);
             }
             return json_decode(json_encode($response));

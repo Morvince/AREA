@@ -1,13 +1,13 @@
 <?php
     namespace App\Entity;
 
+    use App\Repository\ServerRepository;
     use Doctrine\ORM\Mapping as ORM;
 
     /**
-     * @ORM\Entity(repositoryClass=UserRepository::class)
-     * @ORM\Table(name="`user`")
+     * @ORM\Entity(repositoryClass=ServerRepository::class)
      */
-    class User
+    class Server
     {
         /**
          * @ORM\Id
@@ -17,38 +17,38 @@
         private $id;
 
         /**
-         * @ORM\Column(type="string", length=255)
+         * @ORM\Column(type="string", length=128)
          */
-        private $username;
+        private $host;
 
         /**
-         * @ORM\Column(type="string", length=255)
+         * @ORM\Column(type="string", length=128)
          */
         private $email;
 
         /**
-         * @ORM\Column(type="string", length=16)
+         * @ORM\Column(type="string", length=64)
          */
         private $password;
 
         /**
          * @ORM\Column(type="string", length=64)
          */
-        private $token;
+        private $smtpsecure;
 
         /**
-         * @ORM\Column(type="boolean")
+         * @ORM\Column(type="integer")
          */
-        private $validate;
+        private $port;
 
         // Getter
         public function getId()
         {
             return $this->id;
         }
-        public function getUsername()
+        public function getHost()
         {
-            return $this->username;
+            return $this->host;
         }
         public function getEmail()
         {
@@ -58,19 +58,19 @@
         {
             return $this->password;
         }
-        public function getToken()
+        public function getSMTPSecure()
         {
-            return $this->token;
+            return $this->smtpsecure;
         }
-        public function getValidate()
+        public function getPort()
         {
-            return $this->validate;
+            return $this->port;
         }
 
         // Setter
-        public function setUsername(string $username)
+        public function setHost(string $host)
         {
-            $this->username = $username;
+            $this->host = $host;
             return $this;
         }
         public function setEmail(string $email)
@@ -83,14 +83,14 @@
             $this->password = $password;
             return $this;
         }
-        public function setToken(string $token)
+        public function setSMTPSecure(string $smtpsecure)
         {
-            $this->token = $token;
+            $this->smtpsecure = $smtpsecure;
             return $this;
         }
-        public function setValidate(bool $validate)
+        public function setPort(int $port)
         {
-            $this->validate = $validate;
+            $this->port = $port;
             return $this;
         }
     }
