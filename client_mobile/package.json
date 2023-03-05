@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@expo/webpack-config": "^0.17.2",
+    "@react-native-async-storage/async-storage": "~1.17.3",
     "@react-native-community/masked-view": "^0.1.11",
+    "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/drawer": "^6.5.8",
     "@react-navigation/native": "^6.1.2",
     "@react-navigation/native-stack": "^6.9.8",
@@ -22,6 +24,7 @@
     "react-hook-form": "^7.43.3",
     "react-native": "0.70.5",
     "react-native-draglist": "^3.0.1",
+    "react-native-element-dropdown": "^2.7.1",
     "react-native-gesture-handler": "~2.8.0",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-reanimated": "~2.12.0",
@@ -29,7 +32,7 @@
     "react-native-screens": "~3.18.0",
     "react-native-web": "~0.18.9",
     "react-query": "^3.39.3",
-    "@react-native-async-storage/async-storage": "~1.17.3"
+    "react-native-webview": "11.23.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
