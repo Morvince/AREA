@@ -16,8 +16,6 @@ const Landing = () => {
 		},
 	};
 
-	console.log(sessionStorage)
-
 	function isLogged() {
 		if (sessionStorage.getItem('token') == null)
 			return false

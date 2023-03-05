@@ -12,7 +12,7 @@ import { useEditAutomation, useAddAutomation } from '../../api/apiServicesPage';
 //import request for infoBlock
 import { useGetUserPlaylist } from '../../api/apiSpotify';
 import { useGetUserRepos } from '../../api/apiGithub';
-import { useGetThreadType } from '../../api/apiDiscord';
+import { useGetUserChannels } from '../../api/apiDiscord';
 
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = useState([]);
@@ -34,17 +34,17 @@ const PlayBox = (props) => {
   //request for infoblock
   const [playlist, setPlaylist] = useState([]);
   const [repository, setRepository] = useState([]);
-  const [threadType, setThreadType] = useState([]);
+  const [getUserChannels, setgetUserChannels] = useState([]);
   const userPlaylist = useGetUserPlaylist();
   const userRepos = useGetUserRepos();
-  const usethreadType = useGetThreadType();
+  const usegetUserChannels = useGetUserChannels();
 
   //request to get all services
   useEffect(() => {
     tmpServices.mutate()
     userPlaylist.mutate()
     userRepos.mutate()
-    usethreadType.mutate()
+    usegetUserChannels.mutate()
 
     if (isComingFromEdit === true) {
       for (let i = 0; i !== dataTab.automation_actions.length; i++) {
@@ -71,11 +71,9 @@ const PlayBox = (props) => {
       setPlaylist(userPlaylist.data.data)
     if (userRepos.isSuccess)
       setRepository(userRepos.data.data)
-    if (usethreadType.isSuccess) {
-      setThreadType(usethreadType.data.data)
-      console.log(threadType)
-    }
-  }, [userPlaylist, userRepos, usethreadType]);
+    if (usegetUserChannels.isSuccess)
+      setgetUserChannels(usegetUserChannels.data.data)
+  }, [userPlaylist, userRepos, usegetUserChannels]);
 
   function getColorPuzzleBlock(string) {
     switch (string) {
@@ -144,7 +142,7 @@ const PlayBox = (props) => {
   return (
     <RectangleArea>
       <BinLeft />
-      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, setLinkedList, open, setOpen, playlist, repository }}>
+      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, setLinkedList, open, setOpen, playlist, repository, getUserChannels }}>
         <Icon icon="mdi:delete-circle-outline" color="#373b48" width="40" style={{ position: 'absolute', top: '20%', left: '80.3%' }} />
         <Servicesbar tmpServices={tmpServices} />
         <MovableBox>
@@ -155,15 +153,15 @@ const PlayBox = (props) => {
           })}
         </MovableBox>
         <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={() => {
-            if (isComingFromEdit === false) {
-              setOpen(null);
-              setShowSaveNamePanel(true);
-            } else {
-              sendAutomation(dataTab.name);
-            }
-          }} disabled={isLinkedListEmpty === true} >
-            <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
-          </ValidateButton>
+          if (isComingFromEdit === false) {
+            setOpen(null);
+            setShowSaveNamePanel(true);
+          } else {
+            sendAutomation(dataTab.name);
+          }
+        }} disabled={isLinkedListEmpty === true} >
+          <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
+        </ValidateButton>
         {tmpServices.isSuccess &&
           <InfoBlock IsVisible={open} top={sharedData[open]?.top} left={sharedData[open]?.left} background={sharedData[open]?.color} action={tmpServices.data.data.actions} service={sharedData[open]?.service} />
         }

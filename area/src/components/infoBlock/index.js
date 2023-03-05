@@ -6,6 +6,7 @@ import MyContext from '../Context'
 const DropdownSection = (props) => {
   const { playlist } = useContext(MyContext);
   const { repository } = useContext(MyContext);
+  const { getUserChannels } = useContext(MyContext);
   const { sharedData } = useContext(MyContext);
 
   const options = useState([])
@@ -16,7 +17,9 @@ const DropdownSection = (props) => {
   } else if (props.service === "github") {
     for (let i = 0; i < repository.items.length; i++)
       options.push({ value: repository.items[i].id, label: repository.items[i].name })
-  } //TODO ELSE IF FOR DISCORD
+  } else if (props.service === "discord") {
+    
+  }
 
   function onChange(e) {
     //if name already exists, update it
@@ -27,7 +30,6 @@ const DropdownSection = (props) => {
     else {
       sharedData[props.IsVisible].toSend[props.name] = e.value
     }
-    console.log(sharedData)
   }
 
   return (
@@ -50,7 +52,6 @@ const TextSection = (props) => {
     else {
       sharedData[props.IsVisible].toSend[props.name] = e.target.value
     }
-    console.log(sharedData)
   }
 
   useEffect(() => {
@@ -81,7 +82,7 @@ const InfoBlock = (props) => {
         for (let j = 0; j < props.action[i].fields.length; j++) {
           fields[i][1].push([])
           fields[i][1][j].push(props.action[i].fields[j].type) // text, dropdown, search
-          fields[i][1][j].push(props.action[i].fields[j].title) // TODO
+          fields[i][1][j].push(props.action[i].fields[j].title) // title
           fields[i][1][j].push(props.action[i].fields[j].name) // in case of text
         }
       }
