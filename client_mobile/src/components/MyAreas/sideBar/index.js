@@ -39,6 +39,11 @@ export default function SideBar({stateSideBar, handleSlideSideBar, deleteArea}) 
           <MaterialIcons name="keyboard-arrow-left" size={60} color={white}/>
         </TouchableOpacity>
         {stateSideBar[1] &&
+          <Text style={stateSideBar[0] ? {color: white, fontSize: 21, fontWeight: 'bold', textAlign: 'center', marginTop: 25} : null}>
+            {stateSideBar[1].name}
+          </Text>
+        }
+        {stateSideBar[1] &&
           <FlatList
             data={data}
             renderItem={renderItem}

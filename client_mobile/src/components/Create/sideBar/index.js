@@ -65,6 +65,11 @@ export default function SideBar({stateSideBar, handleSlideSideBar, setActionPuzz
         <TouchableOpacity activeOpacity={0.6} onPressOut={() => handleSlideSideBar(null)} style={{position: 'absolute', left: 0, top: '47%'}}>
           <MaterialIcons name="keyboard-arrow-left" size={60} color={white}/>
         </TouchableOpacity>
+        {stateSideBar[1] &&
+          <Text style={stateSideBar[0] ? {color: white, fontSize: 21, fontWeight: 'bold', textAlign: 'center', position: 'absolute', top: 25} : null}>
+            {stateSideBar[1].name}
+          </Text>
+        }
         {stateSideBar[1] ? stateSideBar[1].fields !== null && stateSideBar[1].fields.length !== 0 ?
           stateSideBar[1].fields.map(element => {
             let typeElement = null
