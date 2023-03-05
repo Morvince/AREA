@@ -10,6 +10,7 @@ export const useGetAction = () => {
 }
 
 const addAutomation = async (data) => {
+  console.log(data.actions)
   return await axios.post("/automation/add", JSON.stringify({ token: sessionStorage.getItem("token"), name: data.name, actions: data.actions }))
 }
 

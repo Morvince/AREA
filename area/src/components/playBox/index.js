@@ -119,19 +119,21 @@ const PlayBox = (props) => {
 
   function sendAutomation(name) {
     var actions = [];
-    var i = { id: 0, number: 0, informations: {} };
-
+    var i = { id: 0, number: 0, informations: {}};
     onValidate();
     for (var j = 0; j < linkedList.length; j++) {
       i.id = sharedData[j].dbId;
       i.number = j + 1;
       i.informations = sharedData[j].toSend;
       actions.push(i);
-      i = { id: 0, number: 0, informations: {} }
+      i = { id: 0, number: 0, informations: [] }
     }
+    console.log(actions);
     if (automationId === undefined) {
+      console.log("add");
       addAutomation.mutate({ name: name, actions: actions });
     } else {
+      console.log("edit");
       editAutomation.mutate({ name: name, id: automationId, actions: actions });
     }
     setSharedData([]);
