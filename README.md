@@ -18,11 +18,15 @@
     HAPILINK is a project that aims to be able to connect different services in order to make them interact with each other in the way you want.
     <br />
     <br />
+    <a href="#Project Description">Project Description</a>
+    ·
     <a href="#Service Available">Service available</a>
-    ·
+    .
     <a href="#How to build">How to build</a>
-    ·
-    <a href="#usage">Usage</a>
+     .
+    <a href="#Start Application">Start Application</a>
+    .
+    <a href="#Stop Application">Stop Application</a>
     ·
     <a href="#Group">Group</a>
     ·
@@ -34,7 +38,7 @@
 
 ## **Project Description**
 
-as mentioned earlier, the goal of this project is to allow our application (web and mobile) HAPILINK to connect certain services to each other in an automated way.
+As mentioned earlier, the goal of this project is to allow our application (web and mobile) HAPILINK to connect certain services to each other in an automated way.
 
 And to allow you to use this connection to be able to automate certain tasks on these different services.
 
@@ -55,9 +59,10 @@ Clients works by querying the server to request useful datas.
 <div align="center">
   <img alt="Spotify logo" src="https://cdn.svgporn.com/logos/spotify.svg" width="125" style="margin: 0 140px;">
   <img alt="Discord logo" src="https://cdn.svgporn.com/logos/discord.svg" width="125" style="margin: 0 140px;">
-  <img alt="Instagram logo" src="https://cdn.svgporn.com/logos/instagram.svg" width="125" style="margin: 0 140px;">
+  <img alt="Twitch logo" src="https://cdn.svgporn.com/logos/twitch.svg" width="60" style="margin: 0 140px;">
   <img alt="Twitter logo" src="https://cdn.svgporn.com/logos/twitter.svg" width="60" style="margin: 0 140px;">
-  <img alt="OpenAI logo" src="https://cdn.svgporn.com/logos/openai.svg" width="125" style="margin: 0 140px;">
+  <img alt="Gmail logo" src="https://logodownload.org/wp-content/uploads/2018/03/gmail-logo-16.png" width="60" style="margin: 0 140px;">
+
 </div>
 
 ---
