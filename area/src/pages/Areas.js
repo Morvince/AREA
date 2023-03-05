@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import Sidebar from '../components/sidebar'
 import Navebar from '../components/navbar'
-import { useLocation } from 'react-router-dom'
 import EditAreas from '../components/areas'
 
 const Areas = () => {

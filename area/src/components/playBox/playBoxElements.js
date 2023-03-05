@@ -9,6 +9,7 @@ export const RectangleArea = styled.div`
   height: calc(100% - 80px);
   z-index: 0;
   background-color: #ebebeb;
+  user-select: none;
 `;
 
 export const MovableBox = styled.div`
@@ -118,9 +119,9 @@ export const CheckButton = styled.div`
 export const WrittingZone  =styled.div`
   /* Zone :*/
   position: absolute;
-  height: 84%;
+  height: 90%;
   width: 63%;
-  top: 8%;
+  top: 5%;
   left: 20%;
   background-color: white;
 

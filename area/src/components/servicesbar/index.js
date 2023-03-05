@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { ServicesBarContainer, ServicesBarWrapper, IconBox, ButtonConnect, ServicesName, LeftColumn, RectangleContener } from './servicesbarElements';
 import ButtonBox from '../buttonBlock';
-import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useInstagramConnect, useInstagramConnected, useGmailConnect, useGmailConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
+import { useSpotifyConnect, useSpotifyConnected, useDiscordConnect, useDiscordConnected, useTwitchConnect, useTwitchConnected, useGmailConnect, useGmailConnected, useTwitterConnect, useTwitterConnected, useGithubConnect, useGithubConnected } from '../../api/apiSettingsPage';
 
 const Servicesbar = (props) => {
   const [isOpen] = useState(true);
@@ -13,8 +13,8 @@ const Servicesbar = (props) => {
   const isSpotifyConnected = useSpotifyConnected();
   const handleDiscordConnect = useDiscordConnect()
   const isDiscordConnected = useDiscordConnected()
-  const handleInstagramConnect = useInstagramConnect();
-  const isInstagramConnected = useInstagramConnected();
+  const handleTwitchConnect = useTwitchConnect();
+  const isTwitchConnected = useTwitchConnected();
   const handleGmailConnect = useGmailConnect();
   const isGmailConnected = useGmailConnected();
   const handleTwitterConnect = useTwitterConnect();
@@ -25,7 +25,7 @@ const Servicesbar = (props) => {
     useEffect(() => {
       isSpotifyConnected.mutate();
       isDiscordConnected.mutate();
-      isInstagramConnected.mutate();
+      isTwitchConnected.mutate();
       isGmailConnected.mutate();
       isTwitterConnected.mutate();
       isGithubConnected.mutate();
@@ -42,9 +42,9 @@ const Servicesbar = (props) => {
           sessionStorage.setItem("serviceToConnect", "discord")
           handleDiscordConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
           break;
-        case "instagram":
-          sessionStorage.setItem("serviceToConnect", "instagram")
-          handleInstagramConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
+        case "twitch":
+          sessionStorage.setItem("serviceToConnect", "twitch")
+          handleTwitchConnect.mutate(JSON.stringify({redirect_uri: "http://localhost:8081/connectServices"}))
         break;
         case "gmail":
           sessionStorage.setItem("serviceToConnect", "gmail")
@@ -75,8 +75,8 @@ const Servicesbar = (props) => {
           return true;
         else
           return false;
-      case "instagram":
-        if (isInstagramConnected.isSuccess && isInstagramConnected.data.data.connected)
+      case "twitch":
+        if (isTwitchConnected.isSuccess && isTwitchConnected.data.data.connected)
           return true;
         else
           return false;
@@ -101,7 +101,7 @@ const Servicesbar = (props) => {
   const services = [
     { nom: 'discord',   nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'spotify',   nombre: 0, info: [], action: [], name: [], dbID: [] },
-    { nom: 'instagram', nombre: 0, info: [], action: [], name: [], dbID: [] },
+    { nom: 'twitch', nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'gmail',    nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'twitter',   nombre: 0, info: [], action: [], name: [], dbID: [] },
     { nom: 'github',    nombre: 0, info: [], action: [], name: [], dbID: [] },
@@ -127,7 +127,7 @@ const Servicesbar = (props) => {
         case "spotify":
           fillservices(1, i);
           break;
-        case "instagram":
+        case "twitch":
           fillservices(2, i);
           break;
         case "gmail":
@@ -181,8 +181,8 @@ const Servicesbar = (props) => {
         return "#7289da";
       case "spotify":
         return "#1db954";
-      case "instagram":
-        return "#e1306c";
+      case "twitch":
+        return "#6713e2";
       case "gmail":
         return "#EA4335";
       case "twitter":
@@ -200,8 +200,8 @@ const Servicesbar = (props) => {
         return "#5470d6";
       case "spotify":
         return "#10a143";
-      case "instagram":
-        return "#c2134f";
+      case "twitch":
+        return "#9146ff";
       case "gmail":
         return "#d92516";
       case "twitter":
@@ -219,8 +219,8 @@ const Servicesbar = (props) => {
         return "skill-icons:discord";
       case "spotify":
         return "logos:spotify-icon";
-      case "instagram":
-        return "skill-icons:instagram";
+      case "twitch":
+        return "logos:twitch";
       case "gmail":
         return "logos:google-gmail";
       case "twitter":
@@ -249,10 +249,10 @@ const Servicesbar = (props) => {
               <Icon icon={getIcon("spotify")} width="75" height="75" opacity="0.5"/> 
             }
           </IconBox>
-          <IconBox onClick={() => handleClick("instagram")}>
-            {isInstagramConnected.isSuccess && isInstagramConnected.data.data.connected ?
-              <Icon icon={getIcon("instagram")} width="75" height="75" />:
-              <Icon icon={getIcon("instagram")} width="75" height="75" opacity="0.5" />
+          <IconBox onClick={() => handleClick("twitch")}>
+            {isTwitchConnected.isSuccess && isTwitchConnected.data.data.connected ?
+              <Icon icon={getIcon("twitch")} color="purple" width="75" height="75" > </Icon> :
+              <Icon icon={getIcon("twitch")} width="100" color="purple" height="100" opacity="0.5" > </Icon> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("gmail")}>

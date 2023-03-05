@@ -10,6 +10,7 @@ const Block = (props) => {
   const { sharedData, setSharedData } = useContext(MyContext);
   const { linkedList, setLinkedList } = useContext(MyContext);
   const { open, setOpen } = useContext(MyContext);
+  const {ID, setID} = useContext(MyContext);
 
   const handleOpen = (e, data) => {
     if (open === null) {
@@ -29,7 +30,7 @@ const Block = (props) => {
       if (props.id !== sharedData[i].index) {
         if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130 && rect.left > sharedData[i].left - 10 && rect.left < sharedData[i].left + 10) {
           if (props.action === false) {
-            setbackgroundColor('red')
+            setbackgroundColor('black')
             break;
           }
         } else
@@ -78,7 +79,7 @@ const Block = (props) => {
       if (rect.top > sharedData[i].top + 110 && rect.top < sharedData[i].top + 130 && rect.left > sharedData[i].left - 10 && rect.left < sharedData[i].left + 10) {
         // If the block is not an action block
         if (props.action === false) {
-          setbackgroundColor('red')
+          setbackgroundColor('black')
           sharedData[props.id].above = getIdAboveMe(props.id)
           break;
         }
@@ -91,6 +92,9 @@ const Block = (props) => {
         linkedList.splice(i + 1, 0, props.id)
     }
 
+    // check if the Block is in the bin 
+    console.log("before : ");
+    console.log(sharedData);
     if (rect.left >= screenWidth * 0.85 && rect.top >= screenHeight * 0.25 && rect.top <= screenHeight * 0.61) {
       const indexToRemove = sharedData.findIndex((item) => item.index === props.id);
       if (indexToRemove !== -1) {
@@ -99,8 +103,11 @@ const Block = (props) => {
           item.index = i;
         });
         setSharedData([...sharedData]);
+        setID(sharedData.length);
       }
     }
+    console.log("after : ");
+    console.log(sharedData);
   }
 
   function getIcon(string) {
@@ -109,8 +116,8 @@ const Block = (props) => {
         return "ic:baseline-discord";
       case "spotify":
         return "mdi:spotify";
-      case "instagram":
-        return "uil:instagram-alt";
+      case "twitch":
+        return "mdi:twitch";
       case "gmail":
         return "logos:google-gmail";
       case "twitter":

@@ -61,35 +61,35 @@ export const useDiscordAccess = () => {
 
 
 
-// INSTAGRAM :
+// TWITCH :
 
 
-const instagramConnected = async () => {
-  return await axios.post("/instagram/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
+const twitchConnected = async () => {
+  return await axios.post("/twitch/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
 }
 
-export const useInstagramConnected = () => {
-  return useMutation(instagramConnected)
+export const useTwitchConnected = () => {
+  return useMutation(twitchConnected)
 }
 
-const instagramConnect = async (data) => {
-  return await axios.post("/instagram/connect", data)
+const twitchConnect = async (data) => {
+  return await axios.post("/twitch/connect", data)
 }
 
-export const useInstagramConnect = () => {
-  return useMutation(instagramConnect, {
+export const useTwitchConnect = () => {
+  return useMutation(twitchConnect, {
     onSuccess: (data) => {
       window.location.replace(data.data.authorization_url)
     }
   })
 }
 
-const instagramAccess = async (data) => {
-  return await axios.post("/instagram/get_access_token", data)
+const twitchAccess = async (data) => {
+  return await axios.post("/twitch/get_access_token", data)
 }
 
-export const useInstagramAccess = () => {
-  return useMutation(instagramAccess)
+export const useTwitchAccess = () => {
+  return useMutation(twitchAccess)
 }
 
 

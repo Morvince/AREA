@@ -17,8 +17,8 @@ const ButtonBox = (props) => {
         return "ic:baseline-discord";
       case "spotify":
         return "mdi:spotify";
-      case "instagram":
-        return "uil:instagram-alt" ;
+      case "twitch":
+        return "mdi:twitch" ;
       case "gmail":
         return "logos:google-gmail";
       case "twitter":
@@ -36,8 +36,8 @@ const ButtonBox = (props) => {
         return "#7289da";
       case "spotify":
         return "#1db954";
-      case "instagram":
-        return "#e1306c";
+      case "twitch":
+        return "#6713e2";
       case "gmail":
         return "#EA4335";
       case "twitter":
@@ -94,7 +94,7 @@ const ButtonBox = (props) => {
             <AutomationRectangle>
               <Icon icon={getIcon(props.service)} width="35" height="35" color="white" />
             </AutomationRectangle>
-            <ArrowRectangle onClick={() => { console.log("click") }}>
+            <ArrowRectangle onClick={() => {}}>
               <Icon icon="material-symbols:arrow-forward-ios-rounded" color="white" width="55" height="55" />
             </ArrowRectangle>
           </LogoWrapper>

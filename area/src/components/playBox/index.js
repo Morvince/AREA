@@ -17,11 +17,13 @@ import { useGetUserRepos } from '../../api/apiGithub';
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = useState([]);
   const [linkedList, setLinkedList] = useState([]);
+  const [dataTab, setDataTab] = useState(props.automationActions);
+  const { onValidate } = props;
+  const automationId = props.automationId;
   const [open, setOpen] = useState(null);
   const [ID, setID] = useState(0);
   const [isLinkedListEmpty, setIsLinkedListEmpty] = useState(true);
-  const { onValidate } = props;
-  const automationId = props.automationId;
+  const isComingFromEdit = automationId === undefined ? false : true;
   const editAutomation = useEditAutomation();
   const tmpServices = useGetAction();
   const addAutomation = useAddAutomation();
@@ -43,6 +45,25 @@ const PlayBox = (props) => {
     userPlaylist.mutate()
     userRepos.mutate()
     // threadType.mutate() //TODO AFTER DISCORD
+
+    if (isComingFromEdit === true) {
+      for (let i = 0; i !== dataTab.automation_actions.length; i++) {
+        const newAction = {
+          top: 50 + (170 * i),
+          left: 600,
+          color: getColorPuzzleBlock(dataTab.automation_actions[i].service),
+          service: dataTab.automation_actions[i].service,
+          index: i,
+          action: dataTab.automation_actions[i].type === "action" ? true : false,
+          name: dataTab.automation_actions[i].name,
+          dbId: dataTab.automation_actions[i].id,
+          toSend: dataTab.automation_actions[i].fields
+        };
+        sharedData[i] = newAction;
+      };
+      setID(sharedData.length);
+      linkedList[0] = sharedData[0].index;
+    }
   }, []);
 
   useEffect(() => {
@@ -52,12 +73,28 @@ const PlayBox = (props) => {
     if (userRepos.isSuccess) {
       setRepository(userRepos.data.data)
     }
-    // console.log(playlist)
-    // console.log(repository)
     // if (threadType.isSuccess) //TODO AFTER DISCORD
   }, [userPlaylist, userRepos]);
-
   // console.log(threadType.data.data) //TODO AFTER DISCORD
+
+  function getColorPuzzleBlock(string) {
+    switch (string) {
+      case "discord":
+        return "#5470d6";
+      case "spotify":
+        return "#10a143";
+      case "twitch":
+        return "#c2134f";
+      case "gmail":
+        return "#d92516";
+      case "twitter":
+        return "#1486cc";
+      case "github":
+        return "#686f84";
+      default:
+        return "#454b5e";
+    }
+  }
 
   const handleCheckButtonClick = () => {
     const name = contentEditableRef.current.textContent.trim();
@@ -107,7 +144,7 @@ const PlayBox = (props) => {
   return (
     <RectangleArea>
       <BinLeft />
-      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, linkedList, setLinkedList, open, setOpen, playlist, repository }}>
+      <MyContext.Provider value={{ sharedData, setSharedData, ID, setID, linkedList, setLinkedList, open, setOpen, playlist, repository }}>
         <Icon icon="mdi:delete-circle-outline" color="#373b48" width="40" style={{ position: 'absolute', top: '20%', left: '80.3%' }} />
         <Servicesbar tmpServices={tmpServices} />
         <MovableBox>
@@ -117,9 +154,16 @@ const PlayBox = (props) => {
             )
           })}
         </MovableBox>
-        <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={() => { setOpen(null); setShowSaveNamePanel(true); }} disabled={isLinkedListEmpty === true}>
-          <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
-        </ValidateButton>
+        <ValidateButton className={isLinkedListEmpty === false ? 'green' : 'red'} onClick={() => {
+            if (isComingFromEdit === false) {
+              setOpen(null);
+              setShowSaveNamePanel(true);
+            } else {
+              sendAutomation(dataTab.name);
+            }
+          }} disabled={isLinkedListEmpty === true} >
+            <Icon icon="material-symbols:playlist-add-check-circle" width="100" color={isLinkedListEmpty === false ? 'green' : 'red'} />
+          </ValidateButton>
         {tmpServices.isSuccess &&
           <InfoBlock IsVisible={open} top={sharedData[open]?.top} left={sharedData[open]?.left} background={sharedData[open]?.color} action={tmpServices.data.data.actions} service={sharedData[open]?.service} />
         }
