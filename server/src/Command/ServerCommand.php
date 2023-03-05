@@ -41,6 +41,7 @@
         protected function execute(InputInterface $input, OutputInterface $output): int
         {
             $io = new SymfonyStyle($input, $output);
+            $io->success("Server started");
             $old_parameters = array();
             while (true) {
                 foreach ($this->automation_action_repository->findAll() as $automation_action) {
