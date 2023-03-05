@@ -64,7 +64,7 @@ export default function Create({ navigation }) {
     }
   }, [slideActionsBar, allActions])
 
-  const handleSlideSideBar = useCallback (function(item) {
+  const handleSlideSideBar = useCallback(function(item) {
     setStateSideBar(s => [!s[0], item])
   }, [])
 
@@ -135,11 +135,11 @@ export default function Create({ navigation }) {
     const actionsTmp = []
     dataActionPuzzleBlock.data ?
       actionsTmp.push({id: dataActionPuzzleBlock.id, number: 0, informations: dataActionPuzzleBlock.data})
-      : null
+      : actionsTmp.push({id: dataActionPuzzleBlock.id, number: 0, informations: {}})
     for(let i = 0; i < puzzleBlocksList.length; i++) {
       puzzleBlocksList[i].data ?
         actionsTmp.push({id: puzzleBlocksList[i].id, number: (puzzleBlocksList[i].key + 1), informations: puzzleBlocksList[i].data})
-        : null
+        : actionsTmp.push({id: puzzleBlocksList[i].id, number: (puzzleBlocksList[i].key + 1), informations: {}})
     }
     AsyncStorage.getItem("token")
     .then((res) => {

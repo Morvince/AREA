@@ -1,6 +1,5 @@
 import { Image, ScrollView, TouchableOpacity } from 'react-native';
-import { Fontisto } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { Fontisto, FontAwesome5 } from '@expo/vector-icons';
 import styles from '../styles';
 
 export default function ServicesBar({slideServicesBar, handleSlideActionsBar}) {

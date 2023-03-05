@@ -11,6 +11,7 @@ export default styles = StyleSheet.create({
   containerAreas: {
     flex: 1,
     width: '98%',
+    justifyContent: 'center',
     backgroundColor: white,
     borderWidth: 0.8,
     borderRadius: 32,
@@ -19,5 +20,13 @@ export default styles = StyleSheet.create({
     marginTop: 18,
     elevation: 6,
     shadowColor: darkPurple
+  },
+  containerIconServices: {
+    flexDirection: 'row',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    marginLeft: 15,
+    marginTop: 5
   }
 });
