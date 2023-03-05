@@ -18,7 +18,8 @@ const DropdownSection = (props) => {
     for (let i = 0; i < repository.items.length; i++)
       options.push({ value: repository.items[i].id, label: repository.items[i].name })
   } else if (props.service === "discord") {
-    
+    for (let i = 0; i < getUserChannels.items.length; i++)
+      options.push({ value: getUserChannels.items[i].id, label: getUserChannels.items[i].name })
   }
 
   function onChange(e) {
