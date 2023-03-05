@@ -226,7 +226,7 @@
             if (isset($response->error)) {
                 $response = array("message" => "Twitch: $response->error $response->message", "code" => $response->status);
             }
-            return $response;
+            return json_decode(json_encode($response));
         }
 
         // Action
