@@ -132,7 +132,7 @@
                 $mail->setFrom($server->getEmail());
                 $mail->addAddress($user->getEmail(), $user->getUsername());
                 $mail->Subject = "Hapilink - Register confirmation";
-                $mail->Body = "Hello,\n\nWelcome to Hapilink !\nTo have access to all features, you have to confirm your registration by clicking this link:\nhttp://localhost:8081/XXXX";
+                $mail->Body = "Hello,\n\nWelcome to Hapilink !\nTo have access to all features, you have to confirm your registration by clicking this link:\nhttp://localhost:8081/validate";
                 $mail->Timeout = 30;
                 // Send mail
                 $mail->send();
