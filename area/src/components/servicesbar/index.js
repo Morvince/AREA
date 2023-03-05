@@ -252,7 +252,7 @@ const Servicesbar = (props) => {
           <IconBox onClick={() => handleClick("twitch")}>
             {isTwitchConnected.isSuccess && isTwitchConnected.data.data.connected ?
               <Icon icon={getIcon("twitch")} color="purple" width="75" height="75" > </Icon> :
-              <Icon icon={getIcon("twitch")} width="100" color="purple" height="100" opacity="0.5" > </Icon> 
+              <Icon icon={getIcon("twitch")} width="75" color="purple" height="75" opacity="0.5" > </Icon> 
             }
           </IconBox>
           <IconBox onClick={() => handleClick("gmail")}>
