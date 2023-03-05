@@ -141,7 +141,6 @@
             }
             return new JsonResponse(array("message" => "OK"), 200);
         }
-
         /**
          * @Route("/validate", name="user_validate")
          */
@@ -178,7 +177,7 @@
                 return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
             }
             $user = $user_repository->findByToken($token)[0];
-            return new JsonResponse(array("validated" => $user->isValidate()), 200);
+            return new JsonResponse(array("validated" => $user->getValidate()), 200);
         }
     }
 ?>

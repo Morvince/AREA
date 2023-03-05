@@ -37,7 +37,7 @@
         private $token;
 
         /**
-         * @ORM\Column(type="string", length=10)
+         * @ORM\Column(type="boolean")
          */
         private $validate;
 
@@ -66,12 +66,6 @@
         {
             return $this->validate;
         }
-        public function isValidate()
-        {
-            if (strcmp($this->validate, "validate") === 0)
-                return true;
-            return false;
-        }
 
         // Setter
         public function setUsername(string $username)
@@ -94,7 +88,7 @@
             $this->token = $token;
             return $this;
         }
-        public function setValidate(string $validate)
+        public function setValidate(bool $validate)
         {
             $this->validate = $validate;
             return $this;
