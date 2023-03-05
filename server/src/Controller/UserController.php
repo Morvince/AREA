@@ -31,6 +31,8 @@
                 foreach ($users as $user) {
                     if (strcmp($user->getPassword(), $password) === 0 &&
                         (strcmp($user->getUsername(), $login) === 0 || strcmp($user->getEmail(), $login) === 0)) {
+                        $user->setToken($this->generateToken());
+                        $user_repository->add($user, true);
                         return new JsonResponse(array("token" => $user->getToken()), 200);
                     }
                 }
@@ -72,7 +74,7 @@
                 $user->setEmail($email);
                 $user->setPassword($password);
                 $user->setToken($this->generateToken());
-                $user->setValidate("to_send");
+                $user->setValidate(false);
                 $user_repository->add($user, true);
                 return new JsonResponse(array("token" => $user->getToken()), 200);
             }
@@ -137,32 +139,9 @@
             } catch (Exception $e) {
                 return new JsonResponse(array("message" => "KO"), 400);
             }
-            $user->setValidate("sent");
-            $user_repository->add($user, true);
             return new JsonResponse(array("message" => "OK"), 200);
         }
 
-        /**
-         * @Route("/to_send", name="user_to_send")
-         */
-        public function toSendConfirmation(Request $request, UserRepository $user_repository)
-        {
-            header('Access-Control-Allow-Origin: *');
-            // Get needed values
-            $request_content = json_decode($request->getContent());
-            if (empty($request_content->token)) {
-                return new JsonResponse(array("message" => "User: Missing field"), 400);
-            }
-            $token = $request_content->token;
-            if (empty($user_repository->findByToken($token))) {
-                return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
-            }
-            $user = $user_repository->findByToken($token)[0];
-            $user->setValidate("to_send");
-            $user->setToken($this->generateToken());
-            $user_repository->add($user, true);
-            return new JsonResponse(array("token" => $user->getToken()), 200);
-        }
         /**
          * @Route("/validate", name="user_validate")
          */
@@ -179,10 +158,9 @@
                 return new JsonResponse(array("message" => "Spotify: Bad auth token"), 400);
             }
             $user = $user_repository->findByToken($token)[0];
-            $user->setValidate("validate");
-            $user->setToken($this->generateToken());
+            $user->setValidate(true);
             $user_repository->add($user, true);
-            return new JsonResponse(array("token" => $user->getToken()), 200);
+            return new JsonResponse(array("message" => "OK"), 200);
         }
         /**
          * @Route("/validated", name="user_validated")
