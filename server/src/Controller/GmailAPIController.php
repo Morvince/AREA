@@ -276,7 +276,7 @@
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
-            return new JsonResponse($response, 200);
+            return new JsonResponse($response->messages, 200);
         }
         /**
          * @Route("/gmail/action/check_mail_from_somebody", name="gmail_api_action_check_mail_from_somebody")
@@ -345,7 +345,7 @@
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
-            return new JsonResponse($response, 200);
+            return new JsonResponse($response->messages, 200);
         }
 
         // Reaction
