@@ -12,7 +12,7 @@ import { useEditAutomation, useAddAutomation } from '../../api/apiServicesPage';
 //import request for infoBlock
 import { useGetUserPlaylist } from '../../api/apiSpotify';
 import { useGetUserRepos } from '../../api/apiGithub';
-// import { useGetThreadType } from '../../api/apiDiscord'; //TODO AFTER DISCORD
+import { useGetThreadType } from '../../api/apiDiscord';
 
 const PlayBox = (props) => {
   const [sharedData, setSharedData] = useState([]);
@@ -34,17 +34,17 @@ const PlayBox = (props) => {
   //request for infoblock
   const [playlist, setPlaylist] = useState([]);
   const [repository, setRepository] = useState([]);
-  // const [threadType, setThreadType] = useState([]); //TODO AFTER DISCORD
+  const [threadType, setThreadType] = useState([]);
   const userPlaylist = useGetUserPlaylist();
   const userRepos = useGetUserRepos();
-  // const threadType = useGetThreadType(); //TODO AFTER DISCORD
+  const usethreadType = useGetThreadType();
 
   //request to get all services
   useEffect(() => {
     tmpServices.mutate()
     userPlaylist.mutate()
     userRepos.mutate()
-    // threadType.mutate() //TODO AFTER DISCORD
+    usethreadType.mutate()
 
     if (isComingFromEdit === true) {
       for (let i = 0; i !== dataTab.automation_actions.length; i++) {
@@ -67,15 +67,15 @@ const PlayBox = (props) => {
   }, []);
 
   useEffect(() => {
-    if (userPlaylist.isSuccess) {
+    if (userPlaylist.isSuccess)
       setPlaylist(userPlaylist.data.data)
-    }
-    if (userRepos.isSuccess) {
+    if (userRepos.isSuccess)
       setRepository(userRepos.data.data)
+    if (usethreadType.isSuccess) {
+      setThreadType(usethreadType.data.data)
+      console.log(threadType)
     }
-    // if (threadType.isSuccess) //TODO AFTER DISCORD
-  }, [userPlaylist, userRepos]);
-  // console.log(threadType.data.data) //TODO AFTER DISCORD
+  }, [userPlaylist, userRepos, usethreadType]);
 
   function getColorPuzzleBlock(string) {
     switch (string) {
