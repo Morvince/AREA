@@ -9,6 +9,7 @@
 
     class ActionController extends AbstractController
     {
+
         /**
          * @Route("/action/get_all", name="action_get_all")
          */

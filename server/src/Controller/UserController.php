@@ -31,8 +31,6 @@
                 foreach ($users as $user) {
                     if (strcmp($user->getPassword(), $password) === 0 &&
                         (strcmp($user->getUsername(), $login) === 0 || strcmp($user->getEmail(), $login) === 0)) {
-                        $user->setToken($this->generateToken());
-                        $user_repository->add($user, true);
                         return new JsonResponse(array("token" => $user->getToken()), 200);
                     }
                 }
@@ -130,14 +128,14 @@
                 $mail->Port = $server->getPort();
                 // Set mail informations
                 $mail->setFrom($server->getEmail());
-                $mail->addAddress($user->getEmail(), $user->getUsername());
-                $mail->Subject = "Hapilink - Register confirmation";
-                $mail->Body = "Hello,\n\nWelcome to Hapilink !\nTo have access to all features, you have to confirm your registration by clicking this link:\nhttp://localhost:8081/validate";
+                $mail->addAddress($user->getEmail());
+                $mail->Subject = "Register confirmation from Hapilink";
+                $mail->Body = "Hello,\r\n\r\nWelcome to Hapilink !\r\nTo have access to all features, you have to confirm your registration by clicking this link:\r\nhttp://localhost:8081/validate?t=$token\r\nIf you don't want to, don't click the link.\r\n\r\nBye !";
                 $mail->Timeout = 30;
                 // Send mail
                 $mail->send();
             } catch (Exception $e) {
-                return new JsonResponse(array("message" => "KO"), 400);
+                return new JsonResponse(array("message" => $e->getMessage()), 400);
             }
             return new JsonResponse(array("message" => "OK"), 200);
         }

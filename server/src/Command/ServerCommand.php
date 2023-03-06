@@ -84,10 +84,10 @@
                     $response = $this->sendRequest($url, array("automation_action_id" => $automation_action_id, "new" => $parameters, "old" => $old_parameters[$automation_action_id]));
                     if (isset($response->code)) {
                         try {
-                            $io->warning("Parameters error with message=$parameters->message");
+                            $io->warning("Action error with message=$response->message");
                         } catch (\Throwable $th) {
-                            $io->warning("Parameters error with message=");
-                            print_r($parameters->message);
+                            $io->warning("Action error with message=");
+                            print_r($response->message);
                         }
                         continue;
                     }

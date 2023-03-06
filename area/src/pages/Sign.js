@@ -6,6 +6,7 @@ import { black, white } from '../color';
 import { useLogin, useRegister } from '../api/apiSignPage';
 import { Navigate } from 'react-router-dom';
 
+// css for the sign page
 const SignPage = styled.div`
   display: flex;
   justify-content: center;
@@ -22,6 +23,7 @@ const ErrorMessage = styled.p`
   color: ${props => props.color};
 `;
 
+// page sign
 const Sign = () => {
   const [slideForm, setSlideForm] = useState(0)
   const bgColor = slideForm === 0 || slideForm === 2 ? black : white
