@@ -3,18 +3,22 @@ import { useMutation } from "react-query"
 
 // SPOTIFY :
 
+// function to know is spotify is connected 
 const spotifyConnected = async () => {
   return await axios.post("/spotify/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
 }
 
+// function who calls spotifyConnected
 export const useSpotifyConnected = () => {
   return useMutation(spotifyConnected)
 }
 
+// function who connect to spotify
 const spotifyConnect = async (data) => {
   return await axios.post("/spotify/connect", data)
 }
 
+// function who calls the spotifyConnect function
 export const useSpotifyConnect = () => {
   return useMutation(spotifyConnect, {
     onSuccess: (data) => {
@@ -23,26 +27,36 @@ export const useSpotifyConnect = () => {
   })
 }
 
+// function to get access to the token of spotify
 const spotifyAccess = async (data) => {
   return await axios.post("/spotify/get_access_token", data)
 }
 
+// function that call the spotifyAccess function
 export const useSpotifyAccess = () => {
   return useMutation(spotifyAccess)
 }
 
+
+
+// DISCORD 
+
+// fucntion to check if discord is connected
 const discordConnected = async () => {
   return await axios.post("/discord/connected", JSON.stringify({token: sessionStorage.getItem("token")}))
 }
 
+// function that call the discordConnected function
 export const useDiscordConnected = () => {
   return useMutation(discordConnected)
 }
 
+// function that connect the user to discord
 const discordConnect = async (data) => {
   return await axios.post("/discord/connect", data)
 }
 
+// function that call the discordConnect
 export const useDiscordConnect = () => {
   return useMutation(discordConnect, {
     onSuccess: (data) => {
@@ -51,15 +65,18 @@ export const useDiscordConnect = () => {
   })
 }
 
+// function that allow you to access to discord
 const discordAccess = async (data) => {
   return await axios.post("/discord/get_access_token", data)
 }
 
+
+// function that call the discordAccess
 export const useDiscordAccess = () => {
   return useMutation(discordAccess)
 }
 
-
+// Same functions for the last services : 
 
 // TWITCH :
 

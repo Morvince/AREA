@@ -19,6 +19,14 @@
         private RequestAPI $request_api;
 
         /**
+         * @brief This function is used to connect the service with the user account 
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+        */
+
+        /**
          * @Route("/spotify/connect", name="spotify_api_connect")
          */
         public function connect(Request $request, ServiceRepository $service_repository)
@@ -57,6 +65,18 @@
             $authorization_url = "https://accounts.spotify.com/authorize?client_id=$client_id&response_type=code&redirect_uri=$redirect_uri&scope=$scope&state=$state";
             return new JsonResponse(array("authorization_url" => $authorization_url), 200);
         }
+
+        /**
+         * @brief This function is used to get the access_token with the OAuth request
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
         /**
          * @Route("/spotify/get_access_token", name="spotify_api_get_access_token")
          */
@@ -122,6 +142,18 @@
             $user_service_repository->add($user_service, true);
             return new JsonResponse(array("message" => "OK", 200));
         }
+
+        /**
+         * @brief This function is used to set the new refresh token for the user
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
         /**
          * @Route("/spotify/refresh_access_token", name="spotify_api_refresh_access_token")
          */
@@ -170,6 +202,18 @@
             $user_service_repository->add($user_service, true);
             return new JsonResponse(array("message" => "OK"), 200);
         }
+
+        /**
+         * @brief This function is used to get if the service is connected and currently working
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
         /**
          * @Route("/spotify/connected", name="spotify_api_connected")
          */
@@ -197,6 +241,17 @@
             }
             return new JsonResponse(array("connected" => true), 200);
         }
+
+        /**
+         * @brief This function is used to allow user to make a search with the api
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
 
         /**
          * @Route("/spotify/search", name="spotify_api_search")
@@ -237,6 +292,18 @@
             }
             return new JsonResponse(array("items" => $formatted), 200);
         }
+
+         /**
+         * @brief This function is used to get the user playlist
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
         /**
          * @Route("/spotify/get_user_playlists", name="spotify_api_get_user_playlists")
          */
@@ -277,6 +344,19 @@
             }
             return new JsonResponse(array("items" => $formatted), 200);
         }
+
+        /**
+         * @brief This function allow to sendRequest to the API with the given parameters
+         * 
+         * @param[in] access_token when you need to request via an user account
+         * @param[in] endpoint to use for your request
+         * @param[in] method to precise the method used for the request
+         * @param[in] parameters if you need to access on the database parameters for reaction/action
+         * @param[in] added_header to modify the request header with others informations
+         * @param[in] authorization to precise the different authorization for the request
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
+
         private function sendRequest($access_token, $endpoint, $method = "GET", $parameters = array())
         {
             if (empty($this->request_api)) {
@@ -299,6 +379,14 @@
         }
 
         // Action
+
+        /**
+         * @brief This function is used to get the music playlist changes and trigger reaction if verified
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
+
         /**
          * @Route("/spotify/action/check_music_playlist", name="spotify_api_action_check_music_playlist")
          */
@@ -326,6 +414,18 @@
             }
             return new JsonResponse(array("message" => false), 200);
         }
+
+        /**
+         * @brief This function is used to get the parameters for the check music action
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
+
         /**
          * @Route("/spotify/action/check_music_playlist/get_parameters", name="spotify_api_action_check_music_playlist_parameters")
          */
@@ -364,6 +464,18 @@
         }
 
         // Reaction
+
+        /**
+         * @brief This function is used to change the playlist details in spotify
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
+
         /**
          * @Route("/spotify/reaction/change_playlist_details", name="spotify_api_reaction_change_playlist_details")
          */
@@ -416,6 +528,18 @@
             }
             return new JsonResponse(array("message" => "OK"), 200);
         }
+
+        /**
+         * @brief This function is used to add a music in a playlist
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
+
         /**
          * @Route("/spotify/reaction/add_artist_music_to_playlist", name="spotify_api_reaction_add_artist_music_to_playlist")
          */
@@ -461,14 +585,41 @@
             }
             return new JsonResponse(array("message" => "OK"), 200);
         }
+
+        /**
+         * @brief This function is used to get the artist content with artist id
+         * 
+         * @param[in] access_token used to get the token of a user to use his account
+         * @param[in] artist_id to specify type of the request
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
+
         private function getArtistById($access_token, $artist_id)
         {
             return $this->sendRequest($access_token, "artists/" . $artist_id);
         }
+
+        /**
+        * @brief This function is used to get playlist contente by ids
+        * 
+        * @param[in] access_token used to get the token of a user to use his account
+        * @param[in] playlist_id to specify id of the playlist
+        * @return JsonReponse will return a Json object containing all the information when working
+        */
+
         private function getPlaylistById($access_token, $playlist_id)
         {
             return $this->sendRequest($access_token, "playlists/" . $playlist_id);
         }
+
+        /**
+         * @brief This function is used to get random music from specific artist
+         * 
+         * @param[in] access_token used to get the token of a user to use his account
+         * @param[in] artist_name to specify the name of the artist user want to use
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
+
         private function getRandomMusicFromArtist($access_token, $artist_name)
         {
             srand(time());
@@ -480,6 +631,16 @@
             $tracks = $response->tracks->items;
             return $tracks[rand(0, count($tracks) - 1)]->uri;
         }
+
+        /**
+         * @brief This function is used to do a private search on spotify
+         * 
+         * @param[in] access_token used to get the token of a user to use his account
+         * @param[in] type to specify type of the request
+         * @param[in] search to specify what the user search
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
+
         private function privateSearch($access_token, $type, $search)
         { // type = par exemple artist/track/album/playlist/etc... et search est la recherche
             $search = str_replace(" ", "%20", $search);

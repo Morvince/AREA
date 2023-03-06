@@ -3,6 +3,7 @@ import Sidebar from '../components/sidebar'
 import Navebar from '../components/navbar'
 import EditAreas from '../components/areas'
 
+// page Areas
 const Areas = () => {
 
   const [isOpen, setIsOpen] = useState(false)

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useSpotifyAccess, useDiscordAccess, useTwitchAccess, useGmailAccess, useTwitterAccess, useGithubAccess} from '../api/apiSettingsPage'
 
+// page connect services
 const ConnectServices = () => {
   const [params] = useSearchParams()
   const handleSpotifyAccess = useSpotifyAccess()

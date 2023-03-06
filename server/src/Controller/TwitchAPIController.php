@@ -19,6 +19,14 @@
         private RequestAPI $request_api;
 
         /**
+         * @brief This function is used to connect the service with the user account 
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
+        /**
          * @Route("/twitch/connect", name="twitch_api_connect")
          */
         public function connect(Request $request, ServiceRepository $service_repository)
@@ -67,6 +75,18 @@
             $authorization_url = "https://id.twitch.tv/oauth2/authorize?client_id=$client_id&response_type=code&redirect_uri=$redirect_uri&scope=$scope&state=$state";
             return new JsonResponse(array("authorization_url" => $authorization_url), 200);
         }
+
+        /**
+         * @brief This function is used to get the access_token with the OAuth request
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
         /**
          * @Route("/twitch/get_access_token", name="twitch_api_get_access_token")
          */
@@ -131,6 +151,18 @@
             $user_service_repository->add($user_service, true);
             return new JsonResponse(array("message" => "OK", 200));
         }
+
+        /**
+         * @brief This function is used to set the new refresh token for the user
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         *  @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
         /**
          * @Route("/twitch/refresh_access_token", name="twitch_api_refresh_access_token")
          */
@@ -180,6 +212,18 @@
             $user_service_repository->add($user_service, true);
             return new JsonResponse(array("message" => "OK"), 200);
         }
+
+        /**
+         * @brief This function is used to get if the service is connected and currently working
+         *
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
         /**
          * @Route("/twitch/connected", name="twitch_api_connected")
          */
@@ -207,6 +251,19 @@
             }
             return new JsonResponse(array("connected" => true), 200);
         }
+
+        /**
+         * @brief This function allow to sendRequest to the API with the given parameters
+         * 
+         * @param[in] access_token when you need to request via an user account
+         * @param[in] endpoint to use for your request
+         * @param[in] method to precise the method used for the request
+         * @param[in] parameters if you need to access on the database parameters for reaction/action
+         * @param[in] added_header to modify the request header with others informations
+         * @param[in] authorization to precise the different authorization for the request
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
+
         private function sendRequest(ServiceRepository $service_repository, $access_token, $endpoint, $method = "GET", $parameters = array())
         {
             if (empty($this->request_api)) {
@@ -239,6 +296,14 @@
         }
 
         // Action
+
+        /**
+         * @brief This function is used to check if there is a new follow for the user account
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
         /**
          * @Route("/twitch/action/check_follower", name="twitch_api_action_check_follower")
          */
@@ -266,6 +331,18 @@
             }
             return new JsonResponse(array("message" => false), 200);
         }
+
+        /**
+         * @brief This function is used to get the parameters of the account for the user following list
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
         /**
          * @Route("/twitch/action/check_follower/get_parameters", name="twitch_api_action_check_follower_parameters")
          */
@@ -306,6 +383,18 @@
         }
 
         // Reaction
+
+        /**
+         * @brief This function is used to clean a stream chat by erasing all chat message
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
+
         /**
          * @Route("/twitch/reaction/clean_stream_chat", name="twitch_api_reaction_clean_stream_chat")
          */

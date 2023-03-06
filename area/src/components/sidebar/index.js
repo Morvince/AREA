@@ -1,6 +1,7 @@
 import React from 'react'
 import {SidebarContainer, Icon, CloseIcon, SidebarWrapper, SidebarMenu, SideBtnWrap, SidebarLink, SidebarRoute} from './sidebarElements'
 
+//  function that manage the SideBar if you are on mobile
 const Sidebar = ({ isOpen, toggle}) => {
   return (
     <SidebarContainer isOpen={isOpen} onClick={toggle}>

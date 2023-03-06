@@ -20,6 +20,14 @@
         private RequestAPI $request_api;
 
         /**
+         * @brief This function is used to connect the service with the user account 
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
+        /**
          * @Route("/twitter/connect", name="twitter_api_connect")
          */
         public function connect(Request $request, ServiceRepository $service_repository)
@@ -54,6 +62,18 @@
             $authorization_url = "https://twitter.com/i/oauth2/authorize?client_id=$client_id&redirect_uri=$redirect_uri&response_type=code&scope=like.read%20like.write%20tweet.write%20tweet.read%20users.read%20follows.read%20follows.write%20offline.access&state=$state&code_challenge=$code_challenge&code_challenge_method=plain";
             return new JsonResponse(array("authorization_url" => $authorization_url), 200);
         }
+
+        /**
+         * @brief This function is used to get the access_token with the OAuth request
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
         /**
          * @Route("/twitter/get_access_token", name="twitter_api_get_access_token")
          */
@@ -120,6 +140,18 @@
             $user_service_repository->add($user_service, true);
             return new JsonResponse(array("message" => "OK", 200));
         }
+
+        /**
+         * @brief This function is used to set the new refresh token for the user
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
         /**
          * @Route("/twitter/refresh_access_token", name="twitter_api_refresh_access_token")
          */
@@ -169,6 +201,18 @@
             $user_service_repository->add($user_service, true);
             return new JsonResponse(array("message" => "OK"), 200);
         }
+
+        /**
+         * @brief This function is used to get if the service is connected and currently working
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
         /**
          * @Route("/twitter/connected", name="twitter_api_connected")
          */
@@ -197,6 +241,18 @@
             return new JsonResponse(array("connected" => true), 200);
         }
 
+        /**
+         * @brief This function allow to sendRequest to the API with the given parameters
+         * 
+         * @param[in] access_token when you need to request via an user account
+         * @param[in] endpoint to use for your request
+         * @param[in] method to precise the method used for the request
+         * @param[in] parameters if you need to access on the database parameters for reaction/action
+         * @param[in] added_header to modify the request header with others informations
+         * @param[in] authorization to precise the different authorization for the request
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
+
         private function sendRequest($access_token, $endpoint, $method = "GET", $parameters = array())
         {
             if (empty($this->request_api)) {
@@ -211,6 +267,18 @@
         }
 
         // Action
+
+        /**
+         * @brief This function is used to check if the pinned tweet change on user account
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
         /**
          * @Route("/twitter/action/check_tweet", name="twitter_api_check_tweet")
          */
@@ -229,6 +297,18 @@
             }
             return new JsonResponse(array("message" => true), 200);
         }
+
+        /**
+         * @brief This function is used to check if the pinned tweet parameters to use the action
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
+
         /**
          * @Route("/twitter/action/check_tweet/get_parameters", name="twitter_api_action_check_tweet_parameters")
          */
@@ -263,6 +343,18 @@
         }
 
         // Reaction
+
+        /**
+        * @brief This function is used to send a tweet with the request on the good endpoint for twitter
+        * 
+        * @param[in] request used to get the content of the old username and the new one
+        * @param[in] automation_repo to access linked values on database
+        * @param[in] automation_action_repo to access linked values on database
+        * @param[in] service_repo to access linked values on database
+        * @param[in] user_service_repo to access linked values on database
+        * @return JsonReponse will return a Json object containing all the information when the action is working
+        */
+
         /**
          * @Route("/twitter/reaction/send_tweet", name="twitter_api_send_tweet")
          */
@@ -299,6 +391,18 @@
             }
             return new JsonResponse(array("message" => "OK"), 200);
         }
+
+        /**
+        * @brief This function is used to like a tweet for a specific word given
+        * 
+        * @param[in] request used to get the content of the old username and the new one
+        * @param[in] automation_repo to access linked values on database
+        * @param[in] automation_action_repo to access linked values on database
+        * @param[in] service_repo to access linked values on database
+        * @param[in] user_service_repo to access linked values on database
+        * @return JsonReponse will return a Json object containing all the information when the action is working
+        */
+
         /**
          * @Route("/twitter/reaction/like_tweet", name="twitter_api_like_tweet")
          */
