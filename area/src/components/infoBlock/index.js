@@ -3,6 +3,7 @@ import { InfoBlockContainer, InfoWrapper, InfoTitle, InfoAction, InputBox, Littl
 import Select from 'react-select'
 import MyContext from '../Context'
 
+//  function to handle the dropdown section
 const DropdownSection = (props) => {
   const { playlist } = useContext(MyContext);
   const { repository } = useContext(MyContext);
@@ -11,6 +12,7 @@ const DropdownSection = (props) => {
 
   const options = useState([])
 
+  // initialisation of the different service's dropdown lists
   if (props.service === "spotify") {
     for (let i = 0; i < playlist.items.length; i++)
       options.push({ value: playlist.items[i].id, label: playlist.items[i].name })
@@ -33,6 +35,7 @@ const DropdownSection = (props) => {
     }
   }
 
+  //  display the dropdown list
   return (
     <InfoWrapper>
       <InfoTitle>{props.title}</InfoTitle>
@@ -43,6 +46,7 @@ const DropdownSection = (props) => {
   )
 }
 
+// function that manage the text section
 const TextSection = (props) => {
   const { sharedData } = useContext(MyContext);
   const [text, setText] = useState(props.text)
@@ -55,12 +59,14 @@ const TextSection = (props) => {
     }
   }
 
+  // change infos in sharedData if the current zone text is not empty
   useEffect(() => {
     if (sharedData[props.IsVisible].toSend[props.name] !== undefined) {
       setText(sharedData[props.IsVisible].toSend[props.name])
     }
   }, [sharedData])
 
+  // display the text and tittle infos about the current block
   return (
     <InfoWrapper>
       <InfoTitle>{props.title}</InfoTitle>
@@ -75,6 +81,7 @@ const InfoBlock = (props) => {
   const { sharedData } = useContext(MyContext);
   const [fields, setFields] = useState([])
 
+  //  function that get the infos from the differents filds in order to display them
   function getFields() {
     let fields = []
     for (let i = 0; i < props.action.length; i++) {
@@ -97,8 +104,10 @@ const InfoBlock = (props) => {
   //for each field return a TextSection or DropdownSection
   function renderFields() {
     let infoBlock = []
+    //  return if the text is empty 
     if (sharedData.length === 0 || props.IsVisible === null)
       return
+    //  fill the infos with the current infos to display
     for (let i = 0; i < fields.length; i++) {
       if (sharedData[props.IsVisible].dbId === fields[i][0]) {
         for (let j = 0; j < fields[i][1].length; j++) {
@@ -120,6 +129,7 @@ const InfoBlock = (props) => {
 
   const fieldInfo = renderFields()
   return (
+    //  display infos if the tab is not empty
     props.IsVisible !== null ? (
       <InfoBlockContainer top={(Math.trunc(props.top) - 130) + "px"} left={(Math.trunc(props.left) + 50) + "px"} background={props.background}>
         {fieldInfo}
