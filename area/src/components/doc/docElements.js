@@ -16,6 +16,7 @@ export const IntroText = styled.div`
     left: ${props => props.left};
     color: ${props => props.color};
     font-weight: ${props => props.fontweight};
+    user-select: none;
 `;
 
 export const ContainerLeft = styled.div`
