@@ -7,6 +7,22 @@ user_login:
   path: /login
   controller: App\Controller\UserController::login
   methods: [POST]
+user_validated:
+  path: /validated
+  controller: App\Controller\UserController::isUserValidated
+  methods: [POST]
+user_validate:
+  path: /validate
+  controller: App\Controller\UserController::validate
+  methods: [POST]
+user_send_confirmation:
+  path: /send_confirmation
+  controller: App\Controller\UserController::sendConfirmationMail
+  methods: [POST]
+user_to_send:
+  path: /to_send
+  controller: App\Controller\UserController::toSendConfirmation
+  methods: [POST]
 
 # SPOTIFY
 spotify_api_connect:
@@ -47,7 +63,7 @@ spotify_api_reaction_change_playlist_details:
   methods: [POST]
 spotify_api_reaction_add_artist_music_to_playlist:
   path: /spotify/reaction/add_artist_music_to_playlist
-  controller: App\Controller\SpotifyAPIController::addMusicFromArtistListToPlaylist
+  controller: App\Controller\SpotifyAPIController::addMusicFromArtistToPlaylist
   methods: [POST]
 
 # DISCORD
@@ -67,22 +83,37 @@ discord_api_check_username:
   path: /discord/action/check_username
   controller: App\Controller\DiscordAPIController::isUsernameChanged
   methods: [POST]
-discord_api_check_username_parameters:
+discord_api_check_username_get_parameters:
   path: /discord/action/check_username/get_parameters
   controller: App\Controller\DiscordAPIController::getIsUsernameChangedParameters
-  methods: [POST]
-discord_api_check_user_join:
-  path: /discord/action/check_user_join
-  controller: App\Controller\DiscordAPIController::isUserJoined
-  methods: [POST]
-discord_api_check_user_join_parameters:
-  path: /discord/action/check_user_join/get_parameters
-  controller: App\Controller\DiscordAPIController::getIsUserJoinParameters
   methods: [POST]
 discord_api_send_channel_message:
   path: /discord/reaction/send_channel_message
   controller: App\Controller\DiscordAPIController::sendChannelMessage
   methods: [POST]
+discord_api_send_private:
+  path: /discord/reaction/send_private
+  controller: App\Controller\DiscordAPIController::sendPrivateMessage
+  methods: [POST]
+discord_api_get_user_channels:
+  path: /discord/get_user_channels
+  controller: App\Controller\DiscordAPIController::getUserChannels
+  methods: [POST]
+discord_api_react_message:
+  path: /discord/reaction/react_message
+  controller: App\Controller\DiscordAPIController::reactWithMessage
+  methods: [POST]
+discord_api_create_thread:
+  path: /discord/reaction/create_thread
+  controller: App\Controller\DiscordAPIController::createThreadWithoutMessage
+  methods: [POST]
+discord_api_get_thread_type:
+  path: /discord/get_thread_type
+  controller: App\Controller\DiscordAPIController::getThreadType
+  methods: [POST]
+discord_api_test:
+  path: /discord/test
+  controller: App\Controller\DiscordAPIController::test
 
 # GITHUB
 github_api_connect:
@@ -120,6 +151,44 @@ github_api_action_check_last_commit_parameters:
 github_api_reaction_create_issue:
   path: /github/reaction/create_issue
   controller: App\Controller\GithubAPIController::createIssue
+  methods: [POST]
+
+#TWITTER
+twitter_api_connect:
+  path: /twitter/connect
+  controller: App\Controller\TwitterAPIController::connect
+  methods: [POST]
+twitter_api_get_access_token:
+  path: /twitter/get_access_token
+  controller: App\Controller\TwitterAPIController::getAccessToken
+  methods: [POST]
+twitter_api_refresh_access_token:
+  path: /twitter/refresh_access_token
+  controller: App\Controller\TwitterAPIController::refreshAccessToken
+  methods: [POST]
+twitter_api_twitter_change_status:
+  path: /twitter/reaction/change_status
+  controller: App\Controller\TwitterAPIController::changeStatus
+  methods: [POST]
+twitter_api_connected:
+  path: /twitter/connected
+  controller: App\Controller\TwitterAPIController::isConnected
+  methods: [POST]
+twitter_api_send_tweet:
+  path: /twitter/reaction/send_tweet
+  controller: App\Controller\TwitterAPIController::sendTweet
+  methods: [POST]
+twitter_api_like_tweet:
+  path: /twitter/reaction/like_tweet
+  controller: App\Controller\TwitterAPIController::likeRandomTweet
+  methods: [POST]
+twitter_api_check_tweet:
+  path: /twitter/action/check_tweet
+  controller: App\Controller\TwitterAPIController::checkNewPinnedTweetOnUser
+  methods: [POST]
+twitter_api_action_check_tweet_parameters:
+  path: /twitter/action/check_tweet/get_parameters
+  controller: App\Controller\TwitterAPIController::getIsNewTweetOnUserParameters
   methods: [POST]
 
 # GMAIL
@@ -223,9 +292,6 @@ automation_reaction_do:
   path: /automation/reaction/do
   controller: App\Controller\AutomationActionController::doReaction
   methods: [POST]
-automation_action_check:
-  path: /automation/action/check
-  controller: App\Controller\AutomationActionController::check
 
 # SERVER
 server_about_json:

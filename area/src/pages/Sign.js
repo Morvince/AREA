@@ -41,10 +41,18 @@ const Sign = () => {
       setSlideForm(s => s - 1)
   }, [slideForm])
 
-  if (handleLogin.isSuccess || handleRegister.isSuccess) {
+  if ( handleRegister.isSuccess) {
+    console.log("register success")
     return (
-        <Navigate to="/home" replace={true} />
+      <Navigate to="/waiting_for_registration" replace={true} />
     )
+  }
+
+  if (handleLogin.isSuccess) {
+    console.log("login success")
+      return (
+          <Navigate to="/home" replace={true} />
+      )
   }
 
   return (

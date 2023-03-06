@@ -21,13 +21,31 @@ services:
     depends_on:
       - areadb
 
+  sync-db:
+    build:
+      context: ./server
+      dockerfile: Dockerfile-symfony
+    image: area_symfony:latest
+    container_name: ${CONTAINER_NAME_PREFIX}sync-db
+    volumes:
+        - ./vhosts:/etc/apache2/sites-enabled
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: mysql://root:${MARIADB_ROOT_PASSWORD}@areadb:3306/${MARIADB_DATABASE}
+    networks:
+      - areadb_network
+      - web_network
+    depends_on:
+      - areadb
+    command: php bin/console app:server
+
   client_web:
     build:
       context: ./area
       dockerfile: Dockerfile-reactjs
     image: area_reactjs:latest
     container_name: ${CONTAINER_NAME_PREFIX}client_web
-    restart: unless-stopped
+    # restart: unless-stopped
     volumes:
       - ./area/src:/app/client_web/src/:ro
     ports:
@@ -42,7 +60,7 @@ services:
   areadb:
     image: mariadb
     container_name: ${CONTAINER_NAME_PREFIX}db
-    restart: unless-stopped
+    # restart: unless-stopped
     volumes:
       - db_data:/var/lib/mysql/
     environment:
@@ -54,7 +72,7 @@ services:
   phpmyadmin:
     image: phpmyadmin
     container_name: ${CONTAINER_NAME_PREFIX}db_admin
-    restart: unless-stopped
+    # restart: unless-stopped
     ports:
       - 8082:80
     environment:

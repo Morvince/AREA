@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import styles from '../components/SignIn/styles';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, Alert } from 'react-native';
 import { useForm } from "react-hook-form";
 import { useLogin } from "../api/apiSignPage";
 import InputFieldsSignIn from "../components/SignIn/inputFields/index";
@@ -14,7 +14,7 @@ export default function SignIn({ navigation }) {
   const onSubmit = useCallback(formData => {
     for (const data in formData) {
       if (formData[data] === undefined || formData[data] === "") {
-        alert("Please complete all the fields")
+        Alert.alert("Empty field(s)", "Please complete all the fields")
         return
       }
     }
