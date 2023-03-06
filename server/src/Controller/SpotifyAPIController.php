@@ -345,18 +345,6 @@
             return new JsonResponse(array("items" => $formatted), 200);
         }
 
-        /**
-         * @brief This function allow to sendRequest to the API with the given parameters
-         * 
-         * @param[in] access_token when you need to request via an user account
-         * @param[in] endpoint to use for your request
-         * @param[in] method to precise the method used for the request
-         * @param[in] parameters if you need to access on the database parameters for reaction/action
-         * @param[in] added_header to modify the request header with others informations
-         * @param[in] authorization to precise the different authorization for the request
-         * @return JsonReponse will return a Json object containing all the information when working
-         */
-
         private function sendRequest($access_token, $endpoint, $method = "GET", $parameters = array())
         {
             if (empty($this->request_api)) {
@@ -586,39 +574,15 @@
             return new JsonResponse(array("message" => "OK"), 200);
         }
 
-        /**
-         * @brief This function is used to get the artist content with artist id
-         * 
-         * @param[in] access_token used to get the token of a user to use his account
-         * @param[in] artist_id to specify type of the request
-         * @return JsonReponse will return a Json object containing all the information when working
-         */
-
         private function getArtistById($access_token, $artist_id)
         {
             return $this->sendRequest($access_token, "artists/" . $artist_id);
         }
 
-        /**
-        * @brief This function is used to get playlist contente by ids
-        * 
-        * @param[in] access_token used to get the token of a user to use his account
-        * @param[in] playlist_id to specify id of the playlist
-        * @return JsonReponse will return a Json object containing all the information when working
-        */
-
         private function getPlaylistById($access_token, $playlist_id)
         {
             return $this->sendRequest($access_token, "playlists/" . $playlist_id);
         }
-
-        /**
-         * @brief This function is used to get random music from specific artist
-         * 
-         * @param[in] access_token used to get the token of a user to use his account
-         * @param[in] artist_name to specify the name of the artist user want to use
-         * @return JsonReponse will return a Json object containing all the information when working
-         */
 
         private function getRandomMusicFromArtist($access_token, $artist_name)
         {
@@ -631,15 +595,6 @@
             $tracks = $response->tracks->items;
             return $tracks[rand(0, count($tracks) - 1)]->uri;
         }
-
-        /**
-         * @brief This function is used to do a private search on spotify
-         * 
-         * @param[in] access_token used to get the token of a user to use his account
-         * @param[in] type to specify type of the request
-         * @param[in] search to specify what the user search
-         * @return JsonReponse will return a Json object containing all the information when working
-         */
 
         private function privateSearch($access_token, $type, $search)
         { // type = par exemple artist/track/album/playlist/etc... et search est la recherche
