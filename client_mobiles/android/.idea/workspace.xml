@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="525f74dd-e604-4672-9249-c88a57782fc5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/.bundle/config" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/.eslintrc.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/.node-version" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/.prettierrc.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/.ruby-version" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/.watchmanconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/App.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/Gemfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/__tests__/App-test.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/debug.keystore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/proguard-rules.pro" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/debug/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/debug/java/com/client_mobiles/ReactNativeFlipper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/java/com/client_mobiles/MainActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/java/com/client_mobiles/MainApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/res/drawable/rn_edit_text_material.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/res/mipmap-hdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/app/src/release/java/com/client_mobiles/ReactNativeFlipper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/android/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/ios/.xcode.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/ios/Podfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/ios/client_mobiles.xcodeproj/project.pbxproj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/ios/client_mobiles.xcodeproj/xcshareddata/xcschemes/client_mobiles.xcscheme" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/ios/client_mobiles/AppDelegate.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/ios/client_mobiles/AppDelegate.mm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/ios/client_mobiles/Images.xcassets/AppIcon.appiconset/Contents.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/ios/client_mobiles/Images.xcassets/Contents.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/ios/client_mobiles/Info.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/ios/client_mobiles/LaunchScreen.storyboard" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/ios/client_mobiles/main.m" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/ios/client_mobilesTests/Info.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/ios/client_mobilesTests/client_mobilesTests.m" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/metro.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../client_mobile/yarn.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/.cxx/Debug/6p32j6t0/hash_key.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/.cxx/Debug/6p32j6t0/prefab/x86/prefab/lib/i686-linux-android/cmake/ReactAndroid/ReactAndroidConfig.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/.cxx/Debug/6p32j6t0/prefab/x86/prefab/lib/i686-linux-android/cmake/ReactAndroid/ReactAndroidConfigVersion.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/.cxx/Debug/6p32j6t0/prefab/x86/prefab/lib/i686-linux-android/cmake/fbjni/fbjniConfig.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/.cxx/Debug/6p32j6t0/prefab/x86/prefab/lib/i686-linux-android/cmake/fbjni/fbjniConfigVersion.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/.cxx/Debug/6p32j6t0/x86/.cmake/api/v1/query/client-agp/cache-v2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/.cxx/Debug/6p32j6t0/x86/.cmake/api/v1/query/client-agp/cmakeFiles-v1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/.cxx/Debug/6p32j6t0/x86/.cmake/api/v1/query/client-agp/codemodel-v2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/build/intermediates/cxx/Debug/6p32j6t0/logs/x86/build_model.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/build/intermediates/cxx/Debug/6p32j6t0/logs/x86/configure_command" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/build/intermediates/cxx/Debug/6p32j6t0/logs/x86/configure_stderr.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/build/intermediates/cxx/Debug/6p32j6t0/logs/x86/configure_stdout.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/build/intermediates/cxx/Debug/6p32j6t0/logs/x86/generate_cxx_metadata_21_timing.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/build/intermediates/cxx/Debug/6p32j6t0/logs/x86/metadata_generation_record.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/build/intermediates/cxx/Debug/6p32j6t0/logs/x86/prefab_command" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/build/intermediates/cxx/Debug/6p32j6t0/logs/x86/prefab_stderr.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../node_modules/expo-modules-core/android/build/intermediates/cxx/Debug/6p32j6t0/logs/x86/prefab_stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../client_mobile/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../client_mobile/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../client_mobile/App.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../client_mobile/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../client_mobile/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../client_mobile/assets/adaptive-icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../client_mobile/assets/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../client_mobile/assets/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../client_mobile/assets/images/gmailIcon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../client_mobile/assets/splash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../client_mobile/babel.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../client_mobile/babel.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../client_mobile/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../client_mobile/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../client_mobile/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../client_mobile/package.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="2MdTCUrqBFtZ9R5Gb8ACl5pYiei" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cidr.known.project.marker": "true",
+    "last_opened_file_path": "/home/Nassim/Tek03/area/AREA/client_mobiles/android"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="525f74dd-e604-4672-9249-c88a57782fc5" name="Changes" comment="" />
+      <created>1678096332751</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1678096332751</updated>
+    </task>
+    <servers />
+  </component>
+</project>
