@@ -58,7 +58,7 @@ export const ServiceNameReaction = styled.div`
   position: absolute;
   height: 20%;
   width: 100%;
-  top: 5%;
+  top: 8%;
 
   /* text */
   color: white;
@@ -126,7 +126,7 @@ export const NameReaction = styled.div`
   position: absolute;
   height: 70%;
   width: 100%;
-  top: 25%;
+  top: 43%;
 
   /* text */
   color: white;

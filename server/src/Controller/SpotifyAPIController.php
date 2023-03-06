@@ -364,7 +364,7 @@
             }
             $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters));
             if (isset($response->error)) {
-                if ($response->error->status === 403) {
+                if ($response->error->status === 403 || str_contains($response->error->message, "access token expired")) {
                     $response = json_decode($this->request_api->sendRoute("http://localhost/spotify/refresh_access_token", array("access_token" => $access_token)));
                     if (isset($response->code)) {
                         $response = array("message" => "Spotify: Refresh token error", "code" => $response->code);

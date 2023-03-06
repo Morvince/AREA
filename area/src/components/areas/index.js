@@ -93,7 +93,7 @@ const EditAreas = () => {
                             style={{ left: `${actionIndex * 110}%` }}>
                             <ServiceNameReaction> Reaction {actionIndex + 1} : {action.service}</ServiceNameReaction>
                             <NameReaction> Reaction : {action.name}</NameReaction>
-                            <ValuesReaction> Values : {action.values}</ValuesReaction>
+                            {/* <ValuesReaction> Values : {action.values}</ValuesReaction> */}
                           </AreasZoneReactionsMoovable>
                         ))}
                       </div> :

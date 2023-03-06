@@ -302,9 +302,8 @@
             foreach ($new_mails as $new_mail) {
                 $found = false;
                 foreach ($old_mails as $old_mail) {
-                    if (strcmp($new_mail->id, $old_mail->id) !== 0) {
+                    if (strcmp($new_mail->id, $old_mail->id) === 0) {
                         $found = true;
-                        break (1);
                     }
                 }
                 if ($found === false) {
@@ -355,7 +354,7 @@
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
-            return new JsonResponse($response, 200);
+            return new JsonResponse($response->messages, 200);
         }
 
         /**
@@ -448,7 +447,8 @@
             if (isset($response->code)) {
                 return new JsonResponse(array("message" => $response->message), $response->code);
             }
-            return new JsonResponse($response, 200);
+            return new JsonResponse($this->sendRequest($access_token, "users/me/messages/".$response->messages[0]->id));
+            // return new JsonResponse($response->messages, 200);
         }
 
         // Reaction

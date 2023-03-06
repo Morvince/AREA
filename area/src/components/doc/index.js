@@ -75,7 +75,7 @@ const Doc = () => {
         <TwitchBox onClick={toggleTwitchOpen}>
           <Icon icon="mdi:twitch" color="white" width="130" height="130" />
         </TwitchBox>
-        {twitchOpen && <BoxContentLeft background="#6713e2"> <ActionContainer size="200%" line="50px"> Action : <br></br> -  </ActionContainer> <ReactionContainer size="200%" line="50px"> Reactions : <br></br> -</ReactionContainer> </BoxContentLeft>}
+        {twitchOpen && <BoxContentLeft background="#6713e2"> <ActionContainer size="200%" line="50px"> Action : <br></br> - When a new user followed your channel </ActionContainer> <ReactionContainer size="200%" line="50px"> Reaction : <br></br> - Clean your stream chat</ReactionContainer> </BoxContentLeft>}
       </ContainerLeft>
       {/* Container right that display The Google Twitter and Github docs */}
       <ContainerRight>
@@ -88,8 +88,8 @@ const Doc = () => {
         <TwitterBox onClick={toggleTwitterOpen}> 
           <Icon icon="skill-icons:twitter" width="100" height="100" />
         </TwitterBox>
-        {twitterOpen && <BoxContentRight background="#1486cc"> <ActionContainer size="200%" line="50px"> Action : <br></br> - </ActionContainer> <ReactionContainer size="200%" line="50px"> Reactions : <br></br> -</ReactionContainer> </BoxContentRight>}
         {/* text that fill the doc for Github */}
+        {twitterOpen && <BoxContentRight background="#1486cc"> <ActionContainer size="200%" line="50px"> Action : <br></br> - When a new tweet is posted </ActionContainer> <ReactionContainer size="200%" line="50px"> Reactions : <br></br> - Post a tweet with the message <br></br> - Like a tweet related to a given word</ReactionContainer> </BoxContentRight>}
         <GithubBox onClick={toggleGithubOpen}>
           <Icon icon="mdi:github" color="white" width="130" height="130" />
         </GithubBox>
