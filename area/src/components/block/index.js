@@ -93,8 +93,6 @@ const Block = (props) => {
     }
 
     // check if the Block is in the bin 
-    console.log("before : ");
-    console.log(sharedData);
     if (rect.left >= screenWidth * 0.85 && rect.top >= screenHeight * 0.25 && rect.top <= screenHeight * 0.61) {
       const indexToRemove = sharedData.findIndex((item) => item.index === props.id);
       if (indexToRemove !== -1) {
@@ -106,8 +104,6 @@ const Block = (props) => {
         setID(sharedData.length);
       }
     }
-    console.log("after : ");
-    console.log(sharedData);
   }
 
   function getIcon(string) {

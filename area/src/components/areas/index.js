@@ -89,7 +89,7 @@ const EditAreas = () => {
                       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                         <ServiceNameReaction> Service : {automationsWithActions[index]?.automation_actions[1]?.service}</ServiceNameReaction>
                         <NameReaction> Reaction : {automationsWithActions[index]?.automation_actions[1]?.name}</NameReaction>
-                        <ValuesReaction> Values : {automationsWithActions[index]?.automation_actions[1]?.values}</ValuesReaction>
+                        {/* <ValuesReaction> Values : {automationsWithActions[index]?.automation_actions[1]?.values}</ValuesReaction> */}
                       </div>
                     }
                   </AreasZoneReactions>

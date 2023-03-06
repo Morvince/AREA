@@ -36,6 +36,11 @@
          */
         private $token;
 
+        /**
+         * @ORM\Column(type="boolean")
+         */
+        private $validate;
+
         // Getter
         public function getId()
         {
@@ -57,6 +62,10 @@
         {
             return $this->token;
         }
+        public function getValidate()
+        {
+            return $this->validate;
+        }
 
         // Setter
         public function setUsername(string $username)
@@ -77,6 +86,11 @@
         public function setToken(string $token)
         {
             $this->token = $token;
+            return $this;
+        }
+        public function setValidate(bool $validate)
+        {
+            $this->validate = $validate;
             return $this;
         }
     }

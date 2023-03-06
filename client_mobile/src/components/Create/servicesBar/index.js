@@ -1,5 +1,5 @@
 import { Image, ScrollView, TouchableOpacity } from 'react-native';
-import { Fontisto } from '@expo/vector-icons';
+import { Fontisto, FontAwesome5 } from '@expo/vector-icons';
 import styles from '../styles';
 
 export default function ServicesBar({slideServicesBar, handleSlideActionsBar}) {
@@ -12,18 +12,14 @@ export default function ServicesBar({slideServicesBar, handleSlideActionsBar}) {
       <TouchableOpacity onPress={() => handleSlideActionsBar("spotify")}>
         <Fontisto name="spotify" size={65} color="#17d860"/>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => handleSlideActionsBar("instagram")}>
-        <Image
-          source={require('../../../../assets/images/instagramIcon.png')}
-          fadeDuration={0}
-          style={styles.servicesIcons}
-        />
+      <TouchableOpacity onPress={() => handleSlideActionsBar("twitch")}>
+        <FontAwesome5 name="twitch" size={63} color="#9146ff" />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => handleSlideActionsBar("google")}>
+      <TouchableOpacity onPress={() => handleSlideActionsBar("gmail")}>
         <Image
-          source={require('../../../../assets/images/googleIcon.png')}
+          source={require('../../../../assets/images/gmailIcon.png')}
           fadeDuration={0}
-          style={styles.servicesIcons}
+          style={{width: 76, height: 57}}
         />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => handleSlideActionsBar("twitter")}>
