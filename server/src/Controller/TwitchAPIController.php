@@ -252,18 +252,6 @@
             return new JsonResponse(array("connected" => true), 200);
         }
 
-        /**
-         * @brief This function allow to sendRequest to the API with the given parameters
-         * 
-         * @param[in] access_token when you need to request via an user account
-         * @param[in] endpoint to use for your request
-         * @param[in] method to precise the method used for the request
-         * @param[in] parameters if you need to access on the database parameters for reaction/action
-         * @param[in] added_header to modify the request header with others informations
-         * @param[in] authorization to precise the different authorization for the request
-         * @return JsonReponse will return a Json object containing all the information when working
-         */
-
         private function sendRequest(ServiceRepository $service_repository, $access_token, $endpoint, $method = "GET", $parameters = array())
         {
             if (empty($this->request_api)) {
@@ -271,12 +259,12 @@
             }
             $service = $service_repository->findByName("twitch");
             if (empty($service)) {
-                return array("message" => "Twitch: Service not found", "code" => 404);
+                return json_decode(json_encode(array("message" => "Twitch: Service not found", "code" => 404)));
             }
             $service = $service[0];
             $identifiers = explode(";", $service->getIdentifiers());
             if (count($identifiers) != 2) {
-                return array("message" => "Twitch: Identifiers error", "code" => 422);
+                return json_decode(json_encode(array("message" => "Twitch: Identifiers error", "code" => 422)));
             }
             $client_id = $identifiers[0];
             $response = json_decode($this->request_api->send($access_token, self::API_URL . $endpoint, $method, $parameters, "Client-ID: $client_id"));
