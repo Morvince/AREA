@@ -19,12 +19,12 @@
         private RequestAPI $request_api;
 
         /**
-        * @brief This function is used to connect the service with the user account 
-        * 
-        * @param[in] request used to get the content of the old username and the new one
-        * @param[in] service_repo to access linked values on database
-        * @return JsonReponse will return a Json object containing all the information when the action is working
-        */
+         * @brief This function is used to connect the service with the user account 
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
 
         /**
          * @Route("/gmail/connect", name="gmail_api_connect")
@@ -64,16 +64,16 @@
             return new JsonResponse(array("authorization_url" => $authorization_url), 200);
         }
 
-         /**
-        * @brief This function is used to get the access_token with the OAuth request
-        * 
-        * @param[in] request used to get the content of the old username and the new one
-        * @param[in] automation_repo to access linked values on database
-        * @param[in] automation_action_repo to access linked values on database
-        * @param[in] service_repo to access linked values on database
-        * @param[in] user_service_repo to access linked values on database
-        * @return JsonReponse will return a Json object containing all the information when the action is working
-        */
+        /**
+         * @brief This function is used to get the access_token with the OAuth request
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
 
 
         /**
@@ -145,15 +145,15 @@
         }
 
         /**
-        * @brief This function is used to set the new refresh token for the user
-        * 
-        * @param[in] request used to get the content of the old username and the new one
-        * @param[in] automation_repo to access linked values on database
-        * @param[in] automation_action_repo to access linked values on database
-        * @param[in] service_repo to access linked values on database
-        * @param[in] user_service_repo to access linked values on database
-        * @return JsonReponse will return a Json object containing all the information when the action is working
-        */
+         * @brief This function is used to set the new refresh token for the user
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
 
 
         /**
@@ -206,15 +206,15 @@
         }
 
         /**
-        * @brief This function is used to get if the service is connected and currently working
-        * 
-        * @param[in] request used to get the content of the old username and the new one
-        * @param[in] automation_repo to access linked values on database
-        * @param[in] automation_action_repo to access linked values on database
-        * @param[in] service_repo to access linked values on database
-        * @param[in] user_service_repo to access linked values on database
-        * @return JsonReponse will return a Json object containing all the information when the action is working
-        */
+         * @brief This function is used to get if the service is connected and currently working
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when the action is working
+         */
 
         /**
          * @Route("/gmail/connected", name="gmail_api_connected")
@@ -244,17 +244,17 @@
             return new JsonResponse(array("connected" => true), 200);
         }
 
-         /**
-        * @brief This function allow to sendRequest to the API with the given parameters
-        * 
-        * @param[in] access_token when you need to request via an user account
-        * @param[in] endpoint to use for your request
-        * @param[in] method to precise the method used for the request
-        * @param[in] parameters if you need to access on the database parameters for reaction/action
-        * @param[in] added_header to modify the request header with others informations
-        * @param[in] authorization to precise the different authorization for the request
-        * @return JsonReponse will return a Json object containing all the information when working
-        */
+        /**
+         * @brief This function allow to sendRequest to the API with the given parameters
+         * 
+         * @param[in] access_token when you need to request via an user account
+         * @param[in] endpoint to use for your request
+         * @param[in] method to precise the method used for the request
+         * @param[in] parameters if you need to access on the database parameters for reaction/action
+         * @param[in] added_header to modify the request header with others informations
+         * @param[in] authorization to precise the different authorization for the request
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
 
         private function sendRequest($access_token, $endpoint, $method = "GET", $parameters = array())
         {
@@ -279,12 +279,12 @@
 
         // Action
 
-         /**
-        * @brief This function is used to check if there is new mail received
-        * 
-        * @param[in] request used to get the content of the old username and the new one
-        * @return JsonReponse will return a Json object containing all the information when working
-        */
+        /**
+         * @brief This function is used to check if there is new mail received
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
 
         /**
          * @Route("/gmail/action/check_mail", name="gmail_api_action_check_mail")
@@ -314,16 +314,16 @@
             return new JsonResponse(array("message" => false), 200);
         }
 
-         /**
-        * @brief This function is used to get the parameters for the action on mail received
-        * 
-        * @param[in] request used to get the content of the old username and the new one
-        * @param[in] automation_repo to access linked values on database
-        * @param[in] automation_action_repo to access linked values on database
-        * @param[in] service_repo to access linked values on database
-        * @param[in] user_service_repo to access linked values on database
-        * @return JsonReponse will return a Json object containing all the information when working
-        */
+        /**
+         * @brief This function is used to get the parameters for the action on mail received
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
 
         /**
          * @Route("/gmail/action/check_mail/get_parameters", name="gmail_api_action_check_mail_parameters")
@@ -358,16 +358,16 @@
             return new JsonResponse($response, 200);
         }
 
-         /**
-        * @brief This function is used to check mail received from a special user
-        * 
-        * @param[in] request used to get the content of the old username and the new one
-        * @param[in] automation_repo to access linked values on database
-        * @param[in] automation_action_repo to access linked values on database
-        * @param[in] service_repo to access linked values on database
-        * @param[in] user_service_repo to access linked values on database
-        * @return JsonReponse will return a Json object containing all the information when working
-        */
+        /**
+         * @brief This function is used to check mail received from a special user
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
 
         /**
          * @Route("/gmail/action/check_mail_from_somebody", name="gmail_api_action_check_mail_from_somebody")
@@ -408,15 +408,15 @@
         }
 
         /**
-        * @brief This function is used to get the parameters of the check specific mail received
-        * 
-        * @param[in] request used to get the content of the old username and the new one
-        * @param[in] automation_repo to access linked values on database
-        * @param[in] automation_action_repo to access linked values on database
-        * @param[in] service_repo to access linked values on database
-        * @param[in] user_service_repo to access linked values on database
-        * @return JsonReponse will return a Json object containing all the information when working
-        */
+         * @brief This function is used to get the parameters of the check specific mail received
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
 
         /**
          * @Route("/gmail/action/check_mail_from_somebody/get_parameters", name="gmail_api_action_check_mail_from_somebody_parameters")
@@ -453,16 +453,16 @@
 
         // Reaction
 
-         /**
-        * @brief This function is used to send a mail thanks to an API request
-        * 
-        * @param[in] request used to get the content of the old username and the new one
-        * @param[in] automation_repo to access linked values on database
-        * @param[in] automation_action_repo to access linked values on database
-        * @param[in] service_repo to access linked values on database
-        * @param[in] user_service_repo to access linked values on database
-        * @return JsonReponse will return a Json object containing all the information when working
-        */
+        /**
+         * @brief This function is used to send a mail thanks to an API request
+         * 
+         * @param[in] request used to get the content of the old username and the new one
+         * @param[in] automation_repo to access linked values on database
+         * @param[in] automation_action_repo to access linked values on database
+         * @param[in] service_repo to access linked values on database
+         * @param[in] user_service_repo to access linked values on database
+         * @return JsonReponse will return a Json object containing all the information when working
+         */
 
         /**
          * @Route("/gmail/reaction/send_mail", name="gmail_api_reaction_send_mail")
