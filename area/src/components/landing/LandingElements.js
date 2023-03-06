@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link, Link as LinkR } from 'react-router-dom';
+import { Link as LinkR } from 'react-router-dom';
 
 export const Rect = styled.div`
     width: 100%;
@@ -78,7 +78,7 @@ export const ButtonWithBg = styled(LinkR)`
     }
 `;
 
-export const ButtonTryIt = styled(LinkR)`
+export const ButtonTryIt = styled.button`
     position: absolute;
     display: inline-block;
     text-align: center;
