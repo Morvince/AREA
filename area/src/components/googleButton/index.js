@@ -7,6 +7,7 @@ const GoogleButton = ({signOption, margin, align=null, slideForm=null}) => {
 
   useEffect(() => {
     if (slideForm !== null) {
+
       if (((slideForm === 0 || slideForm === 2) && signOption === "continue_with") ||
       (slideForm === 1 && signOption === "signup_with")) {
         window.google.accounts.id.initialize({

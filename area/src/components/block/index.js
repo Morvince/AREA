@@ -4,6 +4,7 @@ import { RectangleBlock, RectangleWrapper, AutomationText, LogoWrapper, Automati
 import MyContext from '../Context'
 import { Icon } from '@iconify/react';
 
+// function block that allow the user to move, drag and remove some blocks
 const Block = (props) => {
   const [backgroundColor, setbackgroundColor] = useState(props.color)
   const [pos, setPos] = useState({ x: props.top, y: props.left })
@@ -12,6 +13,7 @@ const Block = (props) => {
   const { open, setOpen } = useContext(MyContext);
   const {ID, setID} = useContext(MyContext);
 
+  //  function that allow the user to open the block in order to write some infos in the block
   const handleOpen = (e, data) => {
     if (open === null) {
       setOpen(props.id);
@@ -22,6 +24,7 @@ const Block = (props) => {
     }
   };
 
+  //  function that handle the drag of the block
   const handleDrag = (e) => {
     var rect = e.target.getBoundingClientRect();
     setOpen(null)
@@ -39,6 +42,7 @@ const Block = (props) => {
     }
   }
 
+  //  function that get the id of the block above the current block in order to link them
   const getIdAboveMe = (id) => {
     for (var i = 0; i < sharedData.length; i++) {
       if (id !== sharedData[i].index) {
@@ -49,6 +53,7 @@ const Block = (props) => {
     return;
   }
 
+  //  function check different things when the block is released
   const handleDragStop = (e) => {
     var rect = e.target.getBoundingClientRect();
     const screenWidth = window.innerWidth;
@@ -106,6 +111,7 @@ const Block = (props) => {
     }
   }
 
+  //  function get icon to display the right icon in the block compare to the right service
   function getIcon(string) {
     switch (string) {
       case "discord":
@@ -136,10 +142,12 @@ const Block = (props) => {
           </AutomationText>
           <LogoWrapper>
             <AutomationRectangle>
+              {/* put the icon in the block */}
               <Icon icon={getIcon(props.service)} width="35" height="35" color="white" />
             </AutomationRectangle>
             <ArrowRectangle onClick={() => { handleOpen() }}>
               {(open === props.id) ?
+              //  put an arrow in the block and handle it if the arrow is open or not
                 <Icon icon="material-symbols:arrow-back-ios-rounded" color="white" width="55" height="55" /> :
                 <Icon icon="material-symbols:arrow-forward-ios-rounded" color="white" width="55" height="55" />
               }
