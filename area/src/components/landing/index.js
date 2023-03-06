@@ -102,9 +102,11 @@ const Landing = () => {
 			<Text lineheight="1.2" fontsize="40px" top="405%" left="20%"
 				color="white" fontweight="" > <em> Now you just have to try it by yourself and let the magic happen ! </em> </Text>
 			<YoutubeScreen>
-				<YouTube videoId="EqaBB_DKJno" opts={YoutubeOptions} />
+				<YouTube videoId="cgYLI5hbLmk" opts={YoutubeOptions} />
 			</YoutubeScreen>
-			<ButtonTryIt to="../../../public/download/application-6170542e-13f2-4b26-ba27-7f4d9282f9b5.apk" target="_blank" download top="490%" left="42%" height="100px" width="300px">Download APK</ButtonTryIt>
+			<a href="../../download/app-realease.apk" download>
+				<ButtonTryIt top="490%" left="42%" height="100px" width="300px">Download APK</ButtonTryIt>
+			</a>
 		</>
 	)
 };

@@ -46,8 +46,8 @@ services:
     image: area_reactnative:latest
     container_name: ${CONTAINER_NAME_PREFIX}client_mobile
     # restart: unless-stopped
-    tty: true
-    stdin_open: true
+    volumes:
+      - ./area/src/download:/app/client_mobile/android/app/outputs/apk/release/:ro
     networks:
       - web_network
     depends_on:
@@ -62,7 +62,6 @@ services:
     # restart: unless-stopped
     volumes:
       - ./area/src:/app/client_web/src/:ro
-      - ./client_mobile/apk:/app/client_web/public/download/:ro
     ports:
       - 8081:8081
     environment:

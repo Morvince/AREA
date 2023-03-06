@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "hapilink",
+    "name": "client_mobile",
     "slug": "client_mobile",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -25,16 +25,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "softwareKeyboardLayoutMode": "pan",
-      "package": "com.hapilink.area"
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "ea42c72a-8818-4b6e-b776-90f0379915dd"
-      }
     }
   }
 }
